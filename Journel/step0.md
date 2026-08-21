@@ -93,3 +93,30 @@ Float8DynamicActivationInt4WeightConfig)
   Pareto front for ResNet CNN inference regardless of backend (torchao or ONNX)
 - Decision: use FP32 ResNet18/34/50/152 as the 4-model dispatcher pool
 - DITCHING QUANTIZATION
+
+### [RESULT] Step 0 — ONNX + CUDAExecutionProvider metrics
+
+| Model     | Precision | FLOPs (G) | Latency (ms) | Accuracy (%) |
+|-----------|-----------|-----------|--------------|--------------|
+| ResNet18  | fp32      | 1.824     | 3.577        | 78.14        |
+| ResNet18  | int8      | 1.824     | 3.152        | 78.70        |
+| ResNet34  | fp32      | 3.679     | 3.197        | 81.30        |
+| ResNet34  | int8      | 3.679     | 5.234        | 81.32        |
+| ResNet50  | fp32      | 4.134     | 3.755        | 86.29        |
+| ResNet50  | int8      | 4.134     | 5.423        | 84.97        |
+| ResNet152 | fp32      | 11.604    | 8.736        | 90.62        |
+| ResNet152 | int8      | 11.604    | 14.976       | 91.01        |
+
+### [DEAD-END] ONNX INT8 quantization via CUDAExecutionProvider
+- INT8 is slower than FP32 for 3/4 models — QDQ wrapper nodes add overhead
+  that outweighs INT8 compute savings without TensorRT kernel fusion
+- TensorRT EP not usable (nvinfer_10.dll missing)
+- FP32 model sizes broken in CSV (weights not embedded in ONNX file) — not 
+  a blocker since latency/accuracy are valid
+- Final verdict: quantized variants don't improve the Pareto front, confirmed 
+  across torchao (weight-only + dynamic) and ONNX + CUDA backends
+
+### [DECISION] Final pool: FP32 ResNet18/34/50/152
+- 4 architecturally diverse models with meaningful latency spread (3.2–8.7ms)
+  and accuracy spread (78–91%) — sufficient for dispatcher training
+- Moving to dispatcher implementation
