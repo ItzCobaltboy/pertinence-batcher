@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local editor/agent folders
+.vscode/
+.idea/
+.claude/
+codex/
