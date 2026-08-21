@@ -1,0 +1,9 @@
+model,precision,flops,flops_G,model_size_mb,accuracy,latency_ms,provider
+resnet18,fp32,1824033792,1.824,0.09,78.1401,3.577,CUDAExecutionProvider
+resnet18,int8,1824033792,1.824,11.25,78.7006,3.152,CUDAExecutionProvider
+resnet34,fp32,3678739456,3.679,0.16,81.2994,3.197,CUDAExecutionProvider
+resnet34,int8,3678739456,3.679,20.96,81.3248,5.234,CUDAExecutionProvider
+resnet50,fp32,4133742592,4.134,0.23,86.293,3.755,CUDAExecutionProvider
+resnet50,int8,4133742592,4.134,24.64,84.9682,5.423,CUDAExecutionProvider
+resnet152,fp32,11603945472,11.604,0.67,90.6242,8.736,CUDAExecutionProvider
+resnet152,int8,11603945472,11.604,58.18,91.0064,14.976,CUDAExecutionProvider

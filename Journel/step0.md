@@ -84,3 +84,12 @@ Float8DynamicActivationInt4WeightConfig)
 - If ONNX also shows no meaningful Pareto separation from quantization → conclude 
   quantized variants aren't useful for pool diversity, proceed to dispatcher build with 
   FP32 ResNet18/34/50/152 only
+
+### [DEAD-END] ONNX + CUDAExecutionProvider INT8 quantization
+- Static INT8 PTQ via onnxruntime.quantization, evaluated through CUDAExecutionProvider
+- Latency reduction: ~0.4ms — negligible, not meaningful pool diversity
+- TensorRT EP not usable (nvinfer_10.dll missing, full TRT SDK not installed)
+- Final verdict: quantization does not create useful operating points on the 
+  Pareto front for ResNet CNN inference regardless of backend (torchao or ONNX)
+- Decision: use FP32 ResNet18/34/50/152 as the 4-model dispatcher pool
+- DITCHING QUANTIZATION
