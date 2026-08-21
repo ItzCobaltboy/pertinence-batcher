@@ -1,0 +1,7 @@
+numpy
+pandas
+matplotlib
+scikit-learn
+--index-url https://download.pytorch.org/whl/cu132
+torch
+torchvision
