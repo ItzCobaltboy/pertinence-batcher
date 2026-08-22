@@ -1,5 +1,6 @@
 code/dataset/**
-code/ResnetModels/**
+code/Model Analysis/ResnetModels/**
+code/Model Analysis/OnnxModels/**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -225,4 +226,7 @@ __marimo__/
 .idea/
 .claude/
 codex/
-/code/OnnxModels/
+
+
+# Claude Code project context (local-only, not shared/versioned)
+CLAUDE.md
