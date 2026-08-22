@@ -78,6 +78,6 @@ def generate_labels(dataset_path: str, output_path: str) -> pd.DataFrame:
     print("Label distribution (0=RN18, 1=RN34, 2=RN50, 3=RN152):")
     dist = df["label"].value_counts().sort_index()
     for lbl, count in dist.items():
-        print(f"  [{lbl}] {POOL_MODELS[lbl]['name']:>8}: {count:>5} ({100*count/len(df):.1f}%)")
+        print(f"  [{lbl}] {POOL_MODELS[lbl]['name']:>8}: {count:>5} ({100*count/len(df):.1f}%)") # type: ignore
 
     return df
