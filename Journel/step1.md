@@ -85,3 +85,52 @@ accuracy-neutral, only wasting compute. EDA disproves this: 9.1% of images
 have non-monotonic correctness — overestimating to RN34 on `1 0 x x` images
 actively loses accuracy. Penalty matrix must assign non-zero cost to
 overestimation errors, not just underestimation.
+
+### [RESULT] Step 1C — Dispatcher FC training (ISNS, 30 epochs)
+
+**Script**: `code/Dispatcher/trainer.py`
+**Checkpoint**: `results/checkpoints/dispatcher_fc.pt`
+
+- Architecture: ResNet18 backbone (frozen) + Linear(512→4) head — 2,052 trainable params
+- Weight scheme: ISNS (inverse square root of class count) — counters 82.4% label-0 imbalance
+- Penalty matrix: hand-tuned asymmetric 4×4
+  - Underestimation (pred smaller model than needed): penalty 2.0–4.0×
+  - Overestimation (pred larger model than needed): penalty 0.5×
+- Best training loss: 0.4828 @ epoch 26
+- Final training loss: 0.4925 @ epoch 30
+- Final training acc: ~60.3% (on ISNS-rebalanced sampler — not raw distribution)
+- Converged around ep 26, stable for last 4 epochs
+
+**Next**: Step 1D — evaluate on val set, confusion matrix, accuracy-FLOPs plot.
+
+### [RESULT] Step 1D — Dispatcher FC evaluation (hand-tuned, ISNS)
+
+**Script**: `code/Dispatcher/evaluator.py`
+**Outputs**: `results/eval/confusion_matrix.png`, `results/eval/dispatcher_predictions.csv`
+
+Overall routing accuracy: **81.4%** (7273/8940 images)
+
+| Routing outcome | Count | % |
+|----------------|-------|---|
+| Correct        | 7273  | 81.4% |
+| Underestimated | 1017  | 11.4% ← accuracy risk |
+| Overestimated  |  650  |  7.3% ← FLOPs waste |
+
+Per-class recall:
+| Label | Model    | N    | Correct | Underest. | Overest. | Recall |
+|-------|----------|------|---------|-----------|----------|--------|
+| 0 | ResNet18  | 7363 | 94.1%   | 0%        | 5.9%     | 94.1% |
+| 1 | ResNet34  |  740 | 12.3%   | 69.2%     | 18.5%    | 12.3% |
+| 2 | ResNet50  |  530 | 20.6%   | 64.0%     | 15.5%    | 20.6% |
+| 3 | ResNet152 |  307 | 45.9%   | 54.1%     | 0%       | 45.9% |
+
+**Finding**: FC collapses toward label-0 despite ISNS weighting. Minority class recall
+(RN34: 12.3%, RN50: 20.6%) is too low for a useful dispatcher. ISNS alone is not
+sufficient for an 82:8:6:3 imbalance ratio.
+
+**Root cause**: hand-tuned penalty matrix + fixed weighting scheme cannot jointly
+optimise the accuracy-vs-FLOPs tradeoff across all 4 classes. This is exactly the
+problem NSGA-II solves — evolving the penalty matrix values and weighting scheme
+together to trace the full Pareto front of dispatcher configurations.
+
+**Next**: implement NSGA-II to search penalty matrix + weighting scheme jointly.

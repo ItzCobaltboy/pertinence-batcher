@@ -1,6 +1,9 @@
 code/dataset/**
 code/Model Analysis/ResnetModels/**
 code/Model Analysis/OnnxModels/**
+code/Dispatcher/results/cleaned-data/**
+code/Dispatcher/results/checkpoints/**
+code/Dispatcher/results/logs/**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
