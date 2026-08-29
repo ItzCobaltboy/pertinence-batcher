@@ -5,6 +5,7 @@ code/Dispatcher/results/cleaned-data/**
 code/Dispatcher/results/checkpoints/**
 code/Dispatcher/results/logs/**
 code/Dispatcher/results/nsga2/checkpoint_*.npz
+code/dispatcher_analysis/embeddings_cache/**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
