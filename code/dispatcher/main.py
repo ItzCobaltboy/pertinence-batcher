@@ -16,6 +16,7 @@ Steps:
 import os
 from labeler import generate_labels
 from cleaner import clean_labels
+from nsga2 import run_nsga2
 
 DATASET_PATH  = "./../dataset/"
 RESULTS_PATH  = "./results/"
@@ -35,3 +36,6 @@ if __name__ == "__main__":
         input_path=LABELS_CSV,
         output_path=CLEANED_CSV,
     )
+
+    # --- Step 2: NSGA-II search over penalty matrix + weighting scheme ---
+    # run_nsga2()  # uncomment to run (~2hrs on RTX 5070 Ti)

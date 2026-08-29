@@ -134,3 +134,56 @@ problem NSGA-II solves — evolving the penalty matrix values and weighting sche
 together to trace the full Pareto front of dispatcher configurations.
 
 **Next**: implement NSGA-II to search penalty matrix + weighting scheme jointly.
+
+### [DECISION] Fix NSGA-II fitness objective before first full run
+
+Initial fitness function used `obj1 = 1 - overall_accuracy`. Caught before burning
+compute: this objective doesn't penalize per-class imbalance in routing — a
+chromosome that nails the 82%-majority RN18 class while ignoring RN34/RN50/RN152
+scores well despite being a useless dispatcher (same collapse as the hand-tuned run).
+
+**Fix**: switched `obj1` to `underestimation_rate = mean(pred_label < true_label)`
+— directly targets the accuracy-risk failure mode (routing to a model too weak),
+while `obj2 = avg_flops_G` still captures the compute-cost tradeoff. Killed and
+restarted the run after 30 min on the wrong objective.
+
+### [RESULT] Step 2 — NSGA-II search (50 pop, 50 gen, 30 FC epochs/individual)
+
+**Script**: `code/Dispatcher/nsga2.py`
+**Outputs**: `results/nsga2/pareto_front.csv`, `results/nsga2/checkpoint_gen*.npz`
+
+- Chromosome: 13 floats — 12 penalty matrix values `[0,5]` + weighting exponent
+  α `[0,1]` (`weight_i ∝ 1/count_i^α`; α=0 uniform, α≈0.5 ISNS-like, α=1 INS-like)
+- Objectives (both minimised): `obj1 = underestimation_rate`, `obj2 = avg_flops_G`
+- Key optimisation: backbone frozen → precomputed all 8940 embeddings once (26s),
+  each individual only trains/evals `Linear(512→4)` on in-memory tensors (~3-5s/eval)
+- Standard NSGA-II ops: non-dominated sort, crowding distance, SBX crossover (η=20),
+  polynomial mutation (η=25), binary tournament selection
+- Memory safety: explicit `del` + `torch.cuda.empty_cache()` after every individual
+  eval (2500+ evals total) to prevent CUDA fragmentation over the long run
+- Total runtime: ~3h05m unattended, zero crashes, checkpoints every 5 generations
+
+**Final Pareto front: 50 non-dominated individuals**, full spread across the tradeoff:
+
+| Config | Underestimation rate | Avg FLOPs | α |
+|--------|----------------------|-----------|---|
+| Safest (max accuracy-safety) | 0.04% | 5.21G | 0.83 |
+| Balanced middle | ~2-5% | 2.5-3G | ~0.5 |
+| Cheapest (min compute) | 17.5% | 1.834G | 0.03 |
+
+Compare to hand-tuned baseline: 81.4% accuracy, **11.4%** underestimation rate, fixed
+at one operating point. NSGA-II instead produces a full dial — any point on the front
+is a valid, intentional accuracy/compute tradeoff rather than an accidental collapse.
+
+**Next**: Step 1D-v2 — pick 2-3 representative Pareto points, run full `evaluator.py`
+(confusion matrix, per-class recall) on each, compare against hand-tuned baseline.
+
+### [MEETING] Meet 2 — Prof Gayathri / Traiola
+
+**Action items:**
+- [REDO] TensorRT quantization properly — fix nvinfer EP setup, rule out fp32 
+  typecasting misconfiguration from previous attempt
+- [TODO] Pareto front evaluation — add per-model accuracy; current results only 
+  have underestimation rate
+- [EXPLORE] Model compression (pruning, KD, etc.) — check if it creates useful 
+  Pareto-optimal points
