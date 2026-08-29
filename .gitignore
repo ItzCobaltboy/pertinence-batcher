@@ -1,6 +1,6 @@
 code/dataset/**
 code/Model Analysis/ResnetModels/**
-code/Model Analysis/OnnxModels/**
+code/Model Analysis/model_cache/**
 code/Dispatcher/results/cleaned-data/**
 code/Dispatcher/results/checkpoints/**
 code/Dispatcher/results/logs/**
