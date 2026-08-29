@@ -1,86 +1,45 @@
-import urllib.request
-import tarfile
+"""
+Model Analysis — Torch-TensorRT benchmark, single entry point.
+
+  PHASE 1 (src/run_benchmark.py)
+    For every pool model (resnet18/34/50/152) and every precision
+    (fp32, fp16, int8): load the regular model or compile+cache a
+    Torch-TensorRT engine, measure accuracy/latency/size over the
+    ImageNette val set, save results to results/torch_tensorrt_benchmark.csv.
+
+  PHASE 2 (src/eda.py)
+    Analyze that CSV: accuracy/latency/size grouped bar charts per
+    precision, and an accuracy-vs-latency scatter. Plots saved to
+    results/eda/. This EDA is separate from, and does not touch,
+    code/Dispatcher/eda.py.
+
+Folder layout:
+  main.py                   <- you are here, run this file
+  src/
+    constants.py              paths + settings, shared by every module
+    data_loader.py              ImageNette val loader with correct labels
+    model_utils.py                loads regular pretrained models, FLOPs
+    trt_compiler.py                 compiles/caches Torch-TensorRT engines
+    run_benchmark.py                  phase 1 driver
+    benchmark.py                        accuracy/latency measurement
+    eda.py                                phase 2 driver
+
+  ResnetModels/            cached FP32 .pth checkpoints (regular models)
+  model_cache/               cached Torch-TensorRT engines (fp16, int8)
+  results/                     benchmark_results.csv + eda/ plots
+"""
+
 import os
-import torch
-import torchvision
-import pandas as pd
-import warnings
-warnings.filterwarnings("ignore")
+import sys
 
-from quantizer_onnx import quantize_model_onnx
-from metrics_onnx import model_metrics_onnx
-from metrics import model_metrics  # still used to get FLOPs from the PyTorch FP32 model
+_SRC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src")
+sys.path.insert(0, _SRC_DIR)
 
-path = "./../dataset/"
-url = "https://s3.amazonaws.com/fast-ai-imageclas/imagenette2-320.tgz"
-tgz_path = os.path.join(path, "imagenette2-320.tgz")
-modelPath = "./../ResnetModels/"
-onnxModelPath = "./../OnnxModels/"
-
-
-def download():
-    if not os.path.exists(os.path.join(path, "imagenette2-320")):
-        print("Downloading ImageNette...")
-        urllib.request.urlretrieve(url, tgz_path)
-        with tarfile.open(tgz_path) as f:
-            f.extractall(path)
-        print("Done!")
-
-
-def pull_models():
-    return {
-        "resnet18":  torchvision.models.resnet18(weights='DEFAULT'),
-        "resnet34":  torchvision.models.resnet34(weights='DEFAULT'),
-        "resnet50":  torchvision.models.resnet50(weights='DEFAULT'),
-        "resnet152": torchvision.models.resnet152(weights='DEFAULT'),
-    }
+from run_benchmark import run_benchmark
+from eda import run_eda
 
 
 if __name__ == "__main__":
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
-
-    # download()  # run once to get the dataset
-
-    os.makedirs(onnxModelPath, exist_ok=True)
-
-    models = pull_models()
-    results = []
-
-    for name, model in models.items():
-        print(f"\n=== {name} ===")
-
-        # FLOPs don't change between PyTorch and ONNX exports of the same architecture,
-        # so grab it once from the PyTorch model rather than recomputing per format
-        flops_metrics = model_metrics(model, path, device,
-                                       pth_path=os.path.join(modelPath, f"{name}_float32.pth"))
-        flops = flops_metrics["flops"]
-
-        # export to ONNX + produce static INT8 quantized version
-        onnx_paths = quantize_model_onnx(model, name, onnxModelPath, path, device)
-
-        for precision, onnx_path in [("fp32", onnx_paths["fp32_path"]),
-                                       ("int8", onnx_paths["int8_path"])]:
-            print(f"Evaluating {name}_{precision} (ONNX)...")
-
-            metrics = model_metrics_onnx(onnx_path, path, use_tensorrt=False)
-
-            results.append({
-                "model":         name,
-                "precision":     precision,
-                "flops":         flops,
-                "flops_G":       round(flops / 1e9, 3),
-                "model_size_mb": metrics["model_size_mb"],
-                "accuracy":      metrics["accuracy"],
-                "latency_ms":    metrics["latency_ms"],
-                "provider":      metrics["provider"]
-            })
-
-            print(f"  Acc: {metrics['accuracy']:.2f}% | Size: {metrics['model_size_mb']}MB | "
-                  f"Latency: {metrics['latency_ms']}ms | Provider: {metrics['provider']}")
-
-    os.makedirs("./../results/", exist_ok=True)
-    df = pd.DataFrame(results)
-    df.to_csv("./../results/step0_metrics_onnx.csv", index=False)
-    print("\nResults saved → results/step0_metrics_onnx.csv")
-    print(df.to_string())
+    run_benchmark()
+    run_eda()
+    print("\nDone.")
