@@ -189,3 +189,33 @@ if/when latency (not just FLOPs) matters for the batching deployment story.
 **Next**: decide whether to pursue real INT8/FP8 via explicit `modelopt`
 calibration, or accept FP16 as the practical precision win and move on to
 the batching extension.
+
+### [DECISION] Correction — the "FP16 win" above is a compilation win, not a precision win
+
+Follow-up question: is the FP32→FP16 speedup from actual FP16/Tensor-Core
+execution, or just from TensorRT's graph compilation itself (kernel fusion,
+no eager/Python dispatch overhead) regardless of precision? The FP32 rows in
+the benchmark above were **eager, uncompiled PyTorch** — never run through
+Torch-TensorRT — so the two effects (compile vs precision) were never
+actually isolated.
+
+Isolated test (resnet18, batch=1, each variant in its own process):
+| Variant | Latency |
+|---|---|
+| Eager FP32 (uncompiled) | 1.833–1.912ms |
+| **TensorRT-compiled FP32** | **0.891ms** |
+| TensorRT-compiled FP16 | 0.886ms |
+
+Compiled FP32 and compiled FP16 are statistically identical. **The ~2–2.6x
+speedup in the result above is almost entirely TensorRT compilation itself**
+— fusing Conv→BN→ReLU chains, cutting Python/eager dispatch overhead — not
+FP16 precision or Tensor Core throughput. This also better explains why
+INT8/FP8 measured identical to FP16: at batch=1 on models this size, the
+workload isn't compute-bound enough for precision to matter at all: the
+bottleneck compilation removes is overhead, not raw matmul throughput.
+
+**Correction**: relabel the earlier result "TensorRT compilation win,
+precision-independent" rather than "FP16 win." Whether real INT8/FP16
+throughput differentiation exists at all is still unverified — would need
+a compute-bound setup (larger batch size) to actually test it, since batch=1
+can't distinguish precision effects from overhead effects.
