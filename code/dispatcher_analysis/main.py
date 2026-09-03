@@ -1,46 +1,72 @@
 """
-Dispatcher Pareto-front analysis — single entry point.
+Dispatcher Pareto-front evaluation — single entry point.
 
-Everything is triggered from here, in two phases:
+Standalone from code/Dispatcher/, which owns only the NSGA-II search itself
+(finding the Pareto front). This pipeline's job is evaluating that front:
+for every individual, alpha_sys (Eq. 3 of the PERTINENCE paper — is the
+model the dispatcher actually picked correct, not "did it match the ideal
+label") and avg_flops_G, on both the train set and a held-out val set.
 
-  PHASE 1 (src/train_and_predict.py)
-    For each of the 50 Pareto-front configs: train a fresh dispatcher head
-    on train data, predict on both train and val images, save every
-    prediction to predictions/train_predictions.csv and
-    predictions/val_predictions.csv.
+No retraining: code/Dispatcher already saved the actual trained FC weights
+per Pareto individual (model_cache/individual_<id>.npz, copied over from
+there), so this just loads and predicts.
 
-  PHASE 2 (src/analysis.py)
-    Re-read the saved prediction CSVs and compute accuracy, confusion
-    matrix, recall, precision, and under/correct/over counts for every
-    config, on both train and val. Save everything to results/.
+Two phases:
+  PHASE 1 (src/cache_predictions.py)
+    Load each individual's saved weights, predict on train + val embeddings,
+    cache every prediction to predictions/{train,val}_predictions.csv.
+
+  PHASE 2 (src/summarize.py)
+    Re-read the cached predictions and compute alpha_sys + avg_flops_G per
+    individual, per split. Saved to results/{train,val}_summary.csv.
+
+Deeper analysis (per-class recall/precision, confusion matrices, plots) is
+not built yet — deliberately stopped after caching predictions + summaries,
+per the current scope. The cached predictions carry everything needed to
+add that later without re-predicting.
 
 Folder layout:
-  main.py                 <- you are here, run this file
+  main.py                    <- you are here, run this file
   src/
-    constants.py           paths + hyperparameters, shared by every module
-    embeddings.py           computes/caches ResNet18 embeddings
-    config_utils.py          turns one pareto_front.csv row into a penalty matrix
-    trainer.py                 trains one dispatcher head, predicts with it
-    train_and_predict.py         phase 1 driver
-    metrics.py                    confusion matrix / accuracy / recall / precision
-    analysis.py                     phase 2 driver
+    constants.py               paths + pool constants, shared by every module
+    embeddings.py                loads cached ResNet18 embeddings (train + val)
+    cache_predictions.py           phase 1 driver
+    summarize.py                     phase 2 driver
 
-  data/                  input ground truth (copied in beforehand)
-  embeddings_cache/       cached ResNet18 embeddings (so re-runs are fast)
-  predictions/             raw per-config predictions
-  results/                   final summary CSVs + confusion matrices
+  data/                     pareto_front.csv, train/val ground truth (copied
+                             from code/Dispatcher — same underlying data, no
+                             recomputation)
+  embeddings_cache/           cached ResNet18 embeddings (gitignored)
+  model_cache/                  trained FC weights per Pareto individual
+                                 (copied from code/Dispatcher's own
+                                 results/nsga2/models/)
+  predictions/                    cached raw predictions, one column per
+                                   individual
+  results/                          alpha_sys + avg_flops_G summary per
+                                     individual, per split
 """
 
 import os
 import sys
 
-# main.py lives in the project root, but the actual code lives in src/ —
-# add it to the import path so "from train_and_predict import ..." below works.
+_SRC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src")
+sys.path.insert(0, _SRC_DIR)
 
-from src.train_and_predict import run_training_and_prediction
-from src.analysis import run_analysis
+import torch
+
+from embeddings import load_train_embeddings, load_val_embeddings
+from cache_predictions import cache_predictions
+from summarize import summarize
+
 
 if __name__ == "__main__":
-    run_training_and_prediction()
-    run_analysis()
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print(f"Device: {device}")
+
+    train_embeddings, _ = load_train_embeddings(device)
+    val_embeddings, _ = load_val_embeddings(device)
+
+    train_predictions_df, val_predictions_df = cache_predictions(train_embeddings, val_embeddings)
+    train_summary, val_summary = summarize(train_predictions_df, val_predictions_df)
+
     print("\nDone.")

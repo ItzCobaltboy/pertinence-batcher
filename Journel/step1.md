@@ -210,6 +210,7 @@ is a valid, intentional accuracy/compute tradeoff rather than an accidental coll
   typecasting misconfiguration from previous attempt
 - ~~[TODO] Pareto front evaluation — add per-model accuracy; current results only
   have underestimation rate~~ __See Step 2Dv2 below__
+- ~~[TODO] Impliment Loss weighing scheme on FC layer loss.~~
 - [EXPLORE] Model compression (pruning, KD, etc.) — check if it creates useful
   Pareto-optimal points
 
@@ -251,3 +252,228 @@ Pareto config — it functions as a proxy for "how RN18-biased is this
 config," not "how good is this dispatcher." Config selection and any future
 NSGA-II objective redesign should weight per-class recall/precision (e.g.
 macro-averaged) instead of, or alongside, accuracy.
+
+---
+
+# Day 3 (2026-09-03)
+
+## [DECISION] Class-imbalance bug found — sampler used instead of loss weighting
+
+This project's own methodology doc says class imbalance should be handled with
+INS/ISNS/ENS sample weighting **on the FC layer loss**. What was actually
+implemented everywhere (`Dispatcher/trainer.py`, `Dispatcher/nsga2.py`,
+`dispatcher_analysis/config_utils.py`) was a `WeightedRandomSampler` — biases
+*which images get drawn* (oversampling minority classes with replacement), not
+*how much each image's loss counts*. Different technique, same `1/count^α`
+formula. Likely cause of the Step 2D-v2 train→val collapse seen above (e.g.
+one config: 82% train RN152 recall → 39% val) — oversampling-with-replacement
+repeats the same ~300 RN152 images redundantly across epochs, a memorization
+risk; loss-weighting doesn't repeat images, just scales their gradient.
+
+**Fix**: implement only INS (not ISNS/ENS) as true loss weighting — multiply
+each wrong-prediction's loss by `class_weight[true_label]`, plain shuffled
+`DataLoader`, no oversampling. `code/Dispatcher/` rebuilt clean from scratch
+(old version preserved in git history).
+
+## [PIVOT] NSGA-II mechanics rebuilt on pymoo
+
+Hand-rolled GA operators (selection, SBX crossover, polynomial mutation,
+non-dominated sorting) replaced with `pymoo` (`NSGA2`, `SBX`, `PM`) for
+correctness confidence. Only the domain logic — chromosome → penalty matrix →
+penalized loss → FC training → objectives — is still hand-written.
+
+Before launching, ground truth was independently re-verified from scratch:
+fresh 4-model forward pass over all 9469 raw train images, diffed against the
+cached `data/train_ground_truth.csv` — **0 mismatches**, identical label
+distribution `[7363, 740, 530, 307]`.
+
+## [DECISION] Fitness objective switched back to raw accuracy
+
+Changed `obj1` from `underestimation_rate` to `1 - accuracy` (exact match
+against the cheapest-correct label), per user direction, to follow the paper's
+own approach — despite `underestimation_rate`'s known-good property of not
+symmetrically punishing overestimation. Known risk flagged going in: this
+`accuracy` definition penalizes overestimation exactly as hard as
+underestimation, so a config can't get credit for "safe but wasteful" routing.
+
+## [RESULT] NSGA-II run — accuracy objective, INS loss-weighted, pymoo
+
+**Script**: `code/Dispatcher/main.py` (`run_nsga2()`)
+**Config**: population=50, generations=50, FC_EPOCHS=50, SBX (η=20, p=0.9),
+polynomial mutation (η=25), binary tournament, INS class weights
+`[0.0819, 0.8151, 1.1381, 1.9648]` (fixed, not searched).
+**Runtime**: 20,054s (~5h34m) unattended, zero crashes, checkpoints every 5 gens.
+
+**Final Pareto front: 15 individuals** (vs. 50 for the underestimation_rate
+run) — accuracy 82.70%–84.84%, avg FLOPs 1.846G–2.012G. Much narrower band on
+both axes than the earlier run. This run also saves the **actual trained FC
+weights** per individual (`results/nsga2/models/individual_*.npz`), not just
+chromosomes — fixes the gap that forced Step 2D-v2 to retrain from scratch.
+
+**Local-minima check**: user asked whether the narrow band means the GA got
+stuck rather than genuinely exploring. Checked empirically instead of
+guessing — across all 1043 individuals evaluated during the run,
+`correlation(avg_flops_G, accuracy) = -0.699`. Top 10% by FLOPs averaged only
+62.76% accuracy; bottom 10% by FLOPs averaged 83.20%. The search DID explore
+the expensive region extensively — it's genuinely worse under this specific
+accuracy definition, not a GA exploration failure. Root cause: the metric
+itself structurally punishes overestimation (routing an easy image to a
+bigger model is scored "wrong" even though classification would be correct),
+so spending more FLOPs has no way to pay off under this objective. A photo of
+the PERTINENCE paper's CIFAR-100 CNN results (shown mid-run) shows a similarly
+narrow accuracy band (76.9–77.3%, ~0.4pp) with the real differentiation on the
+compute-savings axis instead — so this shape isn't necessarily wrong, just a
+property of using raw accuracy as an objective, matching the paper's own
+result shape.
+
+## [RESULT] Step 1E-eval — Pareto front evaluated on train + held-out val
+
+**Code**: `code/Dispatcher/src/evaluate.py` (+ `metrics.py`, both new).
+Loads the 15 saved `individual_*.npz` weights directly and predicts — no
+retraining, unlike Step 2D-v2. Val ground truth + its cached embeddings
+copied over from `dispatcher_analysis/` (same frozen ResNet18 backbone, same
+labeling logic — byte-reusable). Outputs in `results/eval/`, kept separate
+from `dispatcher_analysis`'s Step 2D-v2 output (different Pareto front,
+different objective — don't merge).
+
+**Generalization held up** — no repeat of the Step 2D-v2 sampler-collapse.
+Worst single-class drop seen was individual 10's RN152 recall: 86.6% train →
+49.6% val (a real drop, but nowhere near the old 82%→39% collapse). Overall
+accuracy train→val gaps stayed within ~2-4pp for every one of the 15 configs.
+Tentatively: the loss-weighting fix (no more oversampling-with-replacement)
+looks like it helped generalization, though this isn't a controlled
+side-by-side (objective changed too).
+
+**But the majority-class-bias finding from Step 2D-v2 reproduces here, even
+harder**, on val:
+- `correlation(accuracy, recall_resnet18) = 0.998` (vs. 0.997 in Step 2D-v2)
+- `correlation(accuracy, macro_recall) = -0.903` — **negative**: the configs
+  raw accuracy ranks *best* are the ones doing worst across the full class
+  spectrum.
+
+Highest-accuracy config (individual 9, 83.22% val accuracy) has macro_recall
+0.324, 0% RN34 recall, 3.25% RN152 recall — essentially an RN18-only
+dispatcher. Best macro-recall config (individual 0, macro_recall 0.431) sits
+at the *bottom* of the accuracy ranking, 68.50% val accuracy. Same pattern as
+Step 2D-v2, now with harder numbers, because this run's objective directly
+optimizes for accuracy rather than just being scored by it after the fact.
+
+**Conclusion**: confirms the pre-run concern about switching to raw accuracy
+— it doesn't just fail to reward good minority-class routing, it actively
+selects against it. Per-class recall/precision (ideally macro-averaged)
+remains the right way to judge or pick a config, not accuracy, regardless of
+which objective the search itself optimizes.
+
+---
+
+## [DECISION] The "raw accuracy" objective above was still not what the paper does — fixed to real alpha_sys
+
+Read the actual PERTINENCE paper text this session (paper.pdf, 19 pages,
+previously only one photographed page had been seen). Its real accuracy
+objective (Eq. 3) is:
+
+    alpha_sys = fraction of images where the DISPATCHED model itself
+                classifies that image correctly
+
+Not exact-match against the argmin-cheapest-correct "ideal" label — what
+this project built and ran for ~5.5h twice now. Under the paper's real
+metric, routing an easy image to a bigger-but-still-correct model costs
+**zero** accuracy, only FLOPs (obj2). Under what was built, that same
+routing was scored exactly as "wrong" as an actual misclassification —
+which is exactly why the previous run's search converged to a narrow band
+and structurally punished overestimation (`correlation(avg_flops_G,
+accuracy) = -0.699` above).
+
+Quantified the gap before touching code: on one random chromosome, the same
+trained FC head's predictions scored 62.79% under exact-match vs. **95.04%**
+under real alpha_sys (`correctness_matrix[image, predicted_model].mean()`,
+using the `<model>_correct` columns already sitting in the ground truth CSV
+— no new computation needed, just the right lookup).
+
+**Fix**: `code/Dispatcher/src/fitness.py` (+ `dispatcher_problem.py`,
+`nsga2_search.py`) now compute the real alpha_sys per individual. Renamed
+"accuracy"/"accuracy_loss" to `alpha_sys`/`alpha_sys_loss` everywhere in the
+Dispatcher codebase (`save_results.py`'s CSV column included) so the two
+metrics can't get silently conflated again.
+
+Also reduced `FC_EPOCHS` 50→30 and `GENERATIONS` 30 for faster turnaround
+(~2h vs ~5.6h) — the earlier run's hyperparameters weren't in question, just
+its objective, so no reason to keep paying the longer runtime while iterating.
+
+## [RESULT] NSGA-II run — alpha_sys objective, INS loss-weighted, pymoo (Run #3)
+
+**Config**: population=50, generations=30, FC_EPOCHS=30, same SBX/PM/INS
+setup as Run #2. **Runtime**: ~2h30m.
+
+**Final Pareto front: 50 individuals** — `alpha_sys` 83.36%–95.96%, avg
+FLOPs 1.92G–5.39G. Back to a full wide dial, much closer to the
+underestimation_rate run's spread (Run #1: 50 individuals, 0.04–17.5%
+underestimation / 1.83–5.21G) than to Run #2's narrow 15-individual band
+(82.70–84.84% / 1.846–2.012G). Confirms the narrow band in Run #2 was
+specifically an artifact of the wrong accuracy definition, not something
+inherent to this problem.
+
+## [DECISION] User caught a second bug: eval pipeline still used the old exact-match metric
+
+After Run #3 finished, the existing `code/Dispatcher/src/evaluate.py`
+(built earlier this session) was run against it automatically — but that
+eval code was never updated when `fitness.py` was fixed. It still computed
+"accuracy" as exact-match against `ideal_label`, not alpha_sys. Result:
+train alpha_sys (from the search log, 86–96%) and "val accuracy" (from the
+stale eval, 36–79%) looked like a severe generalization collapse — they
+were actually two different metrics being compared to each other, not a
+real train→val gap. Caught by the user before this got written up as a
+finding; would have been a wrong conclusion in this log.
+
+**Also flagged**: the eval pipeline had accumulated real folder-boundary
+violations — `code/Dispatcher/data/val_ground_truth.csv` and
+`embeddings_cache/val_embeddings.npz` had been copied in from
+`dispatcher_analysis/` to build that eval code, duplicating the same CSVs
+across two "separate" pipelines (on top of `train_ground_truth.csv`, which
+was already duplicated this way before this session).
+
+## [PIVOT] Folder responsibilities split cleanly: Dispatcher = search only, dispatcher_analysis = eval only
+
+**`code/Dispatcher/`**: stripped back to *only* the NSGA-II search. Deleted
+`evaluate.py`/`metrics.py`, removed all val-split paths/functions from
+`constants.py`/`embeddings.py`, deleted `results/eval/` (the wrong-metric
+output) and `results/archive_exact_match_accuracy_2026-09-03/` (Run #2's
+now-superseded raw output). `main.py` runs `run_nsga2()` only.
+
+**`code/dispatcher_analysis/`**: emptied completely and rebuilt from scratch
+as the standalone evaluation pipeline (old code — Step 2D-v2's
+sampler/alpha-based retraining pipeline — preserved in git history). New
+pipeline: `cache_predictions.py` (loads each Pareto individual's already-
+saved FC weights from `model_cache/`, predicts on train + val, no
+retraining) → `summarize.py` (alpha_sys + avg_flops_G per individual per
+split, via the same correctness-matrix lookup as the fixed `fitness.py` —
+explicitly not exact-match, named `alpha_sys` not `accuracy` throughout to
+avoid repeating this exact confusion). Populated from Run #3's outputs:
+`pareto_front.csv`, both ground-truth CSVs, both embeddings caches, and all
+50 `individual_*.npz` weight files — copied over once, so no retraining or
+recomputation was needed to stand this pipeline back up.
+
+Scope deliberately stopped after caching predictions + summaries — no
+confusion matrices / per-class recall-precision / plots yet, that's next.
+
+## [RESULT] Step 1E-eval v2 — alpha_sys on train + held-out val (Run #3's front)
+
+With the metric bug actually fixed: val `alpha_sys` sits in **87.5%–92.6%**,
+close to Run #3's train-time search range (83.4–95.2%) — no generalization
+collapse, and no more of the misleading 36–79% spread the metric-mismatch
+bug had produced. Notably, individual 40 — the best-looking config under the
+broken exact-match eval (78.9%) — is now the *worst* under real alpha_sys
+(87.5%). Confirms the fix changes which configs actually look good, not just
+the headline numbers.
+
+Caveat carried over from Run #2: recomputed train alpha_sys (via the saved
+weights) differs from the search's own live number by up to 8.2 percentage
+points for one individual (mean ~2.2pp) — `save_models.py` retrains once
+more after the search with fresh init/shuffle, not bit-identical to what
+pymoo actually saw. Known, documented, not newly introduced.
+
+**Still open**: macro-recall / per-class breakdown for this alpha_sys front
+hasn't been computed yet (scope stopped at predictions + summaries this
+round) — needed before trusting any single "best" config, per the standing
+finding that overall accuracy metrics (now alpha_sys too, potentially) can
+still be majority-class-biased even when correctly defined.

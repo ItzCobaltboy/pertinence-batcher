@@ -1,11 +1,11 @@
 code/dataset/**
 code/Model Analysis/ResnetModels/**
 code/Model Analysis/model_cache/**
-code/Dispatcher/results/cleaned-data/**
-code/Dispatcher/results/checkpoints/**
+code/Dispatcher/embeddings_cache/**
 code/Dispatcher/results/logs/**
 code/Dispatcher/results/nsga2/checkpoint_*.npz
 code/dispatcher_analysis/embeddings_cache/**
+paper.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
