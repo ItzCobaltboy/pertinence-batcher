@@ -1,6 +1,6 @@
 """
 Turns cached predictions into one summary row per Pareto individual, per
-split: alpha_sys and avg_flops_G.
+split: alpha_sys, avg_flops_G, and per-class recall/precision.
 
 alpha_sys (Eq. 3 of the PERTINENCE paper) is the fraction of images where
 the model the dispatcher actually picked classifies correctly — looked up
@@ -10,6 +10,10 @@ argmin-cheapest-correct reference column also cached in the predictions
 CSV) — that was the earlier, incorrect metric this project used, and it
 punished overestimation (a bigger, still-correct model) as hard as an
 actual misclassification. Don't reintroduce that confusion here.
+
+Per-class recall/precision, by contrast, ARE computed against ideal_label —
+a different, complementary question ("how well does this config route
+images to their ideal target class"), independent of alpha_sys.
 """
 
 import os
@@ -17,6 +21,7 @@ import numpy as np
 import pandas as pd
 
 import constants as c
+from metrics import confusion_matrix, recall_per_class, precision_per_class
 
 
 def _correctness_matrix(ground_truth_csv):
@@ -25,6 +30,7 @@ def _correctness_matrix(ground_truth_csv):
 
 
 def _summarize_split(predictions_df, correctness_matrix, out_csv):
+    ideal_labels = predictions_df["ideal_label"].values
     prediction_columns = [col for col in predictions_df.columns if col.startswith("pred_")]
     flops_array = np.array(c.FLOPS_G)
     image_indices = np.arange(len(predictions_df))
@@ -37,11 +43,20 @@ def _summarize_split(predictions_df, correctness_matrix, out_csv):
         alpha_sys = correctness_matrix[image_indices, predicted_labels].mean()
         avg_flops_G = flops_array[predicted_labels].mean()
 
-        rows.append({
+        cm = confusion_matrix(ideal_labels, predicted_labels)
+        recall = recall_per_class(cm)
+        precision = precision_per_class(cm)
+
+        row = {
             "individual": individual_id,
             "alpha_sys": alpha_sys,
             "avg_flops_G": avg_flops_G,
-        })
+        }
+        for class_idx, model_name in enumerate(c.MODEL_NAMES):
+            row[f"recall_{model_name}"] = recall[class_idx]
+            row[f"precision_{model_name}"] = precision[class_idx]
+
+        rows.append(row)
 
     summary_df = pd.DataFrame(rows).sort_values("alpha_sys", ascending=False)
     os.makedirs(os.path.dirname(out_csv), exist_ok=True)

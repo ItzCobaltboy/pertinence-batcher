@@ -477,3 +477,68 @@ hasn't been computed yet (scope stopped at predictions + summaries this
 round) — needed before trusting any single "best" config, per the standing
 finding that overall accuracy metrics (now alpha_sys too, potentially) can
 still be majority-class-biased even when correctly defined.
+
+---
+
+## [DECISION] Stopped trusting any copied model cache — retrain from chromosome every run
+
+The stale-checkpoint discovery above (Run #2's `checkpoint_gen035-050.npz`
+sitting alongside Run #3's `gen005-030.npz` in the same folder, only
+distinguishable by file mtime) raised the same doubt about
+`model_cache/individual_*.npz` — those were copied over from
+`code/Dispatcher/results/nsga2/models/`, so if they'd been similarly stale
+there'd be no code-level signal, only a silent wrong result. Checked by
+mtime: they were genuinely written 20:33–20:34, right after Run #3's
+`checkpoint_gen030.npz` (20:33:12) — not stale. But copied caches costing
+nothing to distrust and everything to get wrong silently, so: **never trust
+a copied weight file here again.**
+
+**Fix**: `dispatcher_analysis` now retrains every one of the 50 individuals
+directly from `pareto_front.csv`'s chromosome columns on every run
+(`build_models.py`, using exact copies of `code/Dispatcher`'s
+`penalty_matrix.py`/`class_weights.py`/`loss.py`/training loop — same
+hyperparameters, `FC_EPOCHS=30`). Costs ~2-3 minutes for all 50 individuals
+(retraining an FC head is ~3-5s), trivial next to the ~2.5h search itself.
+Also deleted the stale `checkpoint_gen035-050.npz` files from
+`code/Dispatcher/` so they can't confuse anyone again.
+
+## [RESULT] Per-class recall/precision, Pareto scatter, confusion matrices — and the majority-bias question resolved
+
+Extended the pipeline: `metrics.py` (confusion matrix / recall / precision
+against `ideal_label`, not alpha_sys — a different, complementary question)
+folded into `summarize.py`'s output; `plots.py` adds a Pareto scatter
+(`1 - alpha_sys` vs `avg_flops_G`, train + val, non-dominated points
+recomputed and highlighted independently per split) and confusion-matrix
+heatmaps for three representative individuals (cheapest / middle /
+highest-alpha_sys) on val.
+
+**Scatter confirms a real front on both splits**: 14/50 non-dominated on
+train, 13/50 on val — a genuine staircase, not degenerate. The two fronts
+mostly agree but aren't identical (a handful of train-optimal individuals
+are dominated once evaluated on val) — expected, since NSGA-II only ever
+saw train objectives.
+
+**Resolves the standing open question** (had raw accuracy metrics, from
+Run #1/#2, been majority-class-biased in a way that's actually about
+`alpha_sys` too, or was that an artifact of the earlier wrong metrics?) —
+checked directly on Run #3's val summary:
+
+| correlation with system-accuracy metric | Run #1/#2 (wrong metrics) | Run #3 (correct alpha_sys) |
+|---|---|---|
+| vs. `recall_resnet18` | +0.997 / +0.998 | **-0.576** |
+| vs. `macro_recall` | -0.903 | **+0.561** |
+| vs. `avg_flops_G` | -0.699 | **+0.786** |
+
+Complete reversal. Under the wrong metrics, "accuracy" was essentially a
+proxy for RN18-dominance and spending more FLOPs actively hurt the score.
+Under real `alpha_sys`, higher scores now correlate *positively* with
+macro-recall and *negatively* with RN18 recall, and more FLOPs now
+genuinely buys more `alpha_sys` rather than costing it. The majority-class-
+bias finding that shaped a large part of this session's earlier analysis
+(Step 2D-v2, Step 1E-eval v1) was, to a significant degree, an artifact of
+measuring the wrong thing — not a property of the dispatcher problem
+itself. Confusion matrices confirm the mechanism visually: cheaper configs
+(e.g. individual 38, 2.18G) route almost everything to RN18; pricier ones
+(individual 15, 3.79G) spread more into RN50/RN152 but also over-route a
+lot of RN18-sufficient images there — the FLOPs-waste side of
+overestimation, now correctly *not* showing up as an accuracy penalty.
