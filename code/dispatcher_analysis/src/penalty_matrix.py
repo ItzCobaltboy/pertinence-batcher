@@ -1,7 +1,7 @@
 """
 Turns a 12-gene chromosome into the 4x4 penalty matrix used by the loss.
-Exact copy of code/Dispatcher/src/penalty_matrix.py — kept in sync manually
-since the two pipelines are standalone (no shared imports).
+Kept identical to code/Dispatcher/src/penalty_matrix.py — the two pipelines
+are standalone (no shared imports), so this is synced manually.
 """
 
 import numpy as np

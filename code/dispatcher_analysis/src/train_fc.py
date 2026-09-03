@@ -1,7 +1,7 @@
 """
-Trains one dispatcher FC head (Linear 512 -> 4) and predicts with it.
-Exact copy of code/Dispatcher/src/dispatcher_model.py, renamed for clarity
-in this pipeline (it's the only training this pipeline does).
+Trains one dispatcher FC head (Linear 512 -> 4) and predicts with it. Kept
+identical to code/Dispatcher/src/dispatcher_model.py, renamed here since
+this is the only training this pipeline does.
 """
 
 import torch

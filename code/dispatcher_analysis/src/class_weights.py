@@ -1,6 +1,7 @@
 """
-INS (Inverse Number of Samples) class weighting — applied in the loss, not
-a sampler. Exact copy of code/Dispatcher/src/class_weights.py.
+INS (Inverse Number of Samples) class weighting, applied in the loss rather
+than a sampler. Kept identical to code/Dispatcher/src/class_weights.py so
+retraining here reproduces the same weighting the search used.
 """
 
 import numpy as np
@@ -9,10 +10,8 @@ import constants as c
 
 
 def compute_ins_class_weights(labels):
-    """
-    weight(class) = 1 / count(class), normalized so the weights sum to
-    NUM_CLASSES.
-    """
+    """weight(class) = 1 / count(class), normalized so the weights sum to
+    NUM_CLASSES. Returns a (NUM_CLASSES,) array."""
     class_counts = [0] * c.NUM_CLASSES
     for label in labels:
         class_counts[label] += 1

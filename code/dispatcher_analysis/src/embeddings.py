@@ -1,8 +1,7 @@
 """
-Loads the cached ResNet18 embeddings for train/val. Both were already
-computed by code/Dispatcher (train) and the original dispatcher_analysis
-build (val) and copied over here — a fresh compute fallback is included
-only so this pipeline still works standalone if the cache is ever missing.
+Loads the cached ResNet18 embeddings for train/val from embeddings_cache/.
+A fresh-compute fallback (frozen ResNet18, classifier head removed) is
+included so this pipeline still works standalone if a cache file is missing.
 """
 
 import os
@@ -12,6 +11,8 @@ import constants as c
 
 
 def _compute_embeddings(dataframe, device):
+    """Runs frozen ResNet18 (classifier head removed) over every image in
+    dataframe. Returns (embeddings, labels) as numpy arrays."""
     import torch
     import torch.nn as nn
     import torchvision.models as tvm
@@ -52,6 +53,8 @@ def _compute_embeddings(dataframe, device):
 
 
 def _load_or_compute(cache_path, ground_truth_csv, device):
+    """Loads cache_path if present, otherwise computes embeddings from
+    ground_truth_csv and writes the cache."""
     if os.path.exists(cache_path):
         cached = np.load(cache_path)
         return cached["embeddings"], cached["labels"]
@@ -66,8 +69,10 @@ def _load_or_compute(cache_path, ground_truth_csv, device):
 
 
 def load_train_embeddings(device):
+    """Returns (embeddings, labels) for the train set."""
     return _load_or_compute(c.TRAIN_EMBEDDINGS_NPZ, c.TRAIN_GROUND_TRUTH_CSV, device)
 
 
 def load_val_embeddings(device):
+    """Returns (embeddings, labels) for the held-out val set."""
     return _load_or_compute(c.VAL_EMBEDDINGS_NPZ, c.VAL_GROUND_TRUTH_CSV, device)

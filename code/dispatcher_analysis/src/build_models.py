@@ -1,14 +1,13 @@
 """
 Retrains every Pareto individual's FC head directly from its chromosome
-(pareto_front.csv) and INS class weights — never trusted as a copied
-cache. Overwrites model_cache/individual_<id>.npz every run.
+(pareto_front.csv) and INS class weights, overwriting
+model_cache/individual_<id>.npz every run — never a copied cache.
 
-Same reasoning as save_models.py in code/Dispatcher: fresh init + shuffle
-means these weights won't be bit-identical to whatever pymoo saw during the
-search, but with the same chromosome, hyperparameters, and class weights,
-results should be very close. Retraining all 50 individuals costs a few
-minutes (~3-5s each) — cheap insurance against ever evaluating a stale or
-mismatched weight file.
+Fresh init + shuffle mean these weights won't be bit-identical to whatever
+pymoo saw during the search, but with the same chromosome, hyperparameters,
+and class weights, results should be very close. Retraining all 50
+individuals costs a few minutes (~3-5s each) — cheap insurance against ever
+evaluating a stale or mismatched weight file.
 """
 
 import os
@@ -22,6 +21,8 @@ from train_fc import train_fc
 
 
 def build_models(train_embeddings, train_labels, device):
+    """Reads pareto_front.csv, retrains an FC head per individual, and
+    writes model_cache/individual_<id>.npz (W, b, chromosome) for each."""
     pareto_df = pd.read_csv(c.PARETO_FRONT_CSV)
     chromosome_columns = [col for col in pareto_df.columns if col.startswith("P_")]
 

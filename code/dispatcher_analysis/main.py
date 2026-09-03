@@ -11,9 +11,8 @@ on both the train set and a held-out val set.
 Four phases:
   PHASE 0 (src/build_models.py)
     Retrain every Pareto individual's FC head directly from its chromosome
-    (pareto_front.csv) — never trusted as a copied cache. Cheap (~3-5s each)
-    and removes any doubt after a real staleness bug was found once this
-    session (stale NSGA-II checkpoints from a superseded run).
+    (pareto_front.csv) — never a copied cache. Cheap (~3-5s each) and
+    guarantees the weights match the front currently in pareto_front.csv.
 
   PHASE 1 (src/cache_predictions.py)
     Predict on train + val embeddings with the freshly retrained weights,
@@ -31,7 +30,7 @@ Four phases:
     results/plots/.
 
 Folder layout:
-  main.py                    <- you are here, run this file
+  main.py                    <- entry point, run this file
   src/
     constants.py               paths + pool constants + FC hyperparameters
     embeddings.py                loads cached ResNet18 embeddings (train + val)
@@ -89,6 +88,7 @@ if __name__ == "__main__":
     plot_pareto_scatter(train_summary, val_summary,
                          os.path.join(c.PLOTS_DIR, "pareto_scatter.png"))
 
+    # pick 3 representative val configs for the confusion-matrix figure
     val_by_alpha = val_summary.sort_values("alpha_sys", ascending=False)
     val_by_flops = val_summary.sort_values("avg_flops_G")
     highest_alpha_sys = int(val_by_alpha.iloc[0]["individual"])

@@ -39,6 +39,8 @@ def _non_dominated_mask(x, y):
 
 
 def plot_pareto_scatter(train_summary, val_summary, out_path):
+    """Saves a side-by-side train/val Pareto scatter (1-alpha_sys vs
+    avg_flops_G) with non-dominated points highlighted, to out_path."""
     fig, axes = plt.subplots(1, 2, figsize=(13, 5.5))
 
     for ax, summary, title in [(axes[0], train_summary, "Train"), (axes[1], val_summary, "Val")]:
@@ -68,6 +70,8 @@ def plot_pareto_scatter(train_summary, val_summary, out_path):
 
 
 def plot_confusion_matrices(val_predictions_df, val_summary, individual_ids, out_path):
+    """Saves one confusion-matrix heatmap (predicted vs. ideal_label) per
+    individual in individual_ids, side by side, to out_path."""
     ideal_labels = val_predictions_df["ideal_label"].values
 
     fig, axes = plt.subplots(1, len(individual_ids), figsize=(5.5 * len(individual_ids), 5))

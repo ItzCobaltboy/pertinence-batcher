@@ -1,6 +1,7 @@
 """
-Per-sample penalized loss for training the dispatcher FC head. Exact copy
-of code/Dispatcher/src/loss.py.
+Per-sample penalized loss for training the dispatcher FC head. Kept
+identical to code/Dispatcher/src/loss.py so retraining here reproduces the
+same objective the search used.
 
   L_k = 0                                                     if pred == true
   L_k = CrossEntropy(logits, true) * P[true, pred] * class_weight[true]   otherwise
@@ -11,6 +12,7 @@ import numpy as np
 
 
 def penalized_loss(logits, targets, penalty_matrix_np, class_weights_np):
+    """Computes the batch-mean penalized loss described above."""
     cross_entropy = torch.nn.functional.cross_entropy(logits, targets, reduction="none")
     predictions = torch.argmax(logits, dim=1)
 

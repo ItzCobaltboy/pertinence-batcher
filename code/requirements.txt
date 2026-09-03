@@ -1,8 +1,11 @@
 numpy
 pandas
 matplotlib
-scikit-learn
-torchao
+pillow
 thop
+pymoo
 torch
 torchvision
+torch-tensorrt==2.13.0
+tensorrt-cu13==11.2.1.2
+nvidia-modelopt
