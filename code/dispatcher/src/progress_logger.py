@@ -12,12 +12,16 @@ import constants as c
 
 
 class ProgressLogger(Callback):
+    """Logs best alpha_sys / lowest FLOPs each generation; checkpoints the
+    population every CHECKPOINT_EVERY_N_GENERATIONS generations."""
+
     def __init__(self, logger):
         super().__init__()
         self.logger = logger
         self.generation = 0
 
     def notify(self, algorithm):
+        """pymoo calls this once per completed generation."""
         self.generation += 1
 
         objectives = algorithm.pop.get("F")   # (pop_size, 2): [alpha_sys_loss, avg_flops_G]
@@ -34,6 +38,7 @@ class ProgressLogger(Callback):
             self._save_checkpoint(chromosomes, objectives)
 
     def _save_checkpoint(self, chromosomes, objectives):
+        """Writes the current population + objectives to results/nsga2/checkpoint_genNNN.npz."""
         os.makedirs(c.NSGA2_DIR, exist_ok=True)
         path = os.path.join(c.NSGA2_DIR, f"checkpoint_gen{self.generation:03d}.npz")
         np.savez(path, population=chromosomes, objectives=objectives, generation=self.generation)

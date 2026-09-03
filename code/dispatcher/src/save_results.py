@@ -10,6 +10,9 @@ import constants as c
 
 
 def save_pareto_front(chromosomes, objectives, logger):
+    """Writes results/nsga2/pareto_front.csv with columns: individual,
+    alpha_sys, avg_flops_G, P_<true><pred> for every off-diagonal penalty
+    entry — sorted by alpha_sys descending."""
     rows = []
     for individual_id in range(len(chromosomes)):
         chromosome = chromosomes[individual_id]

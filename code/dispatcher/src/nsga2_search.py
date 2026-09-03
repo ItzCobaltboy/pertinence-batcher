@@ -1,8 +1,7 @@
 """
-Sets up and runs the NSGA-II search using pymoo (not a hand-rolled GA) —
-selection, crossover, mutation, and non-dominated sorting are all pymoo's
-well-tested implementations. Only the domain logic (what a chromosome means,
-how to train+evaluate one) is ours.
+Sets up and runs the NSGA-II search using pymoo — selection, crossover,
+mutation, and non-dominated sorting are pymoo's implementations. Only the
+domain logic (what a chromosome means, how to train+evaluate one) is ours.
 """
 
 import time
@@ -27,6 +26,9 @@ from logging_setup import setup_logging
 
 
 def run_nsga2():
+    """End-to-end search: load embeddings, build the pymoo problem, run
+    NSGA2 for c.GENERATIONS generations, then save the resulting Pareto
+    front's chromosomes and trained FC weights."""
     logger = setup_logging()
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     logger.info(f"Device: {device}  |  Pop: {c.POPULATION_SIZE}  |  "
@@ -39,9 +41,8 @@ def run_nsga2():
     logger.info(f"Embeddings shape: {train_embeddings.shape}")
 
     # Per-image, per-model correctness (row order matches train_ground_truth.csv,
-    # which is also the order embeddings were computed in) — used to compute the
-    # real alpha_sys (Eq. 3 of the paper): was the DISPATCHED model actually
-    # correct on this image, not "did we match the ideal argmin label."
+    # same order embeddings were computed in) — used to compute alpha_sys (Eq. 3
+    # of the paper): was the DISPATCHED model actually correct on this image.
     correctness_columns = [f"{name}_correct" for name in c.MODEL_NAMES]
     correctness_matrix = pd.read_csv(c.TRAIN_GROUND_TRUTH_CSV)[correctness_columns].values.astype(bool)
     logger.info(f"Correctness matrix shape: {correctness_matrix.shape}")
@@ -72,7 +73,7 @@ def run_nsga2():
         termination,
         callback=ProgressLogger(logger),
         save_history=False,
-        verbose=False,   # our own logging (per-individual + per-generation) replaces pymoo's
+        verbose=False,   # our own per-individual/per-generation logging replaces pymoo's
     )
 
     logger.info(f"\nSearch finished in {time.time()-start_time:.0f}s")

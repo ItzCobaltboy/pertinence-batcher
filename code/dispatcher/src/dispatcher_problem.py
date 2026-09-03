@@ -1,11 +1,6 @@
 """
-Wraps our fitness function into a pymoo Problem, so pymoo's NSGA2
+Wraps the fitness function into a pymoo Problem so pymoo's NSGA2
 implementation can search it.
-
-pymoo hands us a whole batch of chromosomes at once (the current population
-or generation of offspring) via the X argument — we just loop over them and
-call our own evaluate_individual for each one, since each evaluation trains
-a real FC head on the GPU and can't be vectorized.
 """
 
 import numpy as np
@@ -16,6 +11,9 @@ from fitness import evaluate_individual
 
 
 class DispatcherProblem(Problem):
+    """A 12-gene, 2-objective (alpha_sys_loss, avg_flops_G) problem, evaluated
+    by training a real FC head per individual."""
+
     def __init__(self, train_embeddings, train_labels, correctness_matrix, class_weights, device, logger):
         super().__init__(
             n_var=c.N_GENES,
@@ -32,6 +30,9 @@ class DispatcherProblem(Problem):
         self.total_evaluated = 0
 
     def _evaluate(self, X, out, *args, **kwargs):
+        """pymoo hands us a whole population/offspring batch at once via X;
+        each row is one chromosome. Evaluations can't be vectorized — each
+        one trains a real FC head on the GPU — so we loop."""
         num_individuals = X.shape[0]
         objectives = np.zeros((num_individuals, 2))
 

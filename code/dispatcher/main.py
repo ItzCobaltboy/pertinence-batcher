@@ -1,36 +1,25 @@
 """
 Dispatcher NSGA-II search — single entry point.
 
-This folder's ONLY responsibility is finding the Pareto front (the NSGA-II
-search over penalty-matrix chromosomes). Evaluating that front (train + val
-alpha_sys, per-config summaries) is a separate, standalone pipeline —
-code/dispatcher_analysis/ — which reads this folder's pareto_front.csv and
-saved model weights but does not live here. Don't add eval logic back into
-this folder; keep the two pipelines' responsibilities split.
+This folder's only responsibility is finding the Pareto front: an NSGA-II
+search over 12-gene penalty-matrix chromosomes. Evaluating a front (train +
+val alpha_sys, per-config summaries) is a separate pipeline,
+code/dispatcher_analysis/, which reads this folder's pareto_front.csv and
+saved model weights but shares no code. Keep the two responsibilities split.
 
-Evolves the penalty matrix (12 genes) to trace the Pareto front of
-alpha_sys (Eq. 3 of the PERTINENCE paper: does the DISPATCHED model actually
-classify correctly) vs avg-FLOPs. Class imbalance is handled with INS
-(Inverse Number of Samples) weighting applied directly in the loss function
-— every image is seen once per epoch at its natural frequency, and a
-minority-class image's loss counts for more when the model gets it wrong.
+Objectives (both minimised): alpha_sys_loss = 1 - alpha_sys (Eq. 3 of the
+PERTINENCE paper — does the DISPATCHED model actually classify correctly)
+and avg_flops_G. Class imbalance is handled with INS (Inverse Number of
+Samples) weighting applied inside the loss function: every image is seen
+once per epoch at its natural frequency, and a minority-class image's loss
+counts for more when the model gets it wrong.
 
-This replaces two earlier versions of this search, both in git history:
-  - the original, which applied the INS formula to a WeightedRandomSampler
-    instead of the loss (a different, incorrect technique)
-  - a second run which used exact-match accuracy against the ideal
-    argmin-cheapest-correct label as the objective, instead of the paper's
-    real alpha_sys — see Journel/step1.md for why that was wrong (it punishes
-    overestimation exactly as hard as underestimation, which the paper does
-    not do). That run's raw output is archived under
-    code/dispatcher_analysis/ alongside this run's, for reference.
-
-The actual NSGA-II algorithm (selection, crossover, mutation, non-dominated
-sorting) is pymoo's, not hand-rolled — only the domain logic (what a
-chromosome means, how to train+evaluate one) is ours.
+The NSGA-II algorithm itself (selection, crossover, mutation, non-dominated
+sorting) is pymoo's; only the domain logic (what a chromosome means, how to
+train+evaluate one) is ours.
 
 Folder layout:
-  main.py                  <- you are here, run this file
+  main.py                  <- entry point, run this file
   src/
     constants.py              paths + hyperparameters, shared by every module
     embeddings.py               computes/caches ResNet18 embeddings (train only)

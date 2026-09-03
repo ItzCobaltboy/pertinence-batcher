@@ -1,10 +1,10 @@
 """
 Computes (and caches) ResNet18 embeddings for the training set.
 
-An "embedding" here is the 512-number output of ResNet18 with its final
-classification layer removed — used as input to the dispatcher's FC head.
-The backbone is frozen, so every individual in the NSGA-II search reuses
-the exact same embeddings — we only ever need to compute this once.
+An "embedding" is the 512-number output of ResNet18 with its final
+classification layer removed — the input to the dispatcher's FC head. The
+backbone is frozen, so every individual in the NSGA-II search reuses the
+exact same embeddings — computed once, cached to disk.
 """
 
 import os
@@ -19,6 +19,8 @@ import constants as c
 
 
 class ImageDataset(Dataset):
+    """Loads (image, label) pairs from a dataframe with image_path/label columns."""
+
     def __init__(self, dataframe):
         self.dataframe = dataframe
 
@@ -34,11 +36,13 @@ class ImageDataset(Dataset):
 
 
 def compute_embeddings(dataframe, device):
+    """Runs frozen ResNet18 (classifier head removed) over every image in
+    dataframe. Returns (embeddings, labels) as numpy arrays."""
     dataset = ImageDataset(dataframe)
     loader = DataLoader(dataset, batch_size=64, shuffle=False, num_workers=0)
 
     backbone = tvm.resnet18(weights=tvm.ResNet18_Weights.DEFAULT)
-    feature_extractor = nn.Sequential(*list(backbone.children())[:-1])
+    feature_extractor = nn.Sequential(*list(backbone.children())[:-1])   # drop the FC classifier layer
     feature_extractor = feature_extractor.to(device)
     feature_extractor.eval()
     for param in feature_extractor.parameters():
@@ -65,10 +69,8 @@ def compute_embeddings(dataframe, device):
 
 
 def load_or_compute_train_embeddings(device):
-    """
-    Loads the cached train embeddings if they exist, otherwise computes them
-    from data/train_ground_truth.csv and caches the result.
-    """
+    """Loads cached train embeddings if present, otherwise computes them
+    from data/train_ground_truth.csv and caches the result."""
     import pandas as pd
 
     if os.path.exists(c.TRAIN_EMBEDDINGS_NPZ):

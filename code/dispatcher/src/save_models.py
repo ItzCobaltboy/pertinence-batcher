@@ -1,8 +1,7 @@
 """
 Trains and saves the actual FC weights for every individual on the final
-Pareto front — not just their chromosomes. Without this, using any of these
-configs later means retraining from scratch (which is what happened last
-time, in dispatcher_analysis).
+Pareto front, not just their chromosomes — so using any of these configs
+later (e.g. in dispatcher_analysis) doesn't require retraining from scratch.
 
 Note: this retrains each individual one more time after the search ends.
 Random init + shuffle mean these weights won't be bit-identical to whatever
@@ -19,6 +18,8 @@ from dispatcher_model import train_fc
 
 
 def save_pareto_models(chromosomes, train_embeddings, train_labels, class_weights, device, logger):
+    """Retrains an FC head for every Pareto chromosome and saves (W, b,
+    chromosome) to results/nsga2/models/individual_<id>.npz."""
     models_dir = os.path.join(c.NSGA2_DIR, "models")
     os.makedirs(models_dir, exist_ok=True)
 

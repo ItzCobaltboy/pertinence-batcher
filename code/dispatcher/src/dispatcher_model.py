@@ -1,8 +1,9 @@
 """
 Trains one dispatcher FC head (Linear 512 -> 4) and predicts with it.
 
-No sampler here — a plain shuffled DataLoader, since class imbalance is now
-handled entirely inside the loss (see loss.py / class_weights.py).
+Class imbalance is handled entirely inside the loss (loss.py /
+class_weights.py), so the DataLoader here is a plain shuffled loader —
+no sampler.
 """
 
 import torch
@@ -16,10 +17,9 @@ from loss import penalized_loss
 
 
 def train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, device):
-    """
-    Returns the trained weight matrix W (4, 512) and bias b (4,) as plain
-    numpy arrays.
-    """
+    """Train Linear(512, NUM_CLASSES) on the given embeddings/labels under
+    the penalized loss. Returns the trained weight matrix W (4, 512) and
+    bias b (4,) as plain numpy arrays."""
     embeddings_tensor = torch.from_numpy(train_embeddings)
     labels_tensor = torch.from_numpy(train_labels)
     dataset = TensorDataset(embeddings_tensor, labels_tensor)
@@ -43,6 +43,7 @@ def train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, devi
     W = fc.weight.detach().cpu().numpy()
     b = fc.bias.detach().cpu().numpy()
 
+    # free GPU memory immediately — this trains once per NSGA-II individual (2500+ times/run)
     del fc, optimizer, loader
     torch.cuda.empty_cache()
 

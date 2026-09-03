@@ -1,12 +1,8 @@
 """
-INS (Inverse Number of Samples) class weighting — applied in the loss, not
-the sampler. Every image is seen once per epoch at its natural frequency;
-a minority-class image's loss just counts for more when it's wrong.
-
-This replaces the earlier (incorrect) implementation, which used these same
-weights to bias a WeightedRandomSampler instead — that oversampled the same
-few hundred minority images with replacement, which is a likely cause of
-the train-to-val generalization collapse seen in Step 2D-v2.
+INS (Inverse Number of Samples) class weighting, applied inside the loss
+(see loss.py) rather than biasing which images get drawn — every image is
+seen once per epoch at its natural frequency; a minority-class image's loss
+simply counts for more when the model gets it wrong.
 """
 
 import numpy as np
@@ -16,11 +12,9 @@ import constants as c
 
 def compute_ins_class_weights(labels):
     """
-    weight(class) = 1 / count(class)
-
-    Returns an array of length NUM_CLASSES, normalized so the weights sum
-    to NUM_CLASSES (keeps the average loss magnitude comparable across
-    different label distributions / chromosome runs).
+    weight(class) = 1 / count(class), normalized so the weights sum to
+    NUM_CLASSES (keeps average loss magnitude comparable across different
+    label distributions / chromosome runs). Returns a (NUM_CLASSES,) array.
     """
     class_counts = [0] * c.NUM_CLASSES
     for label in labels:

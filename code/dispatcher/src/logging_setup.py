@@ -12,6 +12,8 @@ import constants as c
 
 
 def setup_logging():
+    """Creates a timestamped log file under results/logs/ and returns a
+    logger that writes to it and to stdout."""
     os.makedirs(c.LOGS_DIR, exist_ok=True)
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_file = os.path.join(c.LOGS_DIR, f"nsga2_ins_loss_{run_id}.log")
