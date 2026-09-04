@@ -1,7 +1,6 @@
 # Day 2
 
 ## Context
-
 Task: train a labeller. Ditched quantization entirely — moving on with ResNet18/34/50/152,
 original sizes, FP32.
 
@@ -232,8 +231,8 @@ Before launching, ground truth was independently re-verified from scratch: a fre
 ## [DECISION] Fitness objective switched back to raw accuracy
 
 Changed `obj1` from `underestimation_rate` to `1 - accuracy` (exact match against the
-cheapest-correct label), per user direction, to follow the paper's own approach —
-despite `underestimation_rate`'s known-good property of not symmetrically punishing
+cheapest-correct label), to follow the paper's own approach more literally, despite
+`underestimation_rate`'s known-good property of not symmetrically punishing
 overestimation. Known risk flagged going in: this `accuracy` definition penalizes
 overestimation exactly as hard as underestimation, so a config can't get credit for
 "safe but wasteful" routing.
@@ -252,8 +251,8 @@ earlier run. This run also saves the **actual trained FC weights** per individua
 (`results/nsga2/models/individual_*.npz`), not just chromosomes — fixes the gap that
 forced Step 2D-v2 to retrain from scratch.
 
-**Local-minima check**: user asked whether the narrow band means the GA got stuck rather
-than genuinely exploring. Checked empirically instead of guessing — across all 1043
+**Local-minima check**: wanted to confirm the narrow band wasn't just the GA getting stuck
+rather than genuinely exploring. Checked empirically instead of guessing — across all 1043
 individuals evaluated during the run, `correlation(avg_flops_G, accuracy) = -0.699`. Top
 10% by FLOPs averaged only 62.76% accuracy; bottom 10% by FLOPs averaged 83.20%. The
 search DID explore the expensive region extensively — it's genuinely worse under this
@@ -345,7 +344,7 @@ spread (Run #1: 50 individuals, 0.04–17.5% underestimation / 1.83–5.21G) tha
 in Run #2 was specifically an artifact of the wrong accuracy definition, not something
 inherent to this problem.
 
-## [DECISION] Second bug caught by the user: eval pipeline still used the old exact-match metric
+## [DECISION] Second bug caught: eval pipeline still used the old exact-match metric
 
 After Run #3 finished, the existing `code/Dispatcher/src/evaluate.py` (built earlier
 this session) was run against it automatically — but that eval code was never updated
@@ -353,8 +352,8 @@ when `fitness.py` was fixed. It still computed "accuracy" as exact-match against
 `ideal_label`, not alpha_sys. Result: train alpha_sys (from the search log, 86–96%) and
 "val accuracy" (from the stale eval, 36–79%) looked like a severe generalization
 collapse — they were actually two different metrics being compared to each other, not a
-real train→val gap. Caught by the user before this got written up as a finding — would
-have been a wrong conclusion in this log.
+real train→val gap. Caught before this got written up as a finding — would have been a
+wrong conclusion in this log.
 
 **Also flagged**: the eval pipeline had accumulated real folder-boundary violations —
 `code/Dispatcher/data/val_ground_truth.csv` and `embeddings_cache/val_embeddings.npz`
@@ -461,3 +460,7 @@ confirm the mechanism visually: cheaper configs (e.g. individual 38, 2.18G) rout
 everything to RN18; pricier ones (individual 15, 3.79G) spread more into RN50/RN152 but
 also over-route a lot of RN18-sufficient images there — the FLOPs-waste side of
 overestimation, now correctly *not* showing up as an accuracy penalty.
+
+## Notes
+- Prepare a Google Doc report before the next meet
+- Advisor's GitHub: ga-ananth

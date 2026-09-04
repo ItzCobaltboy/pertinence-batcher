@@ -1,9 +1,9 @@
 code/dataset/**
-code/Model Analysis/ResnetModels/**
-code/Model Analysis/model_cache/**
-code/Dispatcher/embeddings_cache/**
-code/Dispatcher/results/logs/**
-code/Dispatcher/results/nsga2/checkpoint_*.npz
+code/model_analysis/ResnetModels/**
+code/model_analysis/model_cache/**
+code/dispatcher/embeddings_cache/**
+code/dispatcher/results/logs/**
+code/dispatcher/results/nsga2/checkpoint_*.npz
 code/dispatcher_analysis/embeddings_cache/**
 paper.pdf
 
@@ -208,7 +208,7 @@ cython_debug/
 #   that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
 #   and can be added to the global gitignore or merged into this file. However, if you prefer, 
 #   you could uncomment the following to ignore the entire vscode folder
-# .vscode/
+.vscode/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
 
@@ -231,7 +231,6 @@ __marimo__/
 .idea/
 .claude/
 codex/
-
 
 # Claude Code project context (local-only, not shared/versioned)
 CLAUDE.md

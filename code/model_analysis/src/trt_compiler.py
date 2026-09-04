@@ -11,6 +11,7 @@ import torch_tensorrt
 import constants as c
 
 _PRECISION_DTYPES = {
+    "fp32": {torch.float32},
     "fp16": {torch.float16},
     "int8": {torch.int8},
     "fp8":  {torch.float8_e4m3fn},

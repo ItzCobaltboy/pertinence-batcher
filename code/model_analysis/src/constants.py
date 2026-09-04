@@ -1,5 +1,5 @@
 """
-All paths and settings used across the Model Analysis benchmark pipeline.
+All paths and settings used across the model_analysis benchmark pipeline.
 """
 
 import os
@@ -8,7 +8,7 @@ from torchvision import transforms
 # Paths are built from this file's own location, so the pipeline works no
 # matter what directory you run main.py from.
 _SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(_SRC_DIR)   # "Model Analysis/"
+PROJECT_ROOT = os.path.dirname(_SRC_DIR)   # "model_analysis/"
 
 DATASET_PATH = os.path.join(PROJECT_ROOT, "..", "dataset")
 RESNET_MODELS_DIR = os.path.join(PROJECT_ROOT, "ResnetModels")
@@ -16,6 +16,7 @@ MODEL_CACHE_DIR = os.path.join(PROJECT_ROOT, "model_cache")
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
 
 BENCHMARK_RESULTS_CSV = os.path.join(RESULTS_DIR, "torch_tensorrt_benchmark.csv")
+EAGER_BASELINE_CSV = os.path.join(RESULTS_DIR, "eager_baseline.csv")
 
 # ── Model pool ────────────────────────────────────────────────────────────────
 

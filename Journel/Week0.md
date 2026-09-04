@@ -1,9 +1,11 @@
 # 2026-08-21
 
 ## Context
-Prof gave new direction: PERTINENCE assumes single-image inference, but real deployment
-needs batching with mixed-complexity images. Step 1: build a hybrid model pool (ResNet
-variants + quantized versions) and hand-build a dispatcher to learn the mechanics.
+New direction: PERTINENCE assumes single-image inference, but real deployment needs
+batching with mixed-complexity images.
+
+Tasks: build a hybrid model pool (ResNet variants + quantized versions) and hand-build
+a dispatcher to learn the mechanics.
 
 ## Log
 
