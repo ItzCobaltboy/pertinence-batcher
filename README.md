@@ -23,7 +23,6 @@ code/
   dispatcher_analysis/   Step 3 -- evaluation of the dispatcher's Pareto front (train + held-out val)
   dataset/               ImageNette (10-class ImageNet subset, 224px)
 Journel/                 work session logs (narrative "why" record)
-CLAUDE.md                gitignored working notes (repo layout, decisions, dead ends)
 ```
 
 ## Quickstart
@@ -36,6 +35,7 @@ instructions, inputs, and outputs. Run in this order:
 3. [`code/dispatcher/`](code/dispatcher/README.md) — NSGA-II Pareto search
 4. [`code/dispatcher_analysis/`](code/dispatcher_analysis/README.md) — evaluate the resulting front
 
+> Heads up! Requirements.txt is pinned for CUDA 13.x, needs Nvidia Blackwell series device
 ## Status
 
 | Step | Description | Status |

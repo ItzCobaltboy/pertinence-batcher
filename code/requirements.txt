@@ -4,8 +4,11 @@ matplotlib
 pillow
 thop
 pymoo
-torch
-torchvision
+torch==2.13.0
+torchvision==0.28.0
 torch-tensorrt==2.13.0
-tensorrt-cu13==11.2.1.2
-nvidia-modelopt
+tensorrt-cu13==11.0.0.114
+tensorrt-cu13-bindings==11.0.0.114
+tensorrt-cu13-libs==11.0.0.114
+nvidia-modelopt==0.46.0
+huggingface_hub

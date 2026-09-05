@@ -1,0 +1,13 @@
+model,method,accuracy,latency_ms
+resnet18,trt_fp16_no_calib,78.1401,4.949
+resnet18,trt_int8_ptq_calib,78.5478,0.793
+resnet18,trt_fp8_ptq_calib,77.4522,0.781
+resnet34,trt_fp16_no_calib,81.3248,10.553
+resnet34,trt_int8_ptq_calib,81.5796,1.356
+resnet34,trt_fp8_ptq_calib,80.8917,1.225
+resnet50,trt_fp16_no_calib,86.2675,8.085
+resnet50,trt_int8_ptq_calib,85.707,1.578
+resnet50,trt_fp8_ptq_calib,FAILED,FAILED
+resnet152,trt_fp16_no_calib,90.6242,16.469
+resnet152,trt_int8_ptq_calib,89.9363,6.459
+resnet152,trt_fp8_ptq_calib,FAILED,FAILED
