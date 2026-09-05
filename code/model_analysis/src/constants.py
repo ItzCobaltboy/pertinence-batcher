@@ -21,7 +21,8 @@ EAGER_BASELINE_CSV = os.path.join(RESULTS_DIR, "eager_baseline.csv")
 # ── Model pool ────────────────────────────────────────────────────────────────
 
 MODEL_NAMES = ["resnet18", "resnet34", "resnet50", "resnet152"]
-PRECISIONS = ["fp32", "fp16", "int8", "fp8"]
+PRECISIONS = ["fp32", "fp16", "int8", "fp8"] # 5070ti
+# PRECISIONS = ["fp32", "fp16", "int8"] # fp8 is not supported in A100 
 
 # ── Benchmark settings ───────────────────────────────────────────────────────
 

@@ -1,19 +1,25 @@
 # Week 2
 
 ## Context
-Advisor follow-up: investigate whether real quantization (PTQ with calibration) gives
-meaningful latency wins over the unquantized FP16 baseline. Two focused experiments:
+Follow-up from the advisor meeting: check whether real quantization (PTQ with calibration)
+gives meaningful latency wins over the unquantized FP16 baseline.
 
+**Tasks**:
 1. **Exp1** — PTQ calibration: does `modelopt mtq.quantize()` + `export_torch_mode()` +
    torch-tensorrt give genuinely lower latency vs. just passing `enabled_precisions={torch.int8}`?
 2. **Exp2** — Batch size sweep: does per-image latency improve with larger batches, and does
    uncalibrated INT8 benefit from batching?
+3. **Parallel task**: reproduce the PERTINENCE paper's exact experimental setup — same models +
+   CIFAR-10 (the dataset the paper actually uses), not the ImageNet/ImageNette pool used
+   elsewhere in this project. Purpose: show the paper's methodology is understood at
+   implementation depth, not just adapted loosely. Tracked separately from Exp1/Exp2, not
+   started yet.
 
-Both are in `code/quantization_experiments/`, fully separate from the dispatcher pipeline.
+Exp1/Exp2 are in `code/quantization_experiments/`, fully separate from the dispatcher pipeline.
 
 ---
 
-## [SETUP] Environment issue — Cached files were courrpted
+## [SETUP] Environment issue — cached files got corrupted
 
 Before any code could run, `/tmp` filesystem was at 100% capacity (28K free).
 Root cause: ~17GB pip download cache in `/home/cobaltboy/.cache/pip/`.
@@ -123,3 +129,66 @@ INT8 PTQ would be a separate step and would require re-running the labeler with 
 latency figures.
 
 Not started. Flagged as a future optimization if the edge deployment latency budget demands it.
+
+
+---
+
+## [SETUP] A100 environment blocked on dependency install — ran Exp1/Exp2 on the laptop GPU meanwhile
+
+Tried to set up the environment directly on the A100 to run this week's PTQ calibration
+work there. Dependency install broke (conflicting CUDA/driver stack on that machine).
+Rather than block the quantization experiments on fixing it, ran Exp1/Exp2 above on the
+laptop GPU instead — the Blackwell (sm_120) card already referenced in Exp1's FP8
+failure note above. Results are genuinely from that laptop run, not a placeholder —
+committed to git as-is.
+
+**Fix**: got the A100 environment working this morning (2026-09-05) — currently running
+Exp1/Exp2 there now to confirm the laptop numbers hold on the actual target hardware.
+
+---
+
+## [RESULT] model_analysis's precision benchmark, run on both GPUs — FP16 win is real but hardware-dependent
+
+**Output**: `code/model_analysis/results_A100/` and `code/model_analysis/results_RTX_5070ti/`
+(`eager_baseline.csv`, `torch_tensorrt_benchmark.csv`, `quantized_benchmark_log.txt` each).
+
+Re-ran the Week0 Torch-TensorRT precision benchmark (fp32/fp16/int8/fp8 compiled comparison) on
+both machines to get a real cross-GPU picture instead of just the laptop.
+
+**A100 dropped fp8 and int8 from the precision list** (`constants.py`,
+`PRECISIONS = ["fp32", "fp16", "int8"] # fp8 is not supported in A100`) — fp8 has no tensor-core
+support on Ampere at all (Hopper+ only, this isn't a bug), and int8 also failed outright without
+calibration on this GPU, unlike the 5070ti which silently fell back to fp16 instead of erroring.
+Ended up removing int8 from the A100 run too rather than fight it — fp32/fp16 only there.
+
+| model | A100 fp32→fp16 | 5070ti fp32→fp16 |
+|-------|-----------------|---------------------|
+| resnet18  | 0.66→0.453ms (**1.46×**) | 0.971→0.892ms (1.09×) |
+| resnet34  | 0.766→0.679ms (1.13×)    | 9.685→9.691ms (flat) |
+| resnet50  | 0.791→0.728ms (1.09×)    | 7.99→7.53ms (1.06×) |
+| resnet152 | 2.287→1.511ms (**1.51×**) | 19.555→19.675ms (flat/slightly worse) |
+
+**This sharpens the Week0 finding rather than contradicting it.** The compilation win (fp32 eager
+→ fp32 compiled) is real on both GPUs — but a genuine *additional* precision win on top of that
+compilation win shows up clearly on the A100 (up to 1.5×) and barely at all on the 5070ti. Reads as
+architecture-dependent: A100 has a wide FP32-vs-FP16 tensor-core throughput gap, a modern consumer
+card apparently doesn't have as much of one to exploit at batch=1.
+
+**Cross-GPU eager-baseline oddity worth remembering for the batching extension**: the 5070ti is
+*faster* than the A100 on plain eager (uncompiled) batch=1 inference for every model (e.g.
+resnet152: 10.038ms laptop vs. 14.484ms A100). Datacenter GPUs are tuned for throughput at scale,
+not single-image latency — this is consistent with that, not a benchmarking error, but it means
+"A100 = faster" isn't true at batch=1 before compilation evens things out.
+
+**Two numbers flagged for a re-check, not yet trusted as real findings**:
+- 5070ti resnet34 (9.685–10.487ms across all four precisions) is slower than 5070ti resnet50
+  (7.53–7.99ms) despite resnet34 having fewer FLOPs (3.679G vs 4.134G) — breaks the FLOPs-latency
+  ordering that holds everywhere else (including on the A100, where resnet34 is correctly faster
+  than resnet50). Possibly a TRT kernel-selection quirk for resnet34's BasicBlock architecture on
+  this GPU, possibly a bad single run (thermal, warmup). Re-run resnet34 alone before trusting it.
+- 5070ti resnet152 int8 (15.174ms) is ~22% faster than its own fp32/fp16 (~19.6ms), uncalibrated —
+  bigger gap than Week0's "byte-identical to fp16" finding for uncalibrated quantization. Possibly
+  a different TRT version behaving differently (this environment pins `tensorrt-cu13==11.0.0.114`,
+  unclear what Week0's original run used), possibly noise. Doesn't change the calibrated-PTQ
+  conclusion above either way — just don't cite "uncalibrated int8 is always identical to fp16" as
+  a hard rule off the back of this one number.
