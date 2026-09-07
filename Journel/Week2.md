@@ -319,3 +319,37 @@ objective" note in `code/CLAUDE.md`, ported here unchanged).
 **Status**: reproduction track complete end-to-end (labeling → NSGA-II search → eval), all results
 copied back to `code/CIFAR_10_Implementation/` locally and confirmed consistent. See
 `code/CLAUDE.md`'s open threads for the updated status entry.
+
+---
+
+## [RESULT] Interesting finding — the pool's errors are largely complementary, not shared
+
+Question worth checking: all 4 pool models sit in a tight 92.6–96.0% top-1 band, but that doesn't
+mean they're wrong on the *same* images — if their mistakes are on different images, a dispatcher
+has real headroom to beat any single model, not just match the best one. Wrote a reusable script,
+`code/CIFAR_10_Implementation/analyze_model_overlap.py`, to check this directly against the
+per-model `<model>_correct` columns already in the ground-truth CSVs (restricted to images whose
+filename traces back to CIFAR-10's own official test split, so the numbers below aren't inflated by
+the train/test overlap the fresh-70:30-split methodology introduces — see the split `[DECISION]`
+above; pooling `train_ground_truth.csv` + `val_ground_truth.csv` recovers 9,806 of the 10,000
+official test images across the two files).
+
+**Per-model accuracy** on that held-out set: resnet20 94.4%, resnet32 95.4%, shufflenetv2_x2_0
+95.9%, vgg16_bn 96.0% (best single model).
+
+**Oracle ceiling** (at least one of the 4 models correct): **100%** — every image is caught by
+*someone*, a full +4.0pp above the best single model.
+
+**Pairwise error overlap** (Jaccard of each pair's wrong-image sets, 0=fully complementary,
+1=identical): all six pairs sit at **0.19–0.22** — mistakes are mostly not shared. The
+correctness-pattern breakdown backs this up: 88.9% of images are "all four correct," but the
+remaining 11.1% spreads fairly evenly across all 14 other patterns (no single "everyone fails here"
+cluster) — each model also has a small set of images (45–60, ~0.5% each) that *only it* gets right.
+
+**Why this matters**: it's the concrete evidence that the dispatcher problem is well-posed for this
+pool specifically because the 4 architectures (plain ResNet, ShuffleNet, VGG) make genuinely
+different mistakes — not because any one model is simply better, but because routing per-image can
+in principle recover accuracy no single model has on its own. Ties directly into the "known
+limitation: dispatcher judgment is capped by the feature extractor" note in `code/CLAUDE.md` — the
+4.0pp of headroom is real, the open question is how much of it a resnet20-embedding-based FC head
+can actually capture.
