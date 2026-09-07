@@ -41,4 +41,5 @@ Runs both phases in order:
 ## Why
 
 Model pool selection, quantization dead ends (torchao, ONNX INT8), and the
-Torch-TensorRT FP16 result are narrated in `../../Journel/Week0.md`.
+Torch-TensorRT FP16 result are narrated in `../../Journel/Week1.md` (model pool selection
+itself is `../../Journel/Week0.md`).

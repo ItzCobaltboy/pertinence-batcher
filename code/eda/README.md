@@ -30,5 +30,5 @@ Requires `../model_analysis/main.py` to have been run first (both CSVs must exis
 
 ## Why
 
-Model pool selection and the Torch-TensorRT FP16 result are narrated in
-`../../Journel/Week0.md`.
+Model pool selection is narrated in `../../Journel/Week0.md`; the Torch-TensorRT FP16
+result in `../../Journel/Week1.md`.

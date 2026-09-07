@@ -1,6 +1,7 @@
 # Week 2
 
-## Context
+## Meeting notes & tasks
+
 Follow-up from the advisor meeting: check whether real quantization (PTQ with calibration)
 gives meaningful latency wins over the unquantized FP16 baseline.
 
@@ -16,6 +17,12 @@ gives meaningful latency wins over the unquantized FP16 baseline.
    started yet.
 
 Exp1/Exp2 are in `code/quantization_experiments/`, fully separate from the dispatcher pipeline.
+
+Continuing from `Journel/Week1.md`: Torch-TensorRT (on the 5070ti) compiled fine and
+looked like an FP16 win at first, but turned out to be a compilation-only effect —
+INT8/FP8 stayed dead because `enabled_precisions=...` alone never actually engages
+`modelopt` calibration. This week fixes that calibration gap for real and gets access to
+an A100 to benchmark on real datacenter hardware too.
 
 ---
 
@@ -78,7 +85,7 @@ INT8. Fails on resnet50 and resnet152 with TRT Error Code 10:
 `Could not find any implementation for node {ForeignNode[...quantize_op...maxpool...]}`.
 Blackwell (sm_120) + TRT 11.0 has no kernel implementation for FP8 through the deeper
 quantized-maxpool+conv chains those models use. Consistent with the FP8 dead end
-documented in Week0 for the non-PTQ path; PTQ doesn't change the kernel availability.
+documented in Week1 for the non-PTQ path; PTQ doesn't change the kernel availability.
 
 **Verdict**: INT8 PTQ is a genuine 5–7× speedup on the smaller models with negligible
 accuracy cost. Worth revisiting if the batching extension needs tighter latency budgets.
@@ -152,7 +159,7 @@ Exp1/Exp2 there now to confirm the laptop numbers hold on the actual target hard
 **Output**: `code/model_analysis/results_A100/` and `code/model_analysis/results_RTX_5070ti/`
 (`eager_baseline.csv`, `torch_tensorrt_benchmark.csv`, `quantized_benchmark_log.txt` each).
 
-Re-ran the Week0 Torch-TensorRT precision benchmark (fp32/fp16/int8/fp8 compiled comparison) on
+Re-ran the Week1 Torch-TensorRT precision benchmark (fp32/fp16/int8/fp8 compiled comparison) on
 both machines to get a real cross-GPU picture instead of just the laptop.
 
 **A100 dropped fp8 and int8 from the precision list** (`constants.py`,
@@ -168,7 +175,7 @@ Ended up removing int8 from the A100 run too rather than fight it — fp32/fp16 
 | resnet50  | 0.791→0.728ms (1.09×)    | 7.99→7.53ms (1.06×) |
 | resnet152 | 2.287→1.511ms (**1.51×**) | 19.555→19.675ms (flat/slightly worse) |
 
-**This sharpens the Week0 finding rather than contradicting it.** The compilation win (fp32 eager
+**This sharpens the Week1 finding rather than contradicting it.** The compilation win (fp32 eager
 → fp32 compiled) is real on both GPUs — but a genuine *additional* precision win on top of that
 compilation win shows up clearly on the A100 (up to 1.5×) and barely at all on the 5070ti. Reads as
 architecture-dependent: A100 has a wide FP32-vs-FP16 tensor-core throughput gap, a modern consumer
@@ -187,8 +194,128 @@ not single-image latency — this is consistent with that, not a benchmarking er
   than resnet50). Possibly a TRT kernel-selection quirk for resnet34's BasicBlock architecture on
   this GPU, possibly a bad single run (thermal, warmup). Re-run resnet34 alone before trusting it.
 - 5070ti resnet152 int8 (15.174ms) is ~22% faster than its own fp32/fp16 (~19.6ms), uncalibrated —
-  bigger gap than Week0's "byte-identical to fp16" finding for uncalibrated quantization. Possibly
+  bigger gap than Week1's "byte-identical to fp16" finding for uncalibrated quantization. Possibly
   a different TRT version behaving differently (this environment pins `tensorrt-cu13==11.0.0.114`,
-  unclear what Week0's original run used), possibly noise. Doesn't change the calibrated-PTQ
+  unclear what Week1's original run used), possibly noise. Doesn't change the calibrated-PTQ
   conclusion above either way — just don't cite "uncalibrated int8 is always identical to fp16" as
   a hard rule off the back of this one number.
+
+---
+
+## [DEADEND] A100 seems to refuse PTQ calibration 
+
+Some import errors, halting for now
+
+---
+
+## [SETUP] CIFAR-10 reproduction track — copied dispatcher/dispatcher_analysis into a self-contained folder
+
+Started the parallel task from this week's Context: reproduce the PERTINENCE paper's actual
+experimental setup (CIFAR-10 + the paper's own model pool) instead of the ImageNet/ImageNette pool
+the main dispatcher pipeline uses. Copy-pasted `code/dispatcher/` and `code/dispatcher_analysis/`
+into a new `code/CIFAR_10_Implementation/{dispatcher,dispatcher_analysis}/` as starting points, kept
+fully self-contained there so the original two folders are untouched.
+
+**Model pool**: 4 CIFAR-10-pretrained checkpoints from `chenyaofo/pytorch-cifar-models`, ordered by
+MAdds (this pool's cost metric, in place of the ImageNette pool's FLOPs_G): `resnet20` (40.81M,
+92.60% top-1), `resnet32` (69.12M, 93.53%), `shufflenetv2_x2_0` (187.81M, 93.81%), `vgg16_bn`
+(313.73M, 94.16%).
+
+`pytorch-cifar-models` isn't actually pip-installable (its sdist's `setup.py` needs a
+`requirements.txt` missing from the build context) — used via `torch.hub.load("chenyaofo/pytorch-cifar-models", ...)`
+instead, which pulls the model-definition source straight from GitHub into torch's hub cache.
+Documented in `code/requirements.txt` so this isn't rediscovered as a fresh problem later.
+`scikit-learn` also came back into `requirements.txt` for this track (`train_test_split` for the
+stratified split below) — a legitimate new use, not a revival of the quantization-era dependency
+noted as dropped in "Decisions / dead ends."
+
+**Embedding extractor**: swapped from the ImageNette pipeline's frozen ResNet18 (512-dim) to
+resnet20 (this pool's cheapest model, head stripped) — same "free if selected anyway" design
+intent. Measured the actual feature dim with a dummy 32×32 forward pass rather than assuming 512
+carried over: it's **64**. Every hardcoded `512` in both copied `constants.py` files and
+`embeddings.py`'s dim check got updated to the measured value, with a runtime assertion against a
+mismatch left in place.
+
+**[DECISION] fresh 70:30 split, not CIFAR's official 50k/10k train/test**: combined the full 60,000
+images (CIFAR's official train+test) into one pool, then drew a fresh class-stratified 70:30
+train:val split (`sklearn.train_test_split`, `stratify=class_label`, seed 42) instead of reusing
+CIFAR's own division. Reusing CIFAR's official test set as this project's val split would have
+double-counted it — it's also the set chenyaofo used to report/select the checkpoints' accuracy, so
+it isn't actually held-out from the model pool's perspective. This mirrors what "ground truth"
+already means in the ImageNette pipeline (its own 70:30 split, not ImageNette's own division).
+
+Preprocessing switched to CIFAR-specific normalization (`mean=[0.4914,0.4822,0.4465]`,
+`std=[0.2023,0.1994,0.2010]`, no resize/crop — native 32×32) instead of blindly reusing the
+ImageNette pipeline's `Resize(256)/CenterCrop(224)` + ImageNet mean/std. No ImageNet label
+remapping needed either — CIFAR-10 already uses its native 10-class order end to end.
+
+Everything else — `FC_EPOCHS`, `BATCH_SIZE`, `LEARNING_RATE`, the penalty-matrix chromosome, INS
+class weighting, the `alpha_sys` objective, NSGA-II population/generations/operators — left
+untouched. This track is validating the paper's methodology on its own dataset, not redesigning it.
+
+---
+
+## [RESULT] Labeling — 41,872 train / 17,934 val images kept
+
+Ran the new `label_data.py` (downloads CIFAR-10 via torchvision, dumps every image as a PNG, runs
+all 4 models per split, labels `argmin_j{MAdds_j | model_j correct}`, drops images no model gets
+right). Kept 41,872/42,000 train and 17,934/18,000 val (70:30 of the combined 60k pool) — very few
+dropped, unsurprising given resnet20 alone already reports 92.6% top-1 on CIFAR-10.
+
+Hit two infra snags along the way, both environment-level, not methodology bugs:
+- CIFAR-10 download corrupted mid-transfer once (MD5 mismatch at ~75%) — deleted the partial
+  archive and re-ran.
+- A stray subprocess from an earlier tool session kept retrying its own download into the same
+  archive path concurrently with the clean re-run, risking repeat corruption — killed the
+  interfering processes and did one final clean run of `label_data.py`, which completed without
+  further interference.
+
+**[DEAD-END] Windows-built CSV paths don't survive a copy to the Linux server**: `label_data.py`
+originally built the `image_path` CSV column with `os.path.join(...)`, which emits backslashes on
+Windows. Ran fine locally, but once the CSVs were copied to the university server for the actual
+NSGA-II run, `dispatcher_analysis/main.py` failed with `FileNotFoundError` — `Image.open()` trying
+to open a literal filename containing `\` characters, which aren't path separators on Linux.
+**Fix**: switched to `"/".join(...)` for the stored `image_path` field (forward slashes
+unconditionally, since these CSVs are meant to move across machines), plus an immediate `sed -i
+'s/\\/\//g'` one-liner on the already-copied CSVs so the in-flight server run didn't have to wait
+for a full relabel. Confirmed working — see the eval result below.
+
+---
+
+## [RESULT] NSGA-II search — 30-individual Pareto front, alpha_sys 99.09–99.42%, avg_flops 42.3–233.0M
+
+Ran on the university server (A100, EPYC 7282 dual-socket, 128GB RAM) rather than locally — see
+`code/CLAUDE.md` environment notes for that machine. Population 50 / 30 generations / 30 FC epochs,
+same hyperparameters as the ImageNette pipeline's Run #3. Search finished in 27,082s (~7h32m);
+saved FC weights for all 30 final-front individuals afterward.
+
+Final front: `alpha_sys` 99.09%–99.42%, `avg_flops_G` (MAdds, despite the field name carried over
+from the ImageNette pipeline) 42.3M–233.0M.
+
+---
+
+## [RESULT] dispatcher_analysis eval — confirms the front, and explains why alpha_sys looks "insanely high"
+
+Re-ran `dispatcher_analysis/main.py` on the server after the path fix above; copied
+`train_summary.csv`, `val_summary.csv`, `train_predictions.csv`, `val_predictions.csv`, and the
+confusion-matrix/pareto-scatter plots back to the local repo. Val alpha_sys across the front:
+99.01%–99.33%, avg_flops 40.8M–183.3M — consistent with the search-time numbers.
+
+At first glance alpha_sys sitting in a razor-thin 99.0–99.4% band for every individual on the front
+looked suspicious (flagged this while the server run was still going). Checked the actual
+`ideal_label` distribution on val: **99.0% of images already have resnet20 as their
+argmin-cheapest-correct label** — i.e. resnet20 alone gets the overwhelming majority of CIFAR-10
+val images right, so "always pick the cheapest model" is already a ~99%-alpha_sys strategy before
+the dispatcher does anything. This is a genuine property of this pool/dataset combination, not a
+bug: CIFAR-10's accuracy spread across resnet20/32/shufflenetv2_x2_0/vgg16_bn (92.6%→94.2%) is much
+narrower than the ImageNette pipeline's ResNet18/34/50/152 pool, so alpha_sys saturates near-ceiling
+across the whole front and the front's real signal is in the FLOPs axis, not alpha_sys. Matches
+what the per-model recall/precision columns in `val_summary.csv` show — precision on the escalation
+models (shufflenetv2/vgg16_bn) is very low (~0.002–0.003) despite decent recall, meaning most
+"escalations" are the dispatcher over-routing images resnet20 would've gotten right anyway, which
+alpha_sys doesn't penalize (matches the objective's design — see `code/dispatcher/`'s "Fitness
+objective" note in `code/CLAUDE.md`, ported here unchanged).
+
+**Status**: reproduction track complete end-to-end (labeling → NSGA-II search → eval), all results
+copied back to `code/CIFAR_10_Implementation/` locally and confirmed consistent. See
+`code/CLAUDE.md`'s open threads for the updated status entry.

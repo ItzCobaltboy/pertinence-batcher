@@ -1,11 +1,12 @@
-# 2026-08-21
+# Week 0
 
-## Context
+## Meeting notes & tasks
+
 New direction: PERTINENCE assumes single-image inference, but real deployment needs
 batching with mixed-complexity images.
 
-Tasks: build a hybrid model pool (ResNet variants + quantized versions) and hand-build
-a dispatcher to learn the mechanics.
+Tasks: build a hybrid model pool (ResNet variants + quantized versions), hand-build a
+dispatcher to learn the mechanics, and train a labeller for it once the pool is locked.
 
 ## Log
 
@@ -114,102 +115,157 @@ a dispatcher to learn the mechanics.
 - 4 architecturally diverse models with meaningful latency spread (3.2–8.7ms) and
   accuracy spread (78–91%) — sufficient for dispatcher training
 - Moving to dispatcher implementation
+- Ditched quantization entirely for the pool — moving on with ResNet18/34/50/152,
+  original sizes, FP32
 
-### [SETUP] TensorRT via Torch-TensorRT (not ONNX Runtime)
-Revisited TensorRT after the dispatcher/NSGA-II work, per prof meeting action item. ONNX
-Runtime's TensorRT execution provider was a dead end again — onnxruntime 1.29.0's
-provider DLL is hard-pinned to `nvinfer_10.dll`, but the available `tensorrt`/
-`tensorrt-cu13` pip packages ship TensorRT 11.x (`nvinfer_11.dll`) — ABI mismatch,
-unfixable without an old TensorRT release.
+### [RESULT] Step 1A — Dispatcher label generation complete
+**Script**: `code/Dispatcher/labeler.py`
+**Output**: `results/dispatcher_labels.csv` (9469 train images)
 
-Switched to **Torch-TensorRT** instead — compiles directly from the live PyTorch model
-(`ir='dynamo'`), no ONNX export and no onnxruntime provider involved. Installed
-`torch-tensorrt==2.13.0` + `tensorrt-cu13==11.2.1.2` + `nvidia-modelopt` (small
-pure-Python deps: psutil, dllist). ResNet18 compiled and ran successfully on the first
-real test.
+Label assignment: cheapest FP32 model (RN18→RN34→RN50→RN152) that correctly classifies
+each image. Fallback to label 3 if none get it right.
 
-Rebuilt `code/Model Analysis/` to match `code/dispatcher_analysis/`'s structure:
-`main.py` (root) + `src/` (constants, data_loader, model_utils, trt_compiler, benchmark,
-run_benchmark, eda). Compiles + caches one Torch-TensorRT engine per (model, precision)
-to `model_cache/*.pt2`, benchmarks accuracy/latency/size over the full ImageNette val
-set, saves to `results/torch_tensorrt_benchmark.csv`. `eda.py` here is separate from —
-and doesn't touch — `code/Dispatcher/eda.py`.
+| Label | Model | Count | % |
+|-------|-------|-------|---|
+| 0 | ResNet18  | 7363 | 77.8% |
+| 1 | ResNet34  |  740 |  7.8% |
+| 2 | ResNet50  |  530 |  5.6% |
+| 3 | ResNet152 |  836 |  8.8% |
 
-Removed the now-unused torchao float8/int8 checkpoints (1.4GB) and the ONNX export
-folder (561MB, not needed — Torch-TensorRT skips ONNX entirely). Kept the fp32 `.pth`
-checkpoints in `ResnetModels/`.
+**Observation**: heavily skewed toward label 0 — consistent with ImageNette being an easy
+10-class subset (the paper saw ~68% majority on CIFAR-10, we get 77.8%). Label-3 (8.8%)
+conflates two cases — images only RN152 can handle vs. images no model gets right — needs
+splitting in EDA.
 
-**Gotcha**: engines compiled for a static batch-size-1 input shape reject any other
-input shape outright — first benchmark run crashed mid-way because the val accuracy
-loader used batch_size=32. Fixed by setting the val loader to batch_size=1 to match the
-compiled shape (see `constants.py`). A future improvement would be compiling with a
-dynamic shape range (min/opt/max) instead — relevant for the batching extension where
-sub-batch sizes vary.
+**Implication**: a naive FC head will predict 0 always and hit 77.8% "accuracy" while
+being useless. Sample weighting (INS/ISNS/ENS) is mandatory.
 
-### [RESULT] Torch-TensorRT benchmark — FP32 vs FP16 vs INT8 vs FP8
-**Script**: `code/Model Analysis/main.py`
-**Output**: `results/torch_tensorrt_benchmark.csv`, `results/eda/*.png`
+---
 
-| Model | FP32 latency | FP16 latency | INT8 latency | FP8 latency | Speedup (FP32→FP16) |
-|-------|-------------|-------------|-------------|------------|----------------------|
-| resnet18  | 1.779ms | 0.878ms | 0.878ms | 0.877ms | ~2.0x |
-| resnet34  | 4.309ms | 1.715ms | 1.722ms | 1.731ms | ~2.5x |
-| resnet50  | 3.554ms | 1.540ms | 1.559ms | 1.543ms | ~2.3x |
-| resnet152 | 10.698ms | 4.186ms | 4.161ms | 4.129ms | ~2.6x |
+### [RESULT] Step 1B — EDA on dispatcher labels
+**Script**: `code/Dispatcher/eda.py`
+**Input**: `results/dispatcher_labels.csv` (9469 train images)
 
-Accuracy: FP16 identical to FP32 for 3/4 models (resnet34: −0.03pp, noise). Model size:
-FP16/INT8/FP8 are **byte-identical** for every model (e.g. resnet18: 60.27MB across all
-three).
+Label distribution — same table as above. Label-3 split: 307 (36.7%) genuinely hard
+(RN152 correct), 529 (63.3%) noise — no model gets them right. **Effective trainable
+set: 8940 images (94.4% of train set).**
 
-**INT8 and FP8 are dead ends via this path, same as every prior quantization attempt**:
-size, latency, and accuracy for INT8/FP8 are indistinguishable from FP16 across all 4
-models. `enabled_precisions={torch.int8}` / `{torch.float8_e4m3fn}` alone doesn't engage
-real low-precision kernels — TensorRT's builder silently falls back to FP16 without an
-explicit calibration step (real per-layer scale factors, e.g. via `modelopt`'s quantize
-workflow before compiling). Matches the `modelopt` import warnings seen on every
-compile, which persisted even after installing the package.
+Correctness combinations (2^4 = 16 patterns), all 16 observed. Key split: monotonic
+(bigger model ≥ smaller model per image) 90.9% of data, non-monotonic (bigger model
+fails where smaller succeeds) 9.1%. Notable non-monotonic patterns: `1 0 x x` (RN18
+correct, RN34 blind spot — 364 images, 3.8%), `1 0 1 1` (RN34 specifically fails these —
+249 images, 2.6%), `1 1 1 0` (RN152 worst of all four — 40 images, 0.4%), `x x 1 0`
+(RN152 worse than RN50 — 166 images, 1.8%).
 
-**FP16 is a genuine, reproducible win**: ~2.0–2.6x latency reduction across the whole
-pool, essentially zero accuracy cost. First real positive quantization/precision result
-in this project (torchao weight-only, torchao dynamic, and ONNX+CUDA INT8 were all dead
-ends — see above). Unlike those, this is a real wall-clock latency win (not FLOPs-based)
-— relevant if/when latency, not just FLOPs, matters for the batching deployment story.
+Per-class: cassette player hardest (RN18 41.7%, RN152 only 62.0%); church is
+non-monotonic (RN50 51.6% worse than RN34 65.0%); tench/golf ball easiest (RN18 handles
+91–93%).
 
-**Next**: decide whether to pursue real INT8/FP8 via explicit `modelopt` calibration, or
-accept FP16 as the practical precision win and move to the batching extension.
+Cumulative coverage ceiling — up to RN18: 77.8%, up to RN34: 85.6%, up to RN50: 91.2%, up
+to RN152: 94.4%. **Max achievable accuracy with this pool: 94.4%.**
 
-### [DECISION] Correction — the "FP16 win" above is a compilation win, not a precision win
-Follow-up question: is the FP32→FP16 speedup from actual FP16/Tensor-Core execution, or
-just from TensorRT's graph compilation itself (kernel fusion, no eager/Python dispatch
-overhead) regardless of precision? The FP32 rows above were **eager, uncompiled
-PyTorch** — never run through Torch-TensorRT — so the two effects (compile vs precision)
-were never actually isolated.
+---
 
-Isolated test (resnet18, batch=1, each variant in its own process):
+### [DECISION] Filter noise images from dispatcher training
+The 529 `0000` images (no model correct) carry no learnable routing signal and would
+push the FC layer toward spurious label-3 predictions. **Decision**: filter
+`dispatcher_labels.csv` to rows where at least one model is correct before training.
+Retained: 8940 images.
 
-| Variant | Latency |
-|---|---|
-| Eager FP32 (uncompiled) | 1.833–1.912ms |
-| **TensorRT-compiled FP32** | **0.891ms** |
-| TensorRT-compiled FP16 | 0.886ms |
+---
 
-Compiled FP32 and compiled FP16 are statistically identical. **The ~2–2.6x speedup
-above is almost entirely TensorRT compilation itself** — fusing Conv→BN→ReLU chains,
-cutting Python/eager dispatch overhead — not FP16 precision or Tensor Core throughput.
-This also better explains why INT8/FP8 measured identical to FP16: at batch=1 on models
-this size, the workload isn't compute-bound enough for precision to matter at all — the
-bottleneck compilation removes is overhead, not raw matmul throughput.
+### [DECISION] Revise the overestimation cost assumption
+The paper treats overestimation (routing to a larger model than needed) as
+accuracy-neutral — only wasted compute. EDA disproves this: 9.1% of images are
+non-monotonic, so overestimating to RN34 on `1 0 x x` images actively loses accuracy.
+Penalty matrix must assign non-zero cost to overestimation, not just underestimation.
 
-**Correction**: relabel the earlier result "TensorRT compilation win, precision-
-independent" rather than "FP16 win." Whether real INT8/FP16 throughput differentiation
-exists at all is still unverified — would need a compute-bound setup (larger batch size)
-to actually test it, since batch=1 can't distinguish precision effects from overhead
-effects.
+---
+
+### [RESULT] Step 1C — Dispatcher FC training (ISNS, 30 epochs)
+**Script**: `code/Dispatcher/trainer.py`
+**Checkpoint**: `results/checkpoints/dispatcher_fc.pt`
+
+Architecture: ResNet18 backbone (frozen) + Linear(512→4) head, 2,052 trainable params.
+Weighting: ISNS (inverse square root of class count), countering the 82.4% label-0
+imbalance. Penalty matrix: hand-tuned asymmetric 4×4 — underestimation 2.0–4.0×,
+overestimation 0.5×. Best training loss 0.4828 @ epoch 26, final 0.4925 @ epoch 30,
+final training accuracy ~60.3% (on the ISNS-rebalanced sampler, not raw distribution).
+Converged around epoch 26, stable for the last 4.
+
+**Next**: Step 1D — evaluate on val set, confusion matrix, accuracy-FLOPs plot.
+
+---
+
+### [RESULT] Step 1D — Dispatcher FC evaluation (hand-tuned, ISNS)
+**Script**: `code/Dispatcher/evaluator.py`
+**Outputs**: `results/eval/confusion_matrix.png`, `results/eval/dispatcher_predictions.csv`
+
+Overall routing accuracy: **81.4%** (7273/8940). Correct 81.4%, underestimated 11.4%
+(accuracy risk), overestimated 7.3% (FLOPs waste).
+
+Per-class recall: RN18 94.1% (N=7363), RN34 12.3% (N=740), RN50 20.6% (N=530), RN152
+45.9% (N=307).
+
+**Finding**: the FC head collapses toward label-0 despite ISNS weighting — minority
+recall (RN34 12.3%, RN50 20.6%) is too low to be useful. ISNS alone can't handle an
+82:8:6:3 imbalance.
+
+**Root cause**: a hand-tuned penalty matrix + fixed weighting scheme can't jointly
+optimize the accuracy-vs-FLOPs tradeoff across 4 classes. Exactly the problem NSGA-II
+solves — evolve the penalty matrix and weighting scheme together to trace the full
+Pareto front of dispatcher configurations.
+
+**Next**: implement NSGA-II to search penalty matrix + weighting scheme jointly.
+
+---
+
+### [DECISION] Fix the NSGA-II fitness objective before the first full run
+Initial fitness used `obj1 = 1 - overall_accuracy`, which doesn't penalize per-class
+imbalance — a chromosome nailing the 82%-majority RN18 class while ignoring
+RN34/RN50/RN152 scores well despite being a useless dispatcher (same collapse as the
+hand-tuned run). Caught before burning compute. **Fix**: `obj1` →
+`underestimation_rate = mean(pred_label < true_label)`, directly targeting the
+accuracy-risk failure mode; `obj2 = avg_flops_G` still captures the compute tradeoff.
+Killed and restarted the run after 30 min on the wrong objective.
+
+---
+
+### [RESULT] Step 2 — NSGA-II search (50 pop, 50 gen, 30 FC epochs/individual)
+**Script**: `code/Dispatcher/nsga2.py`
+**Outputs**: `results/nsga2/pareto_front.csv`, `results/nsga2/checkpoint_gen*.npz`
+
+Chromosome: 13 floats — 12 penalty matrix values `[0,5]` + weighting exponent α `[0,1]`
+(`weight_i ∝ 1/count_i^α`; α=0 uniform, α≈0.5 ISNS-like, α=1 INS-like). Objectives (both
+minimised): `obj1 = underestimation_rate`, `obj2 = avg_flops_G`.
+
+Key optimization: backbone frozen → all 8940 embeddings precomputed once (26s), each
+individual only trains/evals `Linear(512→4)` on in-memory tensors (~3-5s/eval). Standard
+NSGA-II ops: non-dominated sort, crowding distance, SBX crossover (η=20), polynomial
+mutation (η=25), binary tournament. Memory safety: explicit `del` +
+`torch.cuda.empty_cache()` after every eval (2500+ total) to avoid CUDA fragmentation.
+Runtime: ~3h05m unattended, zero crashes, checkpoints every 5 generations.
+
+**Final Pareto front: 50 non-dominated individuals**, full spread across the tradeoff:
+
+| Config | Underestimation rate | Avg FLOPs | α |
+|--------|----------------------|-----------|---|
+| Safest (max accuracy-safety) | 0.04% | 5.21G | 0.83 |
+| Balanced middle | ~2-5% | 2.5-3G | ~0.5 |
+| Cheapest (min compute) | 17.5% | 1.834G | 0.03 |
+
+Compare to the hand-tuned baseline: 81.4% accuracy, **11.4%** underestimation, fixed at
+one operating point. NSGA-II instead produces a full dial — any point on the front is a
+valid, intentional accuracy/compute tradeoff rather than an accidental collapse.
+
+**Next**: Step 1D-v2 — pick 2-3 representative Pareto points, run full `evaluator.py`
+(confusion matrix, per-class recall) on each, compare against the hand-tuned baseline.
+Meet 2 with the advisors happened right after this run — action items and everything
+that follows from them are logged in `Journel/Week1.md`.
 
 ## Open threads (as of end of this file)
-- Confirm onnx / onnxruntime-gpu / TensorRT installation status — superseded by the
-  Torch-TensorRT pivot above
-- Decide: pursue real INT8/FP8 via explicit `modelopt` calibration, or accept FP16 as
-  the practical precision win and move on to the batching extension
-- Whether real INT8/FP16 throughput differentiation exists at all is unverified — needs
-  a compute-bound (larger batch) setup to test
+- Confirm onnx / onnxruntime-gpu / TensorRT installation status
+- Pareto front evaluation needs per-model accuracy, not just underestimation rate —
+  raised at Meet 2, addressed in `Journel/Week1.md`
+- TensorRT quantization redo, per Meet 2 — see `Journel/Week1.md` (Torch-TensorRT pivot
+  on the 5070ti), calibration fix + cross-GPU benchmarking follows in `Journel/Week2.md`

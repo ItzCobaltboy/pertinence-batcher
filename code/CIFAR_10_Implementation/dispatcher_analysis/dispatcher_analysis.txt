@@ -1,0 +1,19 @@
+Device: cuda:0
+Retraining 30 Pareto individuals from their chromosomes (30 epochs each)...
+  trained 10/30
+  trained 20/30
+  trained 30/30
+All 30 models retrained -> /home/cs24bt033/CS24BT033_Work/code/CIFAR_10/CIFAR_10_Implementation/dispatcher_analysis/model_cache
+Predicting with 30 saved Pareto individuals...
+Saved -> /home/cs24bt033/CS24BT033_Work/code/CIFAR_10/CIFAR_10_Implementation/dispatcher_analysis/predictions/train_predictions.csv
+Saved -> /home/cs24bt033/CS24BT033_Work/code/CIFAR_10/CIFAR_10_Implementation/dispatcher_analysis/predictions/val_predictions.csv
+
+Summarizing train predictions...
+Saved -> /home/cs24bt033/CS24BT033_Work/code/CIFAR_10/CIFAR_10_Implementation/dispatcher_analysis/results/train_summary.csv
+
+Summarizing val predictions...
+Saved -> /home/cs24bt033/CS24BT033_Work/code/CIFAR_10/CIFAR_10_Implementation/dispatcher_analysis/results/val_summary.csv
+Saved -> /home/cs24bt033/CS24BT033_Work/code/CIFAR_10/CIFAR_10_Implementation/dispatcher_analysis/results/plots/pareto_scatter.png
+Saved -> /home/cs24bt033/CS24BT033_Work/code/CIFAR_10/CIFAR_10_Implementation/dispatcher_analysis/results/plots/confusion_matrices.png
+
+Done.

@@ -6,6 +6,9 @@ code/dispatcher/results/logs/**
 code/dispatcher/results/nsga2/checkpoint_*.npz
 code/dispatcher_analysis/embeddings_cache/**
 paper.pdf
+code/CIFAR_10_Implementation/dataset
+code/CIFAR_10_Implementation/dispatcher/embeddings_cache
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
