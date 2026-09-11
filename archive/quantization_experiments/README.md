@@ -7,13 +7,16 @@ Standalone — not wired into the dispatcher pool or NSGA-II runs.
 mtq.quantize()` + calibration dataloader + torch-tensorrt compile) and compares against
 the uncalibrated FP16/INT8 baseline. `exp2_batch_size_sweep.py` sweeps batch sizes
 1/4/8/16/32 across fp32/fp16/uncalibrated-int8 on resnet18 + resnet50.
-**Does not**: feed back into `../dispatcher/`'s model pool — results are exploratory
+**Does not**: feed back into `../../dispatcher/`'s model pool — results are exploratory
 only, pool stays FP32 (see root README's dead-ends).
+
+Archived 2026-09 (`../../Journel/Week3.md`) — done/exploratory work, not part of the
+active pipeline. Moved here unmodified from the old `code/quantization_experiments/`.
 
 ## How to run
 
 ```
-cd code/quantization_experiments
+cd archive/quantization_experiments
 python exp1_ptq_calibration.py
 python exp2_batch_size_sweep.py
 ```

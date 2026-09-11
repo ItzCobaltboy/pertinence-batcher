@@ -2,9 +2,13 @@ import os
 from torchvision import transforms
 
 _SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(_SRC_DIR)
+PROJECT_ROOT = os.path.dirname(_SRC_DIR)   # "archive/quantization_experiments/"
 
-DATASET_PATH = os.path.join(PROJECT_ROOT, "..", "dataset")
+# Archived 2026-09: this pipeline used to live at "code/quantization_experiments/"
+# with the dataset one level up at "code/dataset/". Both moved (this pipeline ->
+# archive/, dataset -> imagenette/dataset/) — repointed here so this still runs if
+# revisited, without otherwise restructuring this archived pipeline.
+DATASET_PATH = os.path.join(PROJECT_ROOT, "..", "..", "imagenette", "dataset")
 MODEL_CACHE_DIR = os.path.join(PROJECT_ROOT, "model_cache")
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
 

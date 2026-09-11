@@ -6,13 +6,16 @@ Step 0 of the pipeline: picks the model pool and benchmarks precision options.
 ImageNette both raw (eager PyTorch fp32) and across precisions compiled through
 Torch-TensorRT (FP32/FP16/INT8/FP8).
 **Does not**: any dispatcher logic (routing, labeling, training) — that starts in
-`../dispatcher/`. No plotting/analysis either — that's `../eda/`, which reads this
-pipeline's CSVs.
+`../../dispatcher/`. No plotting/analysis either — that's `eda/` (nested here, not a
+sibling — see its own README), which reads this pipeline's CSVs.
+
+Archived 2026-09 (`../../Journel/Week3.md`) — done/locked work, not part of the active
+pipeline. Moved here unmodified from the old `code/model_analysis/`.
 
 ## How to run
 
 ```
-cd code/model_analysis
+cd archive/model_analysis
 python main.py
 ```
 
@@ -27,7 +30,7 @@ Runs both phases in order:
 
 ## Inputs
 
-- ImageNette dataset at `../dataset/` (see its own `main.py` `download()` if missing).
+- ImageNette dataset at `../../imagenette/dataset/` (see its own `main.py` `download()` if missing).
 - No upstream pipeline output required — this is the first stage.
 
 ## Outputs

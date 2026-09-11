@@ -5,19 +5,14 @@ images (complementary, giving a dispatcher real headroom above any single
 model's own accuracy).
 
 Restricts to genuinely held-out images only (filename prefix 'test_' -
-CIFAR-10's own official test set, which no pool model was trained on) even
-if the ground-truth CSV passed in still has train-split rows mixed in from
-before the leakage fix (see Journel/Week2.md) - so this is safe to run
-against either the old or the corrected val_ground_truth.csv.
+CIFAR-10's own official test set, which no pool model was trained on).
 
-Accepts multiple CSVs (e.g. both train_ground_truth.csv and
-val_ground_truth.csv from a pre-leakage-fix run, where official-test-set
-images ended up scattered across both) and pools their held-out rows
-together, deduped by image_path, for a bigger/more complete sample of the
-true 10k official test set.
+Accepts multiple CSVs and pools their held-out rows together, deduped by
+image_path, for a bigger/more complete sample of the true 10k official
+test set.
 
 Usage: python analyze_model_overlap.py [csv1] [csv2] ...
-       (defaults to both dispatcher_analysis/data/{train,val}_ground_truth.csv)
+       (defaults to both cifar-10/data/{train,val}_ground_truth.csv)
 """
 
 import sys
@@ -26,15 +21,15 @@ import itertools
 import pandas as pd
 
 DEFAULT_CSVS = [
-    "dispatcher_analysis/data/train_ground_truth.csv",
-    "dispatcher_analysis/data/val_ground_truth.csv",
+    "data/train_ground_truth.csv",
+    "data/val_ground_truth.csv",
 ]
 
 MODEL_COLS = [
+    "shufflenetv2_x0_5_correct",
     "resnet20_correct",
     "resnet32_correct",
-    "shufflenetv2_x2_0_correct",
-    "vgg16_bn_correct",
+    "vgg11_bn_correct",
 ]
 
 
@@ -81,7 +76,7 @@ def main():
     print()
 
     print("Correctness-pattern breakdown (2^4=16 combinations, 1=correct/0=wrong,")
-    print("column order = resnet20, resnet32, shufflenetv2_x2_0, vgg16_bn):")
+    print("column order = shufflenetv2_x0_5, resnet20, resnet32, vgg11_bn):")
     pattern = correct.astype(int).astype(str).agg("".join, axis=1)
     counts = pattern.value_counts().sort_index()
     for pat, n in counts.items():

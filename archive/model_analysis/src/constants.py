@@ -8,9 +8,13 @@ from torchvision import transforms
 # Paths are built from this file's own location, so the pipeline works no
 # matter what directory you run main.py from.
 _SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(_SRC_DIR)   # "model_analysis/"
+PROJECT_ROOT = os.path.dirname(_SRC_DIR)   # "archive/model_analysis/"
 
-DATASET_PATH = os.path.join(PROJECT_ROOT, "..", "dataset")
+# Archived 2026-09: this pipeline used to live at "code/model_analysis/" with the
+# dataset one level up at "code/dataset/". Both moved (model_analysis -> archive/,
+# dataset -> imagenette/dataset/) — repointed here so this still runs if revisited,
+# without otherwise restructuring this archived pipeline.
+DATASET_PATH = os.path.join(PROJECT_ROOT, "..", "..", "imagenette", "dataset")
 RESNET_MODELS_DIR = os.path.join(PROJECT_ROOT, "ResnetModels")
 MODEL_CACHE_DIR = os.path.join(PROJECT_ROOT, "model_cache")
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")

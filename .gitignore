@@ -1,13 +1,12 @@
-code/dataset/**
-code/model_analysis/ResnetModels/**
-code/model_analysis/model_cache/**
-code/dispatcher/embeddings_cache/**
-code/dispatcher/results/logs/**
-code/dispatcher/results/nsga2/checkpoint_*.npz
-code/dispatcher_analysis/embeddings_cache/**
+imagenette/dataset/**
+archive/model_analysis/ResnetModels/**
+archive/model_analysis/model_cache/**
+imagenette/embeddings_cache/**
+imagenette/results/logs/**
+imagenette/results/nsga2/checkpoint_*.npz
 paper.pdf
-code/CIFAR_10_Implementation/dataset
-code/CIFAR_10_Implementation/dispatcher/embeddings_cache
+cifar-10/dataset/**
+cifar-10/embeddings_cache/**
 
 
 # Byte-compiled / optimized / DLL files

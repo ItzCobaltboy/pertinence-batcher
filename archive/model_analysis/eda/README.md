@@ -1,16 +1,16 @@
 # eda
 
-Analysis of `../model_analysis/`'s benchmark results — plotting only.
+Analysis of `../` (this folder is nested inside model_analysis/, not a sibling)'s benchmark results — plotting only.
 
 **Does**: reads `eager_baseline.csv` and `torch_tensorrt_benchmark.csv` (live from
-`../model_analysis/results/`, not copied) and produces comparison plots.
+`../results/`, not copied) and produces comparison plots.
 **Does not**: run any benchmark itself, and does not touch `../dispatcher/`'s own EDA —
 separate pipeline, separate concern.
 
 ## How to run
 
 ```
-cd code/eda
+cd archive/model_analysis/eda
 python main.py
 ```
 
@@ -30,5 +30,5 @@ Requires `../model_analysis/main.py` to have been run first (both CSVs must exis
 
 ## Why
 
-Model pool selection is narrated in `../../Journel/Week0.md`; the Torch-TensorRT FP16
-result in `../../Journel/Week1.md`.
+Model pool selection is narrated in `../../../Journel/Week0.md`; the Torch-TensorRT FP16
+result in `../../../Journel/Week1.md`.

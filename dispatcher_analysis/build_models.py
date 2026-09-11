@@ -1,0 +1,46 @@
+"""
+Retrains every Pareto individual's FC head directly from its chromosome
+(pareto_front.csv) and INS class weights, overwriting
+model_cache/individual_<id>.npz every run — never a copied cache.
+
+Fresh init + shuffle mean these weights won't be bit-identical to whatever
+pymoo saw during the search, but with the same chromosome, hyperparameters,
+and class weights, results should be very close. Retraining every
+individual costs a few minutes (~3-5s each) — cheap insurance against ever
+evaluating a stale or mismatched weight file.
+"""
+
+import os
+import numpy as np
+import pandas as pd
+
+from penalty_matrix import build_penalty_matrix
+from class_weights import compute_ins_class_weights
+from train_fc import train_fc
+
+
+def build_models(train_embeddings, train_labels, device, config):
+    """Reads pareto_front.csv, retrains an FC head per individual, and
+    writes model_cache/individual_<id>.npz (W, b, chromosome) for each."""
+    pareto_df = pd.read_csv(config.PARETO_FRONT_CSV)
+    chromosome_columns = [col for col in pareto_df.columns if col.startswith("P_")]
+
+    class_weights = compute_ins_class_weights(train_labels, config)
+    os.makedirs(config.MODEL_CACHE_DIR, exist_ok=True)
+
+    print(f"Retraining {len(pareto_df)} Pareto individuals from their chromosomes "
+          f"({config.FC_EPOCHS} epochs each)...")
+    for i, row in pareto_df.iterrows():
+        individual_id = int(row["individual"])
+        chromosome = row[chromosome_columns].values.astype(np.float32)
+
+        penalty_matrix = build_penalty_matrix(chromosome, config)
+        W, b = train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, device, config)
+
+        path = os.path.join(config.MODEL_CACHE_DIR, f"individual_{individual_id}.npz")
+        np.savez(path, W=W, b=b, chromosome=chromosome)
+
+        if (i + 1) % 10 == 0 or i == len(pareto_df) - 1:
+            print(f"  trained {i + 1}/{len(pareto_df)}")
+
+    print(f"All {len(pareto_df)} models retrained -> {config.MODEL_CACHE_DIR}")
