@@ -51,6 +51,23 @@ MODEL_NAMES = ["shufflenetv2_x0_5", "resnet20", "resnet32", "vgg11_bn"]
 MODEL_COST = [10.90, 40.81, 69.12, 153.29]
 MODEL_COST_UNIT = "MAdds-M"
 
+# Dispatcher's own fixed overhead — the embedding extractor's
+# (shufflenetv2_x0_5, head stripped) forward pass plus the FC head's
+# (Linear(1024, 4)) forward pass, measured locally via thop. Added on top
+# of the dispatched model's cost in dispatcher/fitness.py and
+# dispatcher_analysis/summarize.py — see fitness.py's module docstring for
+# why (the paper's Eq. 4 defines its cost objective as inclusive of this
+# overhead, not just the selected model). This is close to but not exactly
+# shufflenetv2_x0_5's own MODEL_COST entry above (10.90) even though it's
+# almost the same architecture (extractor backbone + a 4-class FC head vs.
+# the full model's original 10-class FC head) — MODEL_COST is chenyaofo's
+# own published table figure, this is a fresh local thop measurement, and
+# the two tools/methodologies don't agree to the last digit (a locally
+# measured full model with its original head comes out to 11.94M here, not
+# 10.90M) — a known category of discrepancy between different FLOPs-
+# counting conventions, not a stripping bug.
+DISPATCHER_OVERHEAD_COST = 11.96
+
 # Embedding extractor: shufflenetv2_x0_5 (cheapest pool model), final
 # classifier head stripped. Output dim measured empirically (dummy 32x32
 # forward pass) — NOT assumed to be 512 like the ImageNette track's

@@ -5,6 +5,16 @@ Matplotlib outputs:
     a visual check of whether the front NSGA-II found on train is still a
     real Pareto front once independently recomputed here, and whether it
     still holds up on held-out val.
+  - Accuracy-vs-cost: the paper's own Fig. 6-10 plotting convention
+    directly — accuracy (%) on the y-axis (higher better), cost on the
+    x-axis (lower better), PERTINENCE's dispatcher configs as one series
+    and each individual pool model's own standalone accuracy/cost ("SOTA
+    CNNs" in the paper's legend) as a second series, with the Pareto front
+    across BOTH series connected. This is a different framing from the
+    scatter above (which only ever plots PERTINENCE's own points against
+    each other, never compares against a standalone SOTA model) — use this
+    one when the point is showing PERTINENCE's actual value proposition
+    over just picking one fixed model, the way the paper's own figures do.
   - Confusion matrices (ideal_label vs predicted) for a few representative
     individuals off the val-recomputed front: cheapest, highest-alpha_sys,
     and a middle pick.
@@ -17,20 +27,24 @@ import matplotlib.pyplot as plt
 from metrics import confusion_matrix
 
 
-def _non_dominated_mask(x, y):
+def _non_dominated_mask(x, y, minimize_y=True):
     """
-    Both x (avg_model_cost) and y (1 - alpha_sys) are minimized. A point is
-    non-dominated if no other point is <= it on both axes with a strict
-    improvement on at least one.
+    x (cost) is always minimized. y is minimized if minimize_y (e.g.
+    1-alpha_sys), maximized otherwise (e.g. raw accuracy %) — a point is
+    non-dominated if no other point is at least as good on both axes with
+    a strict improvement on at least one.
     """
     n = len(x)
+    y_better_or_equal = (lambda a, b: a <= b) if minimize_y else (lambda a, b: a >= b)
+    y_strictly_better = (lambda a, b: a < b) if minimize_y else (lambda a, b: a > b)
+
     dominated = np.zeros(n, dtype=bool)
     for i in range(n):
         for j in range(n):
             if i == j:
                 continue
-            better_or_equal = x[j] <= x[i] and y[j] <= y[i]
-            strictly_better = x[j] < x[i] or y[j] < y[i]
+            better_or_equal = x[j] <= x[i] and y_better_or_equal(y[j], y[i])
+            strictly_better = x[j] < x[i] or y_strictly_better(y[j], y[i])
             if better_or_equal and strictly_better:
                 dominated[i] = True
                 break
@@ -60,6 +74,54 @@ def plot_pareto_scatter(train_summary, val_summary, out_path, config):
         ax.grid(alpha=0.3)
 
     fig.suptitle("Pareto front | 1-alpha_sys vs avg model cost")
+    fig.tight_layout()
+
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    fig.savefig(out_path, dpi=150)
+    plt.close(fig)
+    print(f"Saved -> {out_path}")
+
+
+def plot_accuracy_vs_cost(summary, correctness_matrix, out_path, config, title="PERTINENCE vs SOTA CNNs"):
+    """Saves one accuracy(%)-vs-cost plot matching the paper's own Fig.
+    6-10 style exactly: PERTINENCE's dispatcher configs (black dots), each
+    individual pool model's own standalone accuracy/cost (green dots,
+    "SOTA CNNs" in the paper's legend), and the Pareto front computed
+    across both series together (red dashed line + markers).
+
+    `correctness_matrix` is the (num_images, num_models) boolean array for
+    whichever split `summary` was computed against — the same one
+    summarize.py's `correctness_matrix_from_csv` builds from a ground-truth CSV's
+    <model>_correct columns. A SOTA model's own point uses ONLY its own
+    MODEL_COST, no DISPATCHER_OVERHEAD_COST — a standalone deployment of
+    that model never runs the feature extractor or FC head, so it doesn't
+    pay for either."""
+    pertinence_x = summary["avg_model_cost"].values
+    pertinence_y = 100.0 * summary["alpha_sys"].values
+
+    sota_x = np.array(config.MODEL_COST, dtype=float)
+    sota_y = 100.0 * correctness_matrix.mean(axis=0)
+
+    all_x = np.concatenate([pertinence_x, sota_x])
+    all_y = np.concatenate([pertinence_y, sota_y])
+    non_dominated = _non_dominated_mask(all_x, all_y, minimize_y=False)
+
+    fig, ax = plt.subplots(figsize=(7.5, 6))
+
+    ax.scatter(pertinence_x, pertinence_y, color="black", label="PERTINENCE", zorder=3, s=25)
+    ax.scatter(sota_x, sota_y, color="mediumseagreen", label="SOTA CNNs", zorder=3, s=60)
+    for name, x, y in zip(config.MODEL_NAMES, sota_x, sota_y):
+        ax.annotate(name, (x, y), textcoords="offset points", xytext=(6, 4), fontsize=8)
+
+    order = np.argsort(all_x[non_dominated])
+    ax.plot(all_x[non_dominated][order], all_y[non_dominated][order], "x--", color="crimson",
+            label="Pareto Front", zorder=2, markersize=8)
+
+    ax.set_xlabel(f"{config.MODEL_COST_UNIT.replace('-M', '')} per image - lower the better")
+    ax.set_ylabel("Accuracy (%) - higher the better")
+    ax.set_title(title)
+    ax.legend()
+    ax.grid(alpha=0.3)
     fig.tight_layout()
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)

@@ -25,7 +25,11 @@ explicit `config` argument — a plain Python module (`imagenette/config.py` or
 (`imagenette/run_dispatcher.py` / `cifar-10/run_dispatcher.py`). Nothing in this folder
 does `import constants` or reads a per-dataset value implicitly.
 
-`config` must define: `MODEL_NAMES`, `MODEL_COST` + `MODEL_COST_UNIT`, `NUM_CLASSES`,
+`config` must define: `MODEL_NAMES`, `MODEL_COST` + `MODEL_COST_UNIT`,
+`DISPATCHER_OVERHEAD_COST` (the feature extractor's + FC head's own forward-
+pass cost, in the same unit as `MODEL_COST` — added on top of the dispatched
+model's cost in `fitness.py`'s `avg_model_cost`, matching the paper's Eq. 4;
+see that module's docstring), `NUM_CLASSES`,
 `EMBEDDING_DIM`, `build_feature_extractor(device)` (returns the frozen backbone with its
 classifier head removed — the *mechanism* for loading this differs by dataset, e.g.
 torchvision's pretrained ResNet18 vs. a local CIFAR-10 checkpoint loader, so it's a
@@ -36,6 +40,17 @@ hyperparameters (`N_GENES`, `PENALTY_LOWER_BOUND`, `PENALTY_UPPER_BOUND`, `FC_EP
 `BATCH_SIZE`, `LEARNING_RATE`, `POPULATION_SIZE`, `GENERATIONS`, `SBX_ETA`,
 `SBX_CROSSOVER_PROBABILITY`, `MUTATION_ETA`, `CHECKPOINT_EVERY_N_GENERATIONS`,
 `EMBEDDING_NUM_WORKERS`).
+
+**Optional: searching the weighting scheme too.** The paper's own chromosome searches a
+choice of class-weighting scheme (INS/ISNS/ENS, see `class_weights.py`) alongside the
+penalty matrix, not just the penalty matrix alone. This is opt-in per track, inferred
+structurally rather than via a separate flag (see `weighting_scheme.py`): set
+`config.N_GENES = NUM_CLASSES**2 - NUM_CLASSES + 1` (one more than the penalty-only count)
+and additionally define `config.SCHEME_GENE_LOWER_BOUND`/`SCHEME_GENE_UPPER_BOUND` — the
+search range for that one extra gene, a different range than the penalty genes' own
+bounds. Leave `N_GENES` at the penalty-only count (`NUM_CLASSES**2 - NUM_CLASSES`) and
+every individual uses plain INS, exactly as before — ImageNette and CIFAR-10 do this,
+unaffected by any of the above.
 
 ## How to run
 

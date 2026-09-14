@@ -8,31 +8,59 @@ file is missing.
 
 import os
 import numpy as np
+from torch.utils.data import Dataset
+
+
+class _ImageDataset(Dataset):
+    """Module-level, not nested inside a function — Windows' spawn-based
+    multiprocessing (DataLoader num_workers>0) can only pickle a class by
+    reference to an importable module attribute, not a locally-scoped
+    class object. This dataset used to be defined inside
+    _compute_embeddings() itself, which worked fine wherever a cache
+    already existed (the DataLoader never got constructed) but broke with
+    an unpicklable-local-object error the first time a track's
+    dispatcher_analysis ran with no cache yet and EMBEDDING_NUM_WORKERS>0
+    on Windows.
+
+    Takes dataset_dir/image_transform directly rather than a whole config
+    object: a track's real config module pickles fine by reference (worker
+    processes just re-import it by name), but a config VIEW built as
+    types.SimpleNamespace(**vars(config)) — see
+    cifar-100/*/run_dispatcher_analysis.py's final-validation pass — copies
+    every attribute by value, including any raw imported modules a
+    config.py happens to hold (e.g. torchvision's own `transforms` module,
+    imported at the top of every track's config.py). Modules aren't
+    generally picklable by value, only by reference, so passing such a view
+    into this dataset used to break the same way on Windows. Extracting
+    just the two plain values actually needed sidesteps the whole class of
+    problem instead of special-casing it."""
+
+    def __init__(self, dataframe, dataset_dir, image_transform):
+        self.dataframe = dataframe
+        self.dataset_dir = dataset_dir
+        self.image_transform = image_transform
+
+    def __len__(self):
+        return len(self.dataframe)
+
+    def __getitem__(self, idx):
+        row = self.dataframe.iloc[idx]
+        full_path = os.path.join(self.dataset_dir, row["image_path"])
+        from PIL import Image
+        image = Image.open(full_path).convert("RGB")
+        image = self.image_transform(image)
+        label = int(row["label"])
+        return image, label
 
 
 def _compute_embeddings(dataframe, device, config):
     """Runs the frozen embedding-extractor backbone over every image in
     dataframe. Returns (embeddings, labels) as numpy arrays."""
     import torch
-    from torch.utils.data import Dataset, DataLoader
-    from PIL import Image
+    from torch.utils.data import DataLoader
 
-    class ImageDataset(Dataset):
-        def __init__(self, dataframe):
-            self.dataframe = dataframe
-
-        def __len__(self):
-            return len(self.dataframe)
-
-        def __getitem__(self, idx):
-            row = self.dataframe.iloc[idx]
-            full_path = os.path.join(config.DATASET_DIR, row["image_path"])
-            image = Image.open(full_path).convert("RGB")
-            image = config.IMAGE_TRANSFORM(image)
-            label = int(row["label"])
-            return image, label
-
-    loader = DataLoader(ImageDataset(dataframe), batch_size=64, shuffle=False,
+    dataset = _ImageDataset(dataframe, config.DATASET_DIR, config.IMAGE_TRANSFORM)
+    loader = DataLoader(dataset, batch_size=64, shuffle=False,
                          num_workers=config.EMBEDDING_NUM_WORKERS)
 
     feature_extractor = config.build_feature_extractor(device).to(device)

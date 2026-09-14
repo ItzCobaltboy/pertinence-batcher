@@ -42,6 +42,18 @@ MODEL_NAMES = ["resnet18", "resnet34", "resnet50", "resnet152"]
 MODEL_COST = [1.824, 3.679, 4.134, 11.604]
 MODEL_COST_UNIT = "GFLOPs"
 
+# Dispatcher's own fixed overhead — the embedding extractor's (ResNet18,
+# head stripped) forward pass plus the FC head's (Linear(512, 4)) forward
+# pass, measured via thop the same way archive/model_analysis measured the
+# pool models' own MODEL_COST figures above. Added on top of the dispatched
+# model's cost in dispatcher/fitness.py and dispatcher_analysis/summarize.py
+# — see fitness.py's module docstring for why (the paper's Eq. 4 defines
+# its cost objective as inclusive of this overhead, not just the selected
+# model). Near-identical to resnet18's own MODEL_COST entry above since the
+# extractor IS a resnet18 backbone with a trivial FC head swapped in for
+# its original 1000-class classifier.
+DISPATCHER_OVERHEAD_COST = 1.824
+
 # ImageNette folder names are ImageNet synset IDs, not 0-9 class indices —
 # label_data.py remaps them to the real 1000-class ImageNet index every
 # pretrained pool model here expects (otherwise correctness looks like

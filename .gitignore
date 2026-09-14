@@ -7,7 +7,14 @@ imagenette/results/nsga2/checkpoint_*.npz
 paper.pdf
 cifar-10/dataset/**
 cifar-10/embeddings_cache/**
-
+cifar-100/dataset/**
+cifar-100/models/cifar100_mobilenetv2_x0_5-9f915757.pt
+cifar-100/models/cifar100_mobilenetv2_x0_75-d7891e60.pt
+cifar-100/models/cifar100_mobilenetv2_x1_4-8a269f5e.pt
+cifar-100/models/cifar100_repvgg_a1-c06b21a7.pt
+cifar-100/models/cifar100_repvgg_a2-8e71b1f8.pt
+cifar-100/models/cifar100_shufflenetv2_x0_5-1977720f.pt
+cifar-100/models/cifar100_shufflenetv2_x1_0-9ae22beb.pt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

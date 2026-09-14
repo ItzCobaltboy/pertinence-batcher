@@ -13,6 +13,14 @@ confusion in project meetings before:
     indexed by the predicted model. Overestimating (routing to a bigger,
     still-correct model) costs nothing on this metric, only avg_model_cost.
 
+  - avg_model_cost includes config.DISPATCHER_OVERHEAD_COST (the feature
+    extractor's + FC layer's own forward-pass cost) on top of the
+    dispatched model's own cost, matching the paper's Eq. 4 definition of
+    this objective and how dispatcher/fitness.py computes it during the
+    search — see that module's docstring for the full reasoning. It's the
+    same fixed constant added to every individual, so it doesn't change
+    which individuals are non-dominated, only the absolute number.
+
   - accuracy_exact_match_vs_ideal (this column): the fraction of images
     where the dispatcher's routing decision was an EXACT MATCH to
     ideal_label (the argmin-cheapest-correct reference label). This is
@@ -47,7 +55,7 @@ import pandas as pd
 from metrics import confusion_matrix, recall_per_class, precision_per_class
 
 
-def _correctness_matrix(ground_truth_csv, config):
+def correctness_matrix_from_csv(ground_truth_csv, config):
     """Loads the (num_images, NUM_MODELS) boolean correctness matrix from a
     ground-truth CSV's <model>_correct columns."""
     columns = [f"{name}_correct" for name in config.MODEL_NAMES]
@@ -71,7 +79,7 @@ def _summarize_split(predictions_df, correctness_matrix, out_csv, config):
         predicted_labels = predictions_df[column_name].values
 
         alpha_sys = correctness_matrix[image_indices, predicted_labels].mean()
-        avg_model_cost = cost_array[predicted_labels].mean()
+        avg_model_cost = cost_array[predicted_labels].mean() + config.DISPATCHER_OVERHEAD_COST
         accuracy_exact_match_vs_ideal = (predicted_labels == ideal_labels).mean()
 
         cm = confusion_matrix(ideal_labels, predicted_labels, config)
@@ -99,8 +107,8 @@ def _summarize_split(predictions_df, correctness_matrix, out_csv, config):
 def summarize(train_predictions_df, val_predictions_df, config):
     """Summarizes both splits and writes results/{train,val}_summary.csv.
     Returns (train_summary, val_summary)."""
-    train_correctness = _correctness_matrix(config.TRAIN_GROUND_TRUTH_CSV, config)
-    val_correctness = _correctness_matrix(config.VAL_GROUND_TRUTH_CSV, config)
+    train_correctness = correctness_matrix_from_csv(config.TRAIN_GROUND_TRUTH_CSV, config)
+    val_correctness = correctness_matrix_from_csv(config.VAL_GROUND_TRUTH_CSV, config)
 
     print("\nSummarizing train predictions...")
     train_summary = _summarize_split(train_predictions_df, train_correctness, config.TRAIN_SUMMARY_CSV, config)
