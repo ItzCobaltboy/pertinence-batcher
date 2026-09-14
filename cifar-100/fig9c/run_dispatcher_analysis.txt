@@ -1,0 +1,46 @@
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Device: cuda:0
+Retraining 50 Pareto individuals from their chromosomes (20 epochs each)...
+  trained 10/50
+  trained 20/50
+  trained 30/50
+  trained 40/50
+  trained 50/50
+All 50 models retrained -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/model_cache
+
+======================================================================
+PASS 1 -- test-fitness split (paper's 'test set': the split
+NSGA-II's own fitness evaluation used during the search itself)
+======================================================================
+Predicting with 50 saved Pareto individuals...
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/predictions/train_predictions.csv
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/predictions/test_predictions.csv
+
+Summarizing train predictions...
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/train_summary.csv
+
+Summarizing val predictions...
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/test_summary.csv
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/plots/pareto_scatter_test.png
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/plots/accuracy_vs_mflops_test.png
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/plots/confusion_matrices_test.png
+
+======================================================================
+PASS 2 -- final validation split (paper's 'validation set': genuinely
+untouched by FC training or the MOEA until this exact point) -- THESE
+are the numbers to report, not PASS 1's
+======================================================================
+Predicting with 50 saved Pareto individuals...
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/predictions/train_predictions.csv
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/predictions/final_val_predictions.csv
+
+Summarizing train predictions...
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/train_summary.csv
+
+Summarizing val predictions...
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/final_val_summary.csv
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/plots/pareto_scatter_final_val.png
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/plots/accuracy_vs_mflops_final_val.png
+Saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/eval/plots/confusion_matrices_final_val.png
+
+Done.

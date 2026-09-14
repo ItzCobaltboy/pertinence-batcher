@@ -1,0 +1,2582 @@
+11:28:44  Log file: /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/logs/nsga2_ins_loss_20260912_112844.log
+11:28:45  Device: cuda:0  |  Pop: 50  |  Gen: 50  |  FC epochs: 20  |  Bias handling: chromosome-selected INS/ISNS/ENS class-weighted LOSS  |  GA engine: pymoo
+11:28:45  Loading train + val embeddings...
+11:28:45  Train embeddings shape: (50000, 1024)  |  Val embeddings shape: (7000, 1024)
+11:28:45  Val correctness matrix shape: (7000, 3)
+11:28:45  
+Starting search: 50 initial individuals, then 50 generations of 50 offspring each...
+
+11:29:01    [eval #   1]  alpha_sys=70.17%  cost=114.263 MFLOPs-M
+11:29:17    [eval #   2]  alpha_sys=67.30%  cost=79.393 MFLOPs-M
+11:29:33    [eval #   3]  alpha_sys=67.24%  cost=68.037 MFLOPs-M
+11:29:48    [eval #   4]  alpha_sys=67.60%  cost=88.203 MFLOPs-M
+11:30:04    [eval #   5]  alpha_sys=68.39%  cost=78.941 MFLOPs-M
+11:30:20    [eval #   6]  alpha_sys=67.44%  cost=68.668 MFLOPs-M
+11:30:35    [eval #   7]  alpha_sys=67.26%  cost=73.205 MFLOPs-M
+11:30:51    [eval #   8]  alpha_sys=67.33%  cost=58.693 MFLOPs-M
+11:31:07    [eval #   9]  alpha_sys=67.30%  cost=83.760 MFLOPs-M
+11:31:23    [eval #  10]  alpha_sys=70.14%  cost=98.027 MFLOPs-M
+11:31:39    [eval #  11]  alpha_sys=67.37%  cost=90.135 MFLOPs-M
+11:31:55    [eval #  12]  alpha_sys=69.30%  cost=103.267 MFLOPs-M
+11:32:11    [eval #  13]  alpha_sys=70.29%  cost=658.368 MFLOPs-M
+11:32:27    [eval #  14]  alpha_sys=71.09%  cost=304.778 MFLOPs-M
+11:32:43    [eval #  15]  alpha_sys=70.67%  cost=731.941 MFLOPs-M
+11:32:58    [eval #  16]  alpha_sys=67.20%  cost=70.542 MFLOPs-M
+11:33:14    [eval #  17]  alpha_sys=71.09%  cost=184.842 MFLOPs-M
+11:33:30    [eval #  18]  alpha_sys=67.70%  cost=114.892 MFLOPs-M
+11:33:46    [eval #  19]  alpha_sys=71.54%  cost=614.628 MFLOPs-M
+11:34:01    [eval #  20]  alpha_sys=67.26%  cost=103.777 MFLOPs-M
+11:34:17    [eval #  21]  alpha_sys=73.40%  cost=262.001 MFLOPs-M
+11:34:32    [eval #  22]  alpha_sys=70.89%  cost=201.669 MFLOPs-M
+11:34:48    [eval #  23]  alpha_sys=67.71%  cost=173.581 MFLOPs-M
+11:35:03    [eval #  24]  alpha_sys=69.16%  cost=222.442 MFLOPs-M
+11:35:18    [eval #  25]  alpha_sys=71.71%  cost=164.219 MFLOPs-M
+11:35:34    [eval #  26]  alpha_sys=68.67%  cost=170.794 MFLOPs-M
+11:35:50    [eval #  27]  alpha_sys=68.09%  cost=67.465 MFLOPs-M
+11:36:06    [eval #  28]  alpha_sys=72.09%  cost=172.173 MFLOPs-M
+11:36:21    [eval #  29]  alpha_sys=67.20%  cost=88.352 MFLOPs-M
+11:36:36    [eval #  30]  alpha_sys=67.41%  cost=87.781 MFLOPs-M
+11:36:52    [eval #  31]  alpha_sys=68.91%  cost=123.045 MFLOPs-M
+11:37:07    [eval #  32]  alpha_sys=72.40%  cost=253.324 MFLOPs-M
+11:37:23    [eval #  33]  alpha_sys=69.93%  cost=719.839 MFLOPs-M
+11:37:39    [eval #  34]  alpha_sys=68.07%  cost=204.392 MFLOPs-M
+11:37:55    [eval #  35]  alpha_sys=70.80%  cost=587.139 MFLOPs-M
+11:38:11    [eval #  36]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+11:38:26    [eval #  37]  alpha_sys=70.56%  cost=185.498 MFLOPs-M
+11:38:42    [eval #  38]  alpha_sys=74.23%  cost=1036.213 MFLOPs-M
+11:38:58    [eval #  39]  alpha_sys=72.93%  cost=524.708 MFLOPs-M
+11:39:14    [eval #  40]  alpha_sys=69.36%  cost=113.191 MFLOPs-M
+11:39:30    [eval #  41]  alpha_sys=67.79%  cost=61.278 MFLOPs-M
+11:39:46    [eval #  42]  alpha_sys=70.69%  cost=708.576 MFLOPs-M
+11:40:02    [eval #  43]  alpha_sys=67.34%  cost=64.361 MFLOPs-M
+11:40:17    [eval #  44]  alpha_sys=68.19%  cost=217.734 MFLOPs-M
+11:40:33    [eval #  45]  alpha_sys=67.26%  cost=55.978 MFLOPs-M
+11:40:49    [eval #  46]  alpha_sys=69.30%  cost=331.116 MFLOPs-M
+11:41:05    [eval #  47]  alpha_sys=68.79%  cost=276.663 MFLOPs-M
+11:41:21    [eval #  48]  alpha_sys=67.99%  cost=67.996 MFLOPs-M
+11:41:37    [eval #  49]  alpha_sys=67.43%  cost=58.865 MFLOPs-M
+11:41:52    [eval #  50]  alpha_sys=69.46%  cost=130.937 MFLOPs-M
+11:41:52  -- Generation 1/50 done  |  best_alpha_sys=74.23%  best_low_cost=47.983 MFLOPs-M --
+11:42:08    [eval #  51]  alpha_sys=67.76%  cost=248.013 MFLOPs-M
+11:42:23    [eval #  52]  alpha_sys=67.56%  cost=136.236 MFLOPs-M
+11:42:38    [eval #  53]  alpha_sys=67.61%  cost=80.052 MFLOPs-M
+11:42:53    [eval #  54]  alpha_sys=70.29%  cost=126.195 MFLOPs-M
+11:43:09    [eval #  55]  alpha_sys=67.37%  cost=52.378 MFLOPs-M
+11:43:24    [eval #  56]  alpha_sys=67.67%  cost=205.066 MFLOPs-M
+11:43:40    [eval #  57]  alpha_sys=67.69%  cost=57.351 MFLOPs-M
+11:43:55    [eval #  58]  alpha_sys=74.89%  cost=1544.139 MFLOPs-M
+11:44:10    [eval #  59]  alpha_sys=72.36%  cost=136.590 MFLOPs-M
+11:44:26    [eval #  60]  alpha_sys=70.71%  cost=952.756 MFLOPs-M
+11:44:41    [eval #  61]  alpha_sys=67.46%  cost=139.254 MFLOPs-M
+11:44:56    [eval #  62]  alpha_sys=71.80%  cost=600.419 MFLOPs-M
+11:45:12    [eval #  63]  alpha_sys=70.71%  cost=216.394 MFLOPs-M
+11:45:28    [eval #  64]  alpha_sys=67.23%  cost=52.308 MFLOPs-M
+11:45:43    [eval #  65]  alpha_sys=69.53%  cost=156.419 MFLOPs-M
+11:45:59    [eval #  66]  alpha_sys=70.33%  cost=372.908 MFLOPs-M
+11:46:15    [eval #  67]  alpha_sys=67.36%  cost=71.901 MFLOPs-M
+11:46:31    [eval #  68]  alpha_sys=67.30%  cost=64.288 MFLOPs-M
+11:46:47    [eval #  69]  alpha_sys=73.76%  cost=783.867 MFLOPs-M
+11:47:03    [eval #  70]  alpha_sys=67.20%  cost=49.160 MFLOPs-M
+11:47:18    [eval #  71]  alpha_sys=72.09%  cost=382.120 MFLOPs-M
+11:47:34    [eval #  72]  alpha_sys=74.27%  cost=887.718 MFLOPs-M
+11:47:49    [eval #  73]  alpha_sys=67.39%  cost=86.198 MFLOPs-M
+11:48:04    [eval #  74]  alpha_sys=67.46%  cost=60.696 MFLOPs-M
+11:48:19    [eval #  75]  alpha_sys=70.50%  cost=109.934 MFLOPs-M
+11:48:34    [eval #  76]  alpha_sys=67.24%  cost=51.947 MFLOPs-M
+11:48:49    [eval #  77]  alpha_sys=69.56%  cost=155.275 MFLOPs-M
+11:49:04    [eval #  78]  alpha_sys=67.23%  cost=48.211 MFLOPs-M
+11:49:20    [eval #  79]  alpha_sys=67.27%  cost=52.681 MFLOPs-M
+11:49:35    [eval #  80]  alpha_sys=68.86%  cost=137.621 MFLOPs-M
+11:49:51    [eval #  81]  alpha_sys=71.56%  cost=231.445 MFLOPs-M
+11:50:06    [eval #  82]  alpha_sys=71.41%  cost=224.864 MFLOPs-M
+11:50:22    [eval #  83]  alpha_sys=69.66%  cost=197.052 MFLOPs-M
+11:50:38    [eval #  84]  alpha_sys=68.50%  cost=304.413 MFLOPs-M
+11:50:54    [eval #  85]  alpha_sys=70.04%  cost=184.612 MFLOPs-M
+11:51:10    [eval #  86]  alpha_sys=68.86%  cost=158.859 MFLOPs-M
+11:51:24    [eval #  87]  alpha_sys=70.79%  cost=344.710 MFLOPs-M
+11:51:39    [eval #  88]  alpha_sys=72.11%  cost=207.162 MFLOPs-M
+11:51:55    [eval #  89]  alpha_sys=69.16%  cost=171.191 MFLOPs-M
+11:52:10    [eval #  90]  alpha_sys=68.07%  cost=79.173 MFLOPs-M
+11:52:26    [eval #  91]  alpha_sys=69.71%  cost=334.054 MFLOPs-M
+11:52:42    [eval #  92]  alpha_sys=68.73%  cost=156.357 MFLOPs-M
+11:52:58    [eval #  93]  alpha_sys=69.17%  cost=93.898 MFLOPs-M
+11:53:13    [eval #  94]  alpha_sys=68.16%  cost=94.953 MFLOPs-M
+11:53:29    [eval #  95]  alpha_sys=71.20%  cost=1058.737 MFLOPs-M
+11:53:44    [eval #  96]  alpha_sys=73.56%  cost=436.743 MFLOPs-M
+11:54:00    [eval #  97]  alpha_sys=67.49%  cost=72.607 MFLOPs-M
+11:54:15    [eval #  98]  alpha_sys=67.26%  cost=69.108 MFLOPs-M
+11:54:31    [eval #  99]  alpha_sys=67.36%  cost=92.155 MFLOPs-M
+11:54:46    [eval # 100]  alpha_sys=71.90%  cost=400.767 MFLOPs-M
+11:54:46  -- Generation 2/50 done  |  best_alpha_sys=74.89%  best_low_cost=47.983 MFLOPs-M --
+11:55:02    [eval # 101]  alpha_sys=72.91%  cost=220.020 MFLOPs-M
+11:55:17    [eval # 102]  alpha_sys=67.17%  cost=51.426 MFLOPs-M
+11:55:33    [eval # 103]  alpha_sys=68.43%  cost=254.781 MFLOPs-M
+11:55:48    [eval # 104]  alpha_sys=70.49%  cost=970.839 MFLOPs-M
+11:56:03    [eval # 105]  alpha_sys=68.27%  cost=219.671 MFLOPs-M
+11:56:19    [eval # 106]  alpha_sys=67.27%  cost=71.913 MFLOPs-M
+11:56:34    [eval # 107]  alpha_sys=72.53%  cost=139.138 MFLOPs-M
+11:56:50    [eval # 108]  alpha_sys=72.34%  cost=311.256 MFLOPs-M
+11:57:05    [eval # 109]  alpha_sys=67.63%  cost=110.619 MFLOPs-M
+11:57:20    [eval # 110]  alpha_sys=70.50%  cost=305.256 MFLOPs-M
+11:57:35    [eval # 111]  alpha_sys=68.80%  cost=85.234 MFLOPs-M
+11:57:51    [eval # 112]  alpha_sys=67.16%  cost=52.633 MFLOPs-M
+11:58:06    [eval # 113]  alpha_sys=69.69%  cost=136.917 MFLOPs-M
+11:58:21    [eval # 114]  alpha_sys=67.54%  cost=120.704 MFLOPs-M
+11:58:36    [eval # 115]  alpha_sys=74.04%  cost=855.809 MFLOPs-M
+11:58:51    [eval # 116]  alpha_sys=67.77%  cost=58.437 MFLOPs-M
+11:59:07    [eval # 117]  alpha_sys=69.16%  cost=442.782 MFLOPs-M
+11:59:23    [eval # 118]  alpha_sys=67.99%  cost=63.729 MFLOPs-M
+11:59:39    [eval # 119]  alpha_sys=72.37%  cost=541.177 MFLOPs-M
+11:59:54    [eval # 120]  alpha_sys=72.96%  cost=262.957 MFLOPs-M
+12:00:11    [eval # 121]  alpha_sys=67.21%  cost=49.257 MFLOPs-M
+12:00:28    [eval # 122]  alpha_sys=68.37%  cost=341.239 MFLOPs-M
+12:00:44    [eval # 123]  alpha_sys=68.37%  cost=118.060 MFLOPs-M
+12:01:00    [eval # 124]  alpha_sys=69.60%  cost=316.560 MFLOPs-M
+12:01:16    [eval # 125]  alpha_sys=71.23%  cost=188.729 MFLOPs-M
+12:01:32    [eval # 126]  alpha_sys=72.39%  cost=892.669 MFLOPs-M
+12:01:48    [eval # 127]  alpha_sys=67.74%  cost=134.172 MFLOPs-M
+12:02:03    [eval # 128]  alpha_sys=71.94%  cost=575.378 MFLOPs-M
+12:02:18    [eval # 129]  alpha_sys=70.04%  cost=186.596 MFLOPs-M
+12:02:34    [eval # 130]  alpha_sys=72.26%  cost=551.362 MFLOPs-M
+12:02:49    [eval # 131]  alpha_sys=67.33%  cost=61.895 MFLOPs-M
+12:03:05    [eval # 132]  alpha_sys=67.64%  cost=61.333 MFLOPs-M
+12:03:21    [eval # 133]  alpha_sys=71.27%  cost=157.669 MFLOPs-M
+12:03:36    [eval # 134]  alpha_sys=74.77%  cost=1419.041 MFLOPs-M
+12:03:51    [eval # 135]  alpha_sys=68.61%  cost=68.029 MFLOPs-M
+12:04:07    [eval # 136]  alpha_sys=70.51%  cost=307.618 MFLOPs-M
+12:04:23    [eval # 137]  alpha_sys=68.86%  cost=87.623 MFLOPs-M
+12:04:38    [eval # 138]  alpha_sys=71.61%  cost=177.042 MFLOPs-M
+12:04:55    [eval # 139]  alpha_sys=73.46%  cost=206.394 MFLOPs-M
+12:05:11    [eval # 140]  alpha_sys=74.74%  cost=1038.406 MFLOPs-M
+12:05:26    [eval # 141]  alpha_sys=67.47%  cost=56.229 MFLOPs-M
+12:05:42    [eval # 142]  alpha_sys=67.34%  cost=64.185 MFLOPs-M
+12:05:58    [eval # 143]  alpha_sys=69.44%  cost=87.468 MFLOPs-M
+12:06:14    [eval # 144]  alpha_sys=72.33%  cost=872.209 MFLOPs-M
+12:06:29    [eval # 145]  alpha_sys=73.87%  cost=542.309 MFLOPs-M
+12:06:44    [eval # 146]  alpha_sys=72.84%  cost=415.669 MFLOPs-M
+12:06:59    [eval # 147]  alpha_sys=69.76%  cost=95.213 MFLOPs-M
+12:07:14    [eval # 148]  alpha_sys=68.89%  cost=84.591 MFLOPs-M
+12:07:30    [eval # 149]  alpha_sys=71.76%  cost=228.736 MFLOPs-M
+12:07:45    [eval # 150]  alpha_sys=67.27%  cost=72.305 MFLOPs-M
+12:07:45  -- Generation 3/50 done  |  best_alpha_sys=74.89%  best_low_cost=47.983 MFLOPs-M --
+12:08:01    [eval # 151]  alpha_sys=69.19%  cost=97.881 MFLOPs-M
+12:08:17    [eval # 152]  alpha_sys=74.10%  cost=707.669 MFLOPs-M
+12:08:33    [eval # 153]  alpha_sys=70.89%  cost=168.472 MFLOPs-M
+12:08:49    [eval # 154]  alpha_sys=67.23%  cost=48.423 MFLOPs-M
+12:09:05    [eval # 155]  alpha_sys=67.31%  cost=107.830 MFLOPs-M
+12:09:21    [eval # 156]  alpha_sys=68.79%  cost=91.661 MFLOPs-M
+12:09:37    [eval # 157]  alpha_sys=72.50%  cost=145.970 MFLOPs-M
+12:09:52    [eval # 158]  alpha_sys=73.10%  cost=264.959 MFLOPs-M
+12:10:07    [eval # 159]  alpha_sys=73.26%  cost=865.271 MFLOPs-M
+12:10:23    [eval # 160]  alpha_sys=71.31%  cost=303.018 MFLOPs-M
+12:10:39    [eval # 161]  alpha_sys=67.34%  cost=59.699 MFLOPs-M
+12:10:54    [eval # 162]  alpha_sys=73.26%  cost=226.596 MFLOPs-M
+12:11:11    [eval # 163]  alpha_sys=67.80%  cost=191.994 MFLOPs-M
+12:11:27    [eval # 164]  alpha_sys=73.76%  cost=458.847 MFLOPs-M
+12:11:43    [eval # 165]  alpha_sys=71.41%  cost=839.657 MFLOPs-M
+12:11:59    [eval # 166]  alpha_sys=76.14%  cost=2480.790 MFLOPs-M
+12:12:15    [eval # 167]  alpha_sys=73.40%  cost=242.241 MFLOPs-M
+12:12:30    [eval # 168]  alpha_sys=67.47%  cost=147.197 MFLOPs-M
+12:12:46    [eval # 169]  alpha_sys=67.20%  cost=52.733 MFLOPs-M
+12:13:01    [eval # 170]  alpha_sys=68.37%  cost=83.312 MFLOPs-M
+12:13:17    [eval # 171]  alpha_sys=72.93%  cost=1098.801 MFLOPs-M
+12:13:33    [eval # 172]  alpha_sys=67.39%  cost=54.922 MFLOPs-M
+12:13:48    [eval # 173]  alpha_sys=70.84%  cost=110.680 MFLOPs-M
+12:14:05    [eval # 174]  alpha_sys=73.03%  cost=611.939 MFLOPs-M
+12:14:21    [eval # 175]  alpha_sys=72.13%  cost=347.737 MFLOPs-M
+12:14:37    [eval # 176]  alpha_sys=73.61%  cost=439.624 MFLOPs-M
+12:14:53    [eval # 177]  alpha_sys=68.01%  cost=107.015 MFLOPs-M
+12:15:08    [eval # 178]  alpha_sys=70.66%  cost=152.083 MFLOPs-M
+12:15:25    [eval # 179]  alpha_sys=73.33%  cost=484.704 MFLOPs-M
+12:15:41    [eval # 180]  alpha_sys=72.94%  cost=324.324 MFLOPs-M
+12:15:56    [eval # 181]  alpha_sys=71.54%  cost=700.222 MFLOPs-M
+12:16:12    [eval # 182]  alpha_sys=74.01%  cost=763.470 MFLOPs-M
+12:16:27    [eval # 183]  alpha_sys=70.70%  cost=125.572 MFLOPs-M
+12:16:43    [eval # 184]  alpha_sys=67.30%  cost=114.942 MFLOPs-M
+12:16:58    [eval # 185]  alpha_sys=67.50%  cost=107.195 MFLOPs-M
+12:17:14    [eval # 186]  alpha_sys=68.63%  cost=74.412 MFLOPs-M
+12:17:30    [eval # 187]  alpha_sys=70.81%  cost=358.631 MFLOPs-M
+12:17:45    [eval # 188]  alpha_sys=74.11%  cost=677.036 MFLOPs-M
+12:18:02    [eval # 189]  alpha_sys=70.07%  cost=441.172 MFLOPs-M
+12:18:18    [eval # 190]  alpha_sys=71.56%  cost=247.595 MFLOPs-M
+12:18:34    [eval # 191]  alpha_sys=68.66%  cost=94.476 MFLOPs-M
+12:18:50    [eval # 192]  alpha_sys=72.34%  cost=480.163 MFLOPs-M
+12:19:06    [eval # 193]  alpha_sys=71.17%  cost=1011.549 MFLOPs-M
+12:19:22    [eval # 194]  alpha_sys=69.46%  cost=175.861 MFLOPs-M
+12:19:37    [eval # 195]  alpha_sys=71.87%  cost=143.833 MFLOPs-M
+12:19:53    [eval # 196]  alpha_sys=68.40%  cost=77.385 MFLOPs-M
+12:20:08    [eval # 197]  alpha_sys=74.30%  cost=700.917 MFLOPs-M
+12:20:24    [eval # 198]  alpha_sys=71.70%  cost=201.115 MFLOPs-M
+12:20:40    [eval # 199]  alpha_sys=72.49%  cost=192.330 MFLOPs-M
+12:20:56    [eval # 200]  alpha_sys=67.49%  cost=87.630 MFLOPs-M
+12:20:56  -- Generation 4/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+12:21:12    [eval # 201]  alpha_sys=73.70%  cost=376.429 MFLOPs-M
+12:21:28    [eval # 202]  alpha_sys=72.00%  cost=1351.132 MFLOPs-M
+12:21:44    [eval # 203]  alpha_sys=73.16%  cost=271.238 MFLOPs-M
+12:22:00    [eval # 204]  alpha_sys=72.67%  cost=143.304 MFLOPs-M
+12:22:15    [eval # 205]  alpha_sys=67.44%  cost=54.458 MFLOPs-M
+12:22:31    [eval # 206]  alpha_sys=68.20%  cost=65.366 MFLOPs-M
+12:22:47    [eval # 207]  alpha_sys=70.69%  cost=553.780 MFLOPs-M
+12:23:02    [eval # 208]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+12:23:17    [eval # 209]  alpha_sys=67.33%  cost=64.886 MFLOPs-M
+12:23:33    [eval # 210]  alpha_sys=67.37%  cost=51.046 MFLOPs-M
+12:23:48    [eval # 211]  alpha_sys=72.20%  cost=134.258 MFLOPs-M
+12:24:04    [eval # 212]  alpha_sys=72.76%  cost=380.077 MFLOPs-M
+12:24:20    [eval # 213]  alpha_sys=67.57%  cost=180.041 MFLOPs-M
+12:24:35    [eval # 214]  alpha_sys=70.39%  cost=367.734 MFLOPs-M
+12:24:51    [eval # 215]  alpha_sys=68.34%  cost=82.281 MFLOPs-M
+12:25:06    [eval # 216]  alpha_sys=69.09%  cost=77.460 MFLOPs-M
+12:25:22    [eval # 217]  alpha_sys=67.76%  cost=57.536 MFLOPs-M
+12:25:38    [eval # 218]  alpha_sys=70.53%  cost=106.649 MFLOPs-M
+12:25:54    [eval # 219]  alpha_sys=74.10%  cost=993.045 MFLOPs-M
+12:26:10    [eval # 220]  alpha_sys=70.07%  cost=262.044 MFLOPs-M
+12:26:26    [eval # 221]  alpha_sys=69.21%  cost=109.967 MFLOPs-M
+12:26:42    [eval # 222]  alpha_sys=73.26%  cost=323.474 MFLOPs-M
+12:26:57    [eval # 223]  alpha_sys=70.46%  cost=234.100 MFLOPs-M
+12:27:14    [eval # 224]  alpha_sys=70.91%  cost=153.978 MFLOPs-M
+12:27:29    [eval # 225]  alpha_sys=72.30%  cost=146.687 MFLOPs-M
+12:27:45    [eval # 226]  alpha_sys=72.59%  cost=177.981 MFLOPs-M
+12:28:01    [eval # 227]  alpha_sys=68.50%  cost=78.334 MFLOPs-M
+12:28:17    [eval # 228]  alpha_sys=73.77%  cost=656.118 MFLOPs-M
+12:28:33    [eval # 229]  alpha_sys=71.04%  cost=151.315 MFLOPs-M
+12:28:48    [eval # 230]  alpha_sys=72.37%  cost=975.133 MFLOPs-M
+12:29:04    [eval # 231]  alpha_sys=72.47%  cost=133.433 MFLOPs-M
+12:29:20    [eval # 232]  alpha_sys=67.90%  cost=57.685 MFLOPs-M
+12:29:36    [eval # 233]  alpha_sys=70.14%  cost=179.190 MFLOPs-M
+12:29:52    [eval # 234]  alpha_sys=67.49%  cost=60.147 MFLOPs-M
+12:30:09    [eval # 235]  alpha_sys=67.64%  cost=83.034 MFLOPs-M
+12:30:24    [eval # 236]  alpha_sys=68.39%  cost=71.629 MFLOPs-M
+12:30:40    [eval # 237]  alpha_sys=72.64%  cost=137.578 MFLOPs-M
+12:30:57    [eval # 238]  alpha_sys=67.20%  cost=66.260 MFLOPs-M
+12:31:13    [eval # 239]  alpha_sys=69.50%  cost=197.946 MFLOPs-M
+12:31:29    [eval # 240]  alpha_sys=73.44%  cost=1283.766 MFLOPs-M
+12:31:45    [eval # 241]  alpha_sys=70.44%  cost=102.155 MFLOPs-M
+12:32:01    [eval # 242]  alpha_sys=71.11%  cost=193.536 MFLOPs-M
+12:32:17    [eval # 243]  alpha_sys=73.19%  cost=411.279 MFLOPs-M
+12:32:33    [eval # 244]  alpha_sys=73.03%  cost=149.209 MFLOPs-M
+12:32:49    [eval # 245]  alpha_sys=72.79%  cost=253.286 MFLOPs-M
+12:33:05    [eval # 246]  alpha_sys=68.43%  cost=230.329 MFLOPs-M
+12:33:20    [eval # 247]  alpha_sys=68.14%  cost=206.133 MFLOPs-M
+12:33:36    [eval # 248]  alpha_sys=71.91%  cost=378.467 MFLOPs-M
+12:33:52    [eval # 249]  alpha_sys=67.46%  cost=120.862 MFLOPs-M
+12:34:07    [eval # 250]  alpha_sys=68.57%  cost=76.696 MFLOPs-M
+12:34:07  -- Generation 5/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+12:34:07  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen005.npz
+12:34:23    [eval # 251]  alpha_sys=71.44%  cost=113.873 MFLOPs-M
+12:34:39    [eval # 252]  alpha_sys=72.36%  cost=466.177 MFLOPs-M
+12:34:55    [eval # 253]  alpha_sys=73.49%  cost=196.592 MFLOPs-M
+12:35:10    [eval # 254]  alpha_sys=70.19%  cost=119.179 MFLOPs-M
+12:35:26    [eval # 255]  alpha_sys=70.14%  cost=270.944 MFLOPs-M
+12:35:42    [eval # 256]  alpha_sys=70.20%  cost=98.731 MFLOPs-M
+12:35:58    [eval # 257]  alpha_sys=73.16%  cost=668.273 MFLOPs-M
+12:36:14    [eval # 258]  alpha_sys=73.06%  cost=531.443 MFLOPs-M
+12:36:30    [eval # 259]  alpha_sys=72.90%  cost=338.182 MFLOPs-M
+12:36:45    [eval # 260]  alpha_sys=70.19%  cost=150.194 MFLOPs-M
+12:37:01    [eval # 261]  alpha_sys=67.26%  cost=56.967 MFLOPs-M
+12:37:17    [eval # 262]  alpha_sys=70.06%  cost=209.298 MFLOPs-M
+12:37:33    [eval # 263]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+12:37:48    [eval # 264]  alpha_sys=67.97%  cost=64.581 MFLOPs-M
+12:38:03    [eval # 265]  alpha_sys=72.94%  cost=273.388 MFLOPs-M
+12:38:19    [eval # 266]  alpha_sys=72.70%  cost=538.714 MFLOPs-M
+12:38:35    [eval # 267]  alpha_sys=74.04%  cost=759.618 MFLOPs-M
+12:38:50    [eval # 268]  alpha_sys=68.03%  cost=63.862 MFLOPs-M
+12:39:06    [eval # 269]  alpha_sys=68.63%  cost=81.840 MFLOPs-M
+12:39:22    [eval # 270]  alpha_sys=73.23%  cost=310.623 MFLOPs-M
+12:39:37    [eval # 271]  alpha_sys=68.39%  cost=69.072 MFLOPs-M
+12:39:53    [eval # 272]  alpha_sys=73.00%  cost=145.494 MFLOPs-M
+12:40:10    [eval # 273]  alpha_sys=74.16%  cost=1093.191 MFLOPs-M
+12:40:26    [eval # 274]  alpha_sys=73.79%  cost=828.719 MFLOPs-M
+12:40:41    [eval # 275]  alpha_sys=69.03%  cost=147.906 MFLOPs-M
+12:40:57    [eval # 276]  alpha_sys=72.90%  cost=366.623 MFLOPs-M
+12:41:12    [eval # 277]  alpha_sys=71.19%  cost=113.463 MFLOPs-M
+12:41:28    [eval # 278]  alpha_sys=70.03%  cost=168.589 MFLOPs-M
+12:41:44    [eval # 279]  alpha_sys=72.11%  cost=614.678 MFLOPs-M
+12:42:00    [eval # 280]  alpha_sys=73.44%  cost=194.869 MFLOPs-M
+12:42:16    [eval # 281]  alpha_sys=74.44%  cost=742.766 MFLOPs-M
+12:42:32    [eval # 282]  alpha_sys=73.21%  cost=608.854 MFLOPs-M
+12:42:48    [eval # 283]  alpha_sys=74.87%  cost=1337.269 MFLOPs-M
+12:43:03    [eval # 284]  alpha_sys=67.31%  cost=49.136 MFLOPs-M
+12:43:18    [eval # 285]  alpha_sys=70.34%  cost=371.753 MFLOPs-M
+12:43:34    [eval # 286]  alpha_sys=67.74%  cost=78.794 MFLOPs-M
+12:43:49    [eval # 287]  alpha_sys=67.37%  cost=97.214 MFLOPs-M
+12:44:05    [eval # 288]  alpha_sys=67.29%  cost=58.177 MFLOPs-M
+12:44:21    [eval # 289]  alpha_sys=73.96%  cost=1017.627 MFLOPs-M
+12:44:36    [eval # 290]  alpha_sys=73.37%  cost=386.581 MFLOPs-M
+12:44:51    [eval # 291]  alpha_sys=71.89%  cost=461.029 MFLOPs-M
+12:45:08    [eval # 292]  alpha_sys=73.29%  cost=286.802 MFLOPs-M
+12:45:24    [eval # 293]  alpha_sys=67.77%  cost=77.516 MFLOPs-M
+12:45:40    [eval # 294]  alpha_sys=73.31%  cost=375.453 MFLOPs-M
+12:45:55    [eval # 295]  alpha_sys=69.51%  cost=109.760 MFLOPs-M
+12:46:11    [eval # 296]  alpha_sys=73.46%  cost=419.856 MFLOPs-M
+12:46:27    [eval # 297]  alpha_sys=71.54%  cost=309.058 MFLOPs-M
+12:46:43    [eval # 298]  alpha_sys=68.99%  cost=133.106 MFLOPs-M
+12:46:59    [eval # 299]  alpha_sys=74.43%  cost=1162.924 MFLOPs-M
+12:47:14    [eval # 300]  alpha_sys=70.43%  cost=123.473 MFLOPs-M
+12:47:14  -- Generation 6/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+12:47:30    [eval # 301]  alpha_sys=67.26%  cost=49.857 MFLOPs-M
+12:47:45    [eval # 302]  alpha_sys=73.21%  cost=369.399 MFLOPs-M
+12:48:00    [eval # 303]  alpha_sys=74.36%  cost=998.006 MFLOPs-M
+12:48:16    [eval # 304]  alpha_sys=71.40%  cost=120.035 MFLOPs-M
+12:48:32    [eval # 305]  alpha_sys=73.43%  cost=166.456 MFLOPs-M
+12:48:48    [eval # 306]  alpha_sys=69.91%  cost=96.756 MFLOPs-M
+12:49:04    [eval # 307]  alpha_sys=67.50%  cost=77.384 MFLOPs-M
+12:49:20    [eval # 308]  alpha_sys=72.59%  cost=305.581 MFLOPs-M
+12:49:36    [eval # 309]  alpha_sys=67.24%  cost=54.749 MFLOPs-M
+12:49:53    [eval # 310]  alpha_sys=67.20%  cost=49.039 MFLOPs-M
+12:50:09    [eval # 311]  alpha_sys=73.40%  cost=409.574 MFLOPs-M
+12:50:25    [eval # 312]  alpha_sys=72.90%  cost=200.209 MFLOPs-M
+12:50:41    [eval # 313]  alpha_sys=74.87%  cost=1029.024 MFLOPs-M
+12:50:57    [eval # 314]  alpha_sys=67.43%  cost=58.886 MFLOPs-M
+12:51:14    [eval # 315]  alpha_sys=71.53%  cost=220.341 MFLOPs-M
+12:51:30    [eval # 316]  alpha_sys=73.33%  cost=340.598 MFLOPs-M
+12:51:46    [eval # 317]  alpha_sys=72.84%  cost=218.261 MFLOPs-M
+12:52:02    [eval # 318]  alpha_sys=67.64%  cost=221.156 MFLOPs-M
+12:52:19    [eval # 319]  alpha_sys=69.43%  cost=242.910 MFLOPs-M
+12:52:34    [eval # 320]  alpha_sys=68.03%  cost=66.770 MFLOPs-M
+12:52:50    [eval # 321]  alpha_sys=69.56%  cost=91.847 MFLOPs-M
+12:53:06    [eval # 322]  alpha_sys=68.24%  cost=70.236 MFLOPs-M
+12:53:23    [eval # 323]  alpha_sys=67.24%  cost=80.703 MFLOPs-M
+12:53:39    [eval # 324]  alpha_sys=73.40%  cost=194.350 MFLOPs-M
+12:53:55    [eval # 325]  alpha_sys=71.26%  cost=323.818 MFLOPs-M
+12:54:12    [eval # 326]  alpha_sys=72.84%  cost=568.809 MFLOPs-M
+12:54:27    [eval # 327]  alpha_sys=69.47%  cost=87.004 MFLOPs-M
+12:54:43    [eval # 328]  alpha_sys=70.61%  cost=535.339 MFLOPs-M
+12:54:58    [eval # 329]  alpha_sys=71.86%  cost=129.509 MFLOPs-M
+12:55:14    [eval # 330]  alpha_sys=74.61%  cost=1036.773 MFLOPs-M
+12:55:30    [eval # 331]  alpha_sys=72.94%  cost=668.388 MFLOPs-M
+12:55:45    [eval # 332]  alpha_sys=73.57%  cost=894.429 MFLOPs-M
+12:56:01    [eval # 333]  alpha_sys=67.37%  cost=51.856 MFLOPs-M
+12:56:17    [eval # 334]  alpha_sys=67.37%  cost=80.463 MFLOPs-M
+12:56:33    [eval # 335]  alpha_sys=72.79%  cost=297.837 MFLOPs-M
+12:56:49    [eval # 336]  alpha_sys=71.76%  cost=115.340 MFLOPs-M
+12:57:05    [eval # 337]  alpha_sys=71.40%  cost=405.326 MFLOPs-M
+12:57:21    [eval # 338]  alpha_sys=67.34%  cost=51.289 MFLOPs-M
+12:57:38    [eval # 339]  alpha_sys=73.50%  cost=162.759 MFLOPs-M
+12:57:54    [eval # 340]  alpha_sys=67.30%  cost=66.278 MFLOPs-M
+12:58:10    [eval # 341]  alpha_sys=72.59%  cost=692.252 MFLOPs-M
+12:58:25    [eval # 342]  alpha_sys=67.20%  cost=48.511 MFLOPs-M
+12:58:41    [eval # 343]  alpha_sys=72.01%  cost=314.735 MFLOPs-M
+12:58:56    [eval # 344]  alpha_sys=72.36%  cost=185.530 MFLOPs-M
+12:59:11    [eval # 345]  alpha_sys=67.20%  cost=57.761 MFLOPs-M
+12:59:27    [eval # 346]  alpha_sys=72.16%  cost=283.911 MFLOPs-M
+12:59:42    [eval # 347]  alpha_sys=67.40%  cost=67.169 MFLOPs-M
+12:59:58    [eval # 348]  alpha_sys=73.49%  cost=266.520 MFLOPs-M
+13:00:14    [eval # 349]  alpha_sys=73.23%  cost=202.243 MFLOPs-M
+13:00:30    [eval # 350]  alpha_sys=69.87%  cost=95.956 MFLOPs-M
+13:00:30  -- Generation 7/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+13:00:45    [eval # 351]  alpha_sys=73.24%  cost=317.232 MFLOPs-M
+13:01:01    [eval # 352]  alpha_sys=67.10%  cost=50.100 MFLOPs-M
+13:01:17    [eval # 353]  alpha_sys=72.24%  cost=155.507 MFLOPs-M
+13:01:33    [eval # 354]  alpha_sys=67.33%  cost=53.806 MFLOPs-M
+13:01:49    [eval # 355]  alpha_sys=67.34%  cost=52.141 MFLOPs-M
+13:02:05    [eval # 356]  alpha_sys=73.27%  cost=516.335 MFLOPs-M
+13:02:21    [eval # 357]  alpha_sys=67.90%  cost=60.462 MFLOPs-M
+13:02:36    [eval # 358]  alpha_sys=72.24%  cost=464.580 MFLOPs-M
+13:02:52    [eval # 359]  alpha_sys=73.04%  cost=222.334 MFLOPs-M
+13:03:07    [eval # 360]  alpha_sys=71.23%  cost=259.620 MFLOPs-M
+13:03:23    [eval # 361]  alpha_sys=69.86%  cost=128.749 MFLOPs-M
+13:03:38    [eval # 362]  alpha_sys=69.13%  cost=90.041 MFLOPs-M
+13:03:54    [eval # 363]  alpha_sys=67.43%  cost=63.414 MFLOPs-M
+13:04:09    [eval # 364]  alpha_sys=70.06%  cost=148.653 MFLOPs-M
+13:04:25    [eval # 365]  alpha_sys=73.10%  cost=288.416 MFLOPs-M
+13:04:41    [eval # 366]  alpha_sys=72.36%  cost=263.912 MFLOPs-M
+13:04:57    [eval # 367]  alpha_sys=68.87%  cost=73.290 MFLOPs-M
+13:05:12    [eval # 368]  alpha_sys=72.67%  cost=161.013 MFLOPs-M
+13:05:28    [eval # 369]  alpha_sys=74.09%  cost=1049.112 MFLOPs-M
+13:05:44    [eval # 370]  alpha_sys=71.74%  cost=132.466 MFLOPs-M
+13:05:59    [eval # 371]  alpha_sys=71.91%  cost=128.902 MFLOPs-M
+13:06:15    [eval # 372]  alpha_sys=73.89%  cost=796.872 MFLOPs-M
+13:06:31    [eval # 373]  alpha_sys=73.56%  cost=230.161 MFLOPs-M
+13:06:47    [eval # 374]  alpha_sys=68.26%  cost=68.721 MFLOPs-M
+13:07:03    [eval # 375]  alpha_sys=72.07%  cost=137.670 MFLOPs-M
+13:07:19    [eval # 376]  alpha_sys=73.43%  cost=164.069 MFLOPs-M
+13:07:35    [eval # 377]  alpha_sys=73.61%  cost=291.402 MFLOPs-M
+13:07:52    [eval # 378]  alpha_sys=73.33%  cost=221.470 MFLOPs-M
+13:08:08    [eval # 379]  alpha_sys=69.24%  cost=83.977 MFLOPs-M
+13:08:24    [eval # 380]  alpha_sys=73.30%  cost=248.299 MFLOPs-M
+13:08:40    [eval # 381]  alpha_sys=73.44%  cost=173.696 MFLOPs-M
+13:08:55    [eval # 382]  alpha_sys=68.21%  cost=71.225 MFLOPs-M
+13:09:11    [eval # 383]  alpha_sys=67.24%  cost=55.553 MFLOPs-M
+13:09:27    [eval # 384]  alpha_sys=70.61%  cost=140.530 MFLOPs-M
+13:09:43    [eval # 385]  alpha_sys=73.59%  cost=326.901 MFLOPs-M
+13:09:59    [eval # 386]  alpha_sys=69.63%  cost=134.661 MFLOPs-M
+13:10:14    [eval # 387]  alpha_sys=68.09%  cost=119.444 MFLOPs-M
+13:10:30    [eval # 388]  alpha_sys=70.36%  cost=94.440 MFLOPs-M
+13:10:46    [eval # 389]  alpha_sys=67.91%  cost=75.096 MFLOPs-M
+13:11:01    [eval # 390]  alpha_sys=70.80%  cost=157.323 MFLOPs-M
+13:11:17    [eval # 391]  alpha_sys=72.89%  cost=258.487 MFLOPs-M
+13:11:32    [eval # 392]  alpha_sys=68.99%  cost=165.067 MFLOPs-M
+13:11:48    [eval # 393]  alpha_sys=72.57%  cost=149.431 MFLOPs-M
+13:12:04    [eval # 394]  alpha_sys=69.01%  cost=84.550 MFLOPs-M
+13:12:20    [eval # 395]  alpha_sys=73.30%  cost=294.885 MFLOPs-M
+13:12:36    [eval # 396]  alpha_sys=67.79%  cost=60.168 MFLOPs-M
+13:12:52    [eval # 397]  alpha_sys=72.09%  cost=180.524 MFLOPs-M
+13:13:08    [eval # 398]  alpha_sys=68.74%  cost=156.614 MFLOPs-M
+13:13:23    [eval # 399]  alpha_sys=73.29%  cost=527.181 MFLOPs-M
+13:13:39    [eval # 400]  alpha_sys=67.21%  cost=48.526 MFLOPs-M
+13:13:39  -- Generation 8/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+13:13:55    [eval # 401]  alpha_sys=69.54%  cost=353.202 MFLOPs-M
+13:14:11    [eval # 402]  alpha_sys=72.27%  cost=130.734 MFLOPs-M
+13:14:27    [eval # 403]  alpha_sys=69.20%  cost=82.895 MFLOPs-M
+13:14:43    [eval # 404]  alpha_sys=68.41%  cost=180.965 MFLOPs-M
+13:14:59    [eval # 405]  alpha_sys=69.04%  cost=100.176 MFLOPs-M
+13:15:15    [eval # 406]  alpha_sys=67.21%  cost=48.044 MFLOPs-M
+13:15:31    [eval # 407]  alpha_sys=73.71%  cost=463.648 MFLOPs-M
+13:15:47    [eval # 408]  alpha_sys=68.01%  cost=127.721 MFLOPs-M
+13:16:02    [eval # 409]  alpha_sys=69.81%  cost=102.453 MFLOPs-M
+13:16:17    [eval # 410]  alpha_sys=68.90%  cost=88.469 MFLOPs-M
+13:16:33    [eval # 411]  alpha_sys=74.36%  cost=1005.919 MFLOPs-M
+13:16:48    [eval # 412]  alpha_sys=73.67%  cost=465.859 MFLOPs-M
+13:17:05    [eval # 413]  alpha_sys=68.53%  cost=121.372 MFLOPs-M
+13:17:21    [eval # 414]  alpha_sys=73.21%  cost=244.156 MFLOPs-M
+13:17:36    [eval # 415]  alpha_sys=73.17%  cost=318.221 MFLOPs-M
+13:17:52    [eval # 416]  alpha_sys=73.43%  cost=161.716 MFLOPs-M
+13:18:07    [eval # 417]  alpha_sys=69.50%  cost=199.215 MFLOPs-M
+13:18:23    [eval # 418]  alpha_sys=70.89%  cost=458.904 MFLOPs-M
+13:18:39    [eval # 419]  alpha_sys=69.66%  cost=100.364 MFLOPs-M
+13:18:55    [eval # 420]  alpha_sys=69.47%  cost=90.167 MFLOPs-M
+13:19:10    [eval # 421]  alpha_sys=70.17%  cost=115.989 MFLOPs-M
+13:19:26    [eval # 422]  alpha_sys=68.61%  cost=164.928 MFLOPs-M
+13:19:41    [eval # 423]  alpha_sys=73.66%  cost=258.928 MFLOPs-M
+13:19:57    [eval # 424]  alpha_sys=71.56%  cost=195.625 MFLOPs-M
+13:20:12    [eval # 425]  alpha_sys=73.64%  cost=338.016 MFLOPs-M
+13:20:28    [eval # 426]  alpha_sys=70.83%  cost=128.140 MFLOPs-M
+13:20:44    [eval # 427]  alpha_sys=75.01%  cost=1381.856 MFLOPs-M
+13:21:00    [eval # 428]  alpha_sys=74.26%  cost=658.053 MFLOPs-M
+13:21:16    [eval # 429]  alpha_sys=73.40%  cost=160.257 MFLOPs-M
+13:21:32    [eval # 430]  alpha_sys=74.31%  cost=837.865 MFLOPs-M
+13:21:47    [eval # 431]  alpha_sys=68.67%  cost=70.819 MFLOPs-M
+13:22:03    [eval # 432]  alpha_sys=72.91%  cost=203.245 MFLOPs-M
+13:22:18    [eval # 433]  alpha_sys=72.60%  cost=143.966 MFLOPs-M
+13:22:34    [eval # 434]  alpha_sys=67.20%  cost=56.730 MFLOPs-M
+13:22:50    [eval # 435]  alpha_sys=73.86%  cost=403.177 MFLOPs-M
+13:23:05    [eval # 436]  alpha_sys=73.10%  cost=156.360 MFLOPs-M
+13:23:21    [eval # 437]  alpha_sys=71.71%  cost=123.170 MFLOPs-M
+13:23:36    [eval # 438]  alpha_sys=74.96%  cost=1389.851 MFLOPs-M
+13:23:52    [eval # 439]  alpha_sys=67.67%  cost=64.455 MFLOPs-M
+13:24:08    [eval # 440]  alpha_sys=73.43%  cost=156.117 MFLOPs-M
+13:24:24    [eval # 441]  alpha_sys=67.31%  cost=53.545 MFLOPs-M
+13:24:40    [eval # 442]  alpha_sys=74.07%  cost=565.210 MFLOPs-M
+13:24:56    [eval # 443]  alpha_sys=67.40%  cost=50.258 MFLOPs-M
+13:25:12    [eval # 444]  alpha_sys=72.91%  cost=144.866 MFLOPs-M
+13:25:27    [eval # 445]  alpha_sys=70.40%  cost=405.992 MFLOPs-M
+13:25:43    [eval # 446]  alpha_sys=73.46%  cost=173.035 MFLOPs-M
+13:25:58    [eval # 447]  alpha_sys=70.89%  cost=165.258 MFLOPs-M
+13:26:13    [eval # 448]  alpha_sys=70.44%  cost=120.934 MFLOPs-M
+13:26:29    [eval # 449]  alpha_sys=72.26%  cost=161.609 MFLOPs-M
+13:26:44    [eval # 450]  alpha_sys=71.79%  cost=156.826 MFLOPs-M
+13:26:44  -- Generation 9/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+13:26:59    [eval # 451]  alpha_sys=70.24%  cost=139.809 MFLOPs-M
+13:27:15    [eval # 452]  alpha_sys=71.93%  cost=126.145 MFLOPs-M
+13:27:30    [eval # 453]  alpha_sys=73.31%  cost=214.211 MFLOPs-M
+13:27:46    [eval # 454]  alpha_sys=73.47%  cost=177.714 MFLOPs-M
+13:28:01    [eval # 455]  alpha_sys=71.87%  cost=456.729 MFLOPs-M
+13:28:17    [eval # 456]  alpha_sys=73.69%  cost=572.041 MFLOPs-M
+13:28:33    [eval # 457]  alpha_sys=71.61%  cost=137.134 MFLOPs-M
+13:28:48    [eval # 458]  alpha_sys=73.09%  cost=213.729 MFLOPs-M
+13:29:04    [eval # 459]  alpha_sys=72.31%  cost=294.215 MFLOPs-M
+13:29:19    [eval # 460]  alpha_sys=74.21%  cost=1103.521 MFLOPs-M
+13:29:35    [eval # 461]  alpha_sys=73.34%  cost=879.747 MFLOPs-M
+13:29:51    [eval # 462]  alpha_sys=72.33%  cost=162.088 MFLOPs-M
+13:30:07    [eval # 463]  alpha_sys=67.20%  cost=50.382 MFLOPs-M
+13:30:23    [eval # 464]  alpha_sys=73.49%  cost=1128.454 MFLOPs-M
+13:30:39    [eval # 465]  alpha_sys=69.33%  cost=81.169 MFLOPs-M
+13:30:55    [eval # 466]  alpha_sys=70.46%  cost=222.627 MFLOPs-M
+13:31:11    [eval # 467]  alpha_sys=73.46%  cost=157.712 MFLOPs-M
+13:31:27    [eval # 468]  alpha_sys=74.03%  cost=812.980 MFLOPs-M
+13:31:43    [eval # 469]  alpha_sys=71.73%  cost=155.768 MFLOPs-M
+13:31:59    [eval # 470]  alpha_sys=73.30%  cost=150.922 MFLOPs-M
+13:32:15    [eval # 471]  alpha_sys=72.69%  cost=129.891 MFLOPs-M
+13:32:31    [eval # 472]  alpha_sys=73.73%  cost=339.648 MFLOPs-M
+13:32:47    [eval # 473]  alpha_sys=74.29%  cost=714.126 MFLOPs-M
+13:33:03    [eval # 474]  alpha_sys=73.41%  cost=169.010 MFLOPs-M
+13:33:18    [eval # 475]  alpha_sys=71.67%  cost=311.622 MFLOPs-M
+13:33:34    [eval # 476]  alpha_sys=70.06%  cost=261.653 MFLOPs-M
+13:33:50    [eval # 477]  alpha_sys=67.50%  cost=58.203 MFLOPs-M
+13:34:06    [eval # 478]  alpha_sys=74.30%  cost=808.239 MFLOPs-M
+13:34:21    [eval # 479]  alpha_sys=68.01%  cost=61.272 MFLOPs-M
+13:34:37    [eval # 480]  alpha_sys=68.17%  cost=71.453 MFLOPs-M
+13:34:53    [eval # 481]  alpha_sys=73.04%  cost=225.927 MFLOPs-M
+13:35:08    [eval # 482]  alpha_sys=71.66%  cost=132.370 MFLOPs-M
+13:35:24    [eval # 483]  alpha_sys=74.61%  cost=1308.047 MFLOPs-M
+13:35:40    [eval # 484]  alpha_sys=67.64%  cost=225.611 MFLOPs-M
+13:35:55    [eval # 485]  alpha_sys=73.60%  cost=401.057 MFLOPs-M
+13:36:11    [eval # 486]  alpha_sys=67.56%  cost=106.325 MFLOPs-M
+13:36:27    [eval # 487]  alpha_sys=71.81%  cost=387.828 MFLOPs-M
+13:36:43    [eval # 488]  alpha_sys=68.49%  cost=99.523 MFLOPs-M
+13:36:58    [eval # 489]  alpha_sys=67.21%  cost=48.377 MFLOPs-M
+13:37:14    [eval # 490]  alpha_sys=67.53%  cost=57.139 MFLOPs-M
+13:37:30    [eval # 491]  alpha_sys=73.57%  cost=242.293 MFLOPs-M
+13:37:46    [eval # 492]  alpha_sys=73.81%  cost=617.766 MFLOPs-M
+13:38:02    [eval # 493]  alpha_sys=71.39%  cost=134.608 MFLOPs-M
+13:38:19    [eval # 494]  alpha_sys=72.79%  cost=135.701 MFLOPs-M
+13:38:34    [eval # 495]  alpha_sys=71.87%  cost=178.883 MFLOPs-M
+13:38:50    [eval # 496]  alpha_sys=73.67%  cost=258.865 MFLOPs-M
+13:39:06    [eval # 497]  alpha_sys=70.27%  cost=104.970 MFLOPs-M
+13:39:22    [eval # 498]  alpha_sys=70.69%  cost=112.860 MFLOPs-M
+13:39:38    [eval # 499]  alpha_sys=67.73%  cost=58.588 MFLOPs-M
+13:39:53    [eval # 500]  alpha_sys=73.13%  cost=194.409 MFLOPs-M
+13:39:53  -- Generation 10/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+13:39:53  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen010.npz
+13:40:09    [eval # 501]  alpha_sys=73.44%  cost=327.480 MFLOPs-M
+13:40:24    [eval # 502]  alpha_sys=73.71%  cost=322.315 MFLOPs-M
+13:40:40    [eval # 503]  alpha_sys=70.90%  cost=174.657 MFLOPs-M
+13:40:56    [eval # 504]  alpha_sys=69.00%  cost=85.597 MFLOPs-M
+13:41:12    [eval # 505]  alpha_sys=73.19%  cost=147.616 MFLOPs-M
+13:41:28    [eval # 506]  alpha_sys=73.36%  cost=234.750 MFLOPs-M
+13:41:44    [eval # 507]  alpha_sys=74.57%  cost=1106.117 MFLOPs-M
+13:42:00    [eval # 508]  alpha_sys=68.14%  cost=81.708 MFLOPs-M
+13:42:17    [eval # 509]  alpha_sys=73.00%  cost=337.642 MFLOPs-M
+13:42:33    [eval # 510]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+13:42:48    [eval # 511]  alpha_sys=67.54%  cost=58.856 MFLOPs-M
+13:43:03    [eval # 512]  alpha_sys=69.53%  cost=97.084 MFLOPs-M
+13:43:19    [eval # 513]  alpha_sys=71.51%  cost=131.757 MFLOPs-M
+13:43:35    [eval # 514]  alpha_sys=73.00%  cost=201.051 MFLOPs-M
+13:43:51    [eval # 515]  alpha_sys=67.43%  cost=56.945 MFLOPs-M
+13:44:06    [eval # 516]  alpha_sys=72.47%  cost=330.431 MFLOPs-M
+13:44:22    [eval # 517]  alpha_sys=74.06%  cost=576.632 MFLOPs-M
+13:44:38    [eval # 518]  alpha_sys=72.19%  cost=132.796 MFLOPs-M
+13:44:53    [eval # 519]  alpha_sys=71.73%  cost=718.338 MFLOPs-M
+13:45:09    [eval # 520]  alpha_sys=69.10%  cost=143.849 MFLOPs-M
+13:45:25    [eval # 521]  alpha_sys=73.39%  cost=557.189 MFLOPs-M
+13:45:41    [eval # 522]  alpha_sys=70.67%  cost=123.986 MFLOPs-M
+13:45:57    [eval # 523]  alpha_sys=68.71%  cost=83.098 MFLOPs-M
+13:46:13    [eval # 524]  alpha_sys=73.39%  cost=153.460 MFLOPs-M
+13:46:30    [eval # 525]  alpha_sys=73.81%  cost=686.330 MFLOPs-M
+13:46:45    [eval # 526]  alpha_sys=72.37%  cost=234.680 MFLOPs-M
+13:47:01    [eval # 527]  alpha_sys=67.44%  cost=53.187 MFLOPs-M
+13:47:17    [eval # 528]  alpha_sys=70.77%  cost=227.260 MFLOPs-M
+13:47:32    [eval # 529]  alpha_sys=70.26%  cost=107.981 MFLOPs-M
+13:47:49    [eval # 530]  alpha_sys=68.80%  cost=157.558 MFLOPs-M
+13:48:05    [eval # 531]  alpha_sys=68.84%  cost=75.938 MFLOPs-M
+13:48:21    [eval # 532]  alpha_sys=67.59%  cost=65.231 MFLOPs-M
+13:48:37    [eval # 533]  alpha_sys=73.44%  cost=161.591 MFLOPs-M
+13:48:52    [eval # 534]  alpha_sys=72.37%  cost=196.616 MFLOPs-M
+13:49:08    [eval # 535]  alpha_sys=73.46%  cost=246.952 MFLOPs-M
+13:49:24    [eval # 536]  alpha_sys=73.67%  cost=628.524 MFLOPs-M
+13:49:40    [eval # 537]  alpha_sys=69.50%  cost=98.877 MFLOPs-M
+13:49:56    [eval # 538]  alpha_sys=73.03%  cost=144.110 MFLOPs-M
+13:50:12    [eval # 539]  alpha_sys=70.50%  cost=111.099 MFLOPs-M
+13:50:28    [eval # 540]  alpha_sys=71.80%  cost=177.727 MFLOPs-M
+13:50:44    [eval # 541]  alpha_sys=73.17%  cost=291.858 MFLOPs-M
+13:50:59    [eval # 542]  alpha_sys=67.37%  cost=85.022 MFLOPs-M
+13:51:15    [eval # 543]  alpha_sys=68.47%  cost=73.894 MFLOPs-M
+13:51:31    [eval # 544]  alpha_sys=70.20%  cost=110.310 MFLOPs-M
+13:51:46    [eval # 545]  alpha_sys=71.93%  cost=172.077 MFLOPs-M
+13:52:01    [eval # 546]  alpha_sys=72.33%  cost=160.128 MFLOPs-M
+13:52:17    [eval # 547]  alpha_sys=68.67%  cost=75.844 MFLOPs-M
+13:52:33    [eval # 548]  alpha_sys=73.50%  cost=272.055 MFLOPs-M
+13:52:48    [eval # 549]  alpha_sys=68.30%  cost=71.650 MFLOPs-M
+13:53:04    [eval # 550]  alpha_sys=69.69%  cost=144.991 MFLOPs-M
+13:53:04  -- Generation 11/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+13:53:20    [eval # 551]  alpha_sys=73.00%  cost=148.803 MFLOPs-M
+13:53:35    [eval # 552]  alpha_sys=70.59%  cost=118.032 MFLOPs-M
+13:53:51    [eval # 553]  alpha_sys=68.50%  cost=479.069 MFLOPs-M
+13:54:07    [eval # 554]  alpha_sys=73.07%  cost=315.871 MFLOPs-M
+13:54:22    [eval # 555]  alpha_sys=68.50%  cost=67.941 MFLOPs-M
+13:54:38    [eval # 556]  alpha_sys=71.93%  cost=302.992 MFLOPs-M
+13:54:54    [eval # 557]  alpha_sys=71.36%  cost=126.019 MFLOPs-M
+13:55:09    [eval # 558]  alpha_sys=70.43%  cost=99.437 MFLOPs-M
+13:55:24    [eval # 559]  alpha_sys=73.46%  cost=161.300 MFLOPs-M
+13:55:40    [eval # 560]  alpha_sys=68.20%  cost=69.815 MFLOPs-M
+13:55:56    [eval # 561]  alpha_sys=71.36%  cost=284.710 MFLOPs-M
+13:56:12    [eval # 562]  alpha_sys=73.19%  cost=152.939 MFLOPs-M
+13:56:28    [eval # 563]  alpha_sys=67.56%  cost=60.062 MFLOPs-M
+13:56:44    [eval # 564]  alpha_sys=73.29%  cost=166.305 MFLOPs-M
+13:57:00    [eval # 565]  alpha_sys=69.87%  cost=99.868 MFLOPs-M
+13:57:16    [eval # 566]  alpha_sys=72.97%  cost=152.039 MFLOPs-M
+13:57:31    [eval # 567]  alpha_sys=72.91%  cost=154.210 MFLOPs-M
+13:57:47    [eval # 568]  alpha_sys=74.03%  cost=718.221 MFLOPs-M
+13:58:03    [eval # 569]  alpha_sys=73.60%  cost=497.054 MFLOPs-M
+13:58:18    [eval # 570]  alpha_sys=67.34%  cost=55.083 MFLOPs-M
+13:58:33    [eval # 571]  alpha_sys=72.59%  cost=397.789 MFLOPs-M
+13:58:50    [eval # 572]  alpha_sys=69.21%  cost=82.822 MFLOPs-M
+13:59:06    [eval # 573]  alpha_sys=67.21%  cost=50.167 MFLOPs-M
+13:59:22    [eval # 574]  alpha_sys=73.16%  cost=165.216 MFLOPs-M
+13:59:38    [eval # 575]  alpha_sys=72.99%  cost=475.734 MFLOPs-M
+13:59:54    [eval # 576]  alpha_sys=68.19%  cost=67.119 MFLOPs-M
+14:00:09    [eval # 577]  alpha_sys=69.30%  cost=341.065 MFLOPs-M
+14:00:25    [eval # 578]  alpha_sys=71.91%  cost=174.401 MFLOPs-M
+14:00:41    [eval # 579]  alpha_sys=69.17%  cost=101.821 MFLOPs-M
+14:00:56    [eval # 580]  alpha_sys=73.77%  cost=479.411 MFLOPs-M
+14:01:12    [eval # 581]  alpha_sys=69.50%  cost=135.370 MFLOPs-M
+14:01:29    [eval # 582]  alpha_sys=72.96%  cost=173.264 MFLOPs-M
+14:01:44    [eval # 583]  alpha_sys=74.79%  cost=1334.002 MFLOPs-M
+14:02:00    [eval # 584]  alpha_sys=73.39%  cost=225.724 MFLOPs-M
+14:02:17    [eval # 585]  alpha_sys=72.03%  cost=146.748 MFLOPs-M
+14:02:33    [eval # 586]  alpha_sys=72.86%  cost=243.616 MFLOPs-M
+14:02:49    [eval # 587]  alpha_sys=67.70%  cost=62.416 MFLOPs-M
+14:03:05    [eval # 588]  alpha_sys=67.60%  cost=64.363 MFLOPs-M
+14:03:21    [eval # 589]  alpha_sys=68.94%  cost=75.076 MFLOPs-M
+14:03:37    [eval # 590]  alpha_sys=72.49%  cost=316.617 MFLOPs-M
+14:03:52    [eval # 591]  alpha_sys=73.29%  cost=173.153 MFLOPs-M
+14:04:08    [eval # 592]  alpha_sys=68.50%  cost=72.123 MFLOPs-M
+14:04:23    [eval # 593]  alpha_sys=71.53%  cost=144.022 MFLOPs-M
+14:04:38    [eval # 594]  alpha_sys=73.99%  cost=383.605 MFLOPs-M
+14:04:54    [eval # 595]  alpha_sys=67.76%  cost=64.597 MFLOPs-M
+14:05:09    [eval # 596]  alpha_sys=73.81%  cost=571.568 MFLOPs-M
+14:05:25    [eval # 597]  alpha_sys=68.81%  cost=93.062 MFLOPs-M
+14:05:40    [eval # 598]  alpha_sys=72.47%  cost=419.736 MFLOPs-M
+14:05:56    [eval # 599]  alpha_sys=74.76%  cost=1159.563 MFLOPs-M
+14:06:11    [eval # 600]  alpha_sys=72.39%  cost=175.181 MFLOPs-M
+14:06:11  -- Generation 12/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+14:06:27    [eval # 601]  alpha_sys=73.31%  cost=193.359 MFLOPs-M
+14:06:43    [eval # 602]  alpha_sys=72.03%  cost=137.181 MFLOPs-M
+14:06:59    [eval # 603]  alpha_sys=69.09%  cost=82.537 MFLOPs-M
+14:07:14    [eval # 604]  alpha_sys=72.86%  cost=164.141 MFLOPs-M
+14:07:30    [eval # 605]  alpha_sys=67.64%  cost=57.263 MFLOPs-M
+14:07:46    [eval # 606]  alpha_sys=73.24%  cost=168.340 MFLOPs-M
+14:08:02    [eval # 607]  alpha_sys=72.81%  cost=282.681 MFLOPs-M
+14:08:18    [eval # 608]  alpha_sys=69.74%  cost=87.847 MFLOPs-M
+14:08:34    [eval # 609]  alpha_sys=72.09%  cost=143.488 MFLOPs-M
+14:08:50    [eval # 610]  alpha_sys=67.16%  cost=49.857 MFLOPs-M
+14:09:05    [eval # 611]  alpha_sys=74.36%  cost=1584.208 MFLOPs-M
+14:09:21    [eval # 612]  alpha_sys=69.00%  cost=135.681 MFLOPs-M
+14:09:37    [eval # 613]  alpha_sys=72.83%  cost=136.844 MFLOPs-M
+14:09:53    [eval # 614]  alpha_sys=67.23%  cost=58.677 MFLOPs-M
+14:10:09    [eval # 615]  alpha_sys=72.01%  cost=147.675 MFLOPs-M
+14:10:25    [eval # 616]  alpha_sys=72.14%  cost=140.645 MFLOPs-M
+14:10:41    [eval # 617]  alpha_sys=68.47%  cost=100.022 MFLOPs-M
+14:10:56    [eval # 618]  alpha_sys=71.34%  cost=157.077 MFLOPs-M
+14:11:12    [eval # 619]  alpha_sys=68.24%  cost=71.750 MFLOPs-M
+14:11:28    [eval # 620]  alpha_sys=72.81%  cost=192.590 MFLOPs-M
+14:11:43    [eval # 621]  alpha_sys=68.39%  cost=71.714 MFLOPs-M
+14:11:58    [eval # 622]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+14:12:14    [eval # 623]  alpha_sys=73.81%  cost=824.242 MFLOPs-M
+14:12:30    [eval # 624]  alpha_sys=72.29%  cost=204.974 MFLOPs-M
+14:12:46    [eval # 625]  alpha_sys=72.54%  cost=137.572 MFLOPs-M
+14:13:01    [eval # 626]  alpha_sys=72.44%  cost=137.245 MFLOPs-M
+14:13:17    [eval # 627]  alpha_sys=73.46%  cost=302.170 MFLOPs-M
+14:13:33    [eval # 628]  alpha_sys=73.31%  cost=368.240 MFLOPs-M
+14:13:48    [eval # 629]  alpha_sys=68.47%  cost=72.396 MFLOPs-M
+14:14:04    [eval # 630]  alpha_sys=72.81%  cost=178.122 MFLOPs-M
+14:14:20    [eval # 631]  alpha_sys=69.19%  cost=114.586 MFLOPs-M
+14:14:36    [eval # 632]  alpha_sys=72.26%  cost=161.876 MFLOPs-M
+14:14:51    [eval # 633]  alpha_sys=75.96%  cost=2027.600 MFLOPs-M
+14:15:07    [eval # 634]  alpha_sys=72.44%  cost=164.396 MFLOPs-M
+14:15:23    [eval # 635]  alpha_sys=71.81%  cost=127.271 MFLOPs-M
+14:15:39    [eval # 636]  alpha_sys=67.30%  cost=55.089 MFLOPs-M
+14:15:55    [eval # 637]  alpha_sys=67.59%  cost=83.288 MFLOPs-M
+14:16:10    [eval # 638]  alpha_sys=73.60%  cost=213.034 MFLOPs-M
+14:16:26    [eval # 639]  alpha_sys=71.64%  cost=130.228 MFLOPs-M
+14:16:41    [eval # 640]  alpha_sys=68.26%  cost=84.616 MFLOPs-M
+14:16:58    [eval # 641]  alpha_sys=74.71%  cost=1112.030 MFLOPs-M
+14:17:13    [eval # 642]  alpha_sys=70.23%  cost=104.417 MFLOPs-M
+14:17:29    [eval # 643]  alpha_sys=71.07%  cost=406.012 MFLOPs-M
+14:17:45    [eval # 644]  alpha_sys=72.17%  cost=336.079 MFLOPs-M
+14:18:01    [eval # 645]  alpha_sys=73.30%  cost=252.536 MFLOPs-M
+14:18:16    [eval # 646]  alpha_sys=68.29%  cost=95.871 MFLOPs-M
+14:18:32    [eval # 647]  alpha_sys=71.61%  cost=206.523 MFLOPs-M
+14:18:48    [eval # 648]  alpha_sys=70.50%  cost=113.166 MFLOPs-M
+14:19:03    [eval # 649]  alpha_sys=68.39%  cost=75.035 MFLOPs-M
+14:19:19    [eval # 650]  alpha_sys=73.94%  cost=825.076 MFLOPs-M
+14:19:19  -- Generation 13/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+14:19:35    [eval # 651]  alpha_sys=70.30%  cost=97.066 MFLOPs-M
+14:19:50    [eval # 652]  alpha_sys=67.37%  cost=57.579 MFLOPs-M
+14:20:06    [eval # 653]  alpha_sys=69.14%  cost=221.034 MFLOPs-M
+14:20:23    [eval # 654]  alpha_sys=71.93%  cost=182.229 MFLOPs-M
+14:20:39    [eval # 655]  alpha_sys=70.86%  cost=125.756 MFLOPs-M
+14:20:55    [eval # 656]  alpha_sys=73.44%  cost=382.019 MFLOPs-M
+14:21:11    [eval # 657]  alpha_sys=73.53%  cost=220.941 MFLOPs-M
+14:21:26    [eval # 658]  alpha_sys=68.63%  cost=72.772 MFLOPs-M
+14:21:43    [eval # 659]  alpha_sys=68.13%  cost=67.814 MFLOPs-M
+14:21:58    [eval # 660]  alpha_sys=72.40%  cost=237.103 MFLOPs-M
+14:22:14    [eval # 661]  alpha_sys=71.94%  cost=285.319 MFLOPs-M
+14:22:30    [eval # 662]  alpha_sys=72.76%  cost=449.174 MFLOPs-M
+14:22:45    [eval # 663]  alpha_sys=71.01%  cost=119.083 MFLOPs-M
+14:23:01    [eval # 664]  alpha_sys=71.67%  cost=484.462 MFLOPs-M
+14:23:17    [eval # 665]  alpha_sys=75.19%  cost=1406.577 MFLOPs-M
+14:23:33    [eval # 666]  alpha_sys=73.41%  cost=322.949 MFLOPs-M
+14:23:50    [eval # 667]  alpha_sys=70.07%  cost=105.446 MFLOPs-M
+14:24:06    [eval # 668]  alpha_sys=67.46%  cost=51.456 MFLOPs-M
+14:24:21    [eval # 669]  alpha_sys=72.26%  cost=245.317 MFLOPs-M
+14:24:37    [eval # 670]  alpha_sys=71.50%  cost=140.459 MFLOPs-M
+14:24:53    [eval # 671]  alpha_sys=67.34%  cost=75.774 MFLOPs-M
+14:25:09    [eval # 672]  alpha_sys=72.86%  cost=189.199 MFLOPs-M
+14:25:24    [eval # 673]  alpha_sys=67.83%  cost=242.102 MFLOPs-M
+14:25:40    [eval # 674]  alpha_sys=73.41%  cost=350.552 MFLOPs-M
+14:25:56    [eval # 675]  alpha_sys=74.50%  cost=814.790 MFLOPs-M
+14:26:12    [eval # 676]  alpha_sys=73.51%  cost=366.815 MFLOPs-M
+14:26:28    [eval # 677]  alpha_sys=70.13%  cost=123.274 MFLOPs-M
+14:26:44    [eval # 678]  alpha_sys=70.34%  cost=123.143 MFLOPs-M
+14:26:59    [eval # 679]  alpha_sys=67.44%  cost=58.082 MFLOPs-M
+14:27:16    [eval # 680]  alpha_sys=72.21%  cost=151.499 MFLOPs-M
+14:27:32    [eval # 681]  alpha_sys=73.10%  cost=189.584 MFLOPs-M
+14:27:47    [eval # 682]  alpha_sys=70.96%  cost=110.785 MFLOPs-M
+14:28:02    [eval # 683]  alpha_sys=72.13%  cost=275.844 MFLOPs-M
+14:28:18    [eval # 684]  alpha_sys=67.93%  cost=67.992 MFLOPs-M
+14:28:33    [eval # 685]  alpha_sys=72.94%  cost=275.338 MFLOPs-M
+14:28:49    [eval # 686]  alpha_sys=71.27%  cost=134.150 MFLOPs-M
+14:29:05    [eval # 687]  alpha_sys=70.19%  cost=462.413 MFLOPs-M
+14:29:21    [eval # 688]  alpha_sys=73.56%  cost=353.761 MFLOPs-M
+14:29:36    [eval # 689]  alpha_sys=67.27%  cost=77.669 MFLOPs-M
+14:29:52    [eval # 690]  alpha_sys=70.14%  cost=131.183 MFLOPs-M
+14:30:08    [eval # 691]  alpha_sys=73.46%  cost=245.077 MFLOPs-M
+14:30:23    [eval # 692]  alpha_sys=73.19%  cost=157.455 MFLOPs-M
+14:30:39    [eval # 693]  alpha_sys=70.31%  cost=106.225 MFLOPs-M
+14:30:54    [eval # 694]  alpha_sys=72.89%  cost=167.977 MFLOPs-M
+14:31:10    [eval # 695]  alpha_sys=70.44%  cost=118.178 MFLOPs-M
+14:31:25    [eval # 696]  alpha_sys=73.20%  cost=334.769 MFLOPs-M
+14:31:41    [eval # 697]  alpha_sys=70.47%  cost=197.329 MFLOPs-M
+14:31:57    [eval # 698]  alpha_sys=70.89%  cost=104.056 MFLOPs-M
+14:32:13    [eval # 699]  alpha_sys=71.86%  cost=130.282 MFLOPs-M
+14:32:28    [eval # 700]  alpha_sys=73.46%  cost=154.124 MFLOPs-M
+14:32:28  -- Generation 14/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+14:32:43    [eval # 701]  alpha_sys=73.19%  cost=176.193 MFLOPs-M
+14:32:59    [eval # 702]  alpha_sys=74.13%  cost=772.505 MFLOPs-M
+14:33:14    [eval # 703]  alpha_sys=71.61%  cost=129.919 MFLOPs-M
+14:33:30    [eval # 704]  alpha_sys=72.50%  cost=135.228 MFLOPs-M
+14:33:45    [eval # 705]  alpha_sys=72.07%  cost=136.099 MFLOPs-M
+14:34:02    [eval # 706]  alpha_sys=71.70%  cost=183.212 MFLOPs-M
+14:34:18    [eval # 707]  alpha_sys=67.21%  cost=51.150 MFLOPs-M
+14:34:34    [eval # 708]  alpha_sys=72.16%  cost=512.120 MFLOPs-M
+14:34:50    [eval # 709]  alpha_sys=67.77%  cost=170.196 MFLOPs-M
+14:35:06    [eval # 710]  alpha_sys=70.60%  cost=178.576 MFLOPs-M
+14:35:22    [eval # 711]  alpha_sys=73.73%  cost=854.596 MFLOPs-M
+14:35:38    [eval # 712]  alpha_sys=72.29%  cost=224.679 MFLOPs-M
+14:35:54    [eval # 713]  alpha_sys=73.94%  cost=701.191 MFLOPs-M
+14:36:10    [eval # 714]  alpha_sys=67.49%  cost=87.120 MFLOPs-M
+14:36:26    [eval # 715]  alpha_sys=72.11%  cost=493.994 MFLOPs-M
+14:36:42    [eval # 716]  alpha_sys=72.41%  cost=236.599 MFLOPs-M
+14:36:58    [eval # 717]  alpha_sys=73.04%  cost=144.741 MFLOPs-M
+14:37:14    [eval # 718]  alpha_sys=71.43%  cost=118.203 MFLOPs-M
+14:37:30    [eval # 719]  alpha_sys=67.63%  cost=63.981 MFLOPs-M
+14:37:45    [eval # 720]  alpha_sys=71.59%  cost=122.701 MFLOPs-M
+14:38:00    [eval # 721]  alpha_sys=72.96%  cost=404.986 MFLOPs-M
+14:38:15    [eval # 722]  alpha_sys=72.57%  cost=154.147 MFLOPs-M
+14:38:31    [eval # 723]  alpha_sys=68.26%  cost=130.333 MFLOPs-M
+14:38:48    [eval # 724]  alpha_sys=74.06%  cost=630.723 MFLOPs-M
+14:39:04    [eval # 725]  alpha_sys=71.30%  cost=115.880 MFLOPs-M
+14:39:19    [eval # 726]  alpha_sys=71.66%  cost=138.781 MFLOPs-M
+14:39:35    [eval # 727]  alpha_sys=70.77%  cost=122.884 MFLOPs-M
+14:39:51    [eval # 728]  alpha_sys=67.56%  cost=51.410 MFLOPs-M
+14:40:07    [eval # 729]  alpha_sys=69.91%  cost=101.400 MFLOPs-M
+14:40:23    [eval # 730]  alpha_sys=71.23%  cost=201.843 MFLOPs-M
+14:40:39    [eval # 731]  alpha_sys=67.83%  cost=65.979 MFLOPs-M
+14:40:55    [eval # 732]  alpha_sys=73.64%  cost=567.674 MFLOPs-M
+14:41:10    [eval # 733]  alpha_sys=67.21%  cost=58.025 MFLOPs-M
+14:41:27    [eval # 734]  alpha_sys=68.53%  cost=76.960 MFLOPs-M
+14:41:42    [eval # 735]  alpha_sys=73.77%  cost=433.461 MFLOPs-M
+14:41:59    [eval # 736]  alpha_sys=73.21%  cost=155.074 MFLOPs-M
+14:42:15    [eval # 737]  alpha_sys=73.79%  cost=405.206 MFLOPs-M
+14:42:31    [eval # 738]  alpha_sys=67.29%  cost=89.826 MFLOPs-M
+14:42:46    [eval # 739]  alpha_sys=70.36%  cost=214.320 MFLOPs-M
+14:43:02    [eval # 740]  alpha_sys=73.49%  cost=229.666 MFLOPs-M
+14:43:17    [eval # 741]  alpha_sys=68.40%  cost=83.739 MFLOPs-M
+14:43:32    [eval # 742]  alpha_sys=73.46%  cost=219.485 MFLOPs-M
+14:43:48    [eval # 743]  alpha_sys=75.17%  cost=1492.632 MFLOPs-M
+14:44:03    [eval # 744]  alpha_sys=67.17%  cost=48.226 MFLOPs-M
+14:44:19    [eval # 745]  alpha_sys=73.47%  cost=155.104 MFLOPs-M
+14:44:34    [eval # 746]  alpha_sys=67.80%  cost=70.410 MFLOPs-M
+14:44:50    [eval # 747]  alpha_sys=71.53%  cost=150.929 MFLOPs-M
+14:45:05    [eval # 748]  alpha_sys=67.87%  cost=176.471 MFLOPs-M
+14:45:20    [eval # 749]  alpha_sys=70.69%  cost=487.818 MFLOPs-M
+14:45:36    [eval # 750]  alpha_sys=70.09%  cost=146.170 MFLOPs-M
+14:45:36  -- Generation 15/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+14:45:36  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen015.npz
+14:45:51    [eval # 751]  alpha_sys=68.71%  cost=77.657 MFLOPs-M
+14:46:07    [eval # 752]  alpha_sys=67.81%  cost=55.871 MFLOPs-M
+14:46:23    [eval # 753]  alpha_sys=72.74%  cost=259.391 MFLOPs-M
+14:46:38    [eval # 754]  alpha_sys=71.86%  cost=751.066 MFLOPs-M
+14:46:54    [eval # 755]  alpha_sys=72.61%  cost=410.122 MFLOPs-M
+14:47:10    [eval # 756]  alpha_sys=73.63%  cost=541.548 MFLOPs-M
+14:47:25    [eval # 757]  alpha_sys=69.23%  cost=92.421 MFLOPs-M
+14:47:41    [eval # 758]  alpha_sys=73.47%  cost=350.370 MFLOPs-M
+14:47:57    [eval # 759]  alpha_sys=74.29%  cost=749.020 MFLOPs-M
+14:48:12    [eval # 760]  alpha_sys=67.41%  cost=60.797 MFLOPs-M
+14:48:27    [eval # 761]  alpha_sys=69.93%  cost=468.919 MFLOPs-M
+14:48:43    [eval # 762]  alpha_sys=73.56%  cost=669.212 MFLOPs-M
+14:48:59    [eval # 763]  alpha_sys=71.73%  cost=152.766 MFLOPs-M
+14:49:14    [eval # 764]  alpha_sys=69.81%  cost=148.996 MFLOPs-M
+14:49:30    [eval # 765]  alpha_sys=69.74%  cost=96.290 MFLOPs-M
+14:49:46    [eval # 766]  alpha_sys=74.40%  cost=924.563 MFLOPs-M
+14:50:02    [eval # 767]  alpha_sys=70.97%  cost=663.546 MFLOPs-M
+14:50:17    [eval # 768]  alpha_sys=67.24%  cost=51.789 MFLOPs-M
+14:50:33    [eval # 769]  alpha_sys=73.34%  cost=238.122 MFLOPs-M
+14:50:48    [eval # 770]  alpha_sys=68.20%  cost=83.883 MFLOPs-M
+14:51:03    [eval # 771]  alpha_sys=67.43%  cost=50.940 MFLOPs-M
+14:51:18    [eval # 772]  alpha_sys=69.23%  cost=223.946 MFLOPs-M
+14:51:34    [eval # 773]  alpha_sys=73.49%  cost=198.551 MFLOPs-M
+14:51:50    [eval # 774]  alpha_sys=72.70%  cost=511.419 MFLOPs-M
+14:52:06    [eval # 775]  alpha_sys=68.54%  cost=191.028 MFLOPs-M
+14:52:22    [eval # 776]  alpha_sys=72.74%  cost=169.706 MFLOPs-M
+14:52:37    [eval # 777]  alpha_sys=73.91%  cost=531.702 MFLOPs-M
+14:52:52    [eval # 778]  alpha_sys=73.47%  cost=151.316 MFLOPs-M
+14:53:08    [eval # 779]  alpha_sys=69.16%  cost=86.485 MFLOPs-M
+14:53:24    [eval # 780]  alpha_sys=73.13%  cost=145.812 MFLOPs-M
+14:53:40    [eval # 781]  alpha_sys=75.76%  cost=2287.381 MFLOPs-M
+14:53:56    [eval # 782]  alpha_sys=73.24%  cost=1007.557 MFLOPs-M
+14:54:11    [eval # 783]  alpha_sys=67.30%  cost=90.730 MFLOPs-M
+14:54:27    [eval # 784]  alpha_sys=73.47%  cost=284.009 MFLOPs-M
+14:54:44    [eval # 785]  alpha_sys=73.49%  cost=321.101 MFLOPs-M
+14:54:59    [eval # 786]  alpha_sys=71.51%  cost=118.103 MFLOPs-M
+14:55:15    [eval # 787]  alpha_sys=67.66%  cost=61.324 MFLOPs-M
+14:55:31    [eval # 788]  alpha_sys=72.41%  cost=233.026 MFLOPs-M
+14:55:47    [eval # 789]  alpha_sys=73.13%  cost=504.598 MFLOPs-M
+14:56:03    [eval # 790]  alpha_sys=69.00%  cost=87.711 MFLOPs-M
+14:56:20    [eval # 791]  alpha_sys=71.79%  cost=154.719 MFLOPs-M
+14:56:35    [eval # 792]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+14:56:51    [eval # 793]  alpha_sys=74.33%  cost=1489.292 MFLOPs-M
+14:57:07    [eval # 794]  alpha_sys=68.26%  cost=61.266 MFLOPs-M
+14:57:22    [eval # 795]  alpha_sys=68.70%  cost=95.067 MFLOPs-M
+14:57:39    [eval # 796]  alpha_sys=72.63%  cost=136.532 MFLOPs-M
+14:57:55    [eval # 797]  alpha_sys=73.26%  cost=372.554 MFLOPs-M
+14:58:11    [eval # 798]  alpha_sys=72.81%  cost=145.764 MFLOPs-M
+14:58:26    [eval # 799]  alpha_sys=73.31%  cost=240.855 MFLOPs-M
+14:58:42    [eval # 800]  alpha_sys=73.39%  cost=173.026 MFLOPs-M
+14:58:42  -- Generation 16/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+14:58:58    [eval # 801]  alpha_sys=71.19%  cost=166.915 MFLOPs-M
+14:59:13    [eval # 802]  alpha_sys=68.94%  cost=129.642 MFLOPs-M
+14:59:29    [eval # 803]  alpha_sys=70.83%  cost=329.382 MFLOPs-M
+14:59:44    [eval # 804]  alpha_sys=73.44%  cost=247.216 MFLOPs-M
+15:00:00    [eval # 805]  alpha_sys=72.84%  cost=271.049 MFLOPs-M
+15:00:16    [eval # 806]  alpha_sys=73.80%  cost=426.776 MFLOPs-M
+15:00:32    [eval # 807]  alpha_sys=73.60%  cost=188.839 MFLOPs-M
+15:00:47    [eval # 808]  alpha_sys=72.26%  cost=513.801 MFLOPs-M
+15:01:04    [eval # 809]  alpha_sys=72.50%  cost=435.137 MFLOPs-M
+15:01:20    [eval # 810]  alpha_sys=68.24%  cost=123.862 MFLOPs-M
+15:01:36    [eval # 811]  alpha_sys=72.70%  cost=140.690 MFLOPs-M
+15:01:52    [eval # 812]  alpha_sys=73.31%  cost=279.104 MFLOPs-M
+15:02:09    [eval # 813]  alpha_sys=73.06%  cost=183.190 MFLOPs-M
+15:02:25    [eval # 814]  alpha_sys=68.56%  cost=74.295 MFLOPs-M
+15:02:41    [eval # 815]  alpha_sys=67.29%  cost=62.371 MFLOPs-M
+15:02:57    [eval # 816]  alpha_sys=73.44%  cost=153.669 MFLOPs-M
+15:03:14    [eval # 817]  alpha_sys=73.60%  cost=195.369 MFLOPs-M
+15:03:30    [eval # 818]  alpha_sys=73.09%  cost=154.699 MFLOPs-M
+15:03:46    [eval # 819]  alpha_sys=72.83%  cost=307.155 MFLOPs-M
+15:04:03    [eval # 820]  alpha_sys=67.21%  cost=56.594 MFLOPs-M
+15:04:18    [eval # 821]  alpha_sys=70.31%  cost=239.867 MFLOPs-M
+15:04:34    [eval # 822]  alpha_sys=67.20%  cost=47.998 MFLOPs-M
+15:04:49    [eval # 823]  alpha_sys=70.36%  cost=103.519 MFLOPs-M
+15:05:05    [eval # 824]  alpha_sys=75.10%  cost=1151.001 MFLOPs-M
+15:05:21    [eval # 825]  alpha_sys=72.89%  cost=141.430 MFLOPs-M
+15:05:37    [eval # 826]  alpha_sys=67.40%  cost=50.652 MFLOPs-M
+15:05:52    [eval # 827]  alpha_sys=72.10%  cost=155.576 MFLOPs-M
+15:06:08    [eval # 828]  alpha_sys=73.19%  cost=190.627 MFLOPs-M
+15:06:24    [eval # 829]  alpha_sys=68.13%  cost=62.664 MFLOPs-M
+15:06:39    [eval # 830]  alpha_sys=69.69%  cost=272.864 MFLOPs-M
+15:06:54    [eval # 831]  alpha_sys=73.44%  cost=665.891 MFLOPs-M
+15:07:11    [eval # 832]  alpha_sys=70.44%  cost=113.774 MFLOPs-M
+15:07:26    [eval # 833]  alpha_sys=68.99%  cost=164.885 MFLOPs-M
+15:07:42    [eval # 834]  alpha_sys=72.69%  cost=645.720 MFLOPs-M
+15:07:58    [eval # 835]  alpha_sys=73.37%  cost=192.701 MFLOPs-M
+15:08:13    [eval # 836]  alpha_sys=72.54%  cost=446.682 MFLOPs-M
+15:08:29    [eval # 837]  alpha_sys=73.50%  cost=208.163 MFLOPs-M
+15:08:45    [eval # 838]  alpha_sys=72.81%  cost=382.742 MFLOPs-M
+15:09:01    [eval # 839]  alpha_sys=70.99%  cost=146.567 MFLOPs-M
+15:09:17    [eval # 840]  alpha_sys=73.43%  cost=233.009 MFLOPs-M
+15:09:33    [eval # 841]  alpha_sys=70.49%  cost=104.271 MFLOPs-M
+15:09:48    [eval # 842]  alpha_sys=73.56%  cost=460.922 MFLOPs-M
+15:10:04    [eval # 843]  alpha_sys=68.81%  cost=364.820 MFLOPs-M
+15:10:20    [eval # 844]  alpha_sys=72.30%  cost=278.991 MFLOPs-M
+15:10:36    [eval # 845]  alpha_sys=73.47%  cost=162.625 MFLOPs-M
+15:10:52    [eval # 846]  alpha_sys=70.20%  cost=98.248 MFLOPs-M
+15:11:08    [eval # 847]  alpha_sys=67.77%  cost=58.637 MFLOPs-M
+15:11:24    [eval # 848]  alpha_sys=72.71%  cost=353.371 MFLOPs-M
+15:11:40    [eval # 849]  alpha_sys=69.81%  cost=91.449 MFLOPs-M
+15:11:55    [eval # 850]  alpha_sys=73.09%  cost=177.794 MFLOPs-M
+15:11:55  -- Generation 17/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+15:12:11    [eval # 851]  alpha_sys=72.20%  cost=153.056 MFLOPs-M
+15:12:27    [eval # 852]  alpha_sys=73.86%  cost=411.809 MFLOPs-M
+15:12:43    [eval # 853]  alpha_sys=68.53%  cost=68.763 MFLOPs-M
+15:12:58    [eval # 854]  alpha_sys=71.74%  cost=144.944 MFLOPs-M
+15:13:14    [eval # 855]  alpha_sys=69.60%  cost=104.134 MFLOPs-M
+15:13:30    [eval # 856]  alpha_sys=67.29%  cost=50.258 MFLOPs-M
+15:13:45    [eval # 857]  alpha_sys=73.06%  cost=162.799 MFLOPs-M
+15:14:01    [eval # 858]  alpha_sys=71.73%  cost=138.566 MFLOPs-M
+15:14:18    [eval # 859]  alpha_sys=73.59%  cost=283.338 MFLOPs-M
+15:14:33    [eval # 860]  alpha_sys=69.34%  cost=91.804 MFLOPs-M
+15:14:49    [eval # 861]  alpha_sys=73.34%  cost=392.204 MFLOPs-M
+15:15:05    [eval # 862]  alpha_sys=73.47%  cost=254.319 MFLOPs-M
+15:15:20    [eval # 863]  alpha_sys=75.07%  cost=1440.313 MFLOPs-M
+15:15:35    [eval # 864]  alpha_sys=68.04%  cost=65.248 MFLOPs-M
+15:15:52    [eval # 865]  alpha_sys=70.53%  cost=410.417 MFLOPs-M
+15:16:08    [eval # 866]  alpha_sys=71.51%  cost=128.038 MFLOPs-M
+15:16:23    [eval # 867]  alpha_sys=73.57%  cost=286.225 MFLOPs-M
+15:16:39    [eval # 868]  alpha_sys=67.94%  cost=98.589 MFLOPs-M
+15:16:54    [eval # 869]  alpha_sys=67.17%  cost=48.377 MFLOPs-M
+15:17:10    [eval # 870]  alpha_sys=72.87%  cost=145.798 MFLOPs-M
+15:17:25    [eval # 871]  alpha_sys=72.50%  cost=198.635 MFLOPs-M
+15:17:41    [eval # 872]  alpha_sys=67.34%  cost=50.194 MFLOPs-M
+15:17:57    [eval # 873]  alpha_sys=67.77%  cost=55.822 MFLOPs-M
+15:18:12    [eval # 874]  alpha_sys=73.50%  cost=163.805 MFLOPs-M
+15:18:28    [eval # 875]  alpha_sys=71.69%  cost=222.594 MFLOPs-M
+15:18:43    [eval # 876]  alpha_sys=72.70%  cost=149.394 MFLOPs-M
+15:18:59    [eval # 877]  alpha_sys=71.43%  cost=135.452 MFLOPs-M
+15:19:15    [eval # 878]  alpha_sys=72.79%  cost=144.302 MFLOPs-M
+15:19:31    [eval # 879]  alpha_sys=74.36%  cost=773.970 MFLOPs-M
+15:19:46    [eval # 880]  alpha_sys=68.17%  cost=443.424 MFLOPs-M
+15:20:02    [eval # 881]  alpha_sys=73.01%  cost=202.228 MFLOPs-M
+15:20:17    [eval # 882]  alpha_sys=71.17%  cost=154.645 MFLOPs-M
+15:20:33    [eval # 883]  alpha_sys=74.49%  cost=1914.960 MFLOPs-M
+15:20:50    [eval # 884]  alpha_sys=69.59%  cost=89.196 MFLOPs-M
+15:21:06    [eval # 885]  alpha_sys=68.04%  cost=65.327 MFLOPs-M
+15:21:22    [eval # 886]  alpha_sys=72.77%  cost=411.016 MFLOPs-M
+15:21:38    [eval # 887]  alpha_sys=71.67%  cost=120.735 MFLOPs-M
+15:21:53    [eval # 888]  alpha_sys=67.54%  cost=55.471 MFLOPs-M
+15:22:09    [eval # 889]  alpha_sys=70.31%  cost=149.429 MFLOPs-M
+15:22:26    [eval # 890]  alpha_sys=69.59%  cost=626.367 MFLOPs-M
+15:22:42    [eval # 891]  alpha_sys=67.29%  cost=87.051 MFLOPs-M
+15:22:58    [eval # 892]  alpha_sys=72.67%  cost=514.920 MFLOPs-M
+15:23:14    [eval # 893]  alpha_sys=68.46%  cost=80.991 MFLOPs-M
+15:23:29    [eval # 894]  alpha_sys=73.31%  cost=151.116 MFLOPs-M
+15:23:45    [eval # 895]  alpha_sys=73.10%  cost=193.195 MFLOPs-M
+15:24:01    [eval # 896]  alpha_sys=71.24%  cost=124.727 MFLOPs-M
+15:24:17    [eval # 897]  alpha_sys=73.57%  cost=234.707 MFLOPs-M
+15:24:33    [eval # 898]  alpha_sys=71.36%  cost=170.901 MFLOPs-M
+15:24:48    [eval # 899]  alpha_sys=68.33%  cost=262.563 MFLOPs-M
+15:25:03    [eval # 900]  alpha_sys=72.86%  cost=1148.940 MFLOPs-M
+15:25:03  -- Generation 18/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+15:25:19    [eval # 901]  alpha_sys=72.63%  cost=232.323 MFLOPs-M
+15:25:34    [eval # 902]  alpha_sys=68.99%  cost=205.244 MFLOPs-M
+15:25:50    [eval # 903]  alpha_sys=73.51%  cost=199.977 MFLOPs-M
+15:26:05    [eval # 904]  alpha_sys=70.09%  cost=359.958 MFLOPs-M
+15:26:21    [eval # 905]  alpha_sys=67.87%  cost=79.618 MFLOPs-M
+15:26:36    [eval # 906]  alpha_sys=70.29%  cost=197.994 MFLOPs-M
+15:26:52    [eval # 907]  alpha_sys=67.23%  cost=55.371 MFLOPs-M
+15:27:08    [eval # 908]  alpha_sys=70.49%  cost=328.054 MFLOPs-M
+15:27:23    [eval # 909]  alpha_sys=71.86%  cost=586.263 MFLOPs-M
+15:27:38    [eval # 910]  alpha_sys=70.09%  cost=108.294 MFLOPs-M
+15:27:54    [eval # 911]  alpha_sys=72.56%  cost=573.265 MFLOPs-M
+15:28:10    [eval # 912]  alpha_sys=73.44%  cost=154.303 MFLOPs-M
+15:28:26    [eval # 913]  alpha_sys=67.40%  cost=56.084 MFLOPs-M
+15:28:43    [eval # 914]  alpha_sys=67.53%  cost=99.664 MFLOPs-M
+15:28:58    [eval # 915]  alpha_sys=72.40%  cost=240.448 MFLOPs-M
+15:29:14    [eval # 916]  alpha_sys=73.27%  cost=169.463 MFLOPs-M
+15:29:30    [eval # 917]  alpha_sys=68.24%  cost=170.529 MFLOPs-M
+15:29:45    [eval # 918]  alpha_sys=67.33%  cost=50.925 MFLOPs-M
+15:30:01    [eval # 919]  alpha_sys=67.53%  cost=62.170 MFLOPs-M
+15:30:16    [eval # 920]  alpha_sys=73.26%  cost=162.210 MFLOPs-M
+15:30:31    [eval # 921]  alpha_sys=69.03%  cost=80.705 MFLOPs-M
+15:30:46    [eval # 922]  alpha_sys=71.70%  cost=252.117 MFLOPs-M
+15:31:03    [eval # 923]  alpha_sys=73.29%  cost=545.807 MFLOPs-M
+15:31:19    [eval # 924]  alpha_sys=74.41%  cost=883.624 MFLOPs-M
+15:31:34    [eval # 925]  alpha_sys=72.04%  cost=131.859 MFLOPs-M
+15:31:50    [eval # 926]  alpha_sys=69.39%  cost=85.463 MFLOPs-M
+15:32:06    [eval # 927]  alpha_sys=67.23%  cost=54.331 MFLOPs-M
+15:32:22    [eval # 928]  alpha_sys=72.77%  cost=189.412 MFLOPs-M
+15:32:38    [eval # 929]  alpha_sys=73.01%  cost=164.337 MFLOPs-M
+15:32:54    [eval # 930]  alpha_sys=69.69%  cost=106.099 MFLOPs-M
+15:33:09    [eval # 931]  alpha_sys=69.97%  cost=93.333 MFLOPs-M
+15:33:25    [eval # 932]  alpha_sys=72.83%  cost=236.110 MFLOPs-M
+15:33:40    [eval # 933]  alpha_sys=67.21%  cost=48.726 MFLOPs-M
+15:33:56    [eval # 934]  alpha_sys=71.16%  cost=113.463 MFLOPs-M
+15:34:12    [eval # 935]  alpha_sys=73.03%  cost=266.112 MFLOPs-M
+15:34:27    [eval # 936]  alpha_sys=67.73%  cost=81.214 MFLOPs-M
+15:34:42    [eval # 937]  alpha_sys=73.24%  cost=478.944 MFLOPs-M
+15:34:58    [eval # 938]  alpha_sys=73.21%  cost=265.736 MFLOPs-M
+15:35:13    [eval # 939]  alpha_sys=71.06%  cost=147.833 MFLOPs-M
+15:35:28    [eval # 940]  alpha_sys=69.91%  cost=97.915 MFLOPs-M
+15:35:44    [eval # 941]  alpha_sys=72.43%  cost=133.715 MFLOPs-M
+15:35:59    [eval # 942]  alpha_sys=70.41%  cost=107.372 MFLOPs-M
+15:36:15    [eval # 943]  alpha_sys=70.61%  cost=109.760 MFLOPs-M
+15:36:31    [eval # 944]  alpha_sys=71.43%  cost=149.958 MFLOPs-M
+15:36:46    [eval # 945]  alpha_sys=73.64%  cost=386.963 MFLOPs-M
+15:37:02    [eval # 946]  alpha_sys=73.69%  cost=373.612 MFLOPs-M
+15:37:17    [eval # 947]  alpha_sys=73.51%  cost=208.344 MFLOPs-M
+15:37:33    [eval # 948]  alpha_sys=67.49%  cost=55.701 MFLOPs-M
+15:37:49    [eval # 949]  alpha_sys=74.07%  cost=620.935 MFLOPs-M
+15:38:04    [eval # 950]  alpha_sys=72.43%  cost=137.779 MFLOPs-M
+15:38:04  -- Generation 19/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+15:38:20    [eval # 951]  alpha_sys=67.70%  cost=256.954 MFLOPs-M
+15:38:36    [eval # 952]  alpha_sys=71.56%  cost=241.682 MFLOPs-M
+15:38:52    [eval # 953]  alpha_sys=72.07%  cost=133.154 MFLOPs-M
+15:39:08    [eval # 954]  alpha_sys=72.49%  cost=184.514 MFLOPs-M
+15:39:24    [eval # 955]  alpha_sys=73.10%  cost=218.646 MFLOPs-M
+15:39:40    [eval # 956]  alpha_sys=73.23%  cost=402.701 MFLOPs-M
+15:39:56    [eval # 957]  alpha_sys=74.20%  cost=836.664 MFLOPs-M
+15:40:12    [eval # 958]  alpha_sys=70.54%  cost=151.325 MFLOPs-M
+15:40:27    [eval # 959]  alpha_sys=68.27%  cost=88.547 MFLOPs-M
+15:40:43    [eval # 960]  alpha_sys=68.00%  cost=66.852 MFLOPs-M
+15:40:59    [eval # 961]  alpha_sys=71.51%  cost=112.129 MFLOPs-M
+15:41:14    [eval # 962]  alpha_sys=72.63%  cost=537.170 MFLOPs-M
+15:41:29    [eval # 963]  alpha_sys=71.37%  cost=128.666 MFLOPs-M
+15:41:45    [eval # 964]  alpha_sys=74.59%  cost=990.505 MFLOPs-M
+15:42:01    [eval # 965]  alpha_sys=73.04%  cost=150.040 MFLOPs-M
+15:42:17    [eval # 966]  alpha_sys=70.99%  cost=329.380 MFLOPs-M
+15:42:32    [eval # 967]  alpha_sys=72.97%  cost=237.647 MFLOPs-M
+15:42:48    [eval # 968]  alpha_sys=72.09%  cost=138.204 MFLOPs-M
+15:43:03    [eval # 969]  alpha_sys=73.31%  cost=153.245 MFLOPs-M
+15:43:18    [eval # 970]  alpha_sys=72.41%  cost=545.636 MFLOPs-M
+15:43:34    [eval # 971]  alpha_sys=73.14%  cost=224.257 MFLOPs-M
+15:43:49    [eval # 972]  alpha_sys=71.61%  cost=124.265 MFLOPs-M
+15:44:05    [eval # 973]  alpha_sys=72.46%  cost=134.312 MFLOPs-M
+15:44:21    [eval # 974]  alpha_sys=71.96%  cost=163.354 MFLOPs-M
+15:44:37    [eval # 975]  alpha_sys=70.17%  cost=98.400 MFLOPs-M
+15:44:54    [eval # 976]  alpha_sys=72.93%  cost=159.081 MFLOPs-M
+15:45:10    [eval # 977]  alpha_sys=72.97%  cost=476.061 MFLOPs-M
+15:45:25    [eval # 978]  alpha_sys=71.47%  cost=134.036 MFLOPs-M
+15:45:41    [eval # 979]  alpha_sys=67.30%  cost=92.313 MFLOPs-M
+15:45:57    [eval # 980]  alpha_sys=69.80%  cost=199.499 MFLOPs-M
+15:46:12    [eval # 981]  alpha_sys=73.23%  cost=914.424 MFLOPs-M
+15:46:28    [eval # 982]  alpha_sys=71.54%  cost=160.349 MFLOPs-M
+15:46:43    [eval # 983]  alpha_sys=71.44%  cost=141.921 MFLOPs-M
+15:46:59    [eval # 984]  alpha_sys=73.43%  cost=375.034 MFLOPs-M
+15:47:14    [eval # 985]  alpha_sys=73.39%  cost=193.123 MFLOPs-M
+15:47:30    [eval # 986]  alpha_sys=68.96%  cost=573.821 MFLOPs-M
+15:47:46    [eval # 987]  alpha_sys=72.37%  cost=376.325 MFLOPs-M
+15:48:02    [eval # 988]  alpha_sys=71.11%  cost=124.131 MFLOPs-M
+15:48:18    [eval # 989]  alpha_sys=69.86%  cost=362.176 MFLOPs-M
+15:48:34    [eval # 990]  alpha_sys=69.40%  cost=284.371 MFLOPs-M
+15:48:50    [eval # 991]  alpha_sys=68.40%  cost=81.113 MFLOPs-M
+15:49:06    [eval # 992]  alpha_sys=70.37%  cost=246.309 MFLOPs-M
+15:49:22    [eval # 993]  alpha_sys=70.01%  cost=200.554 MFLOPs-M
+15:49:38    [eval # 994]  alpha_sys=69.21%  cost=129.571 MFLOPs-M
+15:49:54    [eval # 995]  alpha_sys=67.81%  cost=106.506 MFLOPs-M
+15:50:10    [eval # 996]  alpha_sys=70.70%  cost=107.192 MFLOPs-M
+15:50:25    [eval # 997]  alpha_sys=73.26%  cost=490.158 MFLOPs-M
+15:50:40    [eval # 998]  alpha_sys=69.90%  cost=125.252 MFLOPs-M
+15:50:56    [eval # 999]  alpha_sys=73.91%  cost=561.465 MFLOPs-M
+15:51:13    [eval #1000]  alpha_sys=70.44%  cost=203.322 MFLOPs-M
+15:51:13  -- Generation 20/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+15:51:13  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen020.npz
+15:51:29    [eval #1001]  alpha_sys=74.26%  cost=749.951 MFLOPs-M
+15:51:45    [eval #1002]  alpha_sys=67.31%  cost=77.800 MFLOPs-M
+15:52:00    [eval #1003]  alpha_sys=71.86%  cost=133.846 MFLOPs-M
+15:52:16    [eval #1004]  alpha_sys=69.01%  cost=107.764 MFLOPs-M
+15:52:32    [eval #1005]  alpha_sys=71.40%  cost=685.965 MFLOPs-M
+15:52:47    [eval #1006]  alpha_sys=68.79%  cost=196.144 MFLOPs-M
+15:53:02    [eval #1007]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+15:53:17    [eval #1008]  alpha_sys=73.69%  cost=305.512 MFLOPs-M
+15:53:33    [eval #1009]  alpha_sys=68.34%  cost=72.939 MFLOPs-M
+15:53:48    [eval #1010]  alpha_sys=72.56%  cost=158.272 MFLOPs-M
+15:54:03    [eval #1011]  alpha_sys=70.60%  cost=105.909 MFLOPs-M
+15:54:19    [eval #1012]  alpha_sys=74.06%  cost=673.418 MFLOPs-M
+15:54:35    [eval #1013]  alpha_sys=73.86%  cost=460.012 MFLOPs-M
+15:54:51    [eval #1014]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+15:55:07    [eval #1015]  alpha_sys=72.73%  cost=227.879 MFLOPs-M
+15:55:23    [eval #1016]  alpha_sys=67.49%  cost=53.108 MFLOPs-M
+15:55:39    [eval #1017]  alpha_sys=73.16%  cost=208.212 MFLOPs-M
+15:55:54    [eval #1018]  alpha_sys=70.99%  cost=198.499 MFLOPs-M
+15:56:10    [eval #1019]  alpha_sys=67.31%  cost=49.985 MFLOPs-M
+15:56:26    [eval #1020]  alpha_sys=70.56%  cost=105.882 MFLOPs-M
+15:56:42    [eval #1021]  alpha_sys=73.41%  cost=151.319 MFLOPs-M
+15:56:57    [eval #1022]  alpha_sys=71.59%  cost=305.829 MFLOPs-M
+15:57:12    [eval #1023]  alpha_sys=73.49%  cost=220.719 MFLOPs-M
+15:57:28    [eval #1024]  alpha_sys=73.46%  cost=171.185 MFLOPs-M
+15:57:43    [eval #1025]  alpha_sys=72.87%  cost=193.869 MFLOPs-M
+15:57:59    [eval #1026]  alpha_sys=71.79%  cost=348.847 MFLOPs-M
+15:58:15    [eval #1027]  alpha_sys=73.23%  cost=153.952 MFLOPs-M
+15:58:30    [eval #1028]  alpha_sys=72.40%  cost=363.460 MFLOPs-M
+15:58:46    [eval #1029]  alpha_sys=70.94%  cost=141.018 MFLOPs-M
+15:59:01    [eval #1030]  alpha_sys=68.07%  cost=64.629 MFLOPs-M
+15:59:16    [eval #1031]  alpha_sys=70.70%  cost=149.305 MFLOPs-M
+15:59:32    [eval #1032]  alpha_sys=69.46%  cost=90.540 MFLOPs-M
+15:59:47    [eval #1033]  alpha_sys=71.17%  cost=118.546 MFLOPs-M
+16:00:03    [eval #1034]  alpha_sys=71.17%  cost=107.237 MFLOPs-M
+16:00:19    [eval #1035]  alpha_sys=73.47%  cost=252.381 MFLOPs-M
+16:00:35    [eval #1036]  alpha_sys=73.07%  cost=208.815 MFLOPs-M
+16:00:50    [eval #1037]  alpha_sys=67.69%  cost=61.114 MFLOPs-M
+16:01:05    [eval #1038]  alpha_sys=69.73%  cost=113.265 MFLOPs-M
+16:01:20    [eval #1039]  alpha_sys=67.20%  cost=48.772 MFLOPs-M
+16:01:35    [eval #1040]  alpha_sys=73.66%  cost=831.440 MFLOPs-M
+16:01:51    [eval #1041]  alpha_sys=69.44%  cost=89.391 MFLOPs-M
+16:02:07    [eval #1042]  alpha_sys=70.47%  cost=240.698 MFLOPs-M
+16:02:23    [eval #1043]  alpha_sys=68.81%  cost=74.155 MFLOPs-M
+16:02:38    [eval #1044]  alpha_sys=67.46%  cost=74.379 MFLOPs-M
+16:02:54    [eval #1045]  alpha_sys=67.61%  cost=105.900 MFLOPs-M
+16:03:09    [eval #1046]  alpha_sys=70.26%  cost=112.012 MFLOPs-M
+16:03:24    [eval #1047]  alpha_sys=70.49%  cost=120.704 MFLOPs-M
+16:03:41    [eval #1048]  alpha_sys=73.47%  cost=401.191 MFLOPs-M
+16:03:56    [eval #1049]  alpha_sys=68.50%  cost=102.441 MFLOPs-M
+16:04:11    [eval #1050]  alpha_sys=73.37%  cost=236.658 MFLOPs-M
+16:04:11  -- Generation 21/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+16:04:27    [eval #1051]  alpha_sys=73.03%  cost=235.613 MFLOPs-M
+16:04:43    [eval #1052]  alpha_sys=73.70%  cost=367.961 MFLOPs-M
+16:04:59    [eval #1053]  alpha_sys=69.13%  cost=77.782 MFLOPs-M
+16:05:15    [eval #1054]  alpha_sys=72.87%  cost=289.772 MFLOPs-M
+16:05:32    [eval #1055]  alpha_sys=70.29%  cost=117.025 MFLOPs-M
+16:05:47    [eval #1056]  alpha_sys=70.59%  cost=110.168 MFLOPs-M
+16:06:03    [eval #1057]  alpha_sys=74.93%  cost=1354.444 MFLOPs-M
+16:06:19    [eval #1058]  alpha_sys=70.86%  cost=217.962 MFLOPs-M
+16:06:34    [eval #1059]  alpha_sys=67.16%  cost=48.226 MFLOPs-M
+16:06:50    [eval #1060]  alpha_sys=68.91%  cost=139.911 MFLOPs-M
+16:07:06    [eval #1061]  alpha_sys=67.24%  cost=57.137 MFLOPs-M
+16:07:21    [eval #1062]  alpha_sys=74.79%  cost=1500.109 MFLOPs-M
+16:07:37    [eval #1063]  alpha_sys=74.43%  cost=829.843 MFLOPs-M
+16:07:52    [eval #1064]  alpha_sys=72.03%  cost=128.996 MFLOPs-M
+16:08:07    [eval #1065]  alpha_sys=73.26%  cost=240.182 MFLOPs-M
+16:08:23    [eval #1066]  alpha_sys=72.44%  cost=523.513 MFLOPs-M
+16:08:39    [eval #1067]  alpha_sys=73.46%  cost=441.086 MFLOPs-M
+16:08:56    [eval #1068]  alpha_sys=73.46%  cost=154.124 MFLOPs-M
+16:09:12    [eval #1069]  alpha_sys=72.14%  cost=240.947 MFLOPs-M
+16:09:28    [eval #1070]  alpha_sys=71.59%  cost=282.029 MFLOPs-M
+16:09:44    [eval #1071]  alpha_sys=72.49%  cost=138.121 MFLOPs-M
+16:10:00    [eval #1072]  alpha_sys=73.59%  cost=479.851 MFLOPs-M
+16:10:15    [eval #1073]  alpha_sys=73.36%  cost=199.391 MFLOPs-M
+16:10:31    [eval #1074]  alpha_sys=73.49%  cost=167.872 MFLOPs-M
+16:10:47    [eval #1075]  alpha_sys=70.37%  cost=109.910 MFLOPs-M
+16:11:02    [eval #1076]  alpha_sys=73.41%  cost=151.555 MFLOPs-M
+16:11:18    [eval #1077]  alpha_sys=67.16%  cost=55.751 MFLOPs-M
+16:11:34    [eval #1078]  alpha_sys=72.44%  cost=166.216 MFLOPs-M
+16:11:50    [eval #1079]  alpha_sys=73.96%  cost=575.022 MFLOPs-M
+16:12:05    [eval #1080]  alpha_sys=71.47%  cost=170.995 MFLOPs-M
+16:12:22    [eval #1081]  alpha_sys=73.56%  cost=536.334 MFLOPs-M
+16:12:38    [eval #1082]  alpha_sys=73.59%  cost=343.218 MFLOPs-M
+16:12:53    [eval #1083]  alpha_sys=70.13%  cost=103.998 MFLOPs-M
+16:13:09    [eval #1084]  alpha_sys=67.20%  cost=49.566 MFLOPs-M
+16:13:24    [eval #1085]  alpha_sys=72.43%  cost=198.827 MFLOPs-M
+16:13:40    [eval #1086]  alpha_sys=73.00%  cost=332.054 MFLOPs-M
+16:13:57    [eval #1087]  alpha_sys=68.09%  cost=90.340 MFLOPs-M
+16:14:12    [eval #1088]  alpha_sys=73.47%  cost=153.244 MFLOPs-M
+16:14:28    [eval #1089]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+16:14:44    [eval #1090]  alpha_sys=68.36%  cost=68.029 MFLOPs-M
+16:15:00    [eval #1091]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+16:15:16    [eval #1092]  alpha_sys=72.39%  cost=159.286 MFLOPs-M
+16:15:31    [eval #1093]  alpha_sys=72.07%  cost=174.418 MFLOPs-M
+16:15:47    [eval #1094]  alpha_sys=70.29%  cost=100.335 MFLOPs-M
+16:16:03    [eval #1095]  alpha_sys=71.56%  cost=122.458 MFLOPs-M
+16:16:19    [eval #1096]  alpha_sys=67.84%  cost=68.912 MFLOPs-M
+16:16:35    [eval #1097]  alpha_sys=70.81%  cost=130.545 MFLOPs-M
+16:16:50    [eval #1098]  alpha_sys=70.49%  cost=120.513 MFLOPs-M
+16:17:06    [eval #1099]  alpha_sys=70.27%  cost=102.585 MFLOPs-M
+16:17:22    [eval #1100]  alpha_sys=67.33%  cost=53.248 MFLOPs-M
+16:17:22  -- Generation 22/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+16:17:37    [eval #1101]  alpha_sys=71.79%  cost=123.480 MFLOPs-M
+16:17:53    [eval #1102]  alpha_sys=67.79%  cost=78.457 MFLOPs-M
+16:18:09    [eval #1103]  alpha_sys=69.43%  cost=98.272 MFLOPs-M
+16:18:25    [eval #1104]  alpha_sys=73.86%  cost=414.420 MFLOPs-M
+16:18:42    [eval #1105]  alpha_sys=72.23%  cost=134.382 MFLOPs-M
+16:18:58    [eval #1106]  alpha_sys=71.83%  cost=118.488 MFLOPs-M
+16:19:14    [eval #1107]  alpha_sys=67.71%  cost=257.509 MFLOPs-M
+16:19:30    [eval #1108]  alpha_sys=68.41%  cost=79.381 MFLOPs-M
+16:19:46    [eval #1109]  alpha_sys=68.07%  cost=142.158 MFLOPs-M
+16:20:01    [eval #1110]  alpha_sys=73.69%  cost=583.287 MFLOPs-M
+16:20:17    [eval #1111]  alpha_sys=73.99%  cost=914.581 MFLOPs-M
+16:20:32    [eval #1112]  alpha_sys=70.11%  cost=736.663 MFLOPs-M
+16:20:48    [eval #1113]  alpha_sys=73.47%  cost=549.761 MFLOPs-M
+16:21:04    [eval #1114]  alpha_sys=73.44%  cost=304.633 MFLOPs-M
+16:21:19    [eval #1115]  alpha_sys=69.40%  cost=89.402 MFLOPs-M
+16:21:35    [eval #1116]  alpha_sys=74.01%  cost=715.485 MFLOPs-M
+16:21:51    [eval #1117]  alpha_sys=73.67%  cost=319.885 MFLOPs-M
+16:22:06    [eval #1118]  alpha_sys=67.99%  cost=141.470 MFLOPs-M
+16:22:21    [eval #1119]  alpha_sys=69.51%  cost=92.564 MFLOPs-M
+16:22:36    [eval #1120]  alpha_sys=67.46%  cost=88.910 MFLOPs-M
+16:22:52    [eval #1121]  alpha_sys=74.47%  cost=900.778 MFLOPs-M
+16:23:07    [eval #1122]  alpha_sys=72.80%  cost=186.842 MFLOPs-M
+16:23:22    [eval #1123]  alpha_sys=67.50%  cost=54.913 MFLOPs-M
+16:23:38    [eval #1124]  alpha_sys=69.17%  cost=92.132 MFLOPs-M
+16:23:53    [eval #1125]  alpha_sys=73.79%  cost=447.804 MFLOPs-M
+16:24:09    [eval #1126]  alpha_sys=72.66%  cost=252.464 MFLOPs-M
+16:24:24    [eval #1127]  alpha_sys=71.90%  cost=122.227 MFLOPs-M
+16:24:40    [eval #1128]  alpha_sys=73.54%  cost=599.505 MFLOPs-M
+16:24:56    [eval #1129]  alpha_sys=67.27%  cost=81.758 MFLOPs-M
+16:25:11    [eval #1130]  alpha_sys=72.50%  cost=179.403 MFLOPs-M
+16:25:27    [eval #1131]  alpha_sys=74.90%  cost=1390.652 MFLOPs-M
+16:25:43    [eval #1132]  alpha_sys=73.71%  cost=615.980 MFLOPs-M
+16:25:59    [eval #1133]  alpha_sys=67.47%  cost=62.686 MFLOPs-M
+16:26:15    [eval #1134]  alpha_sys=70.39%  cost=113.598 MFLOPs-M
+16:26:31    [eval #1135]  alpha_sys=71.99%  cost=152.951 MFLOPs-M
+16:26:47    [eval #1136]  alpha_sys=73.06%  cost=463.783 MFLOPs-M
+16:27:02    [eval #1137]  alpha_sys=73.57%  cost=259.763 MFLOPs-M
+16:27:18    [eval #1138]  alpha_sys=68.00%  cost=60.732 MFLOPs-M
+16:27:33    [eval #1139]  alpha_sys=69.10%  cost=226.222 MFLOPs-M
+16:27:49    [eval #1140]  alpha_sys=74.77%  cost=1661.900 MFLOPs-M
+16:28:05    [eval #1141]  alpha_sys=72.64%  cost=240.824 MFLOPs-M
+16:28:22    [eval #1142]  alpha_sys=70.23%  cost=100.323 MFLOPs-M
+16:28:37    [eval #1143]  alpha_sys=67.96%  cost=57.123 MFLOPs-M
+16:28:53    [eval #1144]  alpha_sys=73.30%  cost=159.144 MFLOPs-M
+16:29:09    [eval #1145]  alpha_sys=71.00%  cost=122.071 MFLOPs-M
+16:29:24    [eval #1146]  alpha_sys=67.56%  cost=52.108 MFLOPs-M
+16:29:40    [eval #1147]  alpha_sys=70.66%  cost=109.257 MFLOPs-M
+16:29:56    [eval #1148]  alpha_sys=71.21%  cost=142.082 MFLOPs-M
+16:30:12    [eval #1149]  alpha_sys=72.20%  cost=282.416 MFLOPs-M
+16:30:27    [eval #1150]  alpha_sys=67.94%  cost=88.126 MFLOPs-M
+16:30:27  -- Generation 23/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+16:30:43    [eval #1151]  alpha_sys=67.66%  cost=58.916 MFLOPs-M
+16:30:59    [eval #1152]  alpha_sys=71.14%  cost=118.330 MFLOPs-M
+16:31:15    [eval #1153]  alpha_sys=69.94%  cost=92.893 MFLOPs-M
+16:31:31    [eval #1154]  alpha_sys=73.80%  cost=439.797 MFLOPs-M
+16:31:47    [eval #1155]  alpha_sys=73.70%  cost=505.952 MFLOPs-M
+16:32:02    [eval #1156]  alpha_sys=67.64%  cost=79.647 MFLOPs-M
+16:32:18    [eval #1157]  alpha_sys=69.81%  cost=99.171 MFLOPs-M
+16:32:34    [eval #1158]  alpha_sys=73.60%  cost=339.172 MFLOPs-M
+16:32:50    [eval #1159]  alpha_sys=73.97%  cost=416.197 MFLOPs-M
+16:33:05    [eval #1160]  alpha_sys=73.66%  cost=418.348 MFLOPs-M
+16:33:20    [eval #1161]  alpha_sys=74.97%  cost=2075.086 MFLOPs-M
+16:33:36    [eval #1162]  alpha_sys=73.61%  cost=591.416 MFLOPs-M
+16:33:52    [eval #1163]  alpha_sys=72.80%  cost=140.386 MFLOPs-M
+16:34:07    [eval #1164]  alpha_sys=72.90%  cost=161.307 MFLOPs-M
+16:34:23    [eval #1165]  alpha_sys=73.33%  cost=202.701 MFLOPs-M
+16:34:38    [eval #1166]  alpha_sys=72.30%  cost=130.716 MFLOPs-M
+16:34:54    [eval #1167]  alpha_sys=71.74%  cost=180.308 MFLOPs-M
+16:35:11    [eval #1168]  alpha_sys=70.99%  cost=1288.618 MFLOPs-M
+16:35:27    [eval #1169]  alpha_sys=74.37%  cost=809.598 MFLOPs-M
+16:35:43    [eval #1170]  alpha_sys=70.89%  cost=198.156 MFLOPs-M
+16:35:59    [eval #1171]  alpha_sys=72.96%  cost=163.913 MFLOPs-M
+16:36:15    [eval #1172]  alpha_sys=70.56%  cost=138.250 MFLOPs-M
+16:36:31    [eval #1173]  alpha_sys=73.21%  cost=375.920 MFLOPs-M
+16:36:46    [eval #1174]  alpha_sys=67.23%  cost=62.760 MFLOPs-M
+16:37:02    [eval #1175]  alpha_sys=69.09%  cost=73.815 MFLOPs-M
+16:37:18    [eval #1176]  alpha_sys=67.21%  cost=53.673 MFLOPs-M
+16:37:35    [eval #1177]  alpha_sys=69.34%  cost=82.446 MFLOPs-M
+16:37:51    [eval #1178]  alpha_sys=73.01%  cost=179.181 MFLOPs-M
+16:38:06    [eval #1179]  alpha_sys=74.30%  cost=734.826 MFLOPs-M
+16:38:22    [eval #1180]  alpha_sys=72.07%  cost=125.072 MFLOPs-M
+16:38:39    [eval #1181]  alpha_sys=72.21%  cost=622.070 MFLOPs-M
+16:38:55    [eval #1182]  alpha_sys=73.20%  cost=150.297 MFLOPs-M
+16:39:11    [eval #1183]  alpha_sys=73.77%  cost=355.638 MFLOPs-M
+16:39:27    [eval #1184]  alpha_sys=70.83%  cost=111.780 MFLOPs-M
+16:39:43    [eval #1185]  alpha_sys=72.21%  cost=138.241 MFLOPs-M
+16:39:59    [eval #1186]  alpha_sys=73.24%  cost=168.722 MFLOPs-M
+16:40:14    [eval #1187]  alpha_sys=73.79%  cost=840.065 MFLOPs-M
+16:40:30    [eval #1188]  alpha_sys=68.21%  cost=139.676 MFLOPs-M
+16:40:45    [eval #1189]  alpha_sys=72.93%  cost=144.168 MFLOPs-M
+16:41:01    [eval #1190]  alpha_sys=73.29%  cost=167.097 MFLOPs-M
+16:41:17    [eval #1191]  alpha_sys=72.89%  cost=259.361 MFLOPs-M
+16:41:32    [eval #1192]  alpha_sys=73.74%  cost=650.974 MFLOPs-M
+16:41:48    [eval #1193]  alpha_sys=72.26%  cost=155.796 MFLOPs-M
+16:42:03    [eval #1194]  alpha_sys=74.84%  cost=1204.770 MFLOPs-M
+16:42:18    [eval #1195]  alpha_sys=67.33%  cost=100.787 MFLOPs-M
+16:42:34    [eval #1196]  alpha_sys=74.51%  cost=1895.916 MFLOPs-M
+16:42:50    [eval #1197]  alpha_sys=69.40%  cost=88.939 MFLOPs-M
+16:43:06    [eval #1198]  alpha_sys=67.66%  cost=149.720 MFLOPs-M
+16:43:22    [eval #1199]  alpha_sys=71.43%  cost=121.284 MFLOPs-M
+16:43:38    [eval #1200]  alpha_sys=70.79%  cost=425.264 MFLOPs-M
+16:43:38  -- Generation 24/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+16:43:54    [eval #1201]  alpha_sys=67.67%  cost=67.699 MFLOPs-M
+16:44:10    [eval #1202]  alpha_sys=71.06%  cost=129.802 MFLOPs-M
+16:44:26    [eval #1203]  alpha_sys=68.93%  cost=90.505 MFLOPs-M
+16:44:42    [eval #1204]  alpha_sys=73.61%  cost=243.718 MFLOPs-M
+16:44:58    [eval #1205]  alpha_sys=69.74%  cost=125.785 MFLOPs-M
+16:45:14    [eval #1206]  alpha_sys=68.34%  cost=102.061 MFLOPs-M
+16:45:30    [eval #1207]  alpha_sys=70.11%  cost=99.604 MFLOPs-M
+16:45:47    [eval #1208]  alpha_sys=70.24%  cost=105.597 MFLOPs-M
+16:46:04    [eval #1209]  alpha_sys=73.63%  cost=386.104 MFLOPs-M
+16:46:21    [eval #1210]  alpha_sys=73.64%  cost=478.037 MFLOPs-M
+16:46:38    [eval #1211]  alpha_sys=67.30%  cost=56.117 MFLOPs-M
+16:46:55    [eval #1212]  alpha_sys=72.09%  cost=158.674 MFLOPs-M
+16:47:11    [eval #1213]  alpha_sys=68.60%  cost=72.062 MFLOPs-M
+16:47:28    [eval #1214]  alpha_sys=68.46%  cost=248.563 MFLOPs-M
+16:47:45    [eval #1215]  alpha_sys=73.13%  cost=158.869 MFLOPs-M
+16:48:02    [eval #1216]  alpha_sys=73.39%  cost=153.742 MFLOPs-M
+16:48:19    [eval #1217]  alpha_sys=72.97%  cost=158.368 MFLOPs-M
+16:48:36    [eval #1218]  alpha_sys=72.93%  cost=187.989 MFLOPs-M
+16:48:53    [eval #1219]  alpha_sys=73.07%  cost=145.885 MFLOPs-M
+16:49:10    [eval #1220]  alpha_sys=73.79%  cost=326.661 MFLOPs-M
+16:49:27    [eval #1221]  alpha_sys=73.33%  cost=278.322 MFLOPs-M
+16:49:44    [eval #1222]  alpha_sys=67.80%  cost=88.323 MFLOPs-M
+16:50:00    [eval #1223]  alpha_sys=74.11%  cost=556.490 MFLOPs-M
+16:50:15    [eval #1224]  alpha_sys=71.66%  cost=174.025 MFLOPs-M
+16:50:31    [eval #1225]  alpha_sys=70.00%  cost=147.389 MFLOPs-M
+16:50:46    [eval #1226]  alpha_sys=70.31%  cost=107.826 MFLOPs-M
+16:51:02    [eval #1227]  alpha_sys=69.80%  cost=168.556 MFLOPs-M
+16:51:18    [eval #1228]  alpha_sys=73.24%  cost=167.761 MFLOPs-M
+16:51:33    [eval #1229]  alpha_sys=73.54%  cost=230.118 MFLOPs-M
+16:51:49    [eval #1230]  alpha_sys=72.31%  cost=346.368 MFLOPs-M
+16:52:05    [eval #1231]  alpha_sys=70.53%  cost=106.264 MFLOPs-M
+16:52:21    [eval #1232]  alpha_sys=74.29%  cost=1069.760 MFLOPs-M
+16:52:38    [eval #1233]  alpha_sys=67.23%  cost=53.066 MFLOPs-M
+16:52:54    [eval #1234]  alpha_sys=69.76%  cost=93.012 MFLOPs-M
+16:53:10    [eval #1235]  alpha_sys=67.84%  cost=55.671 MFLOPs-M
+16:53:27    [eval #1236]  alpha_sys=67.77%  cost=118.478 MFLOPs-M
+16:53:43    [eval #1237]  alpha_sys=67.83%  cost=82.236 MFLOPs-M
+16:53:59    [eval #1238]  alpha_sys=67.77%  cost=149.472 MFLOPs-M
+16:54:15    [eval #1239]  alpha_sys=68.24%  cost=68.733 MFLOPs-M
+16:54:31    [eval #1240]  alpha_sys=73.91%  cost=486.280 MFLOPs-M
+16:54:46    [eval #1241]  alpha_sys=67.26%  cost=64.419 MFLOPs-M
+16:55:02    [eval #1242]  alpha_sys=74.17%  cost=736.843 MFLOPs-M
+16:55:17    [eval #1243]  alpha_sys=73.60%  cost=242.629 MFLOPs-M
+16:55:33    [eval #1244]  alpha_sys=68.40%  cost=68.714 MFLOPs-M
+16:55:49    [eval #1245]  alpha_sys=72.96%  cost=435.065 MFLOPs-M
+16:56:05    [eval #1246]  alpha_sys=73.80%  cost=751.026 MFLOPs-M
+16:56:21    [eval #1247]  alpha_sys=67.49%  cost=58.501 MFLOPs-M
+16:56:37    [eval #1248]  alpha_sys=67.37%  cost=86.461 MFLOPs-M
+16:56:53    [eval #1249]  alpha_sys=69.57%  cost=542.621 MFLOPs-M
+16:57:09    [eval #1250]  alpha_sys=72.01%  cost=133.549 MFLOPs-M
+16:57:09  -- Generation 25/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+16:57:09  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen025.npz
+16:57:25    [eval #1251]  alpha_sys=71.46%  cost=132.005 MFLOPs-M
+16:57:42    [eval #1252]  alpha_sys=67.24%  cost=85.076 MFLOPs-M
+16:57:57    [eval #1253]  alpha_sys=73.56%  cost=357.003 MFLOPs-M
+16:58:12    [eval #1254]  alpha_sys=71.66%  cost=208.537 MFLOPs-M
+16:58:28    [eval #1255]  alpha_sys=72.27%  cost=130.312 MFLOPs-M
+16:58:43    [eval #1256]  alpha_sys=72.00%  cost=282.519 MFLOPs-M
+16:58:59    [eval #1257]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+16:59:15    [eval #1258]  alpha_sys=68.09%  cost=107.048 MFLOPs-M
+16:59:30    [eval #1259]  alpha_sys=69.00%  cost=93.870 MFLOPs-M
+16:59:46    [eval #1260]  alpha_sys=67.36%  cost=53.430 MFLOPs-M
+17:00:01    [eval #1261]  alpha_sys=69.56%  cost=99.882 MFLOPs-M
+17:00:16    [eval #1262]  alpha_sys=72.39%  cost=411.924 MFLOPs-M
+17:00:32    [eval #1263]  alpha_sys=73.47%  cost=164.087 MFLOPs-M
+17:00:48    [eval #1264]  alpha_sys=67.51%  cost=56.423 MFLOPs-M
+17:01:04    [eval #1265]  alpha_sys=73.11%  cost=387.040 MFLOPs-M
+17:01:19    [eval #1266]  alpha_sys=72.33%  cost=245.028 MFLOPs-M
+17:01:35    [eval #1267]  alpha_sys=69.74%  cost=98.777 MFLOPs-M
+17:01:51    [eval #1268]  alpha_sys=74.61%  cost=1071.452 MFLOPs-M
+17:02:07    [eval #1269]  alpha_sys=67.56%  cost=54.988 MFLOPs-M
+17:02:22    [eval #1270]  alpha_sys=73.31%  cost=217.581 MFLOPs-M
+17:02:38    [eval #1271]  alpha_sys=69.20%  cost=172.564 MFLOPs-M
+17:02:54    [eval #1272]  alpha_sys=73.47%  cost=193.271 MFLOPs-M
+17:03:09    [eval #1273]  alpha_sys=73.56%  cost=411.919 MFLOPs-M
+17:03:25    [eval #1274]  alpha_sys=71.11%  cost=118.916 MFLOPs-M
+17:03:41    [eval #1275]  alpha_sys=73.40%  cost=294.842 MFLOPs-M
+17:03:56    [eval #1276]  alpha_sys=71.00%  cost=131.818 MFLOPs-M
+17:04:11    [eval #1277]  alpha_sys=72.27%  cost=287.302 MFLOPs-M
+17:04:26    [eval #1278]  alpha_sys=70.44%  cost=113.255 MFLOPs-M
+17:04:42    [eval #1279]  alpha_sys=73.46%  cost=167.569 MFLOPs-M
+17:04:57    [eval #1280]  alpha_sys=73.44%  cost=203.401 MFLOPs-M
+17:05:13    [eval #1281]  alpha_sys=73.59%  cost=340.728 MFLOPs-M
+17:05:30    [eval #1282]  alpha_sys=73.43%  cost=224.447 MFLOPs-M
+17:05:46    [eval #1283]  alpha_sys=73.41%  cost=168.088 MFLOPs-M
+17:06:02    [eval #1284]  alpha_sys=72.96%  cost=238.300 MFLOPs-M
+17:06:17    [eval #1285]  alpha_sys=73.60%  cost=227.270 MFLOPs-M
+17:06:33    [eval #1286]  alpha_sys=69.21%  cost=97.152 MFLOPs-M
+17:06:48    [eval #1287]  alpha_sys=74.90%  cost=1533.696 MFLOPs-M
+17:07:04    [eval #1288]  alpha_sys=73.17%  cost=964.676 MFLOPs-M
+17:07:19    [eval #1289]  alpha_sys=67.29%  cost=56.384 MFLOPs-M
+17:07:35    [eval #1290]  alpha_sys=73.47%  cost=575.566 MFLOPs-M
+17:07:51    [eval #1291]  alpha_sys=72.70%  cost=172.721 MFLOPs-M
+17:08:06    [eval #1292]  alpha_sys=69.59%  cost=91.896 MFLOPs-M
+17:08:22    [eval #1293]  alpha_sys=68.66%  cost=283.318 MFLOPs-M
+17:08:39    [eval #1294]  alpha_sys=67.66%  cost=55.064 MFLOPs-M
+17:08:54    [eval #1295]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+17:09:10    [eval #1296]  alpha_sys=73.50%  cost=332.594 MFLOPs-M
+17:09:26    [eval #1297]  alpha_sys=72.79%  cost=237.211 MFLOPs-M
+17:09:41    [eval #1298]  alpha_sys=69.21%  cost=82.788 MFLOPs-M
+17:09:56    [eval #1299]  alpha_sys=69.71%  cost=408.557 MFLOPs-M
+17:10:11    [eval #1300]  alpha_sys=72.83%  cost=198.817 MFLOPs-M
+17:10:11  -- Generation 26/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+17:10:26    [eval #1301]  alpha_sys=73.57%  cost=450.719 MFLOPs-M
+17:10:42    [eval #1302]  alpha_sys=73.16%  cost=553.759 MFLOPs-M
+17:10:58    [eval #1303]  alpha_sys=69.16%  cost=108.347 MFLOPs-M
+17:11:13    [eval #1304]  alpha_sys=73.36%  cost=149.048 MFLOPs-M
+17:11:29    [eval #1305]  alpha_sys=74.13%  cost=578.025 MFLOPs-M
+17:11:44    [eval #1306]  alpha_sys=70.86%  cost=237.873 MFLOPs-M
+17:12:00    [eval #1307]  alpha_sys=73.46%  cost=157.081 MFLOPs-M
+17:12:16    [eval #1308]  alpha_sys=73.39%  cost=150.521 MFLOPs-M
+17:12:32    [eval #1309]  alpha_sys=73.53%  cost=217.483 MFLOPs-M
+17:12:47    [eval #1310]  alpha_sys=70.09%  cost=103.704 MFLOPs-M
+17:13:03    [eval #1311]  alpha_sys=73.43%  cost=241.483 MFLOPs-M
+17:13:18    [eval #1312]  alpha_sys=67.17%  cost=49.454 MFLOPs-M
+17:13:33    [eval #1313]  alpha_sys=68.51%  cost=221.991 MFLOPs-M
+17:13:49    [eval #1314]  alpha_sys=72.87%  cost=302.562 MFLOPs-M
+17:14:04    [eval #1315]  alpha_sys=67.36%  cost=125.575 MFLOPs-M
+17:14:20    [eval #1316]  alpha_sys=72.31%  cost=242.556 MFLOPs-M
+17:14:36    [eval #1317]  alpha_sys=72.13%  cost=130.267 MFLOPs-M
+17:14:51    [eval #1318]  alpha_sys=67.39%  cost=53.181 MFLOPs-M
+17:15:07    [eval #1319]  alpha_sys=75.21%  cost=1544.654 MFLOPs-M
+17:15:23    [eval #1320]  alpha_sys=73.16%  cost=307.885 MFLOPs-M
+17:15:38    [eval #1321]  alpha_sys=73.59%  cost=310.696 MFLOPs-M
+17:15:54    [eval #1322]  alpha_sys=73.10%  cost=147.301 MFLOPs-M
+17:16:10    [eval #1323]  alpha_sys=71.49%  cost=210.733 MFLOPs-M
+17:16:26    [eval #1324]  alpha_sys=73.69%  cost=390.056 MFLOPs-M
+17:16:42    [eval #1325]  alpha_sys=72.87%  cost=251.829 MFLOPs-M
+17:16:57    [eval #1326]  alpha_sys=69.36%  cost=92.275 MFLOPs-M
+17:17:13    [eval #1327]  alpha_sys=67.89%  cost=65.087 MFLOPs-M
+17:17:28    [eval #1328]  alpha_sys=73.90%  cost=487.417 MFLOPs-M
+17:17:43    [eval #1329]  alpha_sys=67.31%  cost=50.152 MFLOPs-M
+17:17:59    [eval #1330]  alpha_sys=68.64%  cost=79.408 MFLOPs-M
+17:18:15    [eval #1331]  alpha_sys=67.56%  cost=54.564 MFLOPs-M
+17:18:30    [eval #1332]  alpha_sys=69.33%  cost=92.379 MFLOPs-M
+17:18:46    [eval #1333]  alpha_sys=73.17%  cost=181.151 MFLOPs-M
+17:19:02    [eval #1334]  alpha_sys=71.81%  cost=126.586 MFLOPs-M
+17:19:17    [eval #1335]  alpha_sys=71.31%  cost=128.731 MFLOPs-M
+17:19:32    [eval #1336]  alpha_sys=71.73%  cost=144.954 MFLOPs-M
+17:19:47    [eval #1337]  alpha_sys=68.40%  cost=157.646 MFLOPs-M
+17:20:03    [eval #1338]  alpha_sys=71.43%  cost=120.520 MFLOPs-M
+17:20:19    [eval #1339]  alpha_sys=72.90%  cost=148.014 MFLOPs-M
+17:20:34    [eval #1340]  alpha_sys=69.93%  cost=99.113 MFLOPs-M
+17:20:50    [eval #1341]  alpha_sys=74.63%  cost=1376.640 MFLOPs-M
+17:21:05    [eval #1342]  alpha_sys=73.73%  cost=1255.193 MFLOPs-M
+17:21:21    [eval #1343]  alpha_sys=67.20%  cost=49.991 MFLOPs-M
+17:21:36    [eval #1344]  alpha_sys=70.67%  cost=160.050 MFLOPs-M
+17:21:51    [eval #1345]  alpha_sys=73.34%  cost=331.120 MFLOPs-M
+17:22:07    [eval #1346]  alpha_sys=74.39%  cost=995.953 MFLOPs-M
+17:22:23    [eval #1347]  alpha_sys=68.60%  cost=129.819 MFLOPs-M
+17:22:38    [eval #1348]  alpha_sys=73.31%  cost=328.396 MFLOPs-M
+17:22:54    [eval #1349]  alpha_sys=73.37%  cost=495.575 MFLOPs-M
+17:23:09    [eval #1350]  alpha_sys=74.06%  cost=598.927 MFLOPs-M
+17:23:09  -- Generation 27/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+17:23:25    [eval #1351]  alpha_sys=67.20%  cost=48.059 MFLOPs-M
+17:23:41    [eval #1352]  alpha_sys=72.90%  cost=180.415 MFLOPs-M
+17:23:58    [eval #1353]  alpha_sys=68.01%  cost=103.693 MFLOPs-M
+17:24:13    [eval #1354]  alpha_sys=73.09%  cost=589.309 MFLOPs-M
+17:24:29    [eval #1355]  alpha_sys=71.64%  cost=138.674 MFLOPs-M
+17:24:44    [eval #1356]  alpha_sys=71.89%  cost=125.469 MFLOPs-M
+17:25:00    [eval #1357]  alpha_sys=74.93%  cost=1286.396 MFLOPs-M
+17:25:16    [eval #1358]  alpha_sys=70.50%  cost=228.788 MFLOPs-M
+17:25:31    [eval #1359]  alpha_sys=72.71%  cost=187.079 MFLOPs-M
+17:25:47    [eval #1360]  alpha_sys=68.93%  cost=87.301 MFLOPs-M
+17:26:02    [eval #1361]  alpha_sys=73.61%  cost=319.012 MFLOPs-M
+17:26:19    [eval #1362]  alpha_sys=74.13%  cost=442.353 MFLOPs-M
+17:26:35    [eval #1363]  alpha_sys=73.09%  cost=309.267 MFLOPs-M
+17:26:50    [eval #1364]  alpha_sys=73.73%  cost=915.696 MFLOPs-M
+17:27:06    [eval #1365]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+17:27:22    [eval #1366]  alpha_sys=68.60%  cost=71.462 MFLOPs-M
+17:27:37    [eval #1367]  alpha_sys=72.13%  cost=423.152 MFLOPs-M
+17:27:53    [eval #1368]  alpha_sys=67.43%  cost=51.977 MFLOPs-M
+17:28:09    [eval #1369]  alpha_sys=73.46%  cost=264.683 MFLOPs-M
+17:28:24    [eval #1370]  alpha_sys=68.14%  cost=214.064 MFLOPs-M
+17:28:39    [eval #1371]  alpha_sys=73.63%  cost=354.349 MFLOPs-M
+17:28:55    [eval #1372]  alpha_sys=73.67%  cost=529.258 MFLOPs-M
+17:29:10    [eval #1373]  alpha_sys=73.61%  cost=422.206 MFLOPs-M
+17:29:27    [eval #1374]  alpha_sys=67.23%  cost=56.955 MFLOPs-M
+17:29:42    [eval #1375]  alpha_sys=72.06%  cost=169.192 MFLOPs-M
+17:29:58    [eval #1376]  alpha_sys=71.79%  cost=141.987 MFLOPs-M
+17:30:13    [eval #1377]  alpha_sys=73.81%  cost=374.027 MFLOPs-M
+17:30:29    [eval #1378]  alpha_sys=73.51%  cost=236.463 MFLOPs-M
+17:30:45    [eval #1379]  alpha_sys=69.39%  cost=82.537 MFLOPs-M
+17:31:00    [eval #1380]  alpha_sys=73.50%  cost=558.791 MFLOPs-M
+17:31:16    [eval #1381]  alpha_sys=69.44%  cost=175.894 MFLOPs-M
+17:31:31    [eval #1382]  alpha_sys=71.61%  cost=169.283 MFLOPs-M
+17:31:47    [eval #1383]  alpha_sys=68.74%  cost=159.482 MFLOPs-M
+17:32:03    [eval #1384]  alpha_sys=70.83%  cost=128.757 MFLOPs-M
+17:32:18    [eval #1385]  alpha_sys=73.69%  cost=387.038 MFLOPs-M
+17:32:33    [eval #1386]  alpha_sys=67.21%  cost=59.217 MFLOPs-M
+17:32:49    [eval #1387]  alpha_sys=73.33%  cost=347.792 MFLOPs-M
+17:33:04    [eval #1388]  alpha_sys=71.13%  cost=149.696 MFLOPs-M
+17:33:20    [eval #1389]  alpha_sys=67.51%  cost=101.949 MFLOPs-M
+17:33:36    [eval #1390]  alpha_sys=68.03%  cost=162.770 MFLOPs-M
+17:33:51    [eval #1391]  alpha_sys=72.50%  cost=183.191 MFLOPs-M
+17:34:07    [eval #1392]  alpha_sys=73.26%  cost=224.827 MFLOPs-M
+17:34:23    [eval #1393]  alpha_sys=71.97%  cost=338.074 MFLOPs-M
+17:34:38    [eval #1394]  alpha_sys=67.21%  cost=49.575 MFLOPs-M
+17:34:53    [eval #1395]  alpha_sys=67.19%  cost=48.681 MFLOPs-M
+17:35:09    [eval #1396]  alpha_sys=73.94%  cost=422.211 MFLOPs-M
+17:35:24    [eval #1397]  alpha_sys=70.64%  cost=481.800 MFLOPs-M
+17:35:40    [eval #1398]  alpha_sys=73.40%  cost=153.245 MFLOPs-M
+17:35:55    [eval #1399]  alpha_sys=68.99%  cost=79.113 MFLOPs-M
+17:36:11    [eval #1400]  alpha_sys=73.49%  cost=167.375 MFLOPs-M
+17:36:11  -- Generation 28/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+17:36:26    [eval #1401]  alpha_sys=71.39%  cost=121.527 MFLOPs-M
+17:36:42    [eval #1402]  alpha_sys=71.51%  cost=240.070 MFLOPs-M
+17:36:58    [eval #1403]  alpha_sys=70.40%  cost=114.993 MFLOPs-M
+17:37:13    [eval #1404]  alpha_sys=67.46%  cost=67.233 MFLOPs-M
+17:37:29    [eval #1405]  alpha_sys=73.56%  cost=359.508 MFLOPs-M
+17:37:44    [eval #1406]  alpha_sys=73.70%  cost=318.660 MFLOPs-M
+17:37:59    [eval #1407]  alpha_sys=74.21%  cost=696.972 MFLOPs-M
+17:38:15    [eval #1408]  alpha_sys=72.37%  cost=173.095 MFLOPs-M
+17:38:30    [eval #1409]  alpha_sys=67.21%  cost=48.241 MFLOPs-M
+17:38:46    [eval #1410]  alpha_sys=73.69%  cost=345.265 MFLOPs-M
+17:39:01    [eval #1411]  alpha_sys=69.51%  cost=242.480 MFLOPs-M
+17:39:17    [eval #1412]  alpha_sys=73.20%  cost=147.565 MFLOPs-M
+17:39:32    [eval #1413]  alpha_sys=73.91%  cost=560.554 MFLOPs-M
+17:39:49    [eval #1414]  alpha_sys=73.43%  cost=194.105 MFLOPs-M
+17:40:05    [eval #1415]  alpha_sys=73.87%  cost=556.190 MFLOPs-M
+17:40:21    [eval #1416]  alpha_sys=68.26%  cost=112.247 MFLOPs-M
+17:40:37    [eval #1417]  alpha_sys=69.94%  cost=139.586 MFLOPs-M
+17:40:53    [eval #1418]  alpha_sys=73.51%  cost=183.310 MFLOPs-M
+17:41:08    [eval #1419]  alpha_sys=67.89%  cost=59.428 MFLOPs-M
+17:41:23    [eval #1420]  alpha_sys=73.79%  cost=400.753 MFLOPs-M
+17:41:39    [eval #1421]  alpha_sys=68.43%  cost=83.918 MFLOPs-M
+17:41:54    [eval #1422]  alpha_sys=70.23%  cost=187.448 MFLOPs-M
+17:42:10    [eval #1423]  alpha_sys=73.43%  cost=426.867 MFLOPs-M
+17:42:25    [eval #1424]  alpha_sys=73.36%  cost=195.340 MFLOPs-M
+17:42:41    [eval #1425]  alpha_sys=67.23%  cost=50.655 MFLOPs-M
+17:42:57    [eval #1426]  alpha_sys=68.47%  cost=134.800 MFLOPs-M
+17:43:12    [eval #1427]  alpha_sys=72.46%  cost=574.455 MFLOPs-M
+17:43:28    [eval #1428]  alpha_sys=72.87%  cost=229.989 MFLOPs-M
+17:43:44    [eval #1429]  alpha_sys=67.21%  cost=56.642 MFLOPs-M
+17:43:59    [eval #1430]  alpha_sys=69.57%  cost=100.461 MFLOPs-M
+17:44:15    [eval #1431]  alpha_sys=73.50%  cost=257.209 MFLOPs-M
+17:44:32    [eval #1432]  alpha_sys=73.53%  cost=240.698 MFLOPs-M
+17:44:47    [eval #1433]  alpha_sys=72.63%  cost=140.572 MFLOPs-M
+17:45:03    [eval #1434]  alpha_sys=68.10%  cost=66.840 MFLOPs-M
+17:45:18    [eval #1435]  alpha_sys=70.24%  cost=112.063 MFLOPs-M
+17:45:35    [eval #1436]  alpha_sys=73.91%  cost=1216.260 MFLOPs-M
+17:45:51    [eval #1437]  alpha_sys=73.73%  cost=504.546 MFLOPs-M
+17:46:07    [eval #1438]  alpha_sys=73.21%  cost=213.802 MFLOPs-M
+17:46:22    [eval #1439]  alpha_sys=73.89%  cost=917.221 MFLOPs-M
+17:46:38    [eval #1440]  alpha_sys=67.36%  cost=82.274 MFLOPs-M
+17:46:53    [eval #1441]  alpha_sys=73.51%  cost=181.318 MFLOPs-M
+17:47:09    [eval #1442]  alpha_sys=67.31%  cost=67.021 MFLOPs-M
+17:47:24    [eval #1443]  alpha_sys=74.17%  cost=559.678 MFLOPs-M
+17:47:39    [eval #1444]  alpha_sys=70.43%  cost=198.814 MFLOPs-M
+17:47:55    [eval #1445]  alpha_sys=73.59%  cost=215.263 MFLOPs-M
+17:48:10    [eval #1446]  alpha_sys=67.34%  cost=95.209 MFLOPs-M
+17:48:26    [eval #1447]  alpha_sys=71.90%  cost=129.849 MFLOPs-M
+17:48:41    [eval #1448]  alpha_sys=74.01%  cost=873.009 MFLOPs-M
+17:48:57    [eval #1449]  alpha_sys=70.87%  cost=139.111 MFLOPs-M
+17:49:12    [eval #1450]  alpha_sys=73.46%  cost=215.090 MFLOPs-M
+17:49:12  -- Generation 29/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+17:49:28    [eval #1451]  alpha_sys=69.97%  cost=89.676 MFLOPs-M
+17:49:44    [eval #1452]  alpha_sys=71.84%  cost=201.382 MFLOPs-M
+17:49:59    [eval #1453]  alpha_sys=73.77%  cost=768.293 MFLOPs-M
+17:50:15    [eval #1454]  alpha_sys=73.66%  cost=346.873 MFLOPs-M
+17:50:31    [eval #1455]  alpha_sys=70.33%  cost=105.248 MFLOPs-M
+17:50:46    [eval #1456]  alpha_sys=67.16%  cost=48.711 MFLOPs-M
+17:51:02    [eval #1457]  alpha_sys=68.90%  cost=98.112 MFLOPs-M
+17:51:18    [eval #1458]  alpha_sys=71.36%  cost=209.474 MFLOPs-M
+17:51:34    [eval #1459]  alpha_sys=72.73%  cost=190.666 MFLOPs-M
+17:51:50    [eval #1460]  alpha_sys=72.46%  cost=193.215 MFLOPs-M
+17:52:06    [eval #1461]  alpha_sys=73.44%  cost=360.913 MFLOPs-M
+17:52:22    [eval #1462]  alpha_sys=70.00%  cost=110.059 MFLOPs-M
+17:52:37    [eval #1463]  alpha_sys=70.03%  cost=97.109 MFLOPs-M
+17:52:53    [eval #1464]  alpha_sys=72.57%  cost=142.367 MFLOPs-M
+17:53:09    [eval #1465]  alpha_sys=67.23%  cost=48.605 MFLOPs-M
+17:53:25    [eval #1466]  alpha_sys=74.07%  cost=706.835 MFLOPs-M
+17:53:40    [eval #1467]  alpha_sys=69.87%  cost=93.779 MFLOPs-M
+17:53:56    [eval #1468]  alpha_sys=73.31%  cost=530.266 MFLOPs-M
+17:54:12    [eval #1469]  alpha_sys=71.26%  cost=126.981 MFLOPs-M
+17:54:28    [eval #1470]  alpha_sys=69.70%  cost=105.010 MFLOPs-M
+17:54:44    [eval #1471]  alpha_sys=73.30%  cost=459.488 MFLOPs-M
+17:55:00    [eval #1472]  alpha_sys=71.94%  cost=128.278 MFLOPs-M
+17:55:16    [eval #1473]  alpha_sys=70.90%  cost=482.514 MFLOPs-M
+17:55:31    [eval #1474]  alpha_sys=68.74%  cost=196.292 MFLOPs-M
+17:55:47    [eval #1475]  alpha_sys=73.29%  cost=295.978 MFLOPs-M
+17:56:03    [eval #1476]  alpha_sys=70.63%  cost=109.390 MFLOPs-M
+17:56:18    [eval #1477]  alpha_sys=73.23%  cost=149.236 MFLOPs-M
+17:56:34    [eval #1478]  alpha_sys=69.56%  cost=98.489 MFLOPs-M
+17:56:49    [eval #1479]  alpha_sys=71.80%  cost=134.805 MFLOPs-M
+17:57:05    [eval #1480]  alpha_sys=72.56%  cost=240.096 MFLOPs-M
+17:57:21    [eval #1481]  alpha_sys=72.60%  cost=141.318 MFLOPs-M
+17:57:36    [eval #1482]  alpha_sys=73.40%  cost=459.042 MFLOPs-M
+17:57:52    [eval #1483]  alpha_sys=73.41%  cost=412.100 MFLOPs-M
+17:58:08    [eval #1484]  alpha_sys=70.64%  cost=281.054 MFLOPs-M
+17:58:23    [eval #1485]  alpha_sys=73.47%  cost=197.644 MFLOPs-M
+17:58:38    [eval #1486]  alpha_sys=72.79%  cost=215.343 MFLOPs-M
+17:58:54    [eval #1487]  alpha_sys=72.93%  cost=144.814 MFLOPs-M
+17:59:10    [eval #1488]  alpha_sys=70.77%  cost=270.650 MFLOPs-M
+17:59:26    [eval #1489]  alpha_sys=74.14%  cost=706.119 MFLOPs-M
+17:59:42    [eval #1490]  alpha_sys=74.34%  cost=673.899 MFLOPs-M
+17:59:58    [eval #1491]  alpha_sys=67.31%  cost=50.258 MFLOPs-M
+18:00:14    [eval #1492]  alpha_sys=71.24%  cost=539.174 MFLOPs-M
+18:00:30    [eval #1493]  alpha_sys=73.47%  cost=300.398 MFLOPs-M
+18:00:45    [eval #1494]  alpha_sys=73.60%  cost=261.585 MFLOPs-M
+18:01:01    [eval #1495]  alpha_sys=69.67%  cost=89.218 MFLOPs-M
+18:01:16    [eval #1496]  alpha_sys=72.13%  cost=130.864 MFLOPs-M
+18:01:32    [eval #1497]  alpha_sys=70.66%  cost=300.199 MFLOPs-M
+18:01:47    [eval #1498]  alpha_sys=67.36%  cost=51.562 MFLOPs-M
+18:02:03    [eval #1499]  alpha_sys=73.46%  cost=481.025 MFLOPs-M
+18:02:19    [eval #1500]  alpha_sys=69.81%  cost=184.559 MFLOPs-M
+18:02:19  -- Generation 30/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+18:02:19  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen030.npz
+18:02:34    [eval #1501]  alpha_sys=67.96%  cost=136.074 MFLOPs-M
+18:02:49    [eval #1502]  alpha_sys=67.41%  cost=103.459 MFLOPs-M
+18:03:05    [eval #1503]  alpha_sys=71.00%  cost=267.001 MFLOPs-M
+18:03:21    [eval #1504]  alpha_sys=67.21%  cost=54.844 MFLOPs-M
+18:03:38    [eval #1505]  alpha_sys=71.17%  cost=114.746 MFLOPs-M
+18:03:53    [eval #1506]  alpha_sys=72.84%  cost=315.968 MFLOPs-M
+18:04:09    [eval #1507]  alpha_sys=72.00%  cost=170.533 MFLOPs-M
+18:04:25    [eval #1508]  alpha_sys=67.23%  cost=51.256 MFLOPs-M
+18:04:42    [eval #1509]  alpha_sys=73.11%  cost=411.750 MFLOPs-M
+18:04:58    [eval #1510]  alpha_sys=71.99%  cost=601.734 MFLOPs-M
+18:05:13    [eval #1511]  alpha_sys=67.21%  cost=48.453 MFLOPs-M
+18:05:29    [eval #1512]  alpha_sys=70.80%  cost=292.140 MFLOPs-M
+18:05:44    [eval #1513]  alpha_sys=68.84%  cost=77.748 MFLOPs-M
+18:05:59    [eval #1514]  alpha_sys=72.94%  cost=258.047 MFLOPs-M
+18:06:15    [eval #1515]  alpha_sys=74.29%  cost=549.175 MFLOPs-M
+18:06:31    [eval #1516]  alpha_sys=73.03%  cost=267.989 MFLOPs-M
+18:06:46    [eval #1517]  alpha_sys=69.73%  cost=102.551 MFLOPs-M
+18:07:01    [eval #1518]  alpha_sys=73.43%  cost=293.235 MFLOPs-M
+18:07:17    [eval #1519]  alpha_sys=73.33%  cost=162.307 MFLOPs-M
+18:07:33    [eval #1520]  alpha_sys=68.36%  cost=70.940 MFLOPs-M
+18:07:48    [eval #1521]  alpha_sys=73.43%  cost=156.918 MFLOPs-M
+18:08:03    [eval #1522]  alpha_sys=74.73%  cost=1071.219 MFLOPs-M
+18:08:19    [eval #1523]  alpha_sys=69.76%  cost=90.318 MFLOPs-M
+18:08:34    [eval #1524]  alpha_sys=67.50%  cost=139.046 MFLOPs-M
+18:08:50    [eval #1525]  alpha_sys=67.87%  cost=79.883 MFLOPs-M
+18:09:06    [eval #1526]  alpha_sys=70.81%  cost=106.913 MFLOPs-M
+18:09:22    [eval #1527]  alpha_sys=72.50%  cost=248.892 MFLOPs-M
+18:09:37    [eval #1528]  alpha_sys=73.49%  cost=182.255 MFLOPs-M
+18:09:53    [eval #1529]  alpha_sys=67.23%  cost=48.105 MFLOPs-M
+18:10:09    [eval #1530]  alpha_sys=74.90%  cost=1160.725 MFLOPs-M
+18:10:24    [eval #1531]  alpha_sys=73.54%  cost=323.425 MFLOPs-M
+18:10:40    [eval #1532]  alpha_sys=72.74%  cost=276.934 MFLOPs-M
+18:10:56    [eval #1533]  alpha_sys=73.04%  cost=709.491 MFLOPs-M
+18:11:11    [eval #1534]  alpha_sys=72.63%  cost=151.003 MFLOPs-M
+18:11:27    [eval #1535]  alpha_sys=74.26%  cost=762.517 MFLOPs-M
+18:11:43    [eval #1536]  alpha_sys=74.90%  cost=1078.725 MFLOPs-M
+18:11:59    [eval #1537]  alpha_sys=74.86%  cost=1392.990 MFLOPs-M
+18:12:15    [eval #1538]  alpha_sys=73.49%  cost=175.018 MFLOPs-M
+18:12:30    [eval #1539]  alpha_sys=67.86%  cost=269.283 MFLOPs-M
+18:12:46    [eval #1540]  alpha_sys=67.37%  cost=97.414 MFLOPs-M
+18:13:02    [eval #1541]  alpha_sys=73.63%  cost=257.482 MFLOPs-M
+18:13:17    [eval #1542]  alpha_sys=73.17%  cost=430.656 MFLOPs-M
+18:13:33    [eval #1543]  alpha_sys=73.44%  cost=815.920 MFLOPs-M
+18:13:48    [eval #1544]  alpha_sys=73.56%  cost=764.845 MFLOPs-M
+18:14:04    [eval #1545]  alpha_sys=73.69%  cost=258.055 MFLOPs-M
+18:14:19    [eval #1546]  alpha_sys=75.24%  cost=1571.371 MFLOPs-M
+18:14:34    [eval #1547]  alpha_sys=67.99%  cost=136.572 MFLOPs-M
+18:14:50    [eval #1548]  alpha_sys=69.33%  cost=90.009 MFLOPs-M
+18:15:06    [eval #1549]  alpha_sys=70.79%  cost=129.801 MFLOPs-M
+18:15:22    [eval #1550]  alpha_sys=70.60%  cost=105.106 MFLOPs-M
+18:15:22  -- Generation 31/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+18:15:37    [eval #1551]  alpha_sys=71.50%  cost=230.526 MFLOPs-M
+18:15:53    [eval #1552]  alpha_sys=67.21%  cost=51.544 MFLOPs-M
+18:16:08    [eval #1553]  alpha_sys=72.33%  cost=374.840 MFLOPs-M
+18:16:24    [eval #1554]  alpha_sys=67.57%  cost=115.241 MFLOPs-M
+18:16:40    [eval #1555]  alpha_sys=73.19%  cost=381.010 MFLOPs-M
+18:16:56    [eval #1556]  alpha_sys=74.07%  cost=625.916 MFLOPs-M
+18:17:12    [eval #1557]  alpha_sys=73.54%  cost=196.124 MFLOPs-M
+18:17:28    [eval #1558]  alpha_sys=68.54%  cost=115.388 MFLOPs-M
+18:17:44    [eval #1559]  alpha_sys=73.21%  cost=385.365 MFLOPs-M
+18:18:00    [eval #1560]  alpha_sys=73.67%  cost=419.167 MFLOPs-M
+18:18:16    [eval #1561]  alpha_sys=67.46%  cost=87.587 MFLOPs-M
+18:18:32    [eval #1562]  alpha_sys=73.51%  cost=265.683 MFLOPs-M
+18:18:48    [eval #1563]  alpha_sys=71.60%  cost=830.334 MFLOPs-M
+18:19:04    [eval #1564]  alpha_sys=73.26%  cost=576.521 MFLOPs-M
+18:19:20    [eval #1565]  alpha_sys=71.23%  cost=129.859 MFLOPs-M
+18:19:35    [eval #1566]  alpha_sys=70.69%  cost=414.521 MFLOPs-M
+18:19:52    [eval #1567]  alpha_sys=73.34%  cost=161.798 MFLOPs-M
+18:20:07    [eval #1568]  alpha_sys=73.27%  cost=278.683 MFLOPs-M
+18:20:23    [eval #1569]  alpha_sys=68.17%  cost=68.472 MFLOPs-M
+18:20:39    [eval #1570]  alpha_sys=73.46%  cost=207.132 MFLOPs-M
+18:20:55    [eval #1571]  alpha_sys=71.33%  cost=160.149 MFLOPs-M
+18:21:12    [eval #1572]  alpha_sys=69.46%  cost=161.457 MFLOPs-M
+18:21:28    [eval #1573]  alpha_sys=71.37%  cost=116.854 MFLOPs-M
+18:21:43    [eval #1574]  alpha_sys=72.50%  cost=159.689 MFLOPs-M
+18:21:59    [eval #1575]  alpha_sys=74.79%  cost=1085.674 MFLOPs-M
+18:22:15    [eval #1576]  alpha_sys=67.34%  cost=53.506 MFLOPs-M
+18:22:31    [eval #1577]  alpha_sys=73.43%  cost=153.517 MFLOPs-M
+18:22:47    [eval #1578]  alpha_sys=70.57%  cost=101.819 MFLOPs-M
+18:23:03    [eval #1579]  alpha_sys=67.39%  cost=86.441 MFLOPs-M
+18:23:19    [eval #1580]  alpha_sys=72.36%  cost=685.465 MFLOPs-M
+18:23:35    [eval #1581]  alpha_sys=72.44%  cost=256.878 MFLOPs-M
+18:23:50    [eval #1582]  alpha_sys=67.71%  cost=94.153 MFLOPs-M
+18:24:06    [eval #1583]  alpha_sys=73.79%  cost=437.628 MFLOPs-M
+18:24:21    [eval #1584]  alpha_sys=67.20%  cost=48.511 MFLOPs-M
+18:24:36    [eval #1585]  alpha_sys=68.60%  cost=85.100 MFLOPs-M
+18:24:52    [eval #1586]  alpha_sys=71.99%  cost=149.305 MFLOPs-M
+18:25:07    [eval #1587]  alpha_sys=72.89%  cost=484.462 MFLOPs-M
+18:25:23    [eval #1588]  alpha_sys=69.60%  cost=208.313 MFLOPs-M
+18:25:39    [eval #1589]  alpha_sys=67.71%  cost=59.547 MFLOPs-M
+18:25:55    [eval #1590]  alpha_sys=67.21%  cost=48.029 MFLOPs-M
+18:26:12    [eval #1591]  alpha_sys=74.03%  cost=905.453 MFLOPs-M
+18:26:27    [eval #1592]  alpha_sys=70.74%  cost=133.740 MFLOPs-M
+18:26:43    [eval #1593]  alpha_sys=74.34%  cost=613.901 MFLOPs-M
+18:26:59    [eval #1594]  alpha_sys=70.51%  cost=228.690 MFLOPs-M
+18:27:15    [eval #1595]  alpha_sys=74.27%  cost=882.028 MFLOPs-M
+18:27:31    [eval #1596]  alpha_sys=73.37%  cost=336.461 MFLOPs-M
+18:27:47    [eval #1597]  alpha_sys=74.36%  cost=847.519 MFLOPs-M
+18:28:02    [eval #1598]  alpha_sys=73.53%  cost=190.183 MFLOPs-M
+18:28:19    [eval #1599]  alpha_sys=74.09%  cost=734.778 MFLOPs-M
+18:28:35    [eval #1600]  alpha_sys=67.23%  cost=48.029 MFLOPs-M
+18:28:35  -- Generation 32/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+18:28:51    [eval #1601]  alpha_sys=72.36%  cost=244.157 MFLOPs-M
+18:29:07    [eval #1602]  alpha_sys=70.16%  cost=118.557 MFLOPs-M
+18:29:23    [eval #1603]  alpha_sys=74.43%  cost=694.281 MFLOPs-M
+18:29:39    [eval #1604]  alpha_sys=73.73%  cost=388.172 MFLOPs-M
+18:29:54    [eval #1605]  alpha_sys=73.59%  cost=253.302 MFLOPs-M
+18:30:09    [eval #1606]  alpha_sys=73.40%  cost=416.722 MFLOPs-M
+18:30:25    [eval #1607]  alpha_sys=73.60%  cost=293.328 MFLOPs-M
+18:30:41    [eval #1608]  alpha_sys=69.07%  cost=165.479 MFLOPs-M
+18:30:57    [eval #1609]  alpha_sys=73.99%  cost=452.047 MFLOPs-M
+18:31:13    [eval #1610]  alpha_sys=73.49%  cost=156.911 MFLOPs-M
+18:31:28    [eval #1611]  alpha_sys=72.96%  cost=435.376 MFLOPs-M
+18:31:43    [eval #1612]  alpha_sys=69.09%  cost=81.703 MFLOPs-M
+18:31:58    [eval #1613]  alpha_sys=71.73%  cost=275.222 MFLOPs-M
+18:32:14    [eval #1614]  alpha_sys=71.53%  cost=129.977 MFLOPs-M
+18:32:30    [eval #1615]  alpha_sys=70.26%  cost=98.300 MFLOPs-M
+18:32:46    [eval #1616]  alpha_sys=73.09%  cost=228.642 MFLOPs-M
+18:33:02    [eval #1617]  alpha_sys=70.33%  cost=242.189 MFLOPs-M
+18:33:18    [eval #1618]  alpha_sys=70.27%  cost=96.668 MFLOPs-M
+18:33:34    [eval #1619]  alpha_sys=73.60%  cost=238.383 MFLOPs-M
+18:33:49    [eval #1620]  alpha_sys=69.06%  cost=112.573 MFLOPs-M
+18:34:05    [eval #1621]  alpha_sys=67.20%  cost=48.511 MFLOPs-M
+18:34:21    [eval #1622]  alpha_sys=73.34%  cost=151.701 MFLOPs-M
+18:34:37    [eval #1623]  alpha_sys=74.11%  cost=948.809 MFLOPs-M
+18:34:53    [eval #1624]  alpha_sys=73.44%  cost=714.633 MFLOPs-M
+18:35:09    [eval #1625]  alpha_sys=71.50%  cost=144.663 MFLOPs-M
+18:35:25    [eval #1626]  alpha_sys=67.67%  cost=58.036 MFLOPs-M
+18:35:41    [eval #1627]  alpha_sys=74.21%  cost=1348.588 MFLOPs-M
+18:35:57    [eval #1628]  alpha_sys=72.56%  cost=138.412 MFLOPs-M
+18:36:12    [eval #1629]  alpha_sys=73.27%  cost=403.132 MFLOPs-M
+18:36:28    [eval #1630]  alpha_sys=74.40%  cost=646.524 MFLOPs-M
+18:36:44    [eval #1631]  alpha_sys=74.67%  cost=1143.704 MFLOPs-M
+18:36:59    [eval #1632]  alpha_sys=68.10%  cost=99.068 MFLOPs-M
+18:37:15    [eval #1633]  alpha_sys=70.64%  cost=224.743 MFLOPs-M
+18:37:31    [eval #1634]  alpha_sys=69.67%  cost=144.454 MFLOPs-M
+18:37:47    [eval #1635]  alpha_sys=73.47%  cost=250.430 MFLOPs-M
+18:38:02    [eval #1636]  alpha_sys=73.44%  cost=152.820 MFLOPs-M
+18:38:17    [eval #1637]  alpha_sys=69.51%  cost=84.996 MFLOPs-M
+18:38:33    [eval #1638]  alpha_sys=67.53%  cost=111.114 MFLOPs-M
+18:38:48    [eval #1639]  alpha_sys=69.76%  cost=97.927 MFLOPs-M
+18:39:03    [eval #1640]  alpha_sys=67.20%  cost=49.691 MFLOPs-M
+18:39:19    [eval #1641]  alpha_sys=67.44%  cost=81.660 MFLOPs-M
+18:39:34    [eval #1642]  alpha_sys=72.47%  cost=137.011 MFLOPs-M
+18:39:50    [eval #1643]  alpha_sys=67.20%  cost=48.059 MFLOPs-M
+18:40:05    [eval #1644]  alpha_sys=72.20%  cost=184.332 MFLOPs-M
+18:40:21    [eval #1645]  alpha_sys=73.20%  cost=267.248 MFLOPs-M
+18:40:36    [eval #1646]  alpha_sys=72.34%  cost=223.815 MFLOPs-M
+18:40:52    [eval #1647]  alpha_sys=74.61%  cost=992.177 MFLOPs-M
+18:41:07    [eval #1648]  alpha_sys=73.97%  cost=455.501 MFLOPs-M
+18:41:23    [eval #1649]  alpha_sys=73.06%  cost=213.923 MFLOPs-M
+18:41:40    [eval #1650]  alpha_sys=71.11%  cost=140.654 MFLOPs-M
+18:41:40  -- Generation 33/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+18:41:56    [eval #1651]  alpha_sys=74.03%  cost=462.134 MFLOPs-M
+18:42:12    [eval #1652]  alpha_sys=72.90%  cost=243.857 MFLOPs-M
+18:42:27    [eval #1653]  alpha_sys=74.23%  cost=657.934 MFLOPs-M
+18:42:43    [eval #1654]  alpha_sys=73.51%  cost=223.965 MFLOPs-M
+18:42:58    [eval #1655]  alpha_sys=71.57%  cost=125.633 MFLOPs-M
+18:43:13    [eval #1656]  alpha_sys=73.46%  cost=154.124 MFLOPs-M
+18:43:29    [eval #1657]  alpha_sys=71.09%  cost=486.507 MFLOPs-M
+18:43:44    [eval #1658]  alpha_sys=68.30%  cost=404.887 MFLOPs-M
+18:44:00    [eval #1659]  alpha_sys=67.53%  cost=60.821 MFLOPs-M
+18:44:16    [eval #1660]  alpha_sys=73.34%  cost=368.119 MFLOPs-M
+18:44:31    [eval #1661]  alpha_sys=71.94%  cost=147.261 MFLOPs-M
+18:44:46    [eval #1662]  alpha_sys=67.49%  cost=49.833 MFLOPs-M
+18:45:02    [eval #1663]  alpha_sys=70.21%  cost=117.990 MFLOPs-M
+18:45:18    [eval #1664]  alpha_sys=71.67%  cost=242.139 MFLOPs-M
+18:45:34    [eval #1665]  alpha_sys=67.77%  cost=72.058 MFLOPs-M
+18:45:50    [eval #1666]  alpha_sys=74.93%  cost=1626.771 MFLOPs-M
+18:46:06    [eval #1667]  alpha_sys=70.84%  cost=112.969 MFLOPs-M
+18:46:22    [eval #1668]  alpha_sys=67.69%  cost=53.154 MFLOPs-M
+18:46:38    [eval #1669]  alpha_sys=70.44%  cost=231.257 MFLOPs-M
+18:46:54    [eval #1670]  alpha_sys=73.49%  cost=180.933 MFLOPs-M
+18:47:09    [eval #1671]  alpha_sys=70.74%  cost=112.147 MFLOPs-M
+18:47:26    [eval #1672]  alpha_sys=73.71%  cost=288.030 MFLOPs-M
+18:47:41    [eval #1673]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+18:47:57    [eval #1674]  alpha_sys=71.49%  cost=235.336 MFLOPs-M
+18:48:12    [eval #1675]  alpha_sys=67.33%  cost=48.923 MFLOPs-M
+18:48:28    [eval #1676]  alpha_sys=67.20%  cost=48.044 MFLOPs-M
+18:48:44    [eval #1677]  alpha_sys=72.76%  cost=149.983 MFLOPs-M
+18:49:00    [eval #1678]  alpha_sys=73.37%  cost=221.438 MFLOPs-M
+18:49:16    [eval #1679]  alpha_sys=74.00%  cost=577.639 MFLOPs-M
+18:49:32    [eval #1680]  alpha_sys=69.67%  cost=103.490 MFLOPs-M
+18:49:47    [eval #1681]  alpha_sys=72.59%  cost=297.822 MFLOPs-M
+18:50:03    [eval #1682]  alpha_sys=73.46%  cost=155.088 MFLOPs-M
+18:50:19    [eval #1683]  alpha_sys=73.83%  cost=765.378 MFLOPs-M
+18:50:35    [eval #1684]  alpha_sys=68.01%  cost=68.590 MFLOPs-M
+18:50:51    [eval #1685]  alpha_sys=70.76%  cost=113.576 MFLOPs-M
+18:51:06    [eval #1686]  alpha_sys=74.54%  cost=1057.944 MFLOPs-M
+18:51:22    [eval #1687]  alpha_sys=73.11%  cost=281.792 MFLOPs-M
+18:51:39    [eval #1688]  alpha_sys=73.19%  cost=205.491 MFLOPs-M
+18:51:54    [eval #1689]  alpha_sys=74.57%  cost=865.301 MFLOPs-M
+18:52:10    [eval #1690]  alpha_sys=71.76%  cost=126.618 MFLOPs-M
+18:52:26    [eval #1691]  alpha_sys=73.56%  cost=215.503 MFLOPs-M
+18:52:41    [eval #1692]  alpha_sys=70.13%  cost=207.694 MFLOPs-M
+18:52:57    [eval #1693]  alpha_sys=73.46%  cost=193.753 MFLOPs-M
+18:53:13    [eval #1694]  alpha_sys=67.37%  cost=50.910 MFLOPs-M
+18:53:29    [eval #1695]  alpha_sys=72.37%  cost=138.683 MFLOPs-M
+18:53:44    [eval #1696]  alpha_sys=74.20%  cost=596.635 MFLOPs-M
+18:54:00    [eval #1697]  alpha_sys=68.29%  cost=72.242 MFLOPs-M
+18:54:16    [eval #1698]  alpha_sys=73.09%  cost=389.275 MFLOPs-M
+18:54:31    [eval #1699]  alpha_sys=74.03%  cost=951.608 MFLOPs-M
+18:54:47    [eval #1700]  alpha_sys=71.00%  cost=113.757 MFLOPs-M
+18:54:47  -- Generation 34/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+18:55:03    [eval #1701]  alpha_sys=72.79%  cost=187.946 MFLOPs-M
+18:55:19    [eval #1702]  alpha_sys=68.94%  cost=171.109 MFLOPs-M
+18:55:35    [eval #1703]  alpha_sys=69.86%  cost=93.224 MFLOPs-M
+18:55:50    [eval #1704]  alpha_sys=73.44%  cost=154.379 MFLOPs-M
+18:56:06    [eval #1705]  alpha_sys=67.34%  cost=54.319 MFLOPs-M
+18:56:22    [eval #1706]  alpha_sys=71.27%  cost=184.403 MFLOPs-M
+18:56:38    [eval #1707]  alpha_sys=73.59%  cost=481.494 MFLOPs-M
+18:56:54    [eval #1708]  alpha_sys=73.04%  cost=367.238 MFLOPs-M
+18:57:09    [eval #1709]  alpha_sys=72.70%  cost=668.303 MFLOPs-M
+18:57:25    [eval #1710]  alpha_sys=73.59%  cost=296.246 MFLOPs-M
+18:57:40    [eval #1711]  alpha_sys=70.94%  cost=110.683 MFLOPs-M
+18:57:56    [eval #1712]  alpha_sys=72.79%  cost=148.493 MFLOPs-M
+18:58:11    [eval #1713]  alpha_sys=67.27%  cost=53.336 MFLOPs-M
+18:58:27    [eval #1714]  alpha_sys=72.64%  cost=318.074 MFLOPs-M
+18:58:43    [eval #1715]  alpha_sys=73.26%  cost=245.620 MFLOPs-M
+18:58:58    [eval #1716]  alpha_sys=73.41%  cost=402.076 MFLOPs-M
+18:59:13    [eval #1717]  alpha_sys=70.59%  cost=428.394 MFLOPs-M
+18:59:28    [eval #1718]  alpha_sys=73.97%  cost=557.315 MFLOPs-M
+18:59:44    [eval #1719]  alpha_sys=72.61%  cost=242.240 MFLOPs-M
+18:59:59    [eval #1720]  alpha_sys=72.83%  cost=248.603 MFLOPs-M
+19:00:15    [eval #1721]  alpha_sys=68.29%  cost=73.551 MFLOPs-M
+19:00:31    [eval #1722]  alpha_sys=72.71%  cost=152.352 MFLOPs-M
+19:00:47    [eval #1723]  alpha_sys=73.26%  cost=218.539 MFLOPs-M
+19:01:03    [eval #1724]  alpha_sys=73.87%  cost=460.184 MFLOPs-M
+19:01:19    [eval #1725]  alpha_sys=72.20%  cost=183.799 MFLOPs-M
+19:01:35    [eval #1726]  alpha_sys=71.26%  cost=111.871 MFLOPs-M
+19:01:50    [eval #1727]  alpha_sys=68.20%  cost=123.754 MFLOPs-M
+19:02:06    [eval #1728]  alpha_sys=72.79%  cost=140.978 MFLOPs-M
+19:02:22    [eval #1729]  alpha_sys=72.57%  cost=252.137 MFLOPs-M
+19:02:38    [eval #1730]  alpha_sys=71.80%  cost=411.501 MFLOPs-M
+19:02:53    [eval #1731]  alpha_sys=67.50%  cost=53.154 MFLOPs-M
+19:03:08    [eval #1732]  alpha_sys=72.00%  cost=203.708 MFLOPs-M
+19:03:24    [eval #1733]  alpha_sys=73.63%  cost=286.817 MFLOPs-M
+19:03:39    [eval #1734]  alpha_sys=70.89%  cost=116.481 MFLOPs-M
+19:03:55    [eval #1735]  alpha_sys=73.23%  cost=267.961 MFLOPs-M
+19:04:11    [eval #1736]  alpha_sys=73.36%  cost=338.872 MFLOPs-M
+19:04:27    [eval #1737]  alpha_sys=67.23%  cost=64.846 MFLOPs-M
+19:04:42    [eval #1738]  alpha_sys=73.84%  cost=418.551 MFLOPs-M
+19:04:57    [eval #1739]  alpha_sys=73.34%  cost=151.804 MFLOPs-M
+19:05:13    [eval #1740]  alpha_sys=67.21%  cost=56.427 MFLOPs-M
+19:05:28    [eval #1741]  alpha_sys=72.79%  cost=338.425 MFLOPs-M
+19:05:44    [eval #1742]  alpha_sys=74.64%  cost=1096.993 MFLOPs-M
+19:05:59    [eval #1743]  alpha_sys=72.53%  cost=173.568 MFLOPs-M
+19:06:14    [eval #1744]  alpha_sys=68.97%  cost=76.766 MFLOPs-M
+19:06:30    [eval #1745]  alpha_sys=72.67%  cost=140.069 MFLOPs-M
+19:06:46    [eval #1746]  alpha_sys=75.06%  cost=1311.667 MFLOPs-M
+19:07:01    [eval #1747]  alpha_sys=72.74%  cost=319.702 MFLOPs-M
+19:07:16    [eval #1748]  alpha_sys=72.80%  cost=167.201 MFLOPs-M
+19:07:31    [eval #1749]  alpha_sys=70.04%  cost=114.821 MFLOPs-M
+19:07:46    [eval #1750]  alpha_sys=72.81%  cost=352.163 MFLOPs-M
+19:07:46  -- Generation 35/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+19:07:46  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen035.npz
+19:08:01    [eval #1751]  alpha_sys=73.47%  cost=255.168 MFLOPs-M
+19:08:16    [eval #1752]  alpha_sys=73.93%  cost=1061.663 MFLOPs-M
+19:08:32    [eval #1753]  alpha_sys=72.49%  cost=134.968 MFLOPs-M
+19:08:49    [eval #1754]  alpha_sys=74.26%  cost=580.038 MFLOPs-M
+19:09:05    [eval #1755]  alpha_sys=71.41%  cost=119.841 MFLOPs-M
+19:09:21    [eval #1756]  alpha_sys=67.37%  cost=53.575 MFLOPs-M
+19:09:37    [eval #1757]  alpha_sys=73.47%  cost=163.129 MFLOPs-M
+19:09:52    [eval #1758]  alpha_sys=67.20%  cost=49.597 MFLOPs-M
+19:10:08    [eval #1759]  alpha_sys=71.43%  cost=225.355 MFLOPs-M
+19:10:24    [eval #1760]  alpha_sys=69.47%  cost=101.037 MFLOPs-M
+19:10:40    [eval #1761]  alpha_sys=70.79%  cost=177.489 MFLOPs-M
+19:10:56    [eval #1762]  alpha_sys=72.50%  cost=932.828 MFLOPs-M
+19:11:12    [eval #1763]  alpha_sys=71.30%  cost=909.522 MFLOPs-M
+19:11:28    [eval #1764]  alpha_sys=75.66%  cost=2051.673 MFLOPs-M
+19:11:45    [eval #1765]  alpha_sys=73.74%  cost=513.383 MFLOPs-M
+19:12:01    [eval #1766]  alpha_sys=73.43%  cost=330.055 MFLOPs-M
+19:12:16    [eval #1767]  alpha_sys=72.70%  cost=1026.778 MFLOPs-M
+19:12:32    [eval #1768]  alpha_sys=71.94%  cost=153.985 MFLOPs-M
+19:12:48    [eval #1769]  alpha_sys=73.17%  cost=326.435 MFLOPs-M
+19:13:04    [eval #1770]  alpha_sys=71.21%  cost=112.838 MFLOPs-M
+19:13:20    [eval #1771]  alpha_sys=70.20%  cost=532.895 MFLOPs-M
+19:13:36    [eval #1772]  alpha_sys=73.34%  cost=224.556 MFLOPs-M
+19:13:52    [eval #1773]  alpha_sys=70.73%  cost=103.683 MFLOPs-M
+19:14:09    [eval #1774]  alpha_sys=74.04%  cost=519.209 MFLOPs-M
+19:14:25    [eval #1775]  alpha_sys=72.87%  cost=324.227 MFLOPs-M
+19:14:41    [eval #1776]  alpha_sys=67.41%  cost=51.607 MFLOPs-M
+19:14:57    [eval #1777]  alpha_sys=73.41%  cost=215.943 MFLOPs-M
+19:15:13    [eval #1778]  alpha_sys=73.63%  cost=323.946 MFLOPs-M
+19:15:29    [eval #1779]  alpha_sys=72.64%  cost=144.214 MFLOPs-M
+19:15:45    [eval #1780]  alpha_sys=74.17%  cost=545.638 MFLOPs-M
+19:16:02    [eval #1781]  alpha_sys=67.93%  cost=111.656 MFLOPs-M
+19:16:17    [eval #1782]  alpha_sys=74.31%  cost=856.897 MFLOPs-M
+19:16:33    [eval #1783]  alpha_sys=69.41%  cost=101.013 MFLOPs-M
+19:16:49    [eval #1784]  alpha_sys=67.77%  cost=140.299 MFLOPs-M
+19:17:05    [eval #1785]  alpha_sys=71.89%  cost=264.255 MFLOPs-M
+19:17:20    [eval #1786]  alpha_sys=68.74%  cost=122.494 MFLOPs-M
+19:17:37    [eval #1787]  alpha_sys=73.50%  cost=172.501 MFLOPs-M
+19:17:53    [eval #1788]  alpha_sys=74.26%  cost=646.148 MFLOPs-M
+19:18:09    [eval #1789]  alpha_sys=73.23%  cost=313.723 MFLOPs-M
+19:18:25    [eval #1790]  alpha_sys=74.57%  cost=1022.873 MFLOPs-M
+19:18:41    [eval #1791]  alpha_sys=74.20%  cost=594.958 MFLOPs-M
+19:18:56    [eval #1792]  alpha_sys=72.50%  cost=819.771 MFLOPs-M
+19:19:11    [eval #1793]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+19:19:26    [eval #1794]  alpha_sys=72.66%  cost=196.752 MFLOPs-M
+19:19:42    [eval #1795]  alpha_sys=72.61%  cost=178.250 MFLOPs-M
+19:19:57    [eval #1796]  alpha_sys=72.84%  cost=163.837 MFLOPs-M
+19:20:13    [eval #1797]  alpha_sys=68.33%  cost=168.202 MFLOPs-M
+19:20:28    [eval #1798]  alpha_sys=72.39%  cost=390.083 MFLOPs-M
+19:20:44    [eval #1799]  alpha_sys=72.94%  cost=162.270 MFLOPs-M
+19:21:01    [eval #1800]  alpha_sys=70.54%  cost=105.427 MFLOPs-M
+19:21:01  -- Generation 36/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+19:21:17    [eval #1801]  alpha_sys=67.69%  cost=55.610 MFLOPs-M
+19:21:33    [eval #1802]  alpha_sys=74.01%  cost=518.426 MFLOPs-M
+19:21:49    [eval #1803]  alpha_sys=74.21%  cost=547.303 MFLOPs-M
+19:22:06    [eval #1804]  alpha_sys=74.06%  cost=523.728 MFLOPs-M
+19:22:21    [eval #1805]  alpha_sys=73.24%  cost=348.608 MFLOPs-M
+19:22:37    [eval #1806]  alpha_sys=68.64%  cost=140.073 MFLOPs-M
+19:22:53    [eval #1807]  alpha_sys=73.40%  cost=160.281 MFLOPs-M
+19:23:09    [eval #1808]  alpha_sys=73.46%  cost=155.134 MFLOPs-M
+19:23:25    [eval #1809]  alpha_sys=72.14%  cost=331.202 MFLOPs-M
+19:23:41    [eval #1810]  alpha_sys=72.49%  cost=364.801 MFLOPs-M
+19:23:56    [eval #1811]  alpha_sys=71.26%  cost=116.044 MFLOPs-M
+19:24:12    [eval #1812]  alpha_sys=73.81%  cost=436.964 MFLOPs-M
+19:24:27    [eval #1813]  alpha_sys=74.23%  cost=651.001 MFLOPs-M
+19:24:43    [eval #1814]  alpha_sys=72.79%  cost=261.875 MFLOPs-M
+19:24:59    [eval #1815]  alpha_sys=73.17%  cost=193.566 MFLOPs-M
+19:25:14    [eval #1816]  alpha_sys=70.99%  cost=114.170 MFLOPs-M
+19:25:30    [eval #1817]  alpha_sys=73.39%  cost=270.354 MFLOPs-M
+19:25:45    [eval #1818]  alpha_sys=73.14%  cost=465.442 MFLOPs-M
+19:26:00    [eval #1819]  alpha_sys=73.56%  cost=200.826 MFLOPs-M
+19:26:16    [eval #1820]  alpha_sys=74.16%  cost=622.609 MFLOPs-M
+19:26:33    [eval #1821]  alpha_sys=67.20%  cost=48.511 MFLOPs-M
+19:26:49    [eval #1822]  alpha_sys=73.84%  cost=338.462 MFLOPs-M
+19:27:05    [eval #1823]  alpha_sys=72.89%  cost=369.019 MFLOPs-M
+19:27:21    [eval #1824]  alpha_sys=69.80%  cost=99.775 MFLOPs-M
+19:27:38    [eval #1825]  alpha_sys=74.43%  cost=862.854 MFLOPs-M
+19:27:54    [eval #1826]  alpha_sys=73.49%  cost=199.934 MFLOPs-M
+19:28:10    [eval #1827]  alpha_sys=71.61%  cost=194.555 MFLOPs-M
+19:28:25    [eval #1828]  alpha_sys=67.73%  cost=60.772 MFLOPs-M
+19:28:41    [eval #1829]  alpha_sys=74.54%  cost=976.727 MFLOPs-M
+19:28:56    [eval #1830]  alpha_sys=68.31%  cost=95.307 MFLOPs-M
+19:29:12    [eval #1831]  alpha_sys=68.59%  cost=91.812 MFLOPs-M
+19:29:28    [eval #1832]  alpha_sys=67.27%  cost=50.349 MFLOPs-M
+19:29:45    [eval #1833]  alpha_sys=74.87%  cost=1046.512 MFLOPs-M
+19:30:00    [eval #1834]  alpha_sys=73.53%  cost=316.225 MFLOPs-M
+19:30:16    [eval #1835]  alpha_sys=73.54%  cost=298.578 MFLOPs-M
+19:30:32    [eval #1836]  alpha_sys=73.23%  cost=890.344 MFLOPs-M
+19:30:47    [eval #1837]  alpha_sys=67.56%  cost=54.913 MFLOPs-M
+19:31:02    [eval #1838]  alpha_sys=68.96%  cost=99.624 MFLOPs-M
+19:31:18    [eval #1839]  alpha_sys=70.11%  cost=112.790 MFLOPs-M
+19:31:34    [eval #1840]  alpha_sys=70.19%  cost=258.286 MFLOPs-M
+19:31:50    [eval #1841]  alpha_sys=72.87%  cost=422.653 MFLOPs-M
+19:32:05    [eval #1842]  alpha_sys=74.01%  cost=568.477 MFLOPs-M
+19:32:21    [eval #1843]  alpha_sys=67.20%  cost=48.541 MFLOPs-M
+19:32:37    [eval #1844]  alpha_sys=73.43%  cost=158.732 MFLOPs-M
+19:32:53    [eval #1845]  alpha_sys=75.33%  cost=1586.642 MFLOPs-M
+19:33:08    [eval #1846]  alpha_sys=70.26%  cost=245.545 MFLOPs-M
+19:33:24    [eval #1847]  alpha_sys=68.54%  cost=74.139 MFLOPs-M
+19:33:40    [eval #1848]  alpha_sys=67.31%  cost=99.765 MFLOPs-M
+19:33:56    [eval #1849]  alpha_sys=67.20%  cost=50.140 MFLOPs-M
+19:34:12    [eval #1850]  alpha_sys=73.51%  cost=218.833 MFLOPs-M
+19:34:12  -- Generation 37/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+19:34:28    [eval #1851]  alpha_sys=73.46%  cost=154.621 MFLOPs-M
+19:34:44    [eval #1852]  alpha_sys=72.46%  cost=136.104 MFLOPs-M
+19:34:59    [eval #1853]  alpha_sys=73.53%  cost=455.612 MFLOPs-M
+19:35:15    [eval #1854]  alpha_sys=69.40%  cost=129.971 MFLOPs-M
+19:35:32    [eval #1855]  alpha_sys=75.47%  cost=1741.560 MFLOPs-M
+19:35:47    [eval #1856]  alpha_sys=72.90%  cost=146.100 MFLOPs-M
+19:36:03    [eval #1857]  alpha_sys=73.27%  cost=209.737 MFLOPs-M
+19:36:19    [eval #1858]  alpha_sys=74.79%  cost=1474.075 MFLOPs-M
+19:36:35    [eval #1859]  alpha_sys=67.21%  cost=48.951 MFLOPs-M
+19:36:51    [eval #1860]  alpha_sys=74.37%  cost=658.856 MFLOPs-M
+19:37:08    [eval #1861]  alpha_sys=73.54%  cost=403.159 MFLOPs-M
+19:37:24    [eval #1862]  alpha_sys=67.33%  cost=51.365 MFLOPs-M
+19:37:40    [eval #1863]  alpha_sys=71.44%  cost=126.249 MFLOPs-M
+19:37:56    [eval #1864]  alpha_sys=72.39%  cost=184.062 MFLOPs-M
+19:38:12    [eval #1865]  alpha_sys=73.53%  cost=636.368 MFLOPs-M
+19:38:28    [eval #1866]  alpha_sys=73.01%  cost=299.429 MFLOPs-M
+19:38:45    [eval #1867]  alpha_sys=68.39%  cost=103.423 MFLOPs-M
+19:39:01    [eval #1868]  alpha_sys=67.16%  cost=50.276 MFLOPs-M
+19:39:17    [eval #1869]  alpha_sys=73.06%  cost=434.135 MFLOPs-M
+19:39:33    [eval #1870]  alpha_sys=70.16%  cost=107.256 MFLOPs-M
+19:39:49    [eval #1871]  alpha_sys=73.53%  cost=528.609 MFLOPs-M
+19:40:05    [eval #1872]  alpha_sys=72.76%  cost=172.475 MFLOPs-M
+19:40:20    [eval #1873]  alpha_sys=72.91%  cost=165.897 MFLOPs-M
+19:40:36    [eval #1874]  alpha_sys=74.80%  cost=1126.923 MFLOPs-M
+19:40:52    [eval #1875]  alpha_sys=71.47%  cost=126.576 MFLOPs-M
+19:41:08    [eval #1876]  alpha_sys=72.03%  cost=124.356 MFLOPs-M
+19:41:25    [eval #1877]  alpha_sys=73.93%  cost=397.505 MFLOPs-M
+19:41:41    [eval #1878]  alpha_sys=73.30%  cost=151.328 MFLOPs-M
+19:41:57    [eval #1879]  alpha_sys=68.11%  cost=280.811 MFLOPs-M
+19:42:13    [eval #1880]  alpha_sys=68.73%  cost=78.594 MFLOPs-M
+19:42:29    [eval #1881]  alpha_sys=67.20%  cost=57.482 MFLOPs-M
+19:42:44    [eval #1882]  alpha_sys=70.49%  cost=149.460 MFLOPs-M
+19:42:59    [eval #1883]  alpha_sys=74.24%  cost=879.045 MFLOPs-M
+19:43:16    [eval #1884]  alpha_sys=72.80%  cost=159.797 MFLOPs-M
+19:43:31    [eval #1885]  alpha_sys=73.53%  cost=168.416 MFLOPs-M
+19:43:47    [eval #1886]  alpha_sys=74.33%  cost=623.094 MFLOPs-M
+19:44:03    [eval #1887]  alpha_sys=67.20%  cost=47.998 MFLOPs-M
+19:44:19    [eval #1888]  alpha_sys=73.17%  cost=271.055 MFLOPs-M
+19:44:34    [eval #1889]  alpha_sys=72.36%  cost=139.128 MFLOPs-M
+19:44:49    [eval #1890]  alpha_sys=73.54%  cost=210.592 MFLOPs-M
+19:45:05    [eval #1891]  alpha_sys=71.24%  cost=140.068 MFLOPs-M
+19:45:21    [eval #1892]  alpha_sys=70.74%  cost=113.345 MFLOPs-M
+19:45:37    [eval #1893]  alpha_sys=72.80%  cost=149.291 MFLOPs-M
+19:45:52    [eval #1894]  alpha_sys=69.21%  cost=86.674 MFLOPs-M
+19:46:08    [eval #1895]  alpha_sys=72.34%  cost=199.891 MFLOPs-M
+19:46:23    [eval #1896]  alpha_sys=71.77%  cost=747.334 MFLOPs-M
+19:46:38    [eval #1897]  alpha_sys=67.50%  cost=64.922 MFLOPs-M
+19:46:53    [eval #1898]  alpha_sys=73.59%  cost=386.229 MFLOPs-M
+19:47:09    [eval #1899]  alpha_sys=71.01%  cost=112.684 MFLOPs-M
+19:47:24    [eval #1900]  alpha_sys=71.41%  cost=140.092 MFLOPs-M
+19:47:24  -- Generation 38/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+19:47:41    [eval #1901]  alpha_sys=71.09%  cost=225.004 MFLOPs-M
+19:47:57    [eval #1902]  alpha_sys=69.16%  cost=87.872 MFLOPs-M
+19:48:13    [eval #1903]  alpha_sys=72.99%  cost=256.664 MFLOPs-M
+19:48:29    [eval #1904]  alpha_sys=72.60%  cost=167.710 MFLOPs-M
+19:48:44    [eval #1905]  alpha_sys=72.01%  cost=188.684 MFLOPs-M
+19:49:00    [eval #1906]  alpha_sys=67.44%  cost=53.588 MFLOPs-M
+19:49:16    [eval #1907]  alpha_sys=73.30%  cost=230.601 MFLOPs-M
+19:49:33    [eval #1908]  alpha_sys=73.54%  cost=245.832 MFLOPs-M
+19:49:48    [eval #1909]  alpha_sys=67.46%  cost=50.576 MFLOPs-M
+19:50:04    [eval #1910]  alpha_sys=70.21%  cost=102.995 MFLOPs-M
+19:50:20    [eval #1911]  alpha_sys=73.39%  cost=324.993 MFLOPs-M
+19:50:36    [eval #1912]  alpha_sys=74.11%  cost=529.824 MFLOPs-M
+19:50:52    [eval #1913]  alpha_sys=72.10%  cost=139.587 MFLOPs-M
+19:51:07    [eval #1914]  alpha_sys=73.70%  cost=473.657 MFLOPs-M
+19:51:24    [eval #1915]  alpha_sys=74.19%  cost=626.871 MFLOPs-M
+19:51:40    [eval #1916]  alpha_sys=69.71%  cost=179.188 MFLOPs-M
+19:51:56    [eval #1917]  alpha_sys=70.64%  cost=102.312 MFLOPs-M
+19:52:12    [eval #1918]  alpha_sys=67.29%  cost=90.399 MFLOPs-M
+19:52:29    [eval #1919]  alpha_sys=67.87%  cost=132.286 MFLOPs-M
+19:52:45    [eval #1920]  alpha_sys=70.70%  cost=136.320 MFLOPs-M
+19:53:02    [eval #1921]  alpha_sys=67.41%  cost=139.345 MFLOPs-M
+19:53:18    [eval #1922]  alpha_sys=73.76%  cost=415.505 MFLOPs-M
+19:53:34    [eval #1923]  alpha_sys=73.41%  cost=225.075 MFLOPs-M
+19:53:50    [eval #1924]  alpha_sys=73.79%  cost=321.222 MFLOPs-M
+19:54:06    [eval #1925]  alpha_sys=68.23%  cost=95.925 MFLOPs-M
+19:54:22    [eval #1926]  alpha_sys=73.49%  cost=287.763 MFLOPs-M
+19:54:37    [eval #1927]  alpha_sys=72.46%  cost=791.814 MFLOPs-M
+19:54:53    [eval #1928]  alpha_sys=70.17%  cost=104.332 MFLOPs-M
+19:55:09    [eval #1929]  alpha_sys=73.07%  cost=150.892 MFLOPs-M
+19:55:24    [eval #1930]  alpha_sys=68.73%  cost=96.332 MFLOPs-M
+19:55:40    [eval #1931]  alpha_sys=73.47%  cost=297.387 MFLOPs-M
+19:55:56    [eval #1932]  alpha_sys=71.36%  cost=117.982 MFLOPs-M
+19:56:12    [eval #1933]  alpha_sys=70.73%  cost=212.411 MFLOPs-M
+19:56:28    [eval #1934]  alpha_sys=73.60%  cost=431.062 MFLOPs-M
+19:56:44    [eval #1935]  alpha_sys=73.86%  cost=564.219 MFLOPs-M
+19:57:00    [eval #1936]  alpha_sys=73.24%  cost=336.422 MFLOPs-M
+19:57:15    [eval #1937]  alpha_sys=67.23%  cost=48.499 MFLOPs-M
+19:57:31    [eval #1938]  alpha_sys=67.63%  cost=59.716 MFLOPs-M
+19:57:47    [eval #1939]  alpha_sys=73.47%  cost=201.545 MFLOPs-M
+19:58:02    [eval #1940]  alpha_sys=73.44%  cost=498.689 MFLOPs-M
+19:58:18    [eval #1941]  alpha_sys=73.37%  cost=173.453 MFLOPs-M
+19:58:34    [eval #1942]  alpha_sys=73.03%  cost=148.987 MFLOPs-M
+19:58:49    [eval #1943]  alpha_sys=73.51%  cost=176.805 MFLOPs-M
+19:59:04    [eval #1944]  alpha_sys=68.70%  cost=112.658 MFLOPs-M
+19:59:19    [eval #1945]  alpha_sys=75.70%  cost=2015.905 MFLOPs-M
+19:59:35    [eval #1946]  alpha_sys=75.20%  cost=1849.466 MFLOPs-M
+19:59:51    [eval #1947]  alpha_sys=74.29%  cost=632.939 MFLOPs-M
+20:00:07    [eval #1948]  alpha_sys=67.37%  cost=113.001 MFLOPs-M
+20:00:23    [eval #1949]  alpha_sys=73.04%  cost=149.718 MFLOPs-M
+20:00:39    [eval #1950]  alpha_sys=73.33%  cost=234.881 MFLOPs-M
+20:00:39  -- Generation 39/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+20:00:55    [eval #1951]  alpha_sys=72.81%  cost=336.738 MFLOPs-M
+20:01:10    [eval #1952]  alpha_sys=73.39%  cost=206.246 MFLOPs-M
+20:01:26    [eval #1953]  alpha_sys=73.26%  cost=431.969 MFLOPs-M
+20:01:41    [eval #1954]  alpha_sys=72.46%  cost=143.177 MFLOPs-M
+20:01:57    [eval #1955]  alpha_sys=73.56%  cost=158.740 MFLOPs-M
+20:02:13    [eval #1956]  alpha_sys=71.47%  cost=172.417 MFLOPs-M
+20:02:29    [eval #1957]  alpha_sys=74.53%  cost=927.744 MFLOPs-M
+20:02:44    [eval #1958]  alpha_sys=68.56%  cost=106.468 MFLOPs-M
+20:02:59    [eval #1959]  alpha_sys=71.76%  cost=234.434 MFLOPs-M
+20:03:15    [eval #1960]  alpha_sys=73.71%  cost=582.146 MFLOPs-M
+20:03:31    [eval #1961]  alpha_sys=67.20%  cost=48.511 MFLOPs-M
+20:03:46    [eval #1962]  alpha_sys=71.33%  cost=157.064 MFLOPs-M
+20:04:02    [eval #1963]  alpha_sys=72.19%  cost=523.789 MFLOPs-M
+20:04:18    [eval #1964]  alpha_sys=73.54%  cost=187.311 MFLOPs-M
+20:04:33    [eval #1965]  alpha_sys=73.31%  cost=270.600 MFLOPs-M
+20:04:49    [eval #1966]  alpha_sys=70.27%  cost=102.980 MFLOPs-M
+20:05:05    [eval #1967]  alpha_sys=72.63%  cost=142.903 MFLOPs-M
+20:05:20    [eval #1968]  alpha_sys=70.44%  cost=112.230 MFLOPs-M
+20:05:36    [eval #1969]  alpha_sys=69.80%  cost=151.699 MFLOPs-M
+20:05:52    [eval #1970]  alpha_sys=73.53%  cost=213.188 MFLOPs-M
+20:06:08    [eval #1971]  alpha_sys=73.53%  cost=445.509 MFLOPs-M
+20:06:24    [eval #1972]  alpha_sys=73.70%  cost=405.005 MFLOPs-M
+20:06:40    [eval #1973]  alpha_sys=73.59%  cost=261.840 MFLOPs-M
+20:06:56    [eval #1974]  alpha_sys=72.91%  cost=143.728 MFLOPs-M
+20:07:13    [eval #1975]  alpha_sys=73.81%  cost=351.155 MFLOPs-M
+20:07:29    [eval #1976]  alpha_sys=69.21%  cost=89.712 MFLOPs-M
+20:07:45    [eval #1977]  alpha_sys=69.91%  cost=101.806 MFLOPs-M
+20:08:01    [eval #1978]  alpha_sys=71.70%  cost=176.478 MFLOPs-M
+20:08:16    [eval #1979]  alpha_sys=73.70%  cost=358.941 MFLOPs-M
+20:08:32    [eval #1980]  alpha_sys=73.76%  cost=430.124 MFLOPs-M
+20:08:48    [eval #1981]  alpha_sys=67.49%  cost=65.495 MFLOPs-M
+20:09:03    [eval #1982]  alpha_sys=67.13%  cost=48.286 MFLOPs-M
+20:09:19    [eval #1983]  alpha_sys=72.41%  cost=1126.730 MFLOPs-M
+20:09:34    [eval #1984]  alpha_sys=70.70%  cost=102.379 MFLOPs-M
+20:09:50    [eval #1985]  alpha_sys=75.13%  cost=1447.310 MFLOPs-M
+20:10:06    [eval #1986]  alpha_sys=69.21%  cost=227.631 MFLOPs-M
+20:10:22    [eval #1987]  alpha_sys=73.49%  cost=256.860 MFLOPs-M
+20:10:38    [eval #1988]  alpha_sys=70.94%  cost=528.978 MFLOPs-M
+20:10:54    [eval #1989]  alpha_sys=72.16%  cost=378.045 MFLOPs-M
+20:11:10    [eval #1990]  alpha_sys=68.14%  cost=66.506 MFLOPs-M
+20:11:25    [eval #1991]  alpha_sys=73.41%  cost=261.974 MFLOPs-M
+20:11:41    [eval #1992]  alpha_sys=74.26%  cost=577.354 MFLOPs-M
+20:11:57    [eval #1993]  alpha_sys=72.97%  cost=333.292 MFLOPs-M
+20:12:13    [eval #1994]  alpha_sys=67.74%  cost=61.697 MFLOPs-M
+20:12:28    [eval #1995]  alpha_sys=69.06%  cost=91.269 MFLOPs-M
+20:12:44    [eval #1996]  alpha_sys=74.24%  cost=633.892 MFLOPs-M
+20:13:00    [eval #1997]  alpha_sys=74.20%  cost=646.023 MFLOPs-M
+20:13:16    [eval #1998]  alpha_sys=69.47%  cost=114.825 MFLOPs-M
+20:13:31    [eval #1999]  alpha_sys=73.41%  cost=292.568 MFLOPs-M
+20:13:47    [eval #2000]  alpha_sys=73.41%  cost=236.452 MFLOPs-M
+20:13:47  -- Generation 40/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+20:13:47  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen040.npz
+20:14:02    [eval #2001]  alpha_sys=67.23%  cost=61.704 MFLOPs-M
+20:14:18    [eval #2002]  alpha_sys=67.61%  cost=63.592 MFLOPs-M
+20:14:34    [eval #2003]  alpha_sys=73.47%  cost=329.615 MFLOPs-M
+20:14:49    [eval #2004]  alpha_sys=73.71%  cost=884.459 MFLOPs-M
+20:15:05    [eval #2005]  alpha_sys=74.01%  cost=501.163 MFLOPs-M
+20:15:20    [eval #2006]  alpha_sys=67.90%  cost=148.352 MFLOPs-M
+20:15:36    [eval #2007]  alpha_sys=73.49%  cost=301.430 MFLOPs-M
+20:15:51    [eval #2008]  alpha_sys=68.00%  cost=212.496 MFLOPs-M
+20:16:07    [eval #2009]  alpha_sys=73.74%  cost=383.168 MFLOPs-M
+20:16:23    [eval #2010]  alpha_sys=69.80%  cost=95.532 MFLOPs-M
+20:16:39    [eval #2011]  alpha_sys=73.54%  cost=230.376 MFLOPs-M
+20:16:54    [eval #2012]  alpha_sys=73.06%  cost=145.854 MFLOPs-M
+20:17:10    [eval #2013]  alpha_sys=72.57%  cost=191.890 MFLOPs-M
+20:17:27    [eval #2014]  alpha_sys=67.41%  cost=115.809 MFLOPs-M
+20:17:43    [eval #2015]  alpha_sys=72.77%  cost=1072.752 MFLOPs-M
+20:17:59    [eval #2016]  alpha_sys=73.76%  cost=450.042 MFLOPs-M
+20:18:15    [eval #2017]  alpha_sys=70.83%  cost=177.556 MFLOPs-M
+20:18:31    [eval #2018]  alpha_sys=73.34%  cost=151.440 MFLOPs-M
+20:18:47    [eval #2019]  alpha_sys=72.39%  cost=188.151 MFLOPs-M
+20:19:02    [eval #2020]  alpha_sys=72.71%  cost=434.698 MFLOPs-M
+20:19:18    [eval #2021]  alpha_sys=69.46%  cost=122.938 MFLOPs-M
+20:19:33    [eval #2022]  alpha_sys=67.44%  cost=54.306 MFLOPs-M
+20:19:49    [eval #2023]  alpha_sys=68.99%  cost=81.123 MFLOPs-M
+20:20:05    [eval #2024]  alpha_sys=68.56%  cost=83.721 MFLOPs-M
+20:20:20    [eval #2025]  alpha_sys=69.91%  cost=376.655 MFLOPs-M
+20:20:35    [eval #2026]  alpha_sys=73.76%  cost=424.034 MFLOPs-M
+20:20:50    [eval #2027]  alpha_sys=70.29%  cost=241.556 MFLOPs-M
+20:21:06    [eval #2028]  alpha_sys=71.93%  cost=235.326 MFLOPs-M
+20:21:21    [eval #2029]  alpha_sys=73.79%  cost=482.923 MFLOPs-M
+20:21:36    [eval #2030]  alpha_sys=73.39%  cost=154.358 MFLOPs-M
+20:21:52    [eval #2031]  alpha_sys=73.09%  cost=337.002 MFLOPs-M
+20:22:08    [eval #2032]  alpha_sys=75.67%  cost=1799.481 MFLOPs-M
+20:22:24    [eval #2033]  alpha_sys=72.06%  cost=476.408 MFLOPs-M
+20:22:39    [eval #2034]  alpha_sys=67.93%  cost=69.176 MFLOPs-M
+20:22:54    [eval #2035]  alpha_sys=73.33%  cost=215.300 MFLOPs-M
+20:23:10    [eval #2036]  alpha_sys=70.31%  cost=100.201 MFLOPs-M
+20:23:26    [eval #2037]  alpha_sys=74.99%  cost=1452.785 MFLOPs-M
+20:23:42    [eval #2038]  alpha_sys=67.50%  cost=79.541 MFLOPs-M
+20:23:58    [eval #2039]  alpha_sys=72.74%  cost=444.242 MFLOPs-M
+20:24:14    [eval #2040]  alpha_sys=74.60%  cost=1002.292 MFLOPs-M
+20:24:29    [eval #2041]  alpha_sys=72.09%  cost=188.981 MFLOPs-M
+20:24:46    [eval #2042]  alpha_sys=73.96%  cost=736.616 MFLOPs-M
+20:25:02    [eval #2043]  alpha_sys=74.96%  cost=1456.519 MFLOPs-M
+20:25:18    [eval #2044]  alpha_sys=73.80%  cost=465.750 MFLOPs-M
+20:25:34    [eval #2045]  alpha_sys=72.06%  cost=122.804 MFLOPs-M
+20:25:50    [eval #2046]  alpha_sys=70.36%  cost=106.373 MFLOPs-M
+20:26:06    [eval #2047]  alpha_sys=67.34%  cost=83.390 MFLOPs-M
+20:26:22    [eval #2048]  alpha_sys=72.93%  cost=392.733 MFLOPs-M
+20:26:38    [eval #2049]  alpha_sys=69.51%  cost=137.245 MFLOPs-M
+20:26:54    [eval #2050]  alpha_sys=71.87%  cost=245.472 MFLOPs-M
+20:26:54  -- Generation 41/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+20:27:09    [eval #2051]  alpha_sys=74.23%  cost=687.724 MFLOPs-M
+20:27:24    [eval #2052]  alpha_sys=73.64%  cost=367.606 MFLOPs-M
+20:27:40    [eval #2053]  alpha_sys=74.39%  cost=853.558 MFLOPs-M
+20:27:56    [eval #2054]  alpha_sys=67.90%  cost=289.452 MFLOPs-M
+20:28:11    [eval #2055]  alpha_sys=71.17%  cost=115.853 MFLOPs-M
+20:28:27    [eval #2056]  alpha_sys=67.89%  cost=137.382 MFLOPs-M
+20:28:42    [eval #2057]  alpha_sys=67.53%  cost=175.128 MFLOPs-M
+20:28:58    [eval #2058]  alpha_sys=73.47%  cost=169.483 MFLOPs-M
+20:29:14    [eval #2059]  alpha_sys=74.21%  cost=708.815 MFLOPs-M
+20:29:29    [eval #2060]  alpha_sys=73.57%  cost=209.370 MFLOPs-M
+20:29:44    [eval #2061]  alpha_sys=74.29%  cost=820.350 MFLOPs-M
+20:29:59    [eval #2062]  alpha_sys=73.97%  cost=517.368 MFLOPs-M
+20:30:15    [eval #2063]  alpha_sys=69.03%  cost=215.967 MFLOPs-M
+20:30:30    [eval #2064]  alpha_sys=74.39%  cost=1062.885 MFLOPs-M
+20:30:45    [eval #2065]  alpha_sys=67.36%  cost=67.791 MFLOPs-M
+20:31:00    [eval #2066]  alpha_sys=73.00%  cost=333.308 MFLOPs-M
+20:31:16    [eval #2067]  alpha_sys=67.19%  cost=49.269 MFLOPs-M
+20:31:32    [eval #2068]  alpha_sys=73.04%  cost=163.864 MFLOPs-M
+20:31:47    [eval #2069]  alpha_sys=73.90%  cost=1314.748 MFLOPs-M
+20:32:03    [eval #2070]  alpha_sys=74.97%  cost=1257.389 MFLOPs-M
+20:32:19    [eval #2071]  alpha_sys=73.71%  cost=638.669 MFLOPs-M
+20:32:35    [eval #2072]  alpha_sys=73.57%  cost=187.408 MFLOPs-M
+20:32:51    [eval #2073]  alpha_sys=73.59%  cost=992.024 MFLOPs-M
+20:33:07    [eval #2074]  alpha_sys=74.14%  cost=867.677 MFLOPs-M
+20:33:23    [eval #2075]  alpha_sys=71.21%  cost=235.209 MFLOPs-M
+20:33:39    [eval #2076]  alpha_sys=70.47%  cost=148.601 MFLOPs-M
+20:33:55    [eval #2077]  alpha_sys=67.23%  cost=61.122 MFLOPs-M
+20:34:11    [eval #2078]  alpha_sys=74.57%  cost=840.649 MFLOPs-M
+20:34:26    [eval #2079]  alpha_sys=67.73%  cost=60.706 MFLOPs-M
+20:34:41    [eval #2080]  alpha_sys=73.10%  cost=337.457 MFLOPs-M
+20:34:57    [eval #2081]  alpha_sys=73.46%  cost=154.515 MFLOPs-M
+20:35:13    [eval #2082]  alpha_sys=74.56%  cost=1085.950 MFLOPs-M
+20:35:29    [eval #2083]  alpha_sys=72.89%  cost=238.612 MFLOPs-M
+20:35:44    [eval #2084]  alpha_sys=68.83%  cost=85.862 MFLOPs-M
+20:36:01    [eval #2085]  alpha_sys=70.77%  cost=110.549 MFLOPs-M
+20:36:16    [eval #2086]  alpha_sys=72.04%  cost=319.632 MFLOPs-M
+20:36:32    [eval #2087]  alpha_sys=70.17%  cost=164.406 MFLOPs-M
+20:36:47    [eval #2088]  alpha_sys=71.49%  cost=114.279 MFLOPs-M
+20:37:03    [eval #2089]  alpha_sys=67.31%  cost=50.697 MFLOPs-M
+20:37:19    [eval #2090]  alpha_sys=73.90%  cost=741.732 MFLOPs-M
+20:37:35    [eval #2091]  alpha_sys=73.10%  cost=155.978 MFLOPs-M
+20:37:51    [eval #2092]  alpha_sys=72.21%  cost=138.584 MFLOPs-M
+20:38:07    [eval #2093]  alpha_sys=69.86%  cost=101.874 MFLOPs-M
+20:38:23    [eval #2094]  alpha_sys=69.79%  cost=264.420 MFLOPs-M
+20:38:39    [eval #2095]  alpha_sys=73.41%  cost=177.636 MFLOPs-M
+20:38:55    [eval #2096]  alpha_sys=72.04%  cost=909.149 MFLOPs-M
+20:39:10    [eval #2097]  alpha_sys=67.44%  cost=51.031 MFLOPs-M
+20:39:26    [eval #2098]  alpha_sys=69.04%  cost=88.324 MFLOPs-M
+20:39:42    [eval #2099]  alpha_sys=70.54%  cost=425.864 MFLOPs-M
+20:39:57    [eval #2100]  alpha_sys=73.66%  cost=435.430 MFLOPs-M
+20:39:57  -- Generation 42/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+20:40:13    [eval #2101]  alpha_sys=71.59%  cost=230.644 MFLOPs-M
+20:40:29    [eval #2102]  alpha_sys=74.73%  cost=999.158 MFLOPs-M
+20:40:44    [eval #2103]  alpha_sys=72.57%  cost=135.489 MFLOPs-M
+20:41:00    [eval #2104]  alpha_sys=73.94%  cost=621.299 MFLOPs-M
+20:41:16    [eval #2105]  alpha_sys=68.19%  cost=67.971 MFLOPs-M
+20:41:31    [eval #2106]  alpha_sys=67.20%  cost=48.484 MFLOPs-M
+20:41:47    [eval #2107]  alpha_sys=67.59%  cost=65.846 MFLOPs-M
+20:42:03    [eval #2108]  alpha_sys=73.74%  cost=691.953 MFLOPs-M
+20:42:18    [eval #2109]  alpha_sys=68.47%  cost=95.168 MFLOPs-M
+20:42:34    [eval #2110]  alpha_sys=70.47%  cost=105.554 MFLOPs-M
+20:42:49    [eval #2111]  alpha_sys=72.04%  cost=266.708 MFLOPs-M
+20:43:05    [eval #2112]  alpha_sys=69.90%  cost=113.016 MFLOPs-M
+20:43:21    [eval #2113]  alpha_sys=73.90%  cost=851.269 MFLOPs-M
+20:43:36    [eval #2114]  alpha_sys=74.11%  cost=628.878 MFLOPs-M
+20:43:52    [eval #2115]  alpha_sys=75.09%  cost=1472.693 MFLOPs-M
+20:44:08    [eval #2116]  alpha_sys=72.66%  cost=306.039 MFLOPs-M
+20:44:25    [eval #2117]  alpha_sys=73.49%  cost=183.941 MFLOPs-M
+20:44:41    [eval #2118]  alpha_sys=67.20%  cost=49.585 MFLOPs-M
+20:44:57    [eval #2119]  alpha_sys=68.40%  cost=93.820 MFLOPs-M
+20:45:13    [eval #2120]  alpha_sys=71.29%  cost=251.754 MFLOPs-M
+20:45:28    [eval #2121]  alpha_sys=74.06%  cost=729.255 MFLOPs-M
+20:45:44    [eval #2122]  alpha_sys=69.27%  cost=492.701 MFLOPs-M
+20:45:59    [eval #2123]  alpha_sys=67.39%  cost=51.698 MFLOPs-M
+20:46:14    [eval #2124]  alpha_sys=72.90%  cost=191.261 MFLOPs-M
+20:46:29    [eval #2125]  alpha_sys=75.80%  cost=2088.435 MFLOPs-M
+20:46:46    [eval #2126]  alpha_sys=72.84%  cost=487.801 MFLOPs-M
+20:47:02    [eval #2127]  alpha_sys=73.53%  cost=280.517 MFLOPs-M
+20:47:18    [eval #2128]  alpha_sys=70.96%  cost=741.302 MFLOPs-M
+20:47:34    [eval #2129]  alpha_sys=68.63%  cost=134.287 MFLOPs-M
+20:47:50    [eval #2130]  alpha_sys=67.31%  cost=60.118 MFLOPs-M
+20:48:06    [eval #2131]  alpha_sys=72.19%  cost=339.627 MFLOPs-M
+20:48:22    [eval #2132]  alpha_sys=71.26%  cost=410.927 MFLOPs-M
+20:48:37    [eval #2133]  alpha_sys=71.67%  cost=196.125 MFLOPs-M
+20:48:53    [eval #2134]  alpha_sys=75.76%  cost=2217.155 MFLOPs-M
+20:49:09    [eval #2135]  alpha_sys=73.07%  cost=152.912 MFLOPs-M
+20:49:24    [eval #2136]  alpha_sys=73.30%  cost=192.780 MFLOPs-M
+20:49:40    [eval #2137]  alpha_sys=73.67%  cost=713.311 MFLOPs-M
+20:49:56    [eval #2138]  alpha_sys=73.20%  cost=203.374 MFLOPs-M
+20:50:12    [eval #2139]  alpha_sys=73.17%  cost=347.183 MFLOPs-M
+20:50:27    [eval #2140]  alpha_sys=69.29%  cost=88.636 MFLOPs-M
+20:50:42    [eval #2141]  alpha_sys=70.10%  cost=100.544 MFLOPs-M
+20:50:58    [eval #2142]  alpha_sys=71.89%  cost=291.879 MFLOPs-M
+20:51:14    [eval #2143]  alpha_sys=73.46%  cost=220.182 MFLOPs-M
+20:51:31    [eval #2144]  alpha_sys=70.77%  cost=134.440 MFLOPs-M
+20:51:46    [eval #2145]  alpha_sys=72.43%  cost=137.745 MFLOPs-M
+20:52:02    [eval #2146]  alpha_sys=73.30%  cost=244.595 MFLOPs-M
+20:52:18    [eval #2147]  alpha_sys=67.46%  cost=102.678 MFLOPs-M
+20:52:33    [eval #2148]  alpha_sys=67.21%  cost=47.998 MFLOPs-M
+20:52:49    [eval #2149]  alpha_sys=67.29%  cost=61.777 MFLOPs-M
+20:53:06    [eval #2150]  alpha_sys=67.79%  cost=57.475 MFLOPs-M
+20:53:06  -- Generation 43/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+20:53:21    [eval #2151]  alpha_sys=75.33%  cost=1715.325 MFLOPs-M
+20:53:37    [eval #2152]  alpha_sys=73.56%  cost=200.255 MFLOPs-M
+20:53:52    [eval #2153]  alpha_sys=71.16%  cost=148.809 MFLOPs-M
+20:54:07    [eval #2154]  alpha_sys=70.89%  cost=233.757 MFLOPs-M
+20:54:23    [eval #2155]  alpha_sys=72.27%  cost=290.619 MFLOPs-M
+20:54:38    [eval #2156]  alpha_sys=68.26%  cost=142.421 MFLOPs-M
+20:54:54    [eval #2157]  alpha_sys=72.80%  cost=284.044 MFLOPs-M
+20:55:09    [eval #2158]  alpha_sys=69.34%  cost=511.439 MFLOPs-M
+20:55:25    [eval #2159]  alpha_sys=70.11%  cost=104.709 MFLOPs-M
+20:55:41    [eval #2160]  alpha_sys=73.39%  cost=196.580 MFLOPs-M
+20:55:57    [eval #2161]  alpha_sys=67.24%  cost=49.739 MFLOPs-M
+20:56:14    [eval #2162]  alpha_sys=71.39%  cost=364.417 MFLOPs-M
+20:56:29    [eval #2163]  alpha_sys=69.36%  cost=347.900 MFLOPs-M
+20:56:45    [eval #2164]  alpha_sys=71.66%  cost=117.930 MFLOPs-M
+20:57:01    [eval #2165]  alpha_sys=67.19%  cost=49.870 MFLOPs-M
+20:57:16    [eval #2166]  alpha_sys=73.89%  cost=638.475 MFLOPs-M
+20:57:32    [eval #2167]  alpha_sys=68.33%  cost=92.517 MFLOPs-M
+20:57:48    [eval #2168]  alpha_sys=70.39%  cost=147.792 MFLOPs-M
+20:58:04    [eval #2169]  alpha_sys=73.50%  cost=271.910 MFLOPs-M
+20:58:20    [eval #2170]  alpha_sys=71.80%  cost=141.363 MFLOPs-M
+20:58:35    [eval #2171]  alpha_sys=72.94%  cost=226.307 MFLOPs-M
+20:58:51    [eval #2172]  alpha_sys=70.37%  cost=205.185 MFLOPs-M
+20:59:07    [eval #2173]  alpha_sys=73.57%  cost=1010.037 MFLOPs-M
+20:59:23    [eval #2174]  alpha_sys=74.90%  cost=1365.733 MFLOPs-M
+20:59:39    [eval #2175]  alpha_sys=74.41%  cost=1336.554 MFLOPs-M
+20:59:55    [eval #2176]  alpha_sys=73.37%  cost=552.461 MFLOPs-M
+21:00:11    [eval #2177]  alpha_sys=73.43%  cost=278.573 MFLOPs-M
+21:00:26    [eval #2178]  alpha_sys=67.21%  cost=55.432 MFLOPs-M
+21:00:42    [eval #2179]  alpha_sys=70.24%  cost=112.033 MFLOPs-M
+21:00:58    [eval #2180]  alpha_sys=69.91%  cost=94.224 MFLOPs-M
+21:01:14    [eval #2181]  alpha_sys=67.49%  cost=160.724 MFLOPs-M
+21:01:29    [eval #2182]  alpha_sys=73.24%  cost=281.534 MFLOPs-M
+21:01:45    [eval #2183]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+21:02:01    [eval #2184]  alpha_sys=74.30%  cost=940.638 MFLOPs-M
+21:02:17    [eval #2185]  alpha_sys=69.57%  cost=106.032 MFLOPs-M
+21:02:32    [eval #2186]  alpha_sys=73.49%  cost=309.531 MFLOPs-M
+21:02:48    [eval #2187]  alpha_sys=71.99%  cost=124.223 MFLOPs-M
+21:03:04    [eval #2188]  alpha_sys=73.54%  cost=472.262 MFLOPs-M
+21:03:20    [eval #2189]  alpha_sys=70.79%  cost=446.942 MFLOPs-M
+21:03:36    [eval #2190]  alpha_sys=74.01%  cost=606.104 MFLOPs-M
+21:03:52    [eval #2191]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+21:04:09    [eval #2192]  alpha_sys=73.14%  cost=234.371 MFLOPs-M
+21:04:24    [eval #2193]  alpha_sys=75.74%  cost=1945.336 MFLOPs-M
+21:04:40    [eval #2194]  alpha_sys=71.01%  cost=123.672 MFLOPs-M
+21:04:55    [eval #2195]  alpha_sys=73.70%  cost=368.574 MFLOPs-M
+21:05:12    [eval #2196]  alpha_sys=72.39%  cost=183.264 MFLOPs-M
+21:05:28    [eval #2197]  alpha_sys=70.03%  cost=160.843 MFLOPs-M
+21:05:44    [eval #2198]  alpha_sys=69.97%  cost=115.115 MFLOPs-M
+21:05:59    [eval #2199]  alpha_sys=73.60%  cost=241.774 MFLOPs-M
+21:06:15    [eval #2200]  alpha_sys=73.14%  cost=243.798 MFLOPs-M
+21:06:15  -- Generation 44/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+21:06:31    [eval #2201]  alpha_sys=67.17%  cost=51.544 MFLOPs-M
+21:06:47    [eval #2202]  alpha_sys=70.96%  cost=158.347 MFLOPs-M
+21:07:04    [eval #2203]  alpha_sys=73.33%  cost=219.109 MFLOPs-M
+21:07:19    [eval #2204]  alpha_sys=70.47%  cost=103.383 MFLOPs-M
+21:07:35    [eval #2205]  alpha_sys=73.39%  cost=475.235 MFLOPs-M
+21:07:51    [eval #2206]  alpha_sys=73.91%  cost=655.056 MFLOPs-M
+21:08:07    [eval #2207]  alpha_sys=69.86%  cost=292.857 MFLOPs-M
+21:08:23    [eval #2208]  alpha_sys=73.97%  cost=831.197 MFLOPs-M
+21:08:39    [eval #2209]  alpha_sys=69.16%  cost=82.037 MFLOPs-M
+21:08:56    [eval #2210]  alpha_sys=73.60%  cost=227.946 MFLOPs-M
+21:09:11    [eval #2211]  alpha_sys=74.50%  cost=935.269 MFLOPs-M
+21:09:27    [eval #2212]  alpha_sys=67.49%  cost=55.944 MFLOPs-M
+21:09:43    [eval #2213]  alpha_sys=71.26%  cost=113.299 MFLOPs-M
+21:09:59    [eval #2214]  alpha_sys=70.01%  cost=192.195 MFLOPs-M
+21:10:15    [eval #2215]  alpha_sys=68.03%  cost=278.251 MFLOPs-M
+21:10:32    [eval #2216]  alpha_sys=71.09%  cost=314.100 MFLOPs-M
+21:10:48    [eval #2217]  alpha_sys=73.63%  cost=234.552 MFLOPs-M
+21:11:04    [eval #2218]  alpha_sys=72.19%  cost=135.101 MFLOPs-M
+21:11:20    [eval #2219]  alpha_sys=74.41%  cost=928.927 MFLOPs-M
+21:11:37    [eval #2220]  alpha_sys=71.23%  cost=114.482 MFLOPs-M
+21:11:53    [eval #2221]  alpha_sys=71.23%  cost=119.527 MFLOPs-M
+21:12:09    [eval #2222]  alpha_sys=72.70%  cost=168.427 MFLOPs-M
+21:12:25    [eval #2223]  alpha_sys=73.69%  cost=339.075 MFLOPs-M
+21:12:42    [eval #2224]  alpha_sys=67.66%  cost=54.852 MFLOPs-M
+21:12:58    [eval #2225]  alpha_sys=71.20%  cost=130.557 MFLOPs-M
+21:13:14    [eval #2226]  alpha_sys=73.54%  cost=202.030 MFLOPs-M
+21:13:30    [eval #2227]  alpha_sys=72.76%  cost=139.067 MFLOPs-M
+21:13:46    [eval #2228]  alpha_sys=73.44%  cost=154.300 MFLOPs-M
+21:14:03    [eval #2229]  alpha_sys=71.64%  cost=221.920 MFLOPs-M
+21:14:18    [eval #2230]  alpha_sys=75.47%  cost=1688.447 MFLOPs-M
+21:14:34    [eval #2231]  alpha_sys=73.53%  cost=243.018 MFLOPs-M
+21:14:49    [eval #2232]  alpha_sys=72.60%  cost=141.878 MFLOPs-M
+21:15:04    [eval #2233]  alpha_sys=73.76%  cost=503.495 MFLOPs-M
+21:15:20    [eval #2234]  alpha_sys=67.39%  cost=76.814 MFLOPs-M
+21:15:36    [eval #2235]  alpha_sys=73.27%  cost=423.535 MFLOPs-M
+21:15:53    [eval #2236]  alpha_sys=74.24%  cost=834.335 MFLOPs-M
+21:16:08    [eval #2237]  alpha_sys=70.14%  cost=129.451 MFLOPs-M
+21:16:24    [eval #2238]  alpha_sys=71.49%  cost=116.608 MFLOPs-M
+21:16:40    [eval #2239]  alpha_sys=70.23%  cost=103.681 MFLOPs-M
+21:16:55    [eval #2240]  alpha_sys=73.36%  cost=287.032 MFLOPs-M
+21:17:11    [eval #2241]  alpha_sys=67.21%  cost=48.526 MFLOPs-M
+21:17:26    [eval #2242]  alpha_sys=67.94%  cost=67.441 MFLOPs-M
+21:17:42    [eval #2243]  alpha_sys=73.40%  cost=189.473 MFLOPs-M
+21:17:57    [eval #2244]  alpha_sys=75.33%  cost=1693.133 MFLOPs-M
+21:18:13    [eval #2245]  alpha_sys=73.61%  cost=459.299 MFLOPs-M
+21:18:29    [eval #2246]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+21:18:45    [eval #2247]  alpha_sys=70.59%  cost=240.211 MFLOPs-M
+21:19:01    [eval #2248]  alpha_sys=72.96%  cost=145.436 MFLOPs-M
+21:19:17    [eval #2249]  alpha_sys=73.30%  cost=303.180 MFLOPs-M
+21:19:32    [eval #2250]  alpha_sys=73.77%  cost=326.209 MFLOPs-M
+21:19:32  -- Generation 45/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+21:19:32  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen045.npz
+21:19:47    [eval #2251]  alpha_sys=73.41%  cost=350.749 MFLOPs-M
+21:20:03    [eval #2252]  alpha_sys=73.57%  cost=433.407 MFLOPs-M
+21:20:19    [eval #2253]  alpha_sys=73.06%  cost=160.146 MFLOPs-M
+21:20:36    [eval #2254]  alpha_sys=73.47%  cost=230.762 MFLOPs-M
+21:20:50    [eval #2255]  alpha_sys=71.36%  cost=447.512 MFLOPs-M
+21:21:06    [eval #2256]  alpha_sys=71.86%  cost=202.510 MFLOPs-M
+21:21:21    [eval #2257]  alpha_sys=69.00%  cost=88.500 MFLOPs-M
+21:21:36    [eval #2258]  alpha_sys=74.07%  cost=588.673 MFLOPs-M
+21:21:52    [eval #2259]  alpha_sys=73.54%  cost=535.087 MFLOPs-M
+21:22:08    [eval #2260]  alpha_sys=73.89%  cost=440.367 MFLOPs-M
+21:22:23    [eval #2261]  alpha_sys=69.33%  cost=90.853 MFLOPs-M
+21:22:40    [eval #2262]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+21:22:56    [eval #2263]  alpha_sys=73.61%  cost=457.443 MFLOPs-M
+21:23:11    [eval #2264]  alpha_sys=68.76%  cost=75.231 MFLOPs-M
+21:23:26    [eval #2265]  alpha_sys=74.39%  cost=700.465 MFLOPs-M
+21:23:42    [eval #2266]  alpha_sys=71.81%  cost=188.155 MFLOPs-M
+21:23:58    [eval #2267]  alpha_sys=73.11%  cost=179.175 MFLOPs-M
+21:24:14    [eval #2268]  alpha_sys=72.93%  cost=137.884 MFLOPs-M
+21:24:29    [eval #2269]  alpha_sys=74.41%  cost=949.572 MFLOPs-M
+21:24:45    [eval #2270]  alpha_sys=73.67%  cost=227.097 MFLOPs-M
+21:25:01    [eval #2271]  alpha_sys=67.14%  cost=48.590 MFLOPs-M
+21:25:16    [eval #2272]  alpha_sys=73.66%  cost=1069.950 MFLOPs-M
+21:25:32    [eval #2273]  alpha_sys=69.61%  cost=129.565 MFLOPs-M
+21:25:47    [eval #2274]  alpha_sys=69.50%  cost=90.215 MFLOPs-M
+21:26:03    [eval #2275]  alpha_sys=72.64%  cost=780.940 MFLOPs-M
+21:26:19    [eval #2276]  alpha_sys=73.59%  cost=369.599 MFLOPs-M
+21:26:34    [eval #2277]  alpha_sys=68.43%  cost=75.914 MFLOPs-M
+21:26:51    [eval #2278]  alpha_sys=73.41%  cost=398.258 MFLOPs-M
+21:27:07    [eval #2279]  alpha_sys=73.37%  cost=153.236 MFLOPs-M
+21:27:23    [eval #2280]  alpha_sys=67.50%  cost=52.845 MFLOPs-M
+21:27:38    [eval #2281]  alpha_sys=73.16%  cost=334.323 MFLOPs-M
+21:27:55    [eval #2282]  alpha_sys=74.29%  cost=739.706 MFLOPs-M
+21:28:11    [eval #2283]  alpha_sys=67.24%  cost=51.814 MFLOPs-M
+21:28:26    [eval #2284]  alpha_sys=74.57%  cost=1298.620 MFLOPs-M
+21:28:42    [eval #2285]  alpha_sys=73.07%  cost=378.187 MFLOPs-M
+21:28:59    [eval #2286]  alpha_sys=73.57%  cost=253.157 MFLOPs-M
+21:29:15    [eval #2287]  alpha_sys=73.00%  cost=157.310 MFLOPs-M
+21:29:31    [eval #2288]  alpha_sys=71.44%  cost=126.462 MFLOPs-M
+21:29:47    [eval #2289]  alpha_sys=73.24%  cost=194.296 MFLOPs-M
+21:30:02    [eval #2290]  alpha_sys=73.74%  cost=382.200 MFLOPs-M
+21:30:18    [eval #2291]  alpha_sys=73.41%  cost=153.066 MFLOPs-M
+21:30:33    [eval #2292]  alpha_sys=67.97%  cost=59.098 MFLOPs-M
+21:30:48    [eval #2293]  alpha_sys=73.80%  cost=361.652 MFLOPs-M
+21:31:04    [eval #2294]  alpha_sys=73.44%  cost=220.601 MFLOPs-M
+21:31:20    [eval #2295]  alpha_sys=74.01%  cost=929.874 MFLOPs-M
+21:31:36    [eval #2296]  alpha_sys=67.29%  cost=51.984 MFLOPs-M
+21:31:52    [eval #2297]  alpha_sys=72.44%  cost=183.346 MFLOPs-M
+21:32:07    [eval #2298]  alpha_sys=72.30%  cost=137.721 MFLOPs-M
+21:32:23    [eval #2299]  alpha_sys=74.03%  cost=406.868 MFLOPs-M
+21:32:38    [eval #2300]  alpha_sys=72.56%  cost=277.996 MFLOPs-M
+21:32:38  -- Generation 46/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+21:32:54    [eval #2301]  alpha_sys=67.26%  cost=71.340 MFLOPs-M
+21:33:09    [eval #2302]  alpha_sys=70.66%  cost=99.474 MFLOPs-M
+21:33:25    [eval #2303]  alpha_sys=72.76%  cost=195.996 MFLOPs-M
+21:33:41    [eval #2304]  alpha_sys=74.41%  cost=908.515 MFLOPs-M
+21:33:57    [eval #2305]  alpha_sys=69.70%  cost=96.344 MFLOPs-M
+21:34:13    [eval #2306]  alpha_sys=73.07%  cost=143.464 MFLOPs-M
+21:34:28    [eval #2307]  alpha_sys=73.56%  cost=264.273 MFLOPs-M
+21:34:44    [eval #2308]  alpha_sys=72.60%  cost=169.679 MFLOPs-M
+21:35:00    [eval #2309]  alpha_sys=72.86%  cost=139.804 MFLOPs-M
+21:35:16    [eval #2310]  alpha_sys=73.91%  cost=453.518 MFLOPs-M
+21:35:31    [eval #2311]  alpha_sys=73.71%  cost=300.698 MFLOPs-M
+21:35:47    [eval #2312]  alpha_sys=72.11%  cost=426.291 MFLOPs-M
+21:36:02    [eval #2313]  alpha_sys=70.83%  cost=117.045 MFLOPs-M
+21:36:18    [eval #2314]  alpha_sys=73.60%  cost=322.257 MFLOPs-M
+21:36:33    [eval #2315]  alpha_sys=70.47%  cost=109.709 MFLOPs-M
+21:36:49    [eval #2316]  alpha_sys=73.36%  cost=158.061 MFLOPs-M
+21:37:04    [eval #2317]  alpha_sys=73.39%  cost=816.382 MFLOPs-M
+21:37:20    [eval #2318]  alpha_sys=73.67%  cost=358.941 MFLOPs-M
+21:37:35    [eval #2319]  alpha_sys=73.71%  cost=393.841 MFLOPs-M
+21:37:51    [eval #2320]  alpha_sys=73.34%  cost=327.465 MFLOPs-M
+21:38:06    [eval #2321]  alpha_sys=73.77%  cost=464.922 MFLOPs-M
+21:38:22    [eval #2322]  alpha_sys=74.27%  cost=727.298 MFLOPs-M
+21:38:37    [eval #2323]  alpha_sys=67.26%  cost=56.068 MFLOPs-M
+21:38:53    [eval #2324]  alpha_sys=70.60%  cost=832.499 MFLOPs-M
+21:39:09    [eval #2325]  alpha_sys=73.36%  cost=442.615 MFLOPs-M
+21:39:25    [eval #2326]  alpha_sys=69.01%  cost=74.685 MFLOPs-M
+21:39:40    [eval #2327]  alpha_sys=72.74%  cost=265.957 MFLOPs-M
+21:39:56    [eval #2328]  alpha_sys=69.29%  cost=452.299 MFLOPs-M
+21:40:11    [eval #2329]  alpha_sys=71.50%  cost=124.351 MFLOPs-M
+21:40:27    [eval #2330]  alpha_sys=73.59%  cost=385.749 MFLOPs-M
+21:40:43    [eval #2331]  alpha_sys=72.46%  cost=851.845 MFLOPs-M
+21:40:59    [eval #2332]  alpha_sys=72.01%  cost=474.729 MFLOPs-M
+21:41:15    [eval #2333]  alpha_sys=73.14%  cost=157.565 MFLOPs-M
+21:41:31    [eval #2334]  alpha_sys=73.54%  cost=268.664 MFLOPs-M
+21:41:46    [eval #2335]  alpha_sys=71.99%  cost=131.777 MFLOPs-M
+21:42:02    [eval #2336]  alpha_sys=69.97%  cost=95.428 MFLOPs-M
+21:42:17    [eval #2337]  alpha_sys=72.37%  cost=139.361 MFLOPs-M
+21:42:33    [eval #2338]  alpha_sys=73.50%  cost=319.910 MFLOPs-M
+21:42:49    [eval #2339]  alpha_sys=69.19%  cost=83.616 MFLOPs-M
+21:43:04    [eval #2340]  alpha_sys=72.71%  cost=150.580 MFLOPs-M
+21:43:20    [eval #2341]  alpha_sys=72.03%  cost=126.646 MFLOPs-M
+21:43:37    [eval #2342]  alpha_sys=73.60%  cost=358.043 MFLOPs-M
+21:43:53    [eval #2343]  alpha_sys=73.83%  cost=569.281 MFLOPs-M
+21:44:09    [eval #2344]  alpha_sys=72.60%  cost=171.569 MFLOPs-M
+21:44:25    [eval #2345]  alpha_sys=69.57%  cost=88.371 MFLOPs-M
+21:44:41    [eval #2346]  alpha_sys=73.30%  cost=417.157 MFLOPs-M
+21:44:57    [eval #2347]  alpha_sys=73.36%  cost=333.810 MFLOPs-M
+21:45:13    [eval #2348]  alpha_sys=72.61%  cost=136.196 MFLOPs-M
+21:45:28    [eval #2349]  alpha_sys=72.97%  cost=144.462 MFLOPs-M
+21:45:44    [eval #2350]  alpha_sys=67.57%  cost=84.406 MFLOPs-M
+21:45:44  -- Generation 47/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+21:45:59    [eval #2351]  alpha_sys=68.74%  cost=109.346 MFLOPs-M
+21:46:15    [eval #2352]  alpha_sys=72.51%  cost=394.178 MFLOPs-M
+21:46:31    [eval #2353]  alpha_sys=73.54%  cost=235.987 MFLOPs-M
+21:46:46    [eval #2354]  alpha_sys=67.91%  cost=86.782 MFLOPs-M
+21:47:02    [eval #2355]  alpha_sys=71.70%  cost=125.633 MFLOPs-M
+21:47:18    [eval #2356]  alpha_sys=68.83%  cost=76.065 MFLOPs-M
+21:47:33    [eval #2357]  alpha_sys=73.34%  cost=163.639 MFLOPs-M
+21:47:49    [eval #2358]  alpha_sys=68.86%  cost=135.166 MFLOPs-M
+21:48:04    [eval #2359]  alpha_sys=73.43%  cost=315.852 MFLOPs-M
+21:48:19    [eval #2360]  alpha_sys=73.57%  cost=235.969 MFLOPs-M
+21:48:35    [eval #2361]  alpha_sys=72.91%  cost=160.744 MFLOPs-M
+21:48:51    [eval #2362]  alpha_sys=74.00%  cost=712.734 MFLOPs-M
+21:49:06    [eval #2363]  alpha_sys=73.00%  cost=293.506 MFLOPs-M
+21:49:22    [eval #2364]  alpha_sys=71.66%  cost=275.629 MFLOPs-M
+21:49:37    [eval #2365]  alpha_sys=73.31%  cost=403.375 MFLOPs-M
+21:49:53    [eval #2366]  alpha_sys=74.09%  cost=810.393 MFLOPs-M
+21:50:09    [eval #2367]  alpha_sys=75.14%  cost=1533.908 MFLOPs-M
+21:50:24    [eval #2368]  alpha_sys=69.66%  cost=89.909 MFLOPs-M
+21:50:39    [eval #2369]  alpha_sys=71.94%  cost=126.846 MFLOPs-M
+21:50:55    [eval #2370]  alpha_sys=72.27%  cost=246.809 MFLOPs-M
+21:51:11    [eval #2371]  alpha_sys=71.77%  cost=124.893 MFLOPs-M
+21:51:27    [eval #2372]  alpha_sys=73.67%  cost=587.885 MFLOPs-M
+21:51:43    [eval #2373]  alpha_sys=67.37%  cost=49.499 MFLOPs-M
+21:51:59    [eval #2374]  alpha_sys=73.40%  cost=397.845 MFLOPs-M
+21:52:14    [eval #2375]  alpha_sys=71.99%  cost=125.102 MFLOPs-M
+21:52:29    [eval #2376]  alpha_sys=71.83%  cost=450.956 MFLOPs-M
+21:52:46    [eval #2377]  alpha_sys=73.54%  cost=180.854 MFLOPs-M
+21:53:02    [eval #2378]  alpha_sys=67.63%  cost=53.700 MFLOPs-M
+21:53:18    [eval #2379]  alpha_sys=67.53%  cost=56.565 MFLOPs-M
+21:53:34    [eval #2380]  alpha_sys=69.19%  cost=79.340 MFLOPs-M
+21:53:50    [eval #2381]  alpha_sys=70.10%  cost=161.929 MFLOPs-M
+21:54:05    [eval #2382]  alpha_sys=73.61%  cost=314.165 MFLOPs-M
+21:54:21    [eval #2383]  alpha_sys=68.23%  cost=70.822 MFLOPs-M
+21:54:36    [eval #2384]  alpha_sys=73.73%  cost=341.328 MFLOPs-M
+21:54:52    [eval #2385]  alpha_sys=73.36%  cost=207.778 MFLOPs-M
+21:55:08    [eval #2386]  alpha_sys=71.50%  cost=535.049 MFLOPs-M
+21:55:24    [eval #2387]  alpha_sys=73.47%  cost=162.295 MFLOPs-M
+21:55:40    [eval #2388]  alpha_sys=73.83%  cost=493.016 MFLOPs-M
+21:55:56    [eval #2389]  alpha_sys=68.01%  cost=67.201 MFLOPs-M
+21:56:12    [eval #2390]  alpha_sys=73.19%  cost=164.967 MFLOPs-M
+21:56:27    [eval #2391]  alpha_sys=73.34%  cost=240.094 MFLOPs-M
+21:56:43    [eval #2392]  alpha_sys=67.26%  cost=67.509 MFLOPs-M
+21:56:58    [eval #2393]  alpha_sys=71.94%  cost=124.617 MFLOPs-M
+21:57:14    [eval #2394]  alpha_sys=73.44%  cost=170.560 MFLOPs-M
+21:57:29    [eval #2395]  alpha_sys=67.20%  cost=47.998 MFLOPs-M
+21:57:45    [eval #2396]  alpha_sys=74.29%  cost=980.664 MFLOPs-M
+21:58:00    [eval #2397]  alpha_sys=73.21%  cost=464.926 MFLOPs-M
+21:58:16    [eval #2398]  alpha_sys=74.54%  cost=933.140 MFLOPs-M
+21:58:32    [eval #2399]  alpha_sys=67.59%  cost=53.154 MFLOPs-M
+21:58:47    [eval #2400]  alpha_sys=74.43%  cost=838.654 MFLOPs-M
+21:58:47  -- Generation 48/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+21:59:02    [eval #2401]  alpha_sys=75.04%  cost=1610.791 MFLOPs-M
+21:59:17    [eval #2402]  alpha_sys=73.49%  cost=173.068 MFLOPs-M
+21:59:33    [eval #2403]  alpha_sys=73.54%  cost=274.704 MFLOPs-M
+21:59:48    [eval #2404]  alpha_sys=73.76%  cost=411.359 MFLOPs-M
+22:00:04    [eval #2405]  alpha_sys=73.21%  cost=152.778 MFLOPs-M
+22:00:20    [eval #2406]  alpha_sys=73.37%  cost=243.148 MFLOPs-M
+22:00:36    [eval #2407]  alpha_sys=73.50%  cost=172.831 MFLOPs-M
+22:00:51    [eval #2408]  alpha_sys=69.63%  cost=101.886 MFLOPs-M
+22:01:07    [eval #2409]  alpha_sys=74.86%  cost=1502.927 MFLOPs-M
+22:01:23    [eval #2410]  alpha_sys=74.34%  cost=908.261 MFLOPs-M
+22:01:39    [eval #2411]  alpha_sys=67.20%  cost=48.029 MFLOPs-M
+22:01:55    [eval #2412]  alpha_sys=73.31%  cost=164.682 MFLOPs-M
+22:02:11    [eval #2413]  alpha_sys=67.97%  cost=63.219 MFLOPs-M
+22:02:26    [eval #2414]  alpha_sys=67.53%  cost=55.083 MFLOPs-M
+22:02:41    [eval #2415]  alpha_sys=74.01%  cost=460.942 MFLOPs-M
+22:02:56    [eval #2416]  alpha_sys=72.40%  cost=348.027 MFLOPs-M
+22:03:11    [eval #2417]  alpha_sys=67.77%  cost=62.358 MFLOPs-M
+22:03:28    [eval #2418]  alpha_sys=73.21%  cost=681.084 MFLOPs-M
+22:03:44    [eval #2419]  alpha_sys=73.13%  cost=928.066 MFLOPs-M
+22:04:00    [eval #2420]  alpha_sys=72.30%  cost=129.420 MFLOPs-M
+22:04:16    [eval #2421]  alpha_sys=73.46%  cost=155.149 MFLOPs-M
+22:04:32    [eval #2422]  alpha_sys=75.93%  cost=2468.642 MFLOPs-M
+22:04:48    [eval #2423]  alpha_sys=73.17%  cost=195.850 MFLOPs-M
+22:05:03    [eval #2424]  alpha_sys=73.34%  cost=495.304 MFLOPs-M
+22:05:18    [eval #2425]  alpha_sys=67.90%  cost=98.914 MFLOPs-M
+22:05:34    [eval #2426]  alpha_sys=74.13%  cost=583.730 MFLOPs-M
+22:05:50    [eval #2427]  alpha_sys=73.30%  cost=173.636 MFLOPs-M
+22:06:06    [eval #2428]  alpha_sys=73.17%  cost=753.751 MFLOPs-M
+22:06:21    [eval #2429]  alpha_sys=73.19%  cost=555.789 MFLOPs-M
+22:06:37    [eval #2430]  alpha_sys=73.66%  cost=295.488 MFLOPs-M
+22:06:53    [eval #2431]  alpha_sys=73.90%  cost=644.059 MFLOPs-M
+22:07:08    [eval #2432]  alpha_sys=73.44%  cost=253.524 MFLOPs-M
+22:07:23    [eval #2433]  alpha_sys=71.60%  cost=171.750 MFLOPs-M
+22:07:38    [eval #2434]  alpha_sys=73.41%  cost=152.774 MFLOPs-M
+22:07:53    [eval #2435]  alpha_sys=67.56%  cost=55.711 MFLOPs-M
+22:08:09    [eval #2436]  alpha_sys=75.31%  cost=1714.257 MFLOPs-M
+22:08:25    [eval #2437]  alpha_sys=73.51%  cost=205.936 MFLOPs-M
+22:08:41    [eval #2438]  alpha_sys=72.60%  cost=147.757 MFLOPs-M
+22:08:56    [eval #2439]  alpha_sys=72.66%  cost=146.862 MFLOPs-M
+22:09:13    [eval #2440]  alpha_sys=74.10%  cost=594.527 MFLOPs-M
+22:09:28    [eval #2441]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+22:09:43    [eval #2442]  alpha_sys=71.93%  cost=169.171 MFLOPs-M
+22:09:59    [eval #2443]  alpha_sys=73.13%  cost=662.133 MFLOPs-M
+22:10:16    [eval #2444]  alpha_sys=73.64%  cost=385.322 MFLOPs-M
+22:10:31    [eval #2445]  alpha_sys=69.43%  cost=95.217 MFLOPs-M
+22:10:47    [eval #2446]  alpha_sys=74.90%  cost=1146.976 MFLOPs-M
+22:11:02    [eval #2447]  alpha_sys=73.97%  cost=608.460 MFLOPs-M
+22:11:17    [eval #2448]  alpha_sys=74.76%  cost=1307.939 MFLOPs-M
+22:11:33    [eval #2449]  alpha_sys=73.83%  cost=409.985 MFLOPs-M
+22:11:48    [eval #2450]  alpha_sys=73.46%  cost=154.636 MFLOPs-M
+22:11:48  -- Generation 49/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+22:12:04    [eval #2451]  alpha_sys=73.49%  cost=179.713 MFLOPs-M
+22:12:20    [eval #2452]  alpha_sys=73.21%  cost=392.053 MFLOPs-M
+22:12:36    [eval #2453]  alpha_sys=73.56%  cost=500.614 MFLOPs-M
+22:12:52    [eval #2454]  alpha_sys=67.30%  cost=51.304 MFLOPs-M
+22:13:07    [eval #2455]  alpha_sys=67.53%  cost=59.905 MFLOPs-M
+22:13:23    [eval #2456]  alpha_sys=74.30%  cost=704.114 MFLOPs-M
+22:13:38    [eval #2457]  alpha_sys=73.29%  cost=239.218 MFLOPs-M
+22:13:55    [eval #2458]  alpha_sys=73.49%  cost=171.191 MFLOPs-M
+22:14:10    [eval #2459]  alpha_sys=74.13%  cost=1137.897 MFLOPs-M
+22:14:25    [eval #2460]  alpha_sys=75.27%  cost=1652.252 MFLOPs-M
+22:14:40    [eval #2461]  alpha_sys=71.31%  cost=114.731 MFLOPs-M
+22:14:56    [eval #2462]  alpha_sys=72.63%  cost=137.293 MFLOPs-M
+22:15:11    [eval #2463]  alpha_sys=73.40%  cost=189.977 MFLOPs-M
+22:15:26    [eval #2464]  alpha_sys=73.80%  cost=494.900 MFLOPs-M
+22:15:42    [eval #2465]  alpha_sys=67.23%  cost=48.772 MFLOPs-M
+22:15:58    [eval #2466]  alpha_sys=75.41%  cost=1595.477 MFLOPs-M
+22:16:15    [eval #2467]  alpha_sys=72.74%  cost=247.575 MFLOPs-M
+22:16:31    [eval #2468]  alpha_sys=70.23%  cost=144.659 MFLOPs-M
+22:16:47    [eval #2469]  alpha_sys=73.49%  cost=353.907 MFLOPs-M
+22:17:03    [eval #2470]  alpha_sys=73.71%  cost=363.794 MFLOPs-M
+22:17:19    [eval #2471]  alpha_sys=67.23%  cost=55.371 MFLOPs-M
+22:17:36    [eval #2472]  alpha_sys=74.17%  cost=574.946 MFLOPs-M
+22:17:51    [eval #2473]  alpha_sys=67.86%  cost=271.764 MFLOPs-M
+22:18:07    [eval #2474]  alpha_sys=71.71%  cost=243.852 MFLOPs-M
+22:18:23    [eval #2475]  alpha_sys=73.97%  cost=720.174 MFLOPs-M
+22:18:39    [eval #2476]  alpha_sys=71.63%  cost=294.231 MFLOPs-M
+22:18:54    [eval #2477]  alpha_sys=70.17%  cost=205.822 MFLOPs-M
+22:19:09    [eval #2478]  alpha_sys=71.41%  cost=446.923 MFLOPs-M
+22:19:26    [eval #2479]  alpha_sys=70.41%  cost=111.729 MFLOPs-M
+22:19:42    [eval #2480]  alpha_sys=68.23%  cost=67.316 MFLOPs-M
+22:19:58    [eval #2481]  alpha_sys=69.70%  cost=94.728 MFLOPs-M
+22:20:14    [eval #2482]  alpha_sys=67.24%  cost=49.803 MFLOPs-M
+22:20:30    [eval #2483]  alpha_sys=72.89%  cost=143.419 MFLOPs-M
+22:20:45    [eval #2484]  alpha_sys=72.41%  cost=144.788 MFLOPs-M
+22:21:00    [eval #2485]  alpha_sys=70.87%  cost=196.621 MFLOPs-M
+22:21:16    [eval #2486]  alpha_sys=69.23%  cost=90.847 MFLOPs-M
+22:21:31    [eval #2487]  alpha_sys=73.44%  cost=161.716 MFLOPs-M
+22:21:46    [eval #2488]  alpha_sys=71.43%  cost=123.019 MFLOPs-M
+22:22:02    [eval #2489]  alpha_sys=71.01%  cost=208.144 MFLOPs-M
+22:22:18    [eval #2490]  alpha_sys=70.24%  cost=124.471 MFLOPs-M
+22:22:34    [eval #2491]  alpha_sys=73.81%  cost=581.349 MFLOPs-M
+22:22:49    [eval #2492]  alpha_sys=70.59%  cost=119.151 MFLOPs-M
+22:23:05    [eval #2493]  alpha_sys=73.59%  cost=320.646 MFLOPs-M
+22:23:21    [eval #2494]  alpha_sys=73.49%  cost=235.602 MFLOPs-M
+22:23:38    [eval #2495]  alpha_sys=71.57%  cost=739.256 MFLOPs-M
+22:23:54    [eval #2496]  alpha_sys=72.20%  cost=136.535 MFLOPs-M
+22:24:10    [eval #2497]  alpha_sys=67.20%  cost=47.983 MFLOPs-M
+22:24:27    [eval #2498]  alpha_sys=67.44%  cost=55.140 MFLOPs-M
+22:24:42    [eval #2499]  alpha_sys=73.46%  cost=304.041 MFLOPs-M
+22:24:58    [eval #2500]  alpha_sys=73.03%  cost=150.673 MFLOPs-M
+22:24:58  -- Generation 50/50 done  |  best_alpha_sys=76.14%  best_low_cost=47.983 MFLOPs-M --
+22:24:58  Checkpoint -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/checkpoint_gen050.npz
+22:24:58  
+Search finished in 39374s
+22:24:58  Final Pareto front: 50 individuals
+22:24:58  Pareto front -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/pareto_front.csv  (50 individuals, cost unit: MFLOPs-M)
+22:24:58  
+Training + saving final weights for 50 Pareto individuals...
+22:27:34    saved 10/50 models
+22:30:13    saved 20/50 models
+22:32:54    saved 30/50 models
+22:35:34    saved 40/50 models
+22:38:13    saved 50/50 models
+22:38:13  All Pareto models saved -> /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/results/nsga2/models
+
+Done.

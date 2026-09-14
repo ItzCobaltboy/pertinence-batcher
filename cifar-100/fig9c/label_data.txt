@@ -1,0 +1,44 @@
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Using cache found in /home/cs24bt033/.cache/torch/hub/chenyaofo_pytorch-cifar-models_master
+Device: cuda:0
+Model subset for this variant: ['shufflenetv2_x0_5', 'mobilenetv2_x0_75', 'repvgg_a2']
+
+Downloading/loading CIFAR-100's official train (50k) + test (10k) splits and dumping images...
+Files already downloaded and verified
+Files already downloaded and verified
+Official train: 50000 images | Official test: 10000 images
+
+Carving a class-stratified 30% slice out of the official TEST set as the paper's held-out 'validation set' (seed=42); the official TRAIN set stays whole and untouched as the paper's 'training set'...
+NSGA-II fitness pool (paper's 'test set'): 7000 images | Final validation (paper's 'validation set'): 3000 images
+
+Computing per-model correctness + labels for the official TRAIN split (paper's 'training set' — the only split labeling/FC-training ever sees)...
+  [train] correctness pass: 256/50000
+  [train] correctness pass: 5376/50000
+  [train] correctness pass: 10496/50000
+  [train] correctness pass: 15616/50000
+  [train] correctness pass: 20736/50000
+  [train] correctness pass: 25856/50000
+  [train] correctness pass: 30976/50000
+  [train] correctness pass: 36096/50000
+  [train] correctness pass: 41216/50000
+  [train] correctness pass: 46336/50000
+
+Computing per-model correctness + labels for the test-fitness split (paper's 'test set' — used only for NSGA-II fitness during the search)...
+  [test] correctness pass: 256/7000
+  [test] correctness pass: 5376/7000
+
+Computing per-model correctness + labels for the final-validation split (paper's 'validation set' — touched only once, by the final eval pass)...
+  [final_val] correctness pass: 256/3000
+
+50000 images written to /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/data/train_ground_truth.csv, 5 routed to the highest-cost model (0.01%, no pool model correct — kept, not dropped)
+7000 images written to /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/data/test_ground_truth.csv, 979 routed to the highest-cost model (13.99%, no pool model correct — kept, not dropped)
+3000 images written to /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/data/final_val_ground_truth.csv, 403 routed to the highest-cost model (13.43%, no pool model correct — kept, not dropped)
+
+Done. The oracle rate ('at least one model correct') is computed directly from the <model>_correct columns by eda/ground_truth_eda.py, independent of label.

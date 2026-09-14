@@ -16,9 +16,11 @@ Schema written to each of the three CSVs:
   subset a given variant dispatches to)
 - <model>_correct: 1/0, whether that model's own prediction matches the
   CIFAR-100 ground-truth class, one column per config.MODEL_NAMES entry
-- label: argmin_j { MAdds_j | model_j(x) is correct }, indexed into
-  config.MODEL_NAMES in config.MODEL_COST's MAdds-ascending order — the
-  dispatcher's ideal routing target for this variant's own pool
+- label: argmin_j { cost_j | model_j(x) is correct }, indexed into
+  config.MODEL_NAMES in config.MODEL_COST's ascending order (locally
+  measured MFLOPs, see models/model_loader.py — not MAdds/chenyaofo-table
+  figures) — the dispatcher's ideal routing target for this variant's own
+  pool
 
 Three-way split, not the other two tracks' two-way train/val split
 =====================================================================
@@ -77,7 +79,7 @@ computed against that split do).
 Every raw image in all three resulting splits goes through the same
 labeling rule, and none are dropped — including images where NO pool model
 in this variant's subset got them right. Those "impossible" images are
-routed to the highest-MAdds model in config.MODEL_NAMES rather than dropped
+routed to the highest-cost model in config.MODEL_NAMES rather than dropped
 or given a sentinel label, identical to both other tracks' convention — see
 either track's label_data.py for the same reasoning. Counts are printed per
 split.
@@ -158,9 +160,9 @@ def carve_test_and_validation_split(test_df, config):
 def compute_correctness(df, device, split_label, config):
     """Runs every model in config.MODEL_NAMES over every image in df,
     returns df augmented with one <model>_correct column per model plus the
-    argmin-MAdds label (using config.MODEL_COST, in the same order as
+    argmin-cost label (using config.MODEL_COST, in the same order as
     config.MODEL_NAMES). NO rows are dropped — images where no model in
-    this variant's subset is correct are routed to the highest-MAdds model
+    this variant's subset is correct are routed to the highest-cost model
     instead of being removed. Returns (out_df, impossible_count,
     total_count) — split_label is only used for progress printing."""
     from model_loader import load_model
@@ -195,12 +197,12 @@ def compute_correctness(df, device, split_label, config):
     for name in config.MODEL_NAMES:
         out_df[f"{name}_correct"] = correct_cols[name]
 
-    # label = argmin-MAdds among correct models; for images where no model
+    # label = argmin-cost among correct models; for images where no model
     # is correct (kept, not dropped), route to the highest-cost model
-    # (last index, since config.MODEL_NAMES/MODEL_COST are MAdds-ascending)
+    # (last index, since config.MODEL_NAMES/MODEL_COST are cost-ascending)
     # instead — the most defensible fallback, and it keeps every row a
     # normal, valid training target.
-    madds = np.array(config.MODEL_COST)
+    model_cost = np.array(config.MODEL_COST)
     correct_matrix = np.stack([correct_cols[name] for name in config.MODEL_NAMES], axis=1)  # (n, num_models)
     any_correct = correct_matrix.sum(axis=1) > 0
     highest_cost_model_idx = len(config.MODEL_NAMES) - 1
@@ -209,7 +211,7 @@ def compute_correctness(df, device, split_label, config):
     for i in range(n):
         if any_correct[i]:
             correct_idxs = np.where(correct_matrix[i] == 1)[0]
-            labels[i] = correct_idxs[np.argmin(madds[correct_idxs])]
+            labels[i] = correct_idxs[np.argmin(model_cost[correct_idxs])]
     out_df["label"] = labels
 
     impossible = int((~any_correct).sum())

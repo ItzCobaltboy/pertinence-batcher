@@ -15,6 +15,16 @@ cifar-100/models/cifar100_repvgg_a1-c06b21a7.pt
 cifar-100/models/cifar100_repvgg_a2-8e71b1f8.pt
 cifar-100/models/cifar100_shufflenetv2_x0_5-1977720f.pt
 cifar-100/models/cifar100_shufflenetv2_x1_0-9ae22beb.pt
+cifar-100/fig9d/embeddings_cache/**
+cifar-100/fig9c/embeddings_cache/**
+cifar-100/fig9c/results/nsga2/models/**
+cifar-100/fig9d/results/nsga2/models/**
+cifar-100/fig9c/results/nsga2/*.npz
+cifar-100/fig9d/results/nsga2/*.npz
+cifar-100/fig9c/results/eval/model_cache/**
+cifar-100/fig9d/results/eval/model_cache/**
+cifar-100/PIPELINE_REPORT.md
+Claude outputs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,0 +1,81 @@
+
+======================================================================
+TRAIN split — /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/data/train_ground_truth.csv
+50000 images total, including 5 impossible ones (no pool model correct, routed to the highest-cost model) -- nothing dropped from this CSV
+======================================================================
+
+-- 1. Per-model standalone accuracy --
+  shufflenetv2_x0_5_correct    96.80%
+  mobilenetv2_x0_75_correct    99.85%
+  repvgg_a2_correct            99.98%
+
+-- 2. Theoretical maximum (oracle) accuracy --
+  99.99% (49995/50000 images have at least one correct model; 5 are impossible for this pool)
+  Best single model: repvgg_a2 at 99.98% -> oracle headroom above it: 0.01 points
+
+-- 3. Class balance (routing-target distribution across the pool) --
+            model  count  fraction
+shufflenetv2_x0_5  48400   0.96800
+mobilenetv2_x0_75   1573   0.03146
+        repvgg_a2     27   0.00054
+  (note: 5 impossible images are folded into repvgg_a2's count above, alongside genuine routes there)
+
+-- 4. Pairwise model error overlap (Jaccard on wrong-image sets) --
+          model_a           model_b  jaccard_wrong_overlap
+shufflenetv2_x0_5 mobilenetv2_x0_75               0.016374
+shufflenetv2_x0_5         repvgg_a2               0.003741
+mobilenetv2_x0_75         repvgg_a2               0.061728
+
+======================================================================
+VAL split — /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/data/test_ground_truth.csv
+7000 images total, including 979 impossible ones (no pool model correct, routed to the highest-cost model) -- nothing dropped from this CSV
+======================================================================
+
+-- 1. Per-model standalone accuracy --
+  shufflenetv2_x0_5_correct    67.20%
+  mobilenetv2_x0_75_correct    73.46%
+  repvgg_a2_correct            77.51%
+
+-- 2. Theoretical maximum (oracle) accuracy --
+  86.01% (6021/7000 images have at least one correct model; 979 are impossible for this pool)
+  Best single model: repvgg_a2 at 77.51% -> oracle headroom above it: 8.50 points
+
+-- 3. Class balance (routing-target distribution across the pool) --
+            model  count  fraction
+shufflenetv2_x0_5   4704     0.672
+mobilenetv2_x0_75    903     0.129
+        repvgg_a2   1393     0.199
+  (note: 979 impossible images are folded into repvgg_a2's count above, alongside genuine routes there)
+
+-- 4. Pairwise model error overlap (Jaccard on wrong-image sets) --
+          model_a           model_b  jaccard_wrong_overlap
+shufflenetv2_x0_5 mobilenetv2_x0_75               0.504527
+shufflenetv2_x0_5         repvgg_a2               0.465909
+mobilenetv2_x0_75         repvgg_a2               0.507246
+
+======================================================================
+FINAL_VAL split — /home/cs24bt033/CS24BT033_Work/cifar-100/fig9c/data/final_val_ground_truth.csv
+3000 images total, including 403 impossible ones (no pool model correct, routed to the highest-cost model) -- nothing dropped from this CSV
+======================================================================
+
+-- 1. Per-model standalone accuracy --
+  shufflenetv2_x0_5_correct    69.20%
+  mobilenetv2_x0_75_correct    75.50%
+  repvgg_a2_correct            77.47%
+
+-- 2. Theoretical maximum (oracle) accuracy --
+  86.57% (2597/3000 images have at least one correct model; 403 are impossible for this pool)
+  Best single model: repvgg_a2 at 77.47% -> oracle headroom above it: 9.10 points
+
+-- 3. Class balance (routing-target distribution across the pool) --
+            model  count  fraction
+shufflenetv2_x0_5   2076     0.692
+mobilenetv2_x0_75    378     0.126
+        repvgg_a2    546     0.182
+  (note: 403 impossible images are folded into repvgg_a2's count above, alongside genuine routes there)
+
+-- 4. Pairwise model error overlap (Jaccard on wrong-image sets) --
+          model_a           model_b  jaccard_wrong_overlap
+shufflenetv2_x0_5 mobilenetv2_x0_75               0.490566
+shufflenetv2_x0_5         repvgg_a2               0.467890
+mobilenetv2_x0_75         repvgg_a2               0.518837
