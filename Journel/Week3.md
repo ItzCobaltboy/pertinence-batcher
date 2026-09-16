@@ -388,3 +388,8 @@ passes cleanly end to end, producing the new `accuracy_vs_mflops_{test,final_val
 visually an exact match to the paper's own Fig. 6-10 style (PERTINENCE points, green "SOTA CNNs"
 reference points per pool model, joint Pareto front). Neither variant's real 50-population/
 50-generation/20-epoch search has been run yet — that's still the next step, on the A100.
+
+## [REALISATION] Problem with current model is severe class imbalance
+
+- Found a paper on DWB, based on some log thing -- https://ieeexplore.ieee.org/abstract/document/9324926
+- Theoritically, penalty for overestimation and underestimation should be symmetric to push model to 100% ideal, this hurts alpha sys, but randomly initilized penalties may not work, ie what if we create a population manually, ranging from understimation heavy penalty to balanced to overestiamtion and let the thing figure itself out...

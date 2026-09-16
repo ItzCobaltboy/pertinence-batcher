@@ -24,7 +24,7 @@ cifar-100/fig9d/results/nsga2/*.npz
 cifar-100/fig9c/results/eval/model_cache/**
 cifar-100/fig9d/results/eval/model_cache/**
 cifar-100/PIPELINE_REPORT.md
-Claude outputs/
+pptx/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
