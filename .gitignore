@@ -25,6 +25,7 @@ cifar-100/fig9c/results/eval/model_cache/**
 cifar-100/fig9d/results/eval/model_cache/**
 cifar-100/PIPELINE_REPORT.md
 pptx/
+yolo-analysis/dataset/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

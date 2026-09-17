@@ -1,0 +1,17 @@
+yolov8n.pt,yolov8s.pt,yolov8m.pt,yolov8l.pt,count
+False,False,False,False,1821
+True,True,True,True,1410
+False,True,True,True,362
+False,False,False,True,252
+False,False,True,True,245
+False,False,True,False,148
+True,False,True,True,103
+True,False,False,False,98
+False,True,False,False,85
+True,True,False,True,83
+True,True,True,False,81
+False,True,True,False,77
+False,True,False,True,74
+True,True,False,False,69
+True,False,False,True,53
+True,False,True,False,39
