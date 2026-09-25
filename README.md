@@ -25,6 +25,10 @@ cifar-100/                  CIFAR-100 track -- shared infra + two self-contained
 archive/
   model_analysis/           done -- model pool selection + Torch-TensorRT precision benchmark
   quantization_experiments/ done -- calibrated PTQ + batch-size-sweep experiments
+yolo-analysis/               YOLOv8 n/s/m/l on COCO -- class-recall benchmark, self-contained
+scheduler-sim/               discrete-event simulator for the N-model/single-accelerator batch
+                              scheduling problem (Journel/Week4.md's formal problem definition),
+                              self-contained -- see scheduler-sim/README.md
 Journel/                    work session logs (narrative "why" record)
 ```
 
@@ -55,6 +59,9 @@ python cifar-100/fig9d/run_dispatcher_analysis.py
 - [`dispatcher_analysis/`](dispatcher_analysis/README.md) — evaluate the resulting front
 - [`eda/`](eda/README.md) — ground-truth EDA (per-model/oracle accuracy, class balance)
 - [`cifar-100/`](cifar-100/README.md) — CIFAR-100 track specifics (shared infra + both sub-tracks)
+- [`yolo-analysis/`](yolo-analysis/README.md) — YOLOv8 n/s/m/l on COCO, class-recall benchmark
+- [`scheduler-sim/`](scheduler-sim/README.md) — discrete-event simulator for the batch
+  scheduling problem, standalone package
 
 Archived, done work (kept for reference, not part of the active pipeline):
 
@@ -90,5 +97,8 @@ install above.
 | 4 | Batching extension (route sub-batches per model, reassemble) | ⬜ Not started |
 | — | Calibrated PTQ quantization experiments | ✅ Done (proven, not integrated into pool) |
 | — | CIFAR-100 track (`fig9c`/`fig9d`) | ✅ Both sub-tracks smoke-tested end to end; full-hyperparameter NSGA-II searches not yet run |
+| 5 | YOLOv8 n/s/m/l on COCO — class-recall benchmark + correctness definition | ✅ Done |
+| 6 | Scheduler discrete-event simulator (`scheduler-sim/`) | ✅ Built, tested, example sweeps run — see `scheduler-sim/README.md` |
+| 7 | Scheduler validated experimentally with PERTINENCE in the loop | ⬜ Not started |
 
 See `Journel/` for the full narrative.
