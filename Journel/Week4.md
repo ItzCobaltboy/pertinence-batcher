@@ -83,38 +83,57 @@ numbers exist to design against.
 
 ---
 
-## [DECISION] Formal problem definition — the scheduling problem, stated properly
+## [DECISION] Formal problem definition: the scheduling problem, stated properly
 
-**Given.** A model pool where each model M_j has latency L_j, cost C_j, and an associated
-queue Q_j; a batch-size set B available to each queue. The PERTINENCE dispatcher routes
-each arriving image to a queue exactly as in the base system — routing itself is untouched
-here, jobs arrive and are allocated to their respective model's queue by the existing
-dispatcher.
+**Given.**
+- N models M_1 ... M_N, each with its own queue Q_i and a set of supported batch sizes B_i.
+  Running model i on a batch of size b in B_i takes T_i(b), a measured per-model curve.
+- Jobs arrive periodically (period Δ). Each arriving job is added to one queue, as assigned by the
+  PERTINENCE dispatcher. Routing is fixed from the scheduler's point of view.
+- A single accelerator runs one batch at a time, non-preemptively. A batch contains jobs from one
+  queue only.
+- Whenever the accelerator is free, the scheduler picks which queue to serve and a batch size
+  b <= |Q_i|, or chooses to wait so a batch can fill.
+
+T_i(b) is a curve rather than one number per model because batch runtime grows with batch size,
+and not the same way for every model. The Week2 Exp2 sweep
+(`archive/quantization_experiments/results/exp2_batch_size_sweep.csv`) shows it:
+
+| batch | resnet18 fp32 total | vs. bs=1 | resnet50 fp32 total | vs. bs=1 |
+|---|---|---|---|---|
+| 1 | 5.06 ms | 1.0x | 7.45 ms | 1.0x |
+| 4 | 6.30 ms | 1.24x | 13.04 ms | 1.75x |
+| 8 | 9.24 ms | 1.8x | 27.25 ms | 3.7x |
+| 16 | 16.20 ms | 3.2x | 64.94 ms | 8.7x |
+| 32 | 33.43 ms | 6.6x | 149.61 ms | 20x |
+
+resnet18 is roughly affine (a fixed overhead plus a small per-image cost up to bs=4, then linear at
+~1 ms/image); resnet50 is convex (per-image latency gets worse past bs=4). So the useful batch-size
+range differs per model.
 
 **Definitions.**
-- *Accuracy*: the fraction of images correctly classified by the model they were routed
-  to. Unchanged from PERTINENCE's own alpha_sys — the scheduler changes when a routed job
-  runs, not where it's routed.
-- *I*: total number of images processed.
-- *B_n*: total number of batches actually run (model invocations) — one call of any size
-  counts as one, regardless of how many images it holds.
-- *B_o*: the batch count under the no-batching baseline, i.e. batch size fixed at 1
-  everywhere, so B_o = I by construction (a constant, not a variable — this is the thing
-  B_n is trying to beat, not something B_n equals in general).
-- *T_i*: turnaround time of image i, T_i = T_output(i) - T_arrival(i).
-- *T-bar*: average turnaround time across all processed images, T-bar = (1/I) * sum_{i=1}^{I} T_i.
+- *I*: total number of jobs processed.
+- *T_i*: turnaround time of job i, T_output(i) - T_arrival(i).
+- *T-bar*: mean turnaround time, (1/I) * sum_{i=1}^{I} T_i.
+- *C*: total compute, the accelerator's total busy time, the sum of T_i(b) over every batch run.
+  Energy can stand in for busy time once power is measured.
 
 **Objectives.**
-- Maximize accuracy.
-- Minimize B_n / B_o — the batch-compression ratio: how much batching reduced actual
-  model invocations relative to the unbatched baseline. 1 = no benefit from batching,
-  smaller = more aggressive batching.
-- Minimize T-bar, the average turnaround time across all processed images.
+- Minimize C.
+- Minimize T-bar.
 
-This is the formal spec behind the scheduler pitch from this week's meeting — the
-multi-objective shape mirrors the existing NSGA-II routing search (maximize accuracy,
-minimize cost), but adds the batching-efficiency and turnaround-time axes that only exist
-once concurrent streams and queueing are in the picture.
+Accuracy is not an objective: with routing fixed, the scheduler only changes *when* a job runs, not
+*which* model runs it, so accuracy is whatever the dispatcher already delivers.
+
+**Extension.** Let the scheduler choose among the models that are acceptable for a given input,
+instead of taking the dispatcher's single assignment. Accuracy then comes back as a constraint: job
+x may only go to models that pass the correctness bar for it (recall >= 0.80, see the
+correctness-definition entry below). That split sizes the freedom: 44.7% of the train subset is
+correct on every model, so those jobs could go to whichever queue is closest to a full batch at no
+accuracy cost. Routing as a batching lever is where the prior-art search (project doc "Multi-Class
+Batch-Service Scheduling on a Single Accelerator: Prior-Art and Novelty Assessment") found the
+clearest gap: the closest operations-research models (Xia et al. 2002, Chen & Wang 2022) assume
+fixed classes and batch cost that doesn't depend on batch size.
 
 ---
 
@@ -290,8 +309,8 @@ not because they're genuinely hard, just because "exactly right on every object 
 image" is an unreasonably strict bar.
 
 **Plain recall thresholded loose (>= 0.65)** swung too far the other way. All-four-correct
-jumped to 68.0%, all-four-wrong dropped to 4.1%, disagreement zone collapsed to 15.9% — most
-of the clash signal disappeared, since a 0.65 bar is loose enough that even nano clears it on
+jumped to 68.0%, all-four-wrong dropped to 4.1%, disagreement zone shrank to 28.0% — a
+large part of the clash signal disappeared, since a 0.65 bar is loose enough that even nano clears it on
 most images. This is the failure mode flagged as a risk before ever running the benchmark:
 too soft a metric gives the models nothing real to disagree about.
 
@@ -301,7 +320,7 @@ feel:
 | threshold | all-correct | all-wrong | disagreement zone |
 |---|---|---|---|
 | exact-match | 23.6% | 35.6% | 40.8% |
-| recall >= 0.65 | 68.0% | 4.1% | 15.9% |
+| recall >= 0.65 | 68.0% | 4.1% | 28.0% |
 | recall >= 0.80 | 44.7% | 15.6% | 39.7% |
 
 0.80 preserves almost exactly as much disagreement-zone signal as exact-match (39.7% vs.

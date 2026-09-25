@@ -102,17 +102,22 @@ def compute_permutation_counts(pivoted):
     config.MODEL_POOL -- 2^len(MODEL_POOL) rows (16 for a 4-model pool), each
     with the count of images landing in that exact combination. Combinations
     with zero images are still included, with count 0.
+
+    Rows are in truth-table order (all False first, all True last), with the
+    first model in config.MODEL_POOL as the most significant bit, rather than
+    sorted by count -- so the same combination sits on the same row across
+    every split and threshold, and tables can be compared side by side.
     """
     models = config.MODEL_POOL
     observed_counts = pivoted.groupby(models, dropna=False).size()
 
     rows = []
-    for combo in itertools.product([True, False], repeat=len(models)):
+    for combo in itertools.product([False, True], repeat=len(models)):
         row = dict(zip(models, combo))
         row["count"] = int(observed_counts.get(combo, 0))
         rows.append(row)
 
-    counts_df = pd.DataFrame(rows).sort_values("count", ascending=False).reset_index(drop=True)
+    counts_df = pd.DataFrame(rows)
     return counts_df
 
 
