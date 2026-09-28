@@ -160,3 +160,78 @@ single-image latency) and rerun the sweep against real numbers before drawing an
 from this simulator that isn't "the engine behaves correctly." Also still open from the meeting
 notes: the literature review (not started), and validating the eventual winning policy
 experimentally with PERTINENCE actually doing the routing.
+
+---
+
+## Idea (open, not yet decided): size-aware parallel scheduling via MPS
+
+While winding down theory work, a side conversation surfaced a possible way to break the
+"one batch at a time" assumption the formal problem and `scheduler-sim` both currently make.
+
+**The idea.** CUDA MPS lets multiple processes' kernels actually run concurrently on the GPU,
+not just get queued one after another. Small-batch ML inference is typically
+memory-bandwidth-bound rather than compute-bound: the compute cores sit partly idle waiting for
+weights/activations to stream in, which is exactly why batching helps in the first place (it
+amortizes one memory load over more compute). If two small enough models both fit comfortably
+inside the GPU's memory bandwidth budget, running their batches concurrently via MPS should fill
+that idle compute with little to no slowdown, rather than serializing them.
+
+If this holds, the accelerator doesn't strictly have to run one queue's batch at a time — a
+second, small-enough batch from a different queue could run alongside it. The scheduler's job
+would then include a **size-aware parallel scheduling** decision: not just (queue, batch size),
+but whether two candidate batches are cheap enough (bandwidth-wise) to safely co-run, or must be
+serialized.
+
+**Why it's not free.** Checked against the current bibliography: nobody has cleanly
+characterized this. BCEdge learns an interference predictor (RL-based, not a formula) for
+concurrent execution; SEEB-GPU sidesteps the question entirely by physically partitioning GPU
+compute units per model (TPC masking) rather than truly sharing them. So the actual
+slowdown-vs-concurrency curve for small edge models is an open, unmeasured question, not
+something we can just plug in.
+
+**What's needed before this goes anywhere:** understand how real runtime behaves under MPS —
+does running two of our models concurrently actually cost close to nothing when neither is
+memory-bandwidth-bound, or does contention (kernel launch overhead, SM occupancy fragmentation)
+eat the theoretical benefit? That has to be measured on the actual target hardware before it's
+anything more than a hypothesis. Also a practical blocker for now: MPS on Jetson is only
+supported since JetPack 6.1 / CUDA 12.5, and has reported issues inside containers/Kubernetes —
+needs checking against whatever JetPack version is actually in use.
+
+Not pursuing this experimentally yet — flagged here so it isn't lost, and to keep the formal
+problem's "single accelerator, one batch at a time, non-preemptive" assumption honest: it's a
+simplifying assumption, not a proven hardware constraint.
+
+---
+
+## Idea (open, not yet decided): what "building a policy" actually means for this scheduler
+
+Not a decision yet, just writing down where my head's at on how the actual scheduling policy
+gets built, before I go implement anything.
+
+**The shape of it, as I currently understand it**: take the current state (queue lengths, wait
+times, T_i(b) for each model, whatever else is relevant), pass it through some function, get a
+score back for each option I could take right now. Options being: serve queue i at some batch
+size, for each queue, or wait. Whichever option scores highest, do that. This is apparently
+called a greedy/myopic index policy (cμ-rule, CAW index are the classic examples) — I'm not
+predicting the whole future, just scoring "how good does each choice look right now" and taking
+the best one, every time the accelerator frees up.
+
+**The catch**: "wait" can't just be scored as zero or ignored. Whether waiting is actually good
+depends on whether more jobs are about to show up to fill a bigger batch — and that's not
+something I know for sure, it's probabilistic. My arrivals overall are periodic (a frame shows up
+every Δ), but which queue a given frame lands in depends on the dispatcher reading the frame
+content, so from any one queue's point of view it's not periodic at all, it's a periodic tick that
+gets randomly thinned by routing. So I can't just say "a job arrives every Δ for this queue," I
+need to estimate, per queue, how likely a job is to land there.
+
+**Current plan for the "how likely"**: don't assume a textbook distribution (Poisson etc, which
+is what the OR papers assume and which doesn't actually match how my arrivals work) — instead
+track a sliding window of the last X arrivals and estimate the per-queue landing probability
+empirically from that, then use that estimate to calculate what waiting is actually worth before
+comparing it against just serving now. Window size X is itself something to tune later (too short
+= noisy, too long = can't react to routing shifts, e.g. a scene change dumping way more frames on
+one model) — not solving that now, just flagging it.
+
+Net: policy = state -> score function (including a stochastic wait-value term estimated from
+recent history) -> pick the max. That's the target shape for the actual scheduling policy once
+literature search and real T_i(b) measurements are done.
