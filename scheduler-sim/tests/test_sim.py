@@ -12,7 +12,8 @@ from sim import (Job, Profile, Queue, Scheduler, Simulator, compute_metrics, loa
                  save_raw_data)
 from schedulers import (FCFSBatchScheduler, FCFSNoBatchScheduler, LongestQueueScheduler,
                         TimeoutBatchScheduler)
-from workloads import PeriodicWorkload, StickyWorkload, UniformWorkload, WeightedWorkload
+from workloads import (PeriodicRoutedWorkload, PeriodicWorkload, StickyWorkload, UniformWorkload,
+                       WeightedWorkload)
 
 ONE_MODEL_CSV = "model,1\nm0,3.0\n"
 TWO_MODEL_CSV = "# two made-up models\nmodel,1,4,8\nm0,1.0,2.0,3.0\nm1,2.0,,6.0\n"
@@ -208,6 +209,14 @@ def test_uniform_workload_spreads_evenly(tmp_path):
 def test_weighted_workload_matches_weights(tmp_path):
     queues = make_queues(make_profile(tmp_path, TWO_MODEL_CSV))
     workload = WeightedWorkload(queues, np.random.default_rng(2), 1, 1.0, [3, 1])
+    counts = route_many(workload, 20000)
+    assert abs(counts[0] / 20000 - 0.75) < 0.02
+
+
+def test_periodic_routed_workload(tmp_path):
+    queues = make_queues(make_profile(tmp_path, TWO_MODEL_CSV))
+    workload = PeriodicRoutedWorkload(queues, np.random.default_rng(6), 4, 0.5, [3, 1])
+    assert workload.next_arrival_time(100.0, 2) == 108.0  # 4 streams / 0.5 jobs per ms = 8 ms
     counts = route_many(workload, 20000)
     assert abs(counts[0] / 20000 - 0.75) < 0.02
 

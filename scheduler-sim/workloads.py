@@ -69,6 +69,27 @@ class StickyWorkload(Workload):
         return queue_id
 
 
+class PeriodicRoutedWorkload(Workload):
+    """Cameras: every stream sends a frame exactly every period, and each frame
+    goes to queue i with probability weights[i], like a dispatcher reading the
+    frame and picking a model. The period comes from the load:
+    period_ms = num_streams / load_jobs_per_ms (8 streams at 0.25 jobs/ms is
+    one frame every 32 ms per camera, about 30 fps)."""
+
+    def __init__(self, queues, rng, num_streams, load_jobs_per_ms, weights):
+        Workload.__init__(self, queues, rng, num_streams, load_jobs_per_ms)
+        if load_jobs_per_ms <= 0:
+            raise ValueError("load_jobs_per_ms must be positive")
+        self.period_ms = num_streams / load_jobs_per_ms
+        self.probabilities = normalise_weights(weights, len(queues))
+
+    def next_arrival_time(self, now, stream_id):
+        return now + self.period_ms
+
+    def choose_queue(self, stream_id):
+        return int(self.rng.choice(len(self.queues), p=self.probabilities))
+
+
 class PeriodicWorkload(Workload):
     """Every stream sends a job exactly every period_ms (no randomness at all).
     Stream i goes to queue_for_stream[i] if given, else queue i % K. Mostly

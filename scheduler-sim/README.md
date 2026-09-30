@@ -11,7 +11,7 @@ imports nothing from the rest of the repo.
 
     sim.py             Job, Queue, Profile, the Workload and Scheduler base classes, Simulator,
                        raw data save/load, compute_metrics
-    workloads.py       Workload subclasses: Uniform, Weighted, Sticky, Periodic
+    workloads.py       Workload subclasses: Uniform, Weighted, Sticky, PeriodicRouted, Periodic
     schedulers.py      Scheduler subclasses: FCFSNoBatch, FCFSBatch, LongestQueue, TimeoutBatch
     run_experiment.py  the load sweeps, results CSVs and plots
     profiles/          T_i(b) tables (resnet_example.csv is measured, synthetic_4model.csv is SYNTHETIC)
@@ -153,5 +153,8 @@ completed.
 - The `stable` flag is a rough heuristic. It can misfire at very light loads, where small wiggles
   look like growth, and near saturation, where the fill-up from the empty start looks like growth
   (see the TODO in `sim.py`).
+- In `yolo_periodic_load_sweep` every camera starts at t=0 with the same period, so frames arrive
+  in simultaneous bursts of 8. Its turnaround reflects clearing those bursts (about 10 ms at
+  every load), a synchronized-cameras worst case rather than typical camera traffic.
 - `profiles/synthetic_4model.csv` is made up. Do not draw conclusions from it about real YOLO
   timings.

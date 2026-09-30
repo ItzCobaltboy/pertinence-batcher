@@ -19,7 +19,7 @@ import numpy as np
 from sim import Profile, Queue, Simulator, compute_metrics, load_raw_data, save_raw_data
 from schedulers import (FCFSBatchScheduler, FCFSNoBatchScheduler, LongestQueueScheduler,
                         TimeoutBatchScheduler)
-from workloads import StickyWorkload, UniformWorkload, WeightedWorkload
+from workloads import PeriodicRoutedWorkload, StickyWorkload, UniformWorkload, WeightedWorkload
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(HERE, "results")
@@ -74,6 +74,19 @@ EXPERIMENTS = [
         "num_streams": 8,
         "workload_class": StickyWorkload,
         "workload_kwargs": {"weights": YOLO_WEIGHTS, "stay_probability": 0.9},
+    },
+    # Same setup as yolo_synthetic_load_sweep but with camera-like arrivals: each
+    # stream sends a frame at a fixed period instead of Poisson. All streams start
+    # at t=0 with the same period, so frames arrive in simultaneous bursts of 8 and
+    # turnaround is dominated by clearing each burst. Read it as a synchronized-
+    # cameras worst case until streams get staggered start phases.
+    {
+        "name": "yolo_periodic_load_sweep",
+        "profile_csv": os.path.join(HERE, "profiles", "synthetic_4model.csv"),
+        "loads": [0.05, 0.10, 0.15, 0.20, 0.25],
+        "num_streams": 8,
+        "workload_class": PeriodicRoutedWorkload,
+        "workload_kwargs": {"weights": YOLO_WEIGHTS},
     },
     # Example of switching knob 1: uncomment to add a uniform-routing sweep.
     # {
