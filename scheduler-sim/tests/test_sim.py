@@ -8,10 +8,12 @@ import pytest
 # sim.py, workloads.py and schedulers.py live one folder up
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from sim import Job, Profile, Queue, Scheduler, Simulator
+from sim import (Job, Profile, Queue, Scheduler, Simulator, compute_metrics, load_raw_data,
+                 save_raw_data)
 from schedulers import (FCFSBatchScheduler, FCFSNoBatchScheduler, LongestQueueScheduler,
                         TimeoutBatchScheduler)
-from workloads import PeriodicWorkload, StickyWorkload, UniformWorkload, WeightedWorkload
+from workloads import (PeriodicRoutedWorkload, PeriodicWorkload, StickyWorkload, UniformWorkload,
+                       WeightedWorkload)
 
 ONE_MODEL_CSV = "model,1\nm0,3.0\n"
 TWO_MODEL_CSV = "# two made-up models\nmodel,1,4,8\nm0,1.0,2.0,3.0\nm1,2.0,,6.0\n"
@@ -39,7 +41,7 @@ def run_weighted(tmp_path, seed, load=0.3):
     queues = make_queues(profile)
     workload = WeightedWorkload(queues, np.random.default_rng(seed), 4, load, [0.7, 0.3])
     scheduler = FCFSBatchScheduler(queues, profile)
-    sim = Simulator(queues, workload, scheduler, profile, horizon_ms=5000, warmup_ms=500)
+    sim = Simulator(queues, workload, scheduler, profile, horizon_ms=5000)
     return sim, workload, sim.run()
 
 
@@ -58,7 +60,7 @@ def test_periodic_turnaround_equals_service_time(tmp_path):
     profile = make_profile(tmp_path, ONE_MODEL_CSV)
     queues = make_queues(profile)
     workload = PeriodicWorkload(queues, np.random.default_rng(0), 1, period_ms=10.0)
-    sim = Simulator(queues, workload, FCFSNoBatchScheduler(queues, profile), profile, 1000, 0)
+    sim = Simulator(queues, workload, FCFSNoBatchScheduler(queues, profile), profile, 1000)
     metrics = sim.run()
     assert metrics["num_jobs_completed"] > 90
     for job in sim.completed_jobs:
@@ -72,7 +74,7 @@ def test_poisson_mean_wait_matches_md1(tmp_path):
     queues = make_queues(profile)
     workload = UniformWorkload(queues, np.random.default_rng(7), 1, rho / service_ms)
     sim = Simulator(queues, workload, FCFSNoBatchScheduler(queues, profile), profile,
-                    horizon_ms=400000, warmup_ms=1000, sample_interval_ms=10000)
+                    horizon_ms=400000, sample_interval_ms=10000)
     metrics = sim.run()
     expected_wait = rho * service_ms / (2 * (1 - rho))
     assert metrics["wait_mean_ms"] == pytest.approx(expected_wait, rel=0.05)
@@ -90,7 +92,7 @@ def test_conservation(tmp_path):
         job_ids.append(job.job_id)
     assert len(job_ids) == len(set(job_ids))  # nobody served twice
     longest_batch = 6.0
-    assert metrics["busy_time_ms"] <= sim.horizon_ms - sim.warmup_ms + longest_batch
+    assert metrics["busy_time_ms"] <= sim.horizon_ms + longest_batch
 
 
 def test_same_seed_same_result_different_seed_differs(tmp_path):
@@ -99,6 +101,16 @@ def test_same_seed_same_result_different_seed_differs(tmp_path):
     other = run_weighted(tmp_path, seed=12)[2]
     assert first == second
     assert first != other
+
+
+def test_raw_data_round_trip(tmp_path):
+    sim, workload, metrics = run_weighted(tmp_path, seed=5, load=0.8)
+    path = str(tmp_path / "run.npz")
+    save_raw_data(sim.raw_data, path)
+    raw = load_raw_data(path)
+    assert compute_metrics(raw) == metrics
+    assert len(raw["job_id"]) == workload.jobs_created  # every job is in the raw data once
+    assert len(set(raw["job_id"].tolist())) == workload.jobs_created
 
 
 def test_invalid_action_raises(tmp_path):
@@ -114,7 +126,7 @@ def test_invalid_action_raises(tmp_path):
         profile = make_profile(tmp_path, TWO_MODEL_CSV)
         queues = make_queues(profile)
         workload = PeriodicWorkload(queues, np.random.default_rng(0), 1, 10.0, queue_for_stream=[0])
-        sim = Simulator(queues, workload, bad_class(queues, profile), profile, 100, 0)
+        sim = Simulator(queues, workload, bad_class(queues, profile), profile, 100)
         with pytest.raises(ValueError):
             sim.run()
 
@@ -197,6 +209,14 @@ def test_uniform_workload_spreads_evenly(tmp_path):
 def test_weighted_workload_matches_weights(tmp_path):
     queues = make_queues(make_profile(tmp_path, TWO_MODEL_CSV))
     workload = WeightedWorkload(queues, np.random.default_rng(2), 1, 1.0, [3, 1])
+    counts = route_many(workload, 20000)
+    assert abs(counts[0] / 20000 - 0.75) < 0.02
+
+
+def test_periodic_routed_workload(tmp_path):
+    queues = make_queues(make_profile(tmp_path, TWO_MODEL_CSV))
+    workload = PeriodicRoutedWorkload(queues, np.random.default_rng(6), 4, 0.5, [3, 1])
+    assert workload.next_arrival_time(100.0, 2) == 108.0  # 4 streams / 0.5 jobs per ms = 8 ms
     counts = route_many(workload, 20000)
     assert abs(counts[0] / 20000 - 0.75) < 0.02
 

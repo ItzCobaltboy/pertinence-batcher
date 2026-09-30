@@ -9,8 +9,9 @@ imports nothing from the rest of the repo.
 
 ## Files
 
-    sim.py             Job, Queue, Profile, the Workload and Scheduler base classes, Simulator, compute_metrics
-    workloads.py       Workload subclasses: Uniform, Weighted, Sticky, Periodic
+    sim.py             Job, Queue, Profile, the Workload and Scheduler base classes, Simulator,
+                       raw data save/load, compute_metrics
+    workloads.py       Workload subclasses: Uniform, Weighted, Sticky, PeriodicRouted, Periodic
     schedulers.py      Scheduler subclasses: FCFSNoBatch, FCFSBatch, LongestQueue, TimeoutBatch
     run_experiment.py  the load sweeps, results CSVs and plots
     profiles/          T_i(b) tables (resnet_example.csv is measured, synthetic_4model.csv is SYNTHETIC)
@@ -23,9 +24,46 @@ imports nothing from the rest of the repo.
     python -m pytest tests/ -q      # about 5 seconds
     python run_experiment.py        # about 1 minute, writes results/<experiment>/
 
-Each experiment folder gets `results.csv` (one row per policy, load and seed) and 5 plots:
-`turnaround_vs_busy_time.png`, `turnaround_vs_load.png`, `utilization_vs_load.png`,
-`compression_ratio_vs_load.png` and `ranking_agreement.png`.
+Each experiment folder gets `results.csv` (one row per policy, load and seed), 5 plots
+(`turnaround_vs_busy_time.png`, `turnaround_vs_load.png`, `utilization_vs_load.png`,
+`compression_ratio_vs_load.png`, `ranking_agreement.png`) and a `raw/` folder with one `.npz`
+file per run.
+
+## Raw data and adding a metric
+
+Every run saves its raw data to `results/<experiment>/raw/<policy>_load<L>_seed<S>.npz`, and
+all metrics are computed from those files by `compute_metrics` in `sim.py`. To add or change a
+metric without re-running any simulation:
+
+1. Edit `compute_metrics` (and add the column to `CSV_COLUMNS` in `run_experiment.py`).
+2. Set `SIMULATE = False` at the top of `run_experiment.py` and run it (about 10 seconds). It
+   loads the saved files and rewrites every `results.csv` and plot.
+
+`raw/` folders are git-ignored (about 50 MB in total). Runs are deterministic from their seed,
+so `SIMULATE = True` regenerates them exactly.
+
+Each file holds numpy arrays, loaded with `load_raw_data(path)` from `sim.py`:
+
+| array | contents |
+|---|---|
+| `job_id`, `job_stream_id`, `job_queue_id` | one entry per job ever created |
+| `job_status` | where the job ended up: 0 completed, 1 in service at the horizon, 2 still queued, 3 dropped |
+| `job_arrival_time`, `job_start_time`, `job_finish_time` | ms; NaN when it never happened |
+| `job_batch_size` | size of the batch the job ran in, 0 if it never started |
+| `batch_start`, `batch_end`, `batch_size`, `batch_queue_id` | one entry per batch, in start order |
+| `sample_time`, `sample_lengths` | queue-length snapshots; `sample_lengths[i][q]` is queue q at `sample_time[i]` |
+| `model_names` | model of each queue, index = queue_id |
+| `horizon_ms`, `sample_interval_ms` | run settings |
+
+Quick look at one run from a Python prompt in `scheduler-sim/`:
+
+```python
+from sim import load_raw_data
+raw = load_raw_data("results/resnet_load_sweep/raw/fcfs_batch_load0.20_seed1.npz")
+done = raw["job_status"] == 0
+turnaround = raw["job_finish_time"][done] - raw["job_arrival_time"][done]
+print(turnaround.mean(), raw["batch_size"].mean())
+```
 
 ## How it flows
 
@@ -84,11 +122,39 @@ class ShortestQueueScheduler(Scheduler):
 To use either one, add it to `POLICIES` or set an experiment's `workload_class` and
 `workload_kwargs` at the top of `run_experiment.py`.
 
+## Metrics
+
+`compute_metrics` in `sim.py` summarises a run's raw data from t=0 to `HORIZON_MS`, using every
+completed job and every batch started. Jobs still queued or mid-batch when time runs out count as not
+completed.
+
+| metric | how it is computed |
+|---|---|
+| `turnaround_*_ms` | finish time minus arrival time per completed job: mean, p50, p95, p99, max, and mean per queue |
+| `wait_mean_ms` | start time minus arrival time, averaged over completed jobs |
+| `busy_time_ms` | sum of batch durations |
+| `compression_ratio` | batches divided by completed jobs (1.0 means no batching) |
+| `throughput_jobs_per_ms` | completed jobs divided by the horizon |
+| `utilization` | busy time divided by the horizon |
+| `idle_time_ms` | horizon minus busy time |
+| `max_queue_length` | largest single queue length seen in the queue-length samples (taken every `SAMPLE_INTERVAL_MS`) |
+| `stable` | a straight line fitted to total queued jobs over time; False if it climbs by more than half the average total |
+| `per_model` | per model: jobs served, number of batches, batch-size histogram, mean wait |
+
 ## Things to know
 
 - Partial batches are padded: a batch of 5 on a model with engines for 4 and 8 pays the cost of 8.
-- Metrics ignore jobs that arrived, and batches that started, during the warm-up.
-- The `stable` flag is a rough heuristic and wrongly says False on some very light loads (see
-  the TODO in `sim.py`).
+- Every stream sends its first job at t=0, and the queues start empty, so the first moments look
+  slightly better than steady state. That bias shrinks as `HORIZON_MS` grows.
+- Overloaded runs have no steady state: their turnaround grows with the run length and only says
+  "this policy cannot keep up".
+- A batch still running at the horizon is counted at its full duration, so utilization can read
+  slightly above 1.0 by at most one batch divided by the horizon.
+- The `stable` flag is a rough heuristic. It can misfire at very light loads, where small wiggles
+  look like growth, and near saturation, where the fill-up from the empty start looks like growth
+  (see the TODO in `sim.py`).
+- In `yolo_periodic_load_sweep` every camera starts at t=0 with the same period, so frames arrive
+  in simultaneous bursts of 8. Its turnaround reflects clearing those bursts (about 10 ms at
+  every load), a synchronized-cameras worst case rather than typical camera traffic.
 - `profiles/synthetic_4model.csv` is made up. Do not draw conclusions from it about real YOLO
   timings.

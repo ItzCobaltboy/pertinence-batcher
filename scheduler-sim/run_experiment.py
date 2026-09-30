@@ -1,6 +1,8 @@
 """Runs the load sweeps: for every experiment, policy, load and seed, build a
-fresh simulation, run it, and store one row of metrics. Then writes
-results/<experiment>/results.csv and 5 plots per experiment.
+fresh simulation, run it, save its raw data, and turn that into one row of
+metrics. Then writes results/<experiment>/results.csv and 5 plots per
+experiment. With SIMULATE = False it skips simulating and recomputes
+everything from the saved raw data.
 
 Run from anywhere:  python run_experiment.py
 The two knobs are at the top: POLICIES (which schedulers) and each
@@ -14,17 +16,21 @@ matplotlib.use("Agg")  # write PNG files, never open a window
 import matplotlib.pyplot as plt
 import numpy as np
 
-from sim import Profile, Queue, Simulator
+from sim import Profile, Queue, Simulator, compute_metrics, load_raw_data, save_raw_data
 from schedulers import (FCFSBatchScheduler, FCFSNoBatchScheduler, LongestQueueScheduler,
                         TimeoutBatchScheduler)
-from workloads import StickyWorkload, UniformWorkload, WeightedWorkload
+from workloads import PeriodicRoutedWorkload, StickyWorkload, UniformWorkload, WeightedWorkload
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(HERE, "results")
 
+# True: run every simulation and save its raw data to results/<experiment>/raw/.
+# False: skip simulating, load the saved raw data and only recompute metrics and plots
+# (use this after adding or changing a metric in compute_metrics).
+SIMULATE = True
+
 SEEDS = [1, 2, 3]
 HORIZON_MS = 60000.0
-WARMUP_MS = 5000.0
 SAMPLE_INTERVAL_MS = 100.0
 
 # Knob 2: the schedulers to compare, as (name, class, extra constructor arguments).
@@ -38,7 +44,7 @@ POLICIES = [
 # Share of COCO val2017 images whose cheapest passing model is yolov8 n, s, m, l.
 # Derived from yolo-analysis/results/val2017/coco_class_recall_benchmark.csv at
 # threshold 0.80 (cheapest model with recall >= 0.80, else the largest model),
-# i.e. 2639 / 745 / 417 / 1199 out of 5000 images. Computed 2026-09-29.
+# i.e. 2639 / 745 / 417 / 1199 out of 5000 images.
 YOLO_WEIGHTS = [0.5278, 0.149, 0.0834, 0.2398]
 
 # Knob 1 lives inside each experiment: workload_class + workload_kwargs.
@@ -59,9 +65,8 @@ EXPERIMENTS = [
         "workload_class": WeightedWorkload,
         "workload_kwargs": {"weights": [0.5, 0.5]},  # no real routing data for this pair
     },
-    # NEW, not part of the regression comparison with the old implementation.
-    # Purpose: see whether bursty arrivals (a stream keeps hitting the same
-    # queue) change which scheduler wins compared to yolo_synthetic_load_sweep.
+    # Same setup as yolo_synthetic_load_sweep but with bursty arrivals (a stream
+    # keeps hitting the same queue), to see whether that changes which scheduler wins.
     {
         "name": "yolo_sticky_load_sweep",
         "profile_csv": os.path.join(HERE, "profiles", "synthetic_4model.csv"),
@@ -69,6 +74,19 @@ EXPERIMENTS = [
         "num_streams": 8,
         "workload_class": StickyWorkload,
         "workload_kwargs": {"weights": YOLO_WEIGHTS, "stay_probability": 0.9},
+    },
+    # Same setup as yolo_synthetic_load_sweep but with camera-like arrivals: each
+    # stream sends a frame at a fixed period instead of Poisson. All streams start
+    # at t=0 with the same period, so frames arrive in simultaneous bursts of 8 and
+    # turnaround is dominated by clearing each burst. Read it as a synchronized-
+    # cameras worst case until streams get staggered start phases.
+    {
+        "name": "yolo_periodic_load_sweep",
+        "profile_csv": os.path.join(HERE, "profiles", "synthetic_4model.csv"),
+        "loads": [0.05, 0.10, 0.15, 0.20, 0.25],
+        "num_streams": 8,
+        "workload_class": PeriodicRoutedWorkload,
+        "workload_kwargs": {"weights": YOLO_WEIGHTS},
     },
     # Example of switching knob 1: uncomment to add a uniform-routing sweep.
     # {
@@ -90,8 +108,14 @@ CSV_COLUMNS = [
 ]
 
 
-def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, seed):
-    """Build everything from scratch for one run and return its row."""
+def raw_data_path(experiment, policy_name, load, seed):
+    """Where the raw data of one run lives: results/<experiment>/raw/<policy>_load<L>_seed<S>.npz"""
+    file_name = policy_name + "_load" + format(load, ".2f") + "_seed" + str(seed) + ".npz"
+    return os.path.join(RESULTS_DIR, experiment["name"], "raw", file_name)
+
+
+def simulate_one(experiment, scheduler_class, scheduler_kwargs, load, seed):
+    """Build everything from scratch for one run, run it, and return its raw data."""
     profile = Profile(experiment["profile_csv"])
     queues = []
     for queue_id in range(len(profile.models)):
@@ -100,9 +124,23 @@ def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, se
     workload = experiment["workload_class"](queues, rng, experiment["num_streams"], load,
                                             **experiment["workload_kwargs"])
     scheduler = scheduler_class(queues, profile, **scheduler_kwargs)
-    simulator = Simulator(queues, workload, scheduler, profile, HORIZON_MS, WARMUP_MS,
-                          SAMPLE_INTERVAL_MS)
-    metrics = simulator.run()
+    simulator = Simulator(queues, workload, scheduler, profile, HORIZON_MS, SAMPLE_INTERVAL_MS)
+    simulator.run()
+    return simulator.raw_data
+
+
+def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, seed):
+    """Get the raw data of one run (simulate and save it, or load the saved file)
+    and turn it into one row of metrics."""
+    path = raw_data_path(experiment, policy_name, load, seed)
+    if SIMULATE:
+        raw = simulate_one(experiment, scheduler_class, scheduler_kwargs, load, seed)
+        save_raw_data(raw, path)
+    else:
+        if not os.path.exists(path):
+            raise FileNotFoundError(path + " is missing: run once with SIMULATE = True")
+        raw = load_raw_data(path)
+    metrics = compute_metrics(raw)
 
     row = {"experiment": experiment["name"], "policy": policy_name,
            "load_jobs_per_ms": load, "seed": seed}
@@ -112,6 +150,7 @@ def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, se
 
 
 def run_experiment(experiment):
+    os.makedirs(os.path.join(RESULTS_DIR, experiment["name"], "raw"), exist_ok=True)
     rows = []
     for policy_name, scheduler_class, scheduler_kwargs in POLICIES:
         for load in experiment["loads"]:
