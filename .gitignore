@@ -255,3 +255,9 @@ codex/
 
 # scheduler-sim raw per-run data (regenerable from seeds, about 50 MB)
 scheduler-sim/results/*/raw/
+
+# yolo-analysis batch_sweep caches (rebuildable, not results): compiled TRT engines (~4 GB),
+# the per-session lock file, and any YOLO checkpoint ultralytics downloads next to the scripts
+yolo-analysis/results/batch_sweep/engines/
+yolo-analysis/results/batch_sweep/logs/*/measure.lock
+yolo-analysis/batch_sweep/*.pt
