@@ -235,3 +235,47 @@ one model) — not solving that now, just flagging it.
 Net: policy = state -> score function (including a stochastic wait-value term estimated from
 recent history) -> pick the max. That's the target shape for the actual scheduling policy once
 literature search and real T_i(b) measurements are done.
+
+---
+
+## [SETUP] scheduler-sim rewritten as plain student-style OOP, same results within noise
+
+The first version of `scheduler-sim` worked but I couldn't read it top to bottom: registries,
+ABCs, frozen view dataclasses, decorators, import-for-side-effect registration, a JSONL tracer and
+hooks nothing used. I rebuilt it in place as three plain files I can actually follow:
+
+- `sim.py`: `Job`, `Queue`, `Profile` (the T_i(b) table), the two base classes `Workload` and
+  `Scheduler`, the `Simulator` (one heap, one while loop) and `compute_metrics`.
+- `workloads.py`: `UniformWorkload`, `WeightedWorkload`, `StickyWorkload`, `PeriodicWorkload`.
+- `schedulers.py`: the same 4 policies as before (`fcfs_no_batch`, `fcfs_batch`,
+  `longest_queue`, `timeout_batch` with tau=15ms), same tie-breaks.
+
+The design is now built around the two knobs I actually want to experiment with. A Workload
+decides when a job arrives and which queue it goes to (a subclass usually only writes
+`choose_queue`), and a Scheduler decides which queue and batch size run next (only `decide`). The
+same `Queue` objects are handed to both, so there are no copied view objects in between. The
+Simulator still checks every scheduler decision and raises on an invalid one. Metrics keep the
+same keys and the same `results.csv` columns, and the `stable` heuristic is unchanged (it still
+wrongly says unstable on some very light loads, left as a TODO).
+
+**Removed**: the registries, ABCs, policy hooks, JSONL event tracer, deadline/priority fields,
+the trace router and `recall_labeling.py`, interpolate mode, model switch cost, and the live
+read of the recall CSV. The YOLO routing weights are now hardcoded from one run of the old code
+at recall >= 0.80 on val2017: `[0.5278, 0.149, 0.0834, 0.2398]` for n/s/m/l (2639 / 745 / 417 /
+1199 of 5000 images).
+
+**Regression check against the old implementation**: RNG usage changed (one generator now drives
+both arrivals and routing), so numbers can't match bit for bit. On `yolo_synthetic_load_sweep`
+every seed-averaged turnaround, utilization and compression ratio is within 7% of the old value
+and the policy ranking is identical at every load. On `resnet_load_sweep` loads 0.05 to 0.20 are
+within 6% with identical rankings. At 0.25 and 0.30 a few cells moved 10 to 55% and the 3-seed
+ranking flipped, but those loads sit at 97 to 100% utilization, where the old code's own
+seed-to-seed spread was already about 40%. I reran both old and new code on 20 fresh seeds for
+those cells: they agree within 1 to 2 standard errors everywhere and rank the policies the same
+way, so the flips were seed noise, not a behaviour change.
+
+**New experiment** `yolo_sticky_load_sweep` (not part of the regression check): same YOLO setup
+but `StickyWorkload` with stay_probability=0.9, so each stream keeps hitting the same queue like
+real video. `longest_queue` still wins at every load and everything gets 5 to 15% slower. The
+one ranking change is at load 0.25, where `fcfs_no_batch` drops to last (21.2ms against 9.9ms
+without stickiness): bursts hurt the policy that can't batch the most.
