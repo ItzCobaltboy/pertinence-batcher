@@ -27,8 +27,10 @@ archive/
   quantization_experiments/ done -- calibrated PTQ + batch-size-sweep experiments
 yolo-analysis/               YOLOv8 n/s/m/l on COCO -- class-recall benchmark, self-contained
 scheduler-sim/               discrete-event simulator for the N-model/single-accelerator batch
-                              scheduling problem (Journel/Week4.md's formal problem definition),
-                              self-contained -- see scheduler-sim/README.md
+                              scheduling problem (Journel/Week4.md's formal problem definition).
+                              Plain OOP in 3 core files: sim.py (Job, Queue, Profile, Simulator and
+                              the Workload/Scheduler base classes), workloads.py, schedulers.py.
+                              Self-contained, see scheduler-sim/README.md
 Journel/                    work session logs (narrative "why" record)
 ```
 
@@ -60,8 +62,9 @@ python cifar-100/fig9d/run_dispatcher_analysis.py
 - [`eda/`](eda/README.md) — ground-truth EDA (per-model/oracle accuracy, class balance)
 - [`cifar-100/`](cifar-100/README.md) — CIFAR-100 track specifics (shared infra + both sub-tracks)
 - [`yolo-analysis/`](yolo-analysis/README.md) — YOLOv8 n/s/m/l on COCO, class-recall benchmark
-- [`scheduler-sim/`](scheduler-sim/README.md) — discrete-event simulator for the batch
-  scheduling problem, standalone package
+- [`scheduler-sim/`](scheduler-sim/README.md): discrete-event simulator for the batch
+  scheduling problem. Subclass Workload (how jobs arrive and which queue gets them) or
+  Scheduler (which queue and batch size runs next); both share the same Queue objects
 
 Archived, done work (kept for reference, not part of the active pipeline):
 
