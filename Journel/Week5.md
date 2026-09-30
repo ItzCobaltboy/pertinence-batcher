@@ -314,3 +314,29 @@ but `StickyWorkload` with stay_probability=0.9, so each stream keeps hitting the
 real video. `longest_queue` still wins at every load and everything gets 5 to 15% slower. The
 one ranking change is at load 0.25, where `fcfs_no_batch` drops to last (21.2ms against 9.9ms
 without stickiness): bursts hurt the policy that can't batch the most.
+
+---
+
+## [SETUP] Batched-inference timing sweep for real YOLOv8 T_i(b), written, waiting to run on the A100
+
+Wrote `yolo-analysis/batch_sweep/` (single entry point `sweep.py`) to replace the synthetic
+YOLO profile with measured curves. It times YOLOv8n/s/m/l at batch sizes 1, 2, 4, 8, 12, 16,
+32, 48 in three variants: eager_fp32 (plain PyTorch, torch defaults), trt_fp32 (torch_tensorrt
+dynamo compile, FP32) and trt_fp16 (same with FP16 enabled). Forward means the fused
+DetectionModel including the Detect head's box decode, on a batch already on the GPU; NMS is
+timed as a separate column. Each batch is synchronized before and after, with 20 warmup and 100
+timed batches per run and 5 independent runs per config, each run a fresh process with a fresh
+model or engine load. Rounds are shuffled so drift on the shared GPU spreads over all configs.
+Images are real, a seeded pool from the same val2017 and train2017 subset folders
+yolo-analysis uses, letterboxed like predict() and preloaded before timing. TRT engines are
+compiled once per (model, batch size) and cached (64 compiles). Every run keeps its raw
+per-batch timings plus nvidia-smi clocks, temperature, throttling and other processes at start
+and end. The sweep resumes after a kill and records failures without stopping.
+
+Testing it on CPU with torch 2.3.1 caught one real blocker: torch 2.3's export rejects YOLOv8
+because the model and its Detect head share one stride tensor. I clone the model-level copy,
+which forward never reads, so export now works for the full model, head included. TensorRT
+itself is untested until the server run. After aggregating I will pick which variant becomes the
+scheduler-sim profile (`sweep.py profile --variant <v>` writes
+`scheduler-sim/profiles/yolov8_a100_<v>.csv`). Note that "fp32" on the A100 is TF32 by default
+for both eager and TRT; I kept the defaults and logged the flags.
