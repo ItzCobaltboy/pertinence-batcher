@@ -230,14 +230,13 @@ class Scheduler:
 class Simulator:
     """Discrete-event simulation: jump from event to event instead of ticking a clock."""
 
-    def __init__(self, queues, workload, scheduler, profile, horizon_ms, warmup_ms,
+    def __init__(self, queues, workload, scheduler, profile, horizon_ms,
                  sample_interval_ms=DEFAULT_SAMPLE_INTERVAL_MS):
         self.queues = queues
         self.workload = workload
         self.scheduler = scheduler
         self.profile = profile
         self.horizon_ms = horizon_ms
-        self.warmup_ms = warmup_ms
         self.sample_interval_ms = sample_interval_ms
 
         self.events = []  # heap of (time, priority, sequence_number, kind, data)
@@ -352,22 +351,22 @@ def percentile_or_none(values, p):
     return float(np.percentile(values, p))
 
 
-def is_stable(queue_samples, warmup_ms):
+def is_stable(queue_samples):
     """Rough check that the queues are not growing without bound.
 
-    Fit a straight line to (time, total jobs queued) after warm-up. If the
-    line would add more than half of the average occupancy over the window,
-    call the run unstable.
-    TODO: this wrongly reports False on very light loads (e.g. yolo_synthetic
-    fcfs_no_batch at load 0.05, about 15% utilization) because the mean
-    occupancy is tiny, so small wiggles look like growth. Needs tightening.
+    Fit a straight line to (time, total jobs queued) over the whole run. If
+    the line would add more than half of the average occupancy over the run,
+    call it unstable.
+    TODO: this is rough and needs tightening. At very light loads the mean
+    occupancy is tiny, so small wiggles can look like growth. Near saturation
+    (about 97% utilization) the fill-up from the empty start can look like
+    growth too.
     """
     times = []
     totals = []
     for time, lengths in queue_samples:
-        if time >= warmup_ms:
-            times.append(time)
-            totals.append(sum(lengths))
+        times.append(time)
+        totals.append(sum(lengths))
     if len(times) < MIN_SAMPLES_FOR_STABILITY:
         return True
     slope, intercept = np.polyfit(np.array(times, dtype=float), np.array(totals, dtype=float), 1)
@@ -379,12 +378,13 @@ def is_stable(queue_samples, warmup_ms):
 
 
 def compute_metrics(sim):
-    """Summarise a finished run. Jobs that arrived and batches that started
-    during warm-up are ignored."""
-    jobs = [job for job in sim.completed_jobs if job.arrival_time >= sim.warmup_ms]
-    dropped = [job for job in sim.dropped_jobs if job.arrival_time >= sim.warmup_ms]
-    batches = [batch for batch in sim.batches if batch[0] >= sim.warmup_ms]
-    measured_time = max(sim.horizon_ms - sim.warmup_ms, 1e-9)
+    """Summarise a finished run, from t=0 to the horizon. There is no warm-up:
+    the empty start makes the first moments look slightly too good, and that
+    bias shrinks as the run gets longer. Jobs still queued or mid-batch at the
+    horizon are not completed and are left out."""
+    jobs = sim.completed_jobs
+    batches = sim.batches
+    measured_time = max(sim.horizon_ms, 1e-9)
 
     turnarounds = []
     waits = []
@@ -396,7 +396,7 @@ def compute_metrics(sim):
         turnarounds_per_queue.setdefault(job.queue_id, []).append(turnarounds[-1])
         waits_per_queue.setdefault(job.queue_id, []).append(waits[-1])
 
-    # Only models that actually ran a batch after warm-up get an entry.
+    # Only models that actually ran a batch get an entry.
     busy_time = 0.0
     per_model = {}
     for start, end, model, batch_size, queue_id in batches:
@@ -422,7 +422,7 @@ def compute_metrics(sim):
 
     return {
         "num_jobs_completed": len(jobs),
-        "num_jobs_dropped": len(dropped),
+        "num_jobs_dropped": len(sim.dropped_jobs),
         "num_batches": len(batches),
         "turnaround_mean_ms": mean_or_none(turnarounds),
         "turnaround_p50_ms": percentile_or_none(turnarounds, 50),
@@ -437,6 +437,6 @@ def compute_metrics(sim):
         "utilization": busy_time / measured_time,
         "idle_time_ms": max(measured_time - busy_time, 0.0),
         "max_queue_length": max_queue_length,
-        "stable": is_stable(sim.queue_samples, sim.warmup_ms),
+        "stable": is_stable(sim.queue_samples),
         "per_model": per_model,
     }

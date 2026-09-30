@@ -24,7 +24,6 @@ RESULTS_DIR = os.path.join(HERE, "results")
 
 SEEDS = [1, 2, 3]
 HORIZON_MS = 60000.0
-WARMUP_MS = 5000.0
 SAMPLE_INTERVAL_MS = 100.0
 
 # Knob 2: the schedulers to compare, as (name, class, extra constructor arguments).
@@ -100,8 +99,7 @@ def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, se
     workload = experiment["workload_class"](queues, rng, experiment["num_streams"], load,
                                             **experiment["workload_kwargs"])
     scheduler = scheduler_class(queues, profile, **scheduler_kwargs)
-    simulator = Simulator(queues, workload, scheduler, profile, HORIZON_MS, WARMUP_MS,
-                          SAMPLE_INTERVAL_MS)
+    simulator = Simulator(queues, workload, scheduler, profile, HORIZON_MS, SAMPLE_INTERVAL_MS)
     metrics = simulator.run()
 
     row = {"experiment": experiment["name"], "policy": policy_name,

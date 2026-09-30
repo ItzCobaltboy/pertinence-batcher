@@ -87,7 +87,9 @@ To use either one, add it to `POLICIES` or set an experiment's `workload_class` 
 ## Things to know
 
 - Partial batches are padded: a batch of 5 on a model with engines for 4 and 8 pays the cost of 8.
-- Metrics ignore jobs that arrived, and batches that started, during the warm-up.
+- There is no warm-up: metrics cover the whole run from t=0. The empty start makes the first
+  moments look slightly too good, and that bias shrinks as `HORIZON_MS` grows. Jobs still queued
+  or mid-batch when time runs out are not counted as completed.
 - The `stable` flag is a rough heuristic and wrongly says False on some very light loads (see
   the TODO in `sim.py`).
 - `profiles/synthetic_4model.csv` is made up. Do not draw conclusions from it about real YOLO
