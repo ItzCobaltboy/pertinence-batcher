@@ -1,6 +1,8 @@
 """Runs the load sweeps: for every experiment, policy, load and seed, build a
-fresh simulation, run it, and store one row of metrics. Then writes
-results/<experiment>/results.csv and 5 plots per experiment.
+fresh simulation, run it, save its raw data, and turn that into one row of
+metrics. Then writes results/<experiment>/results.csv and 5 plots per
+experiment. With SIMULATE = False it skips simulating and recomputes
+everything from the saved raw data.
 
 Run from anywhere:  python run_experiment.py
 The two knobs are at the top: POLICIES (which schedulers) and each
@@ -14,13 +16,18 @@ matplotlib.use("Agg")  # write PNG files, never open a window
 import matplotlib.pyplot as plt
 import numpy as np
 
-from sim import Profile, Queue, Simulator
+from sim import Profile, Queue, Simulator, compute_metrics, load_raw_data, save_raw_data
 from schedulers import (FCFSBatchScheduler, FCFSNoBatchScheduler, LongestQueueScheduler,
                         TimeoutBatchScheduler)
 from workloads import StickyWorkload, UniformWorkload, WeightedWorkload
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(HERE, "results")
+
+# True: run every simulation and save its raw data to results/<experiment>/raw/.
+# False: skip simulating, load the saved raw data and only recompute metrics and plots
+# (use this after adding or changing a metric in compute_metrics).
+SIMULATE = True
 
 SEEDS = [1, 2, 3]
 HORIZON_MS = 60000.0
@@ -88,8 +95,14 @@ CSV_COLUMNS = [
 ]
 
 
-def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, seed):
-    """Build everything from scratch for one run and return its row."""
+def raw_data_path(experiment, policy_name, load, seed):
+    """Where the raw data of one run lives: results/<experiment>/raw/<policy>_load<L>_seed<S>.npz"""
+    file_name = policy_name + "_load" + format(load, ".2f") + "_seed" + str(seed) + ".npz"
+    return os.path.join(RESULTS_DIR, experiment["name"], "raw", file_name)
+
+
+def simulate_one(experiment, scheduler_class, scheduler_kwargs, load, seed):
+    """Build everything from scratch for one run, run it, and return its raw data."""
     profile = Profile(experiment["profile_csv"])
     queues = []
     for queue_id in range(len(profile.models)):
@@ -99,7 +112,22 @@ def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, se
                                             **experiment["workload_kwargs"])
     scheduler = scheduler_class(queues, profile, **scheduler_kwargs)
     simulator = Simulator(queues, workload, scheduler, profile, HORIZON_MS, SAMPLE_INTERVAL_MS)
-    metrics = simulator.run()
+    simulator.run()
+    return simulator.raw_data
+
+
+def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, seed):
+    """Get the raw data of one run (simulate and save it, or load the saved file)
+    and turn it into one row of metrics."""
+    path = raw_data_path(experiment, policy_name, load, seed)
+    if SIMULATE:
+        raw = simulate_one(experiment, scheduler_class, scheduler_kwargs, load, seed)
+        save_raw_data(raw, path)
+    else:
+        if not os.path.exists(path):
+            raise FileNotFoundError(path + " is missing: run once with SIMULATE = True")
+        raw = load_raw_data(path)
+    metrics = compute_metrics(raw)
 
     row = {"experiment": experiment["name"], "policy": policy_name,
            "load_jobs_per_ms": load, "seed": seed}
@@ -109,6 +137,7 @@ def run_one(experiment, policy_name, scheduler_class, scheduler_kwargs, load, se
 
 
 def run_experiment(experiment):
+    os.makedirs(os.path.join(RESULTS_DIR, experiment["name"], "raw"), exist_ok=True)
     rows = []
     for policy_name, scheduler_class, scheduler_kwargs in POLICIES:
         for load in experiment["loads"]:

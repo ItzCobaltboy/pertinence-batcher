@@ -9,7 +9,8 @@ imports nothing from the rest of the repo.
 
 ## Files
 
-    sim.py             Job, Queue, Profile, the Workload and Scheduler base classes, Simulator, compute_metrics
+    sim.py             Job, Queue, Profile, the Workload and Scheduler base classes, Simulator,
+                       raw data save/load, compute_metrics
     workloads.py       Workload subclasses: Uniform, Weighted, Sticky, Periodic
     schedulers.py      Scheduler subclasses: FCFSNoBatch, FCFSBatch, LongestQueue, TimeoutBatch
     run_experiment.py  the load sweeps, results CSVs and plots
@@ -23,9 +24,46 @@ imports nothing from the rest of the repo.
     python -m pytest tests/ -q      # about 5 seconds
     python run_experiment.py        # about 1 minute, writes results/<experiment>/
 
-Each experiment folder gets `results.csv` (one row per policy, load and seed) and 5 plots:
-`turnaround_vs_busy_time.png`, `turnaround_vs_load.png`, `utilization_vs_load.png`,
-`compression_ratio_vs_load.png` and `ranking_agreement.png`.
+Each experiment folder gets `results.csv` (one row per policy, load and seed), 5 plots
+(`turnaround_vs_busy_time.png`, `turnaround_vs_load.png`, `utilization_vs_load.png`,
+`compression_ratio_vs_load.png`, `ranking_agreement.png`) and a `raw/` folder with one `.npz`
+file per run.
+
+## Raw data and adding a metric
+
+Every run saves its raw data to `results/<experiment>/raw/<policy>_load<L>_seed<S>.npz`, and
+all metrics are computed from those files by `compute_metrics` in `sim.py`. To add or change a
+metric without re-running any simulation:
+
+1. Edit `compute_metrics` (and add the column to `CSV_COLUMNS` in `run_experiment.py`).
+2. Set `SIMULATE = False` at the top of `run_experiment.py` and run it (about 10 seconds). It
+   loads the saved files and rewrites every `results.csv` and plot.
+
+`raw/` folders are git-ignored (about 50 MB in total). Runs are deterministic from their seed,
+so `SIMULATE = True` regenerates them exactly.
+
+Each file holds numpy arrays, loaded with `load_raw_data(path)` from `sim.py`:
+
+| array | contents |
+|---|---|
+| `job_id`, `job_stream_id`, `job_queue_id` | one entry per job ever created |
+| `job_status` | where the job ended up: 0 completed, 1 in service at the horizon, 2 still queued, 3 dropped |
+| `job_arrival_time`, `job_start_time`, `job_finish_time` | ms; NaN when it never happened |
+| `job_batch_size` | size of the batch the job ran in, 0 if it never started |
+| `batch_start`, `batch_end`, `batch_size`, `batch_queue_id` | one entry per batch, in start order |
+| `sample_time`, `sample_lengths` | queue-length snapshots; `sample_lengths[i][q]` is queue q at `sample_time[i]` |
+| `model_names` | model of each queue, index = queue_id |
+| `horizon_ms`, `sample_interval_ms` | run settings |
+
+Quick look at one run from a Python prompt in `scheduler-sim/`:
+
+```python
+from sim import load_raw_data
+raw = load_raw_data("results/resnet_load_sweep/raw/fcfs_batch_load0.20_seed1.npz")
+done = raw["job_status"] == 0
+turnaround = raw["job_finish_time"][done] - raw["job_arrival_time"][done]
+print(turnaround.mean(), raw["batch_size"].mean())
+```
 
 ## How it flows
 
@@ -86,8 +124,8 @@ To use either one, add it to `POLICIES` or set an experiment's `workload_class` 
 
 ## Metrics
 
-`compute_metrics` in `sim.py` summarises a run from t=0 to `HORIZON_MS`, using every completed
-job and every batch started. Jobs still queued or mid-batch when time runs out count as not
+`compute_metrics` in `sim.py` summarises a run's raw data from t=0 to `HORIZON_MS`, using every
+completed job and every batch started. Jobs still queued or mid-batch when time runs out count as not
 completed.
 
 | metric | how it is computed |

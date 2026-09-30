@@ -8,7 +8,8 @@ import pytest
 # sim.py, workloads.py and schedulers.py live one folder up
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from sim import Job, Profile, Queue, Scheduler, Simulator
+from sim import (Job, Profile, Queue, Scheduler, Simulator, compute_metrics, load_raw_data,
+                 save_raw_data)
 from schedulers import (FCFSBatchScheduler, FCFSNoBatchScheduler, LongestQueueScheduler,
                         TimeoutBatchScheduler)
 from workloads import PeriodicWorkload, StickyWorkload, UniformWorkload, WeightedWorkload
@@ -99,6 +100,16 @@ def test_same_seed_same_result_different_seed_differs(tmp_path):
     other = run_weighted(tmp_path, seed=12)[2]
     assert first == second
     assert first != other
+
+
+def test_raw_data_round_trip(tmp_path):
+    sim, workload, metrics = run_weighted(tmp_path, seed=5, load=0.8)
+    path = str(tmp_path / "run.npz")
+    save_raw_data(sim.raw_data, path)
+    raw = load_raw_data(path)
+    assert compute_metrics(raw) == metrics
+    assert len(raw["job_id"]) == workload.jobs_created  # every job is in the raw data once
+    assert len(set(raw["job_id"].tolist())) == workload.jobs_created
 
 
 def test_invalid_action_raises(tmp_path):

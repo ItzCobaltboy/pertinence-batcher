@@ -26,6 +26,12 @@ SAMPLE = 3
 
 DEFAULT_SAMPLE_INTERVAL_MS = 100.0
 
+# Where each job ended up, as stored in the saved raw data (job_status column).
+COMPLETED = 0
+IN_SERVICE = 1
+QUEUED = 2
+DROPPED = 3
+
 # Stability check settings, see is_stable() below.
 MIN_SAMPLES_FOR_STABILITY = 4
 MAX_RELATIVE_GROWTH = 0.5
@@ -279,7 +285,8 @@ class Simulator:
             if kind != SAMPLE and not self.accelerator_busy:
                 self.try_to_dispatch()
 
-        return compute_metrics(self)
+        self.raw_data = collect_raw_data(self)
+        return compute_metrics(self.raw_data)
 
     def handle_arrival(self, stream_id):
         job, accepted = self.workload.handle_arrival(self.now, stream_id)
@@ -339,6 +346,80 @@ class Simulator:
         self.push_event(end_time, BATCH_DONE, batch_jobs)
 
 
+def collect_raw_data(sim):
+    """Everything that happened in a finished run, as plain numpy arrays.
+
+    Saved to disk by run_experiment.py, so any metric can be computed later
+    from the file without running the simulation again. Every job ever created
+    is included, with a status saying where it ended up. Times that never
+    happened (e.g. finish_time of a queued job) are NaN.
+    """
+    jobs_and_status = []
+    for job in sim.completed_jobs:
+        jobs_and_status.append((job, COMPLETED))
+    for job in sim.in_service:
+        jobs_and_status.append((job, IN_SERVICE))
+    for queue in sim.queues:
+        for job in queue.jobs:
+            jobs_and_status.append((job, QUEUED))
+    for job in sim.dropped_jobs:
+        jobs_and_status.append((job, DROPPED))
+
+    columns = {"job_id": [], "job_stream_id": [], "job_queue_id": [], "job_status": [],
+               "job_arrival_time": [], "job_start_time": [], "job_finish_time": [],
+               "job_batch_size": []}
+    for job, status in jobs_and_status:
+        columns["job_id"].append(job.job_id)
+        columns["job_stream_id"].append(job.stream_id)
+        columns["job_queue_id"].append(job.queue_id)
+        columns["job_status"].append(status)
+        columns["job_arrival_time"].append(job.arrival_time)
+        columns["job_start_time"].append(nan_if_none(job.start_time))
+        columns["job_finish_time"].append(nan_if_none(job.finish_time))
+        columns["job_batch_size"].append(0 if job.batch_size is None else job.batch_size)
+
+    raw = {}
+    for name in columns:
+        raw[name] = np.array(columns[name])
+    raw["job_status"] = raw["job_status"].astype(int)
+
+    # one entry per batch run on the accelerator, in the order they started
+    raw["batch_start"] = np.array([batch[0] for batch in sim.batches], dtype=float)
+    raw["batch_end"] = np.array([batch[1] for batch in sim.batches], dtype=float)
+    raw["batch_size"] = np.array([batch[3] for batch in sim.batches], dtype=int)
+    raw["batch_queue_id"] = np.array([batch[4] for batch in sim.batches], dtype=int)
+
+    # queue-length snapshots: sample_lengths[i][q] = length of queue q at sample_time[i]
+    raw["sample_time"] = np.array([sample[0] for sample in sim.queue_samples], dtype=float)
+    raw["sample_lengths"] = np.array([sample[1] for sample in sim.queue_samples], dtype=int)
+
+    raw["model_names"] = np.array([queue.model_name for queue in sim.queues])  # index = queue_id
+    raw["horizon_ms"] = np.array(sim.horizon_ms, dtype=float)
+    raw["sample_interval_ms"] = np.array(sim.sample_interval_ms, dtype=float)
+    return raw
+
+
+def nan_if_none(value):
+    if value is None:
+        return float("nan")
+    return value
+
+
+def save_raw_data(raw, path):
+    """Write the raw data of one run to a compressed .npz file."""
+    np.savez_compressed(path, **raw)
+
+
+def load_raw_data(path):
+    """Read a file written by save_raw_data back into a dict of numpy arrays."""
+    raw = {}
+    data = np.load(path)
+    for name in data.files:
+        raw[name] = data[name]
+    data.close()
+    return raw
+
+
 def mean_or_none(values):
     if len(values) == 0:
         return None
@@ -351,7 +432,7 @@ def percentile_or_none(values, p):
     return float(np.percentile(values, p))
 
 
-def is_stable(queue_samples):
+def is_stable(sample_times, sample_lengths):
     """Rough check that the queues are not growing without bound.
 
     Fit a straight line to (time, total jobs queued) over the whole run. If
@@ -362,45 +443,53 @@ def is_stable(queue_samples):
     (about 97% utilization) the fill-up from the empty start can look like
     growth too.
     """
-    times = []
-    totals = []
-    for time, lengths in queue_samples:
-        times.append(time)
-        totals.append(sum(lengths))
-    if len(times) < MIN_SAMPLES_FOR_STABILITY:
+    if len(sample_times) < MIN_SAMPLES_FOR_STABILITY:
         return True
-    slope, intercept = np.polyfit(np.array(times, dtype=float), np.array(totals, dtype=float), 1)
+    totals = []
+    for lengths in sample_lengths:
+        totals.append(int(np.sum(lengths)))
+    slope, intercept = np.polyfit(sample_times, np.array(totals, dtype=float), 1)
     mean_total = float(np.mean(totals))
     if mean_total <= 0:
         mean_total = 1.0
-    window = max(times[-1] - times[0], 1e-9)
+    window = max(float(sample_times[-1] - sample_times[0]), 1e-9)
     return bool(slope * window / mean_total < MAX_RELATIVE_GROWTH)
 
 
-def compute_metrics(sim):
-    """Summarise a finished run over the whole window, from t=0 to the horizon.
-    The empty start makes the first moments look slightly too good, and that
-    bias shrinks as the run gets longer. Jobs still queued or mid-batch at the
-    horizon are not completed and are left out."""
-    jobs = sim.completed_jobs
-    batches = sim.batches
-    measured_time = max(sim.horizon_ms, 1e-9)
+def compute_metrics(raw):
+    """Summarise one run from its raw data (see collect_raw_data), over the
+    whole window from t=0 to the horizon. The empty start makes the first
+    moments look slightly too good, and that bias shrinks as the run gets
+    longer. Jobs still queued or mid-batch at the horizon are not completed
+    and are left out."""
+    measured_time = max(float(raw["horizon_ms"]), 1e-9)
+    model_names = raw["model_names"]
 
     turnarounds = []
     waits = []
     turnarounds_per_queue = {}  # queue_id -> list of turnaround times
     waits_per_queue = {}        # queue_id -> list of wait times
-    for job in jobs:
-        turnarounds.append(job.finish_time - job.arrival_time)
-        waits.append(job.start_time - job.arrival_time)
-        turnarounds_per_queue.setdefault(job.queue_id, []).append(turnarounds[-1])
-        waits_per_queue.setdefault(job.queue_id, []).append(waits[-1])
+    num_dropped = 0
+    for i in range(len(raw["job_id"])):
+        if raw["job_status"][i] == DROPPED:
+            num_dropped += 1
+        if raw["job_status"][i] != COMPLETED:
+            continue
+        queue_id = int(raw["job_queue_id"][i])
+        arrival = float(raw["job_arrival_time"][i])
+        turnarounds.append(float(raw["job_finish_time"][i]) - arrival)
+        waits.append(float(raw["job_start_time"][i]) - arrival)
+        turnarounds_per_queue.setdefault(queue_id, []).append(turnarounds[-1])
+        waits_per_queue.setdefault(queue_id, []).append(waits[-1])
 
     # Only models that actually ran a batch get an entry.
     busy_time = 0.0
     per_model = {}
-    for start, end, model, batch_size, queue_id in batches:
-        busy_time += end - start
+    for i in range(len(raw["batch_start"])):
+        busy_time += float(raw["batch_end"][i]) - float(raw["batch_start"][i])
+        queue_id = int(raw["batch_queue_id"][i])
+        batch_size = int(raw["batch_size"][i])
+        model = str(model_names[queue_id])
         if model not in per_model:
             per_model[model] = {"jobs_served": 0, "num_batches": 0, "batch_size_histogram": {},
                                 "mean_wait_ms": mean_or_none(waits_per_queue.get(queue_id, []))}
@@ -414,16 +503,18 @@ def compute_metrics(sim):
     for queue_id in turnarounds_per_queue:
         per_queue_mean[queue_id] = mean_or_none(turnarounds_per_queue[queue_id])
     max_queue_length = 0
-    for time, lengths in sim.queue_samples:
-        max_queue_length = max(max_queue_length, max(lengths))
+    if raw["sample_lengths"].size > 0:
+        max_queue_length = int(np.max(raw["sample_lengths"]))
+    num_completed = len(turnarounds)
+    num_batches = len(raw["batch_start"])
     compression_ratio = None
-    if len(jobs) > 0:
-        compression_ratio = len(batches) / len(jobs)
+    if num_completed > 0:
+        compression_ratio = num_batches / num_completed
 
     return {
-        "num_jobs_completed": len(jobs),
-        "num_jobs_dropped": len(sim.dropped_jobs),
-        "num_batches": len(batches),
+        "num_jobs_completed": num_completed,
+        "num_jobs_dropped": num_dropped,
+        "num_batches": num_batches,
         "turnaround_mean_ms": mean_or_none(turnarounds),
         "turnaround_p50_ms": percentile_or_none(turnarounds, 50),
         "turnaround_p95_ms": percentile_or_none(turnarounds, 95),
@@ -433,10 +524,10 @@ def compute_metrics(sim):
         "wait_mean_ms": mean_or_none(waits),
         "busy_time_ms": busy_time,
         "compression_ratio": compression_ratio,
-        "throughput_jobs_per_ms": len(jobs) / measured_time,
+        "throughput_jobs_per_ms": num_completed / measured_time,
         "utilization": busy_time / measured_time,
         "idle_time_ms": max(measured_time - busy_time, 0.0),
         "max_queue_length": max_queue_length,
-        "stable": is_stable(sim.queue_samples),
+        "stable": is_stable(raw["sample_time"], raw["sample_lengths"]),
         "per_model": per_model,
     }
