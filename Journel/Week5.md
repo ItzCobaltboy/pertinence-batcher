@@ -163,6 +163,41 @@ experimentally with PERTINENCE actually doing the routing.
 
 ---
 
+## [RESULT] Literature search done: the multi-queue batch-scheduling gap looks open, the power lever is not new on its own
+
+Did the literature search the meeting asked for. About 50 papers, each with a link and a "what is
+actually different from us" note, are in `research.md` at the repo root (grouped by category:
+edge multi-DNN systems, real-time edge scheduling, batch-service queueing theory, incompatible job
+families, datacenter serving, LLM serving, energy/DVFS).
+
+**Closest work**: EdgeServing (arXiv 2605.05527). Same setting as ours (several models
+time-sharing one GPU, own queue each, offline-measured latency table, tested on a Jetson Orin
+Nano). It differs in objective (SLO violations, not turnaround or compute), adds an early-exit
+depth choice, and always dispatches min(queue length, B_max), so it never waits or picks a smaller
+batch on purpose.
+
+**Theory side**: Xia et al. 2002, Chen & Wang 2022 and Duenyas & Neale 1997 (incompatible job
+families, the best keyword anchor) all assume batch cost does not depend on batch size, and the
+proofs break once T_i(b) is size-dependent and different per model. That is still the open part.
+Concurrent or preemptive edge systems (BCEdge, SEEB-GPU, Pantheon, Fluid Batching, RT-mDL) break
+our one-batch-at-a-time assumption, so they are not the same problem.
+
+**Power**: Camel (Jetson AGX Orin) and Nabavinejad et al. (TPDS 2022) already tune batch size and
+GPU frequency together for delay and energy, but for a single model. So turnaround plus power is
+not new by itself. What nobody has done is that joint tuning across N heterogeneous queues, where
+the scheduler also picks which queue goes next.
+
+**Leaning towards** (not decided): extend T_i(b) to T_i(b, f) with a measured power number, and let
+the policy pick (queue, batch size, frequency), still one batch at a time. The MPS idea below stays
+a separate open thread.
+
+**Corrections found**: the polling-with-set-up-costs paper is Duenyas & Van Oyen (1995), not
+Koole (1998); the Whittle-index paper is Glazebrook, Lumley & Ansell (2003). **Still unverified**
+(paywalled): whether Chen & Wang's finite-capacity extension is a full optimality proof, and the
+headline number in Nabavinejad et al.
+
+---
+
 ## Idea (open, not yet decided): size-aware parallel scheduling via MPS
 
 While winding down theory work, a side conversation surfaced a possible way to break the
