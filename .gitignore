@@ -252,8 +252,6 @@ __marimo__/
 .claude/
 codex/
 
-# Claude Code project context (local-only, not shared/versioned)
-CLAUDE.md
 
 # scheduler-sim raw per-run data (regenerable from seeds, about 50 MB)
 scheduler-sim/results/*/raw/
