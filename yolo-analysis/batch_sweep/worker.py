@@ -86,7 +86,7 @@ def stats(values):
 def rng_key(job):
     """Stable per-run seed: different runs get different images, reruns the same."""
     return [job["seed"], zlib.crc32(job["variant"].encode()),
-            zlib.crc32(settings.model_stem(job["model"]).encode()), job["batch_size"], job["run_index"]]
+            zlib.crc32(settings.model_stem(job["model"]).encode()), job["batch_size"], job.get("run_index", 0)]  # compile jobs have no run_index
 
 
 def apply_torch_flags(job):

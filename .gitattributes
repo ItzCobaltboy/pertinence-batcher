@@ -1,0 +1,2 @@
+# Shell scripts run on Linux servers: always check out with LF, even on Windows
+*.sh text eol=lf
