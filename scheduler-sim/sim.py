@@ -26,7 +26,7 @@ SAMPLE = 3
 
 DEFAULT_SAMPLE_INTERVAL_MS = 100.0
 
-# Stability check settings (same heuristic as the previous implementation).
+# Stability check settings, see is_stable() below.
 MIN_SAMPLES_FOR_STABILITY = 4
 MAX_RELATIVE_GROWTH = 0.5
 
@@ -378,8 +378,8 @@ def is_stable(queue_samples):
 
 
 def compute_metrics(sim):
-    """Summarise a finished run, from t=0 to the horizon. There is no warm-up:
-    the empty start makes the first moments look slightly too good, and that
+    """Summarise a finished run over the whole window, from t=0 to the horizon.
+    The empty start makes the first moments look slightly too good, and that
     bias shrinks as the run gets longer. Jobs still queued or mid-batch at the
     horizon are not completed and are left out."""
     jobs = sim.completed_jobs

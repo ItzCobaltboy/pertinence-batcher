@@ -37,7 +37,7 @@ POLICIES = [
 # Share of COCO val2017 images whose cheapest passing model is yolov8 n, s, m, l.
 # Derived from yolo-analysis/results/val2017/coco_class_recall_benchmark.csv at
 # threshold 0.80 (cheapest model with recall >= 0.80, else the largest model),
-# i.e. 2639 / 745 / 417 / 1199 out of 5000 images. Computed 2026-09-29.
+# i.e. 2639 / 745 / 417 / 1199 out of 5000 images.
 YOLO_WEIGHTS = [0.5278, 0.149, 0.0834, 0.2398]
 
 # Knob 1 lives inside each experiment: workload_class + workload_kwargs.
@@ -58,9 +58,8 @@ EXPERIMENTS = [
         "workload_class": WeightedWorkload,
         "workload_kwargs": {"weights": [0.5, 0.5]},  # no real routing data for this pair
     },
-    # NEW, not part of the regression comparison with the old implementation.
-    # Purpose: see whether bursty arrivals (a stream keeps hitting the same
-    # queue) change which scheduler wins compared to yolo_synthetic_load_sweep.
+    # Same setup as yolo_synthetic_load_sweep but with bursty arrivals (a stream
+    # keeps hitting the same queue), to see whether that changes which scheduler wins.
     {
         "name": "yolo_sticky_load_sweep",
         "profile_csv": os.path.join(HERE, "profiles", "synthetic_4model.csv"),

@@ -84,13 +84,36 @@ class ShortestQueueScheduler(Scheduler):
 To use either one, add it to `POLICIES` or set an experiment's `workload_class` and
 `workload_kwargs` at the top of `run_experiment.py`.
 
+## Metrics
+
+`compute_metrics` in `sim.py` summarises a run from t=0 to `HORIZON_MS`, using every completed
+job and every batch started. Jobs still queued or mid-batch when time runs out count as not
+completed.
+
+| metric | how it is computed |
+|---|---|
+| `turnaround_*_ms` | finish time minus arrival time per completed job: mean, p50, p95, p99, max, and mean per queue |
+| `wait_mean_ms` | start time minus arrival time, averaged over completed jobs |
+| `busy_time_ms` | sum of batch durations |
+| `compression_ratio` | batches divided by completed jobs (1.0 means no batching) |
+| `throughput_jobs_per_ms` | completed jobs divided by the horizon |
+| `utilization` | busy time divided by the horizon |
+| `idle_time_ms` | horizon minus busy time |
+| `max_queue_length` | largest single queue length seen in the queue-length samples (taken every `SAMPLE_INTERVAL_MS`) |
+| `stable` | a straight line fitted to total queued jobs over time; False if it climbs by more than half the average total |
+| `per_model` | per model: jobs served, number of batches, batch-size histogram, mean wait |
+
 ## Things to know
 
 - Partial batches are padded: a batch of 5 on a model with engines for 4 and 8 pays the cost of 8.
-- There is no warm-up: metrics cover the whole run from t=0. The empty start makes the first
-  moments look slightly too good, and that bias shrinks as `HORIZON_MS` grows. Jobs still queued
-  or mid-batch when time runs out are not counted as completed.
-- The `stable` flag is a rough heuristic and wrongly says False on some very light loads (see
-  the TODO in `sim.py`).
+- Every stream sends its first job at t=0, and the queues start empty, so the first moments look
+  slightly better than steady state. That bias shrinks as `HORIZON_MS` grows.
+- Overloaded runs have no steady state: their turnaround grows with the run length and only says
+  "this policy cannot keep up".
+- A batch still running at the horizon is counted at its full duration, so utilization can read
+  slightly above 1.0 by at most one batch divided by the horizon.
+- The `stable` flag is a rough heuristic. It can misfire at very light loads, where small wiggles
+  look like growth, and near saturation, where the fill-up from the empty start looks like growth
+  (see the TODO in `sim.py`).
 - `profiles/synthetic_4model.csv` is made up. Do not draw conclusions from it about real YOLO
   timings.
