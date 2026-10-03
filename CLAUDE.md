@@ -370,10 +370,12 @@ every run rather than relying on a copied `.npz` weight file.
    badly off. On the real profile `fcfs_no_batch` collapses past ~0.49 jobs/ms, `longest_queue`
    ~ `fcfs_batch`, and `timeout_batch` uses ~38% less GPU busy time at +11 ms turnaround (load
    0.3): waiting buys compute. K/I and busy time ranked the 4 policies the same on real curves
-   (leans to K/I as primary, not final). **Running**: dense trt_fp16 sweep (session `dense`, b = 1..32 step 2, then
-   40/48/56/64) on the A100. **Next**: E_i(b) via NVML sampling during the timed loop
-   (the sweep's end-of-run power reading is useless), then the score-based policy and an
-   EdgeServing-style baseline.
+   (leans to K/I as primary, not final). **Done**: dense sweep (all 3 variants, session `main`, b = 1..32 step 2, then
+   40/48/56/64, 1260/1260 ok); profile CSV still has the old 8 columns until rebuilt. **Next**: E_i(b) via NVML sampling during the timed loop
+   (the sweep's end-of-run power reading is useless), then implement the score-based policy and an
+   EdgeServing-style baseline. **Policy v1 defined** (Week5 `[DECISION]`, not implemented):
+   Cost(i, j) = β · Σ ages of jobs not served + (1 - β) · T_ij, argmin over (queue, batch size),
+   padding allowed, no wait option yet.
 
    **Literature** (`research.md`, Week5 `[RESULT]` entries): closest is EdgeServing (arXiv
    2605.05527): same setting, but always runs min(|Q|, 10), never waits or picks b, clocks locked

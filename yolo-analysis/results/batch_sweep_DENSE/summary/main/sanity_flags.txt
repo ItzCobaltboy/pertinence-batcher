@@ -1,0 +1,289 @@
+session main: 1260 ok runs, 252 configs, 0 configs with no data, 0 failed/skipped records, 288 sanity flags
+  [per-image cost not decreasing] eager_fp32 yolov8l bs=10: T/b at 8=3.6130 ms, at 10=3.7743 ms
+  [per-image cost not decreasing] eager_fp32 yolov8l bs=14: T/b at 12=3.6710 ms, at 14=3.7691 ms
+  [per-image cost not decreasing] eager_fp32 yolov8l bs=18: T/b at 16=3.5885 ms, at 18=3.6747 ms
+  [per-image cost not decreasing] eager_fp32 yolov8l bs=22: T/b at 20=3.6153 ms, at 22=3.6441 ms
+  [per-image cost not decreasing] eager_fp32 yolov8l bs=26: T/b at 24=3.5774 ms, at 26=3.5963 ms
+  [per-image cost not decreasing] eager_fp32 yolov8l bs=32: T/b at 30=3.4981 ms, at 32=3.5342 ms
+  [per-image cost not decreasing] eager_fp32 yolov8l bs=40: T/b at 32=3.5342 ms, at 40=3.5497 ms
+  [possible GPU interference] eager_fp32 yolov8l bs=2: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8l bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] eager_fp32 yolov8m bs=6: T/b at 4=2.4255 ms, at 6=2.5390 ms
+  [per-image cost not decreasing] eager_fp32 yolov8m bs=14: T/b at 12=2.2899 ms, at 14=2.3396 ms
+  [per-image cost not decreasing] eager_fp32 yolov8m bs=22: T/b at 20=2.2393 ms, at 22=2.2855 ms
+  [per-image cost not decreasing] eager_fp32 yolov8m bs=24: T/b at 22=2.2855 ms, at 24=2.2988 ms
+  [per-image cost not decreasing] eager_fp32 yolov8m bs=32: T/b at 30=2.2295 ms, at 32=2.2663 ms
+  [per-image cost not decreasing] eager_fp32 yolov8m bs=48: T/b at 40=2.2571 ms, at 48=2.2961 ms
+  [possible GPU interference] eager_fp32 yolov8m bs=2: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8m bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] eager_fp32 yolov8n bs=18: T/b at 16=0.5581 ms, at 18=0.5806 ms
+  [per-image cost not decreasing] eager_fp32 yolov8n bs=30: T/b at 28=0.5419 ms, at 30=0.5494 ms
+  [per-image cost not decreasing] eager_fp32 yolov8n bs=40: T/b at 32=0.5472 ms, at 40=0.5568 ms
+  [possible GPU interference] eager_fp32 yolov8n bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8n bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] eager_fp32 yolov8s bs=10: T/b at 8=1.0563 ms, at 10=1.1084 ms
+  [per-image cost not decreasing] eager_fp32 yolov8s bs=18: T/b at 16=1.0241 ms, at 18=1.0681 ms
+  [per-image cost not decreasing] eager_fp32 yolov8s bs=26: T/b at 24=1.0283 ms, at 26=1.0383 ms
+  [per-image cost not decreasing] eager_fp32 yolov8s bs=32: T/b at 30=1.0135 ms, at 32=1.0235 ms
+  [per-image cost not decreasing] eager_fp32 yolov8s bs=40: T/b at 32=1.0235 ms, at 40=1.0382 ms
+  [per-image cost not decreasing] eager_fp32 yolov8s bs=48: T/b at 40=1.0382 ms, at 48=1.0480 ms
+  [possible GPU interference] eager_fp32 yolov8s bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] eager_fp32 yolov8s bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] trt_fp16 yolov8l bs=10: T/b at 8=1.3853 ms, at 10=1.3916 ms
+  [per-image cost not decreasing] trt_fp16 yolov8l bs=18: T/b at 16=1.3100 ms, at 18=1.3159 ms
+  [per-image cost not decreasing] trt_fp16 yolov8l bs=22: T/b at 20=1.3029 ms, at 22=1.3064 ms
+  [per-image cost not decreasing] trt_fp16 yolov8l bs=26: T/b at 24=1.2884 ms, at 26=1.2964 ms
+  [per-image cost not decreasing] trt_fp16 yolov8l bs=40: T/b at 32=1.2474 ms, at 40=1.2615 ms
+  [possible GPU interference] trt_fp16 yolov8l bs=1: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=2: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8l bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] trt_fp16 yolov8m bs=48: T/b at 40=0.7664 ms, at 48=0.7706 ms
+  [possible GPU interference] trt_fp16 yolov8m bs=2: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8m bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] trt_fp16 yolov8n bs=30: T/b at 28=0.2167 ms, at 30=0.2170 ms
+  [std across runs > 5% of mean] trt_fp16 yolov8n bs=2: std 0.119 ms = 6.6% of 1.806 ms
+  [possible GPU interference] trt_fp16 yolov8n bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8n bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] trt_fp16 yolov8s bs=10: T/b at 8=0.4900 ms, at 10=0.4911 ms
+  [per-image cost not decreasing] trt_fp16 yolov8s bs=18: T/b at 16=0.3895 ms, at 18=0.4005 ms
+  [per-image cost not decreasing] trt_fp16 yolov8s bs=26: T/b at 24=0.3701 ms, at 26=0.3716 ms
+  [std across runs > 5% of mean] trt_fp16 yolov8s bs=1: std 0.154 ms = 8.2% of 1.869 ms
+  [std across runs > 5% of mean] trt_fp16 yolov8s bs=2: std 0.126 ms = 5.9% of 2.121 ms
+  [possible GPU interference] trt_fp16 yolov8s bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=6: 5 of 5 runs, see run_summary 'interference'
+  [std across runs > 5% of mean] trt_fp16 yolov8s bs=8: std 0.197 ms = 5.0% of 3.920 ms
+  [possible GPU interference] trt_fp16 yolov8s bs=8: 5 of 5 runs, see run_summary 'interference'
+  [std across runs > 5% of mean] trt_fp16 yolov8s bs=10: std 0.258 ms = 5.3% of 4.911 ms
+  [possible GPU interference] trt_fp16 yolov8s bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp16 yolov8s bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] trt_fp32 yolov8l bs=6: T/b at 4=2.7858 ms, at 6=2.8265 ms
+  [per-image cost not decreasing] trt_fp32 yolov8l bs=10: T/b at 8=2.6472 ms, at 10=2.7281 ms
+  [per-image cost not decreasing] trt_fp32 yolov8l bs=18: T/b at 16=2.5799 ms, at 18=2.6800 ms
+  [per-image cost not decreasing] trt_fp32 yolov8l bs=22: T/b at 20=2.5957 ms, at 22=2.6048 ms
+  [per-image cost not decreasing] trt_fp32 yolov8l bs=26: T/b at 24=2.5562 ms, at 26=2.6187 ms
+  [per-image cost not decreasing] trt_fp32 yolov8l bs=40: T/b at 32=2.5167 ms, at 40=2.5250 ms
+  [possible GPU interference] trt_fp32 yolov8l bs=1: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=2: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8l bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] trt_fp32 yolov8m bs=18: T/b at 16=1.6000 ms, at 18=1.6284 ms
+  [per-image cost not decreasing] trt_fp32 yolov8m bs=24: T/b at 22=1.5720 ms, at 24=1.5823 ms
+  [per-image cost not decreasing] trt_fp32 yolov8m bs=30: T/b at 28=1.5520 ms, at 30=1.5621 ms
+  [per-image cost not decreasing] trt_fp32 yolov8m bs=48: T/b at 40=1.5215 ms, at 48=1.5442 ms
+  [possible GPU interference] trt_fp32 yolov8m bs=1: 4 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=2: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8m bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] trt_fp32 yolov8n bs=18: T/b at 16=0.4022 ms, at 18=0.4165 ms
+  [per-image cost not decreasing] trt_fp32 yolov8n bs=40: T/b at 32=0.3741 ms, at 40=0.3783 ms
+  [std across runs > 5% of mean] trt_fp32 yolov8n bs=2: std 0.134 ms = 5.8% of 2.329 ms
+  [possible GPU interference] trt_fp32 yolov8n bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=8: 5 of 5 runs, see run_summary 'interference'
+  [std across runs > 5% of mean] trt_fp32 yolov8n bs=10: std 0.238 ms = 5.1% of 4.703 ms
+  [possible GPU interference] trt_fp32 yolov8n bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8n bs=64: 5 of 5 runs, see run_summary 'interference'
+  [per-image cost not decreasing] trt_fp32 yolov8s bs=10: T/b at 8=0.7830 ms, at 10=0.8082 ms
+  [per-image cost not decreasing] trt_fp32 yolov8s bs=18: T/b at 16=0.7280 ms, at 18=0.7720 ms
+  [per-image cost not decreasing] trt_fp32 yolov8s bs=26: T/b at 24=0.7244 ms, at 26=0.7348 ms
+  [per-image cost not decreasing] trt_fp32 yolov8s bs=40: T/b at 32=0.7028 ms, at 40=0.7094 ms
+  [std across runs > 5% of mean] trt_fp32 yolov8s bs=2: std 0.162 ms = 5.5% of 2.937 ms
+  [possible GPU interference] trt_fp32 yolov8s bs=2: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=4: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=6: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=8: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=10: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=12: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=14: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=16: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=18: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=20: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=22: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=24: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=26: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=28: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=30: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=32: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=40: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=48: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=56: 5 of 5 runs, see run_summary 'interference'
+  [possible GPU interference] trt_fp32 yolov8s bs=64: 5 of 5 runs, see run_summary 'interference'

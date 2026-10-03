@@ -262,3 +262,7 @@ yolo-analysis/results/batch_sweep/engines/
 yolo-analysis/results/batch_sweep/logs/*/measure.lock
 yolo-analysis/batch_sweep/*.pt
 yolo-analysis/results/batch_sweep/raw
+
+# batch sweep logs (per-job stdout, launcher/measure logs)
+yolo-analysis/results/batch_sweep_DENSE/raw/**
+yolo-analysis/results/batch_sweep_OLD/raw/**

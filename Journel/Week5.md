@@ -417,17 +417,82 @@ option) and an EdgeServing-style baseline on this profile.
 
 ---
 
-## [SETUP] Dense batch-size sweep (session `dense`), running on the A100
+## [SETUP] Dense batch-size sweep, all three variants, on the A100
 
 The `main` sweep had only 8 batch sizes, too coarse to see where each curve bends (m/l knee near
 b=8, n/s near 16-32), and the simulator pads an unmeasured size up to the next measured one (b=5
-costs T(8)). Rerunning trt_fp16 only (the scheduler profile; eager is launch-bound, fp32 has the
-same shape) at b = 1, 2, 4, 6, ..., 32 in steps of 2 where the curves bend, then 40, 48, 56, 64
-where they are already linear. Going to 64 so the simulator can use larger batches at high load.
-Separate session `dense`, so `main` stays intact; cached engines are shared, so only the new
-sizes compile. Command: `SESSION=dense bash run_sweep.sh --variants trt_fp16 --batch-sizes 1 2 4
-6 8 10 12 14 16 18 20 22 24 26 28 30 32 40 48 56 64`. Power is still not sampled during the timed
-loop (E_i(b) needs a separate change).
+costs T(8)). Reran all three variants (eager_fp32, trt_fp32, trt_fp16) at b = 1, 2, 4, 6, ..., 32
+in steps of 2 where the curves bend, then 40, 48, 56, 64 where they are already linear. Going to
+64 so the simulator can use larger batches at high load. Ran it in the same session `main`: the
+sweep resumes, so the 8 sizes already measured were skipped and only new sizes ran (cached
+engines reused). Power is still not sampled during the timed loop (E_i(b) needs a separate
+change).
+
+**Done**: 1260/1260 runs ok (252 configs: 3 variants × 4 models × 21 sizes, 5 runs each), 0
+failures, every TRT engine fully TensorRT. trt_fp16 T(b) increases monotonically at all 21 sizes
+for all four models and matches the first sweep within a few percent (b=1: 1.62/1.87/2.47/2.99 ms
+for n/s/m/l). Per-image cost flattens from b~8 for l (1.39 -> 1.22 ms at 64), b~10 for m (0.87 ->
+0.76), and keeps falling to b~32 for n and s (0.21 and 0.35 ms), flat after. Past the knee l is
+linear (~1.20 ms per extra image from 8-32 and 32-64); n bends up slightly (0.16 -> 0.18).
+n and s are noisier at small b (CV 2-8%, vs <0.5% for m/l): their batches take only 2-4 ms, so
+launch/sync jitter (TRT warns it uses the default stream) is a bigger share. Small bumps at sizes
+that aren't multiples of 8 (e.g. s at b=10, 18) are TensorRT's per-engine kernel choice, real
+behaviour. A NumPy 2.2.6 vs onnxruntime ABI error shows in the logs: it comes from the
+version-logging import (torchvision -> torch.onnx -> onnxruntime), not the timed path; onnxruntime is
+unused. The server venv has numpy 2.2.6, not 1.26.4.
 
 Plan meanwhile: no Jetson yet, so hardware work beyond this sweep waits; next is designing the
 score-based policy.
+
+---
+
+## [DECISION] Scheduler policy: cost model v1, built from first principles
+
+Built the first version of my own policy in one sitting, from scratch rather than adapting a
+paper's rule.
+
+**Notation**: M queues Q_1..Q_M; N_i(t) = jobs in queue i at decision time t; batch sizes
+B_1..B_k; T_ij = latency of model i at batch size B_j (the measured profile).
+
+**Options**: at every decision there are M·k + 1 options: serve (queue i, batch size j), or wait.
+Padding is allowed, so a batch can run with B_j > N_i(t).
+
+**What drives the cost**, given the goal of minimising turnaround and power:
+1. Every job not run hurts, so small batches are bad.
+2. Longer execution hurts (roughly, power), so big batches are bad.
+
+**Structure**: give every option a cost and pick the cheapest.
+
+    Cost(i, j) = β · (cost of jobs not run) + (1 - β) · (energy cost of running batch B_j)
+
+β is a user-chosen knob trading latency against energy.
+
+**Job cost**: only jobs not run now cost anything, and the cost grows the longer a job has
+waited. With J_p = time the p-th job has spent in its queue so far:
+
+    Cost_jobs(i, j) = Σ J_p over all jobs p not chosen by option (i, j)
+
+For now J_p is the age right now; I ignore how much longer the unchosen jobs will keep waiting
+after this decision. Linear in J_p for now (exponential is an option).
+
+**Energy cost**: assume constant power, so energy is just T_ij.
+
+**Padding needs no special rule**: a bigger batch removes one more job from the not-run cost only
+while a real job fills the slot. For B_j > N_i(t) the energy cost keeps rising while the job cost
+stops falling, so padding prices itself out.
+
+**Policy v1**:
+
+    Cost(i, j) = β · Σ_{p unchosen} J_p + (1 - β) · T_ij
+    pick argmin over all (i, j); no wait option yet
+
+**Parked, not decided**:
+- Cost of the wait option (not defined yet).
+- Time horizon: unchosen jobs keep aging during T_ij, not counted yet.
+- Linear vs exponential growth of the job cost with J_p.
+- Real power P_ij per (model, batch size) instead of constant power.
+- Scale mismatch: the job term grows with queue length while T_ij doesn't, so the same β will
+  behave differently at light and heavy load.
+
+Status: theory only, not implemented in `scheduler-sim` yet. Planned as the policy to present at
+meet 6.
