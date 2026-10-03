@@ -4,10 +4,11 @@ Research project (PERTINENCE line of work).
 - **Supervisor**: Prof. Gayathri Ananthanarayanan (IIT Dharwad) + Dr. Marcello Traiola (INRIA)
 - **Goal**: input-based opportunistic dynamic execution of NNs for energy-efficient edge inference
 
-New direction (from advisor discussion): PERTINENCE assumed single-image inference; real
-deployment needs batching with mixed-complexity images. Step 1 (current): hybrid model pool +
-a hand-built dispatcher that learns the batching mechanics. Full narrative log lives
-in `Journel/` (the "why"); this file is the "what/where" snapshot.
+Current direction (since Week4): a batching-aware scheduler for PERTINENCE on compute-constrained
+edge devices (Jetson-class), built and tested in a discrete event simulator (`scheduler-sim/`)
+before running with PERTINENCE in the loop. Earlier steps (hybrid model pool, dispatcher, NSGA-II,
+CIFAR-100) are done. Full narrative log lives in `Journel/` (the "why"); this file is the
+"what/where" snapshot.
 
 ## Repo layout
 
@@ -49,20 +50,42 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   `requirements.txt`, no imports from the rest of the repo) since it's meant to be copied to a
   server to run. Not wired to `dispatcher/`/`dispatcher_analysis/` — pure data-gathering, see
   `yolo-analysis/README.md`.
-  `yolo-analysis/batch_sweep/` (single entry point `sweep.py`: preflight | measure | aggregate |
-  profile): batched-inference timing sweep for real YOLOv8 n/s/m/l T_i(b) at b = 1,2,4,8,12,16,32,48
-  in eager_fp32 / trt_fp32 / trt_fp16 (torch_tensorrt dynamo, engines compiled once and cached to
-  `results/batch_sweep/engines/`, git-ignored). Forward = fused DetectionModel incl. Detect head
-  decode, NMS a separate column. Every job is its own subprocess (crash-safe, resumable, session
-  lock). Raw per-run JSON under `results/batch_sweep/raw/<session>/`, summaries, plots and sanity
-  flags under `summary/<session>/`. `profile --variant V` writes
-  `scheduler-sim/profiles/yolov8_a100_<V>.csv` (no default variant). Gotcha: torch 2.3 export needs
-  `DetectionModel.stride` cloned (shared tensor with the Detect head). Written and CPU-tested, NOT
-  yet run on the A100.
-- `scheduler-sim/` — standalone discrete-event scheduler simulator (own `requirements.txt`, own `README.md`, no imports from the rest of the repo). Rewritten as plain, student-style OOP (three merged PRs); the old registry/ABC design is gone. Two knobs only: a `Workload` (when a job arrives and which queue it goes to; usually just `choose_queue`) and a `Scheduler` (only `decide(now)`, returning `("run", queue_id, batch_size)`, `("wait", until_time)` or `None`); the `Simulator` validates every decision. Files: `sim.py` (Job, Queue, Profile holding the T_i(b) table, Workload/Scheduler base classes, Simulator, raw-data save/load, `compute_metrics`), `workloads.py` (Uniform, Weighted, Sticky, PeriodicRouted, Periodic), `schedulers.py` (`FCFSNoBatch`, `FCFSBatch`, `LongestQueue`, `TimeoutBatch` tau=15 ms), `run_experiment.py` (sweeps, CSVs, plots), `profiles/` (`resnet_example.csv` measured; `synthetic_4model.csv` SYNTHETIC YOLOv8 n/s/m/l stand-in; `build_profiles.py`), `tests/test_sim.py` (16 pytest tests, all passing). YOLO routing weights are hardcoded from the val2017 recall >= 0.80 benchmark: `[0.528 n, 0.149 s, 0.083 m, 0.240 l]` (no live recall-CSV read anymore). Metrics are computed from t=0 (warm-up dropped because it inflated compression ratio on overloaded runs). Each run saves raw per-job data as `.npz` under `results/<exp>/raw/` (git-ignored); set `SIMULATE = False` in `run_experiment.py` to recompute metrics/plots from it in ~10 s. Four experiments in `results/`: `resnet_load_sweep`, `yolo_synthetic_load_sweep`, `yolo_sticky_load_sweep`, `yolo_periodic_load_sweep` (each with `results.csv` + 5 plots). Removed vs the first version: registries, ABCs/hooks, JSONL tracer, deadline/priority fields, trace router, `recall_labeling.py`, interpolate mode, switch cost. Known TODO: the `stable` heuristic wrongly flags some very light loads. See `Journel/Week5.md` `[SETUP]` entries.
-- `research.md` — annotated bibliography for the scheduler direction (~50 papers, each with a link and what differs from our problem). Read it before citing anything or claiming novelty.
+  `yolo-analysis/batch_sweep/` (`sweep.py`: preflight | measure | aggregate | profile): timing
+  sweep for real YOLOv8 n/s/m/l T_i(b), b = 1,2,4,8,12,16,32,48, variants eager_fp32 / trt_fp32 /
+  trt_fp16 (torch_tensorrt dynamo; engines cached in `results/batch_sweep/engines/`, git-ignored).
+  Forward = fused DetectionModel incl. Detect head decode; NMS a separate column. One subprocess
+  per job (crash-safe, resumable, session lock). Raw per-run JSON in
+  `results/batch_sweep/raw/<session>/`; summaries, plots, sanity flags in `summary/<session>/`.
+  `profile --variant V` writes `scheduler-sim/profiles/yolov8_a100_<V>.csv` (no default).
+  Gotcha: torch 2.3 export needs `DetectionModel.stride` cloned (shared with the Detect head).
+  "fp32" on the A100 is TF32 by default. **Done** (session `main`, 480/480 runs ok): results in
+  `results/batch_sweep/summary/main/`; trt_fp16 chosen as the scheduler profile.
+- `scheduler-sim/` — standalone DES for the scheduler (own `requirements.txt` and `README.md`, no
+  imports from the rest of the repo), plain OOP. Two knobs: a `Workload` (arrival times + target
+  queue, usually just `choose_queue`) and a `Scheduler` (only `decide(now)` ->
+  `("run", queue_id, batch_size)`, `("wait", until_time)` or `None`); the `Simulator` validates
+  every decision.
+  - `sim.py`: Job, Queue, Profile (T_i(b) table), base classes, Simulator, raw save/load,
+    `compute_metrics`. `workloads.py`: Uniform, Weighted, Sticky, PeriodicRouted, Periodic.
+    `schedulers.py`: `FCFSNoBatch`, `FCFSBatch`, `LongestQueue`, `TimeoutBatch` (tau = 15 ms).
+    `run_experiment.py`: sweeps, CSVs, plots. `tests/test_sim.py`: 16 pytest tests, passing.
+  - `profiles/yolov8_a100_trt_fp16.csv`: the only profile, measured YOLOv8 n/s/m/l, A100
+    TensorRT FP16, b = 1..48 (written by `yolo-analysis/batch_sweep/sweep.py profile`).
+  - YOLO routing weights hardcoded from val2017 recall >= 0.80: `[0.528 n, 0.149 s, 0.083 m,
+    0.240 l]`. Metrics from t=0 (warm-up dropped: it inflated compression ratio when overloaded).
+  - Each run saves raw per-job data as `.npz` in `results/<exp>/raw/` (git-ignored);
+    `SIMULATE = False` recomputes metrics and plots from it in ~10 s.
+  - Experiments in `results/` (each `results.csv` + 5 plots), all on the measured profile,
+    `REAL_LOADS` 0.1-1.0 jobs/ms: `yolo_load_sweep` (Poisson), `yolo_sticky_load_sweep`,
+    `yolo_periodic_load_sweep`. Old synthetic/ResNet profiles and sweeps deleted (in git history).
+  - Removed vs the first version: registries, ABCs/hooks, JSONL tracer, deadline/priority fields,
+    trace router, `recall_labeling.py`, interpolate mode, switch cost.
+  - TODO: `stable` heuristic wrongly flags some very light loads; periodic workload starts all
+    streams at t=0 (worst case), stagger phases.
+- `research.md` — annotated bibliography for the scheduler (~50 papers, link + what differs from
+  us). Read before citing anything or claiming novelty.
 - `venv/` — set up locally (`python -m venv venv` + `pip install -r requirements.txt`), not committed.
-- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5, scheduler direction accepted; decided to build a discrete event simulator for the scheduler first (decoupled from PERTINENCE), literature search first, Jetson-class edge devices as the target. `scheduler-sim/` built, then rewritten simpler (16 tests passing; resnet, synthetic YOLO, sticky and periodic sweeps); literature search done (`research.md`): heterogeneous multi-queue batch scheduling on one edge accelerator looks open, batch+frequency tuning exists only for single models. Also logged there: an open idea about MPS-based parallel batches and a note on how the greedy score-based policy is meant to work.
+- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape.
 - `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first.
 
 ## Pipeline: archive/model_analysis/ (archived — done/locked work, not part of the active pipeline)
@@ -317,7 +340,7 @@ Full narrative: `Journel/Week0.md` (model pool + first dispatcher run), `Journel
 (dispatcher objective fix + Torch-TensorRT pivot), `Journel/Week2.md` (PTQ follow-up),
 `Journel/Week3.md` (repo restructure + fitness-on-val fix + CIFAR-100 track build +
 `avg_model_cost` overhead-accounting fix), `Journel/Week4.md` (CIFAR-100 results presented,
-greenlit for the batching-aware scheduler direction), `Journel/Week5.md` (scheduler direction accepted, simulator-first plan).
+greenlit for the batching-aware scheduler direction), `Journel/Week5.md` (scheduler direction accepted, simulator built, energy angle for meet 6).
 
 `avg_model_cost` now includes `config.DISPATCHER_OVERHEAD_COST` (feature extractor + FC head cost)
 on top of the dispatched model's own cost, matching the paper's Eq. 4 — see "Fitness objective"
@@ -328,21 +351,46 @@ it applies to both sub-tracks.
 every run rather than relying on a copied `.npz` weight file.
 
 **Open threads**:
-1. **Scheduler direction (new, from Week4)** — the batching extension below has been superseded
-   by a broader batching-aware scheduling problem, formally defined in `Journel/Week4.md`. Next
-   concrete steps: benchmark the YOLO model family on COCO (cost/latency/accuracy), sweep batch
-   sizes, train a new PERTINENCE dispatcher stack over the YOLO pool.
+1. **Scheduler direction (active)**. Supersedes the batching extension below; formal problem in
+   `Journel/Week4.md` and summarised under "Formal problem" here.
 
-   **Week5 plan (meeting 5, `Journel/Week5.md`)**: direction accepted. The scheduling problem is
-   treated as decoupled from PERTINENCE (the scheduler only sees queues, batch sizes and T_i(b)),
-   so it gets built and evaluated in a **discrete event simulator** first, then validated
-   experimentally with PERTINENCE doing the routing. Order: (1) literature search for the same or
-   similar problem, adapting existing work if it matches; (2) the simulator; (3) PERTINENCE in the
-   loop. Target is compute-constrained edge devices (Jetsons), not large-scale serving. Later
-   extensions: per-job deadlines, stream priorities. Next meeting (meet 6) is two weeks after
-   meeting 5.
+   **Plan (meet 5, `Journel/Week5.md`)**: the scheduler only sees queues, batch sizes and T_i(b),
+   so it is built and evaluated in a DES first, then validated with PERTINENCE routing. Target:
+   compute-constrained edge devices (Jetsons). Later: per-job deadlines, stream priorities. Meet 6
+   is two weeks after meet 5.
 
-   **Simulator built and rewritten** (`scheduler-sim/`, `Journel/Week5.md` `[SETUP]`): the harness is done and self-tested (16 pytest tests, all passing). Four sweeps run: `resnet_example` (real profile), `yolo_synthetic` (synthetic stand-in, routing weights from the val2017 recall >= 0.80 benchmark), `yolo_sticky` (sticky routing; `longest_queue` wins at every load, `fcfs_no_batch` collapses at load 0.25, ~21 ms vs ~8), and `yolo_periodic` (periodic routed streams, synchronized start at t=0 = documented worst case; nearly flat across load, ~9.9-10.0 ms for `fcfs_batch`, so it mostly measures burst drain). Busy time and compression ratio did not always agree on policy ranking, a first data point for the compute-metric decision above, not conclusive while the YOLO profile is synthetic. **Not done yet**: real YOLOv8 n/s/m/l batched T_i(b) curves: sweep written (`yolo-analysis/batch_sweep/`), waiting to be run on the A100; then pick a variant and rerun the YOLO sim sweeps on the measured profile (power per batch if a Jetson is available), and the score-based policy itself is not built. Both are needed before any YOLO-side result means anything. Literature search is done: see `research.md` (about 50 papers with links and per-paper differences) and the Week5 `[RESULT]` entry. Closest work is EdgeServing (arXiv 2605.05527); Camel and Nabavinejad et al. tune batch size + GPU frequency jointly but only for a single model. Leaning direction (not decided): make the policy pick (queue, batch size, frequency) with a measured T_i(b, f) and power. Policy shape planned: state -> score per option (serve queue i at size b, or wait) -> pick the max, with the wait score estimated from a sliding window of recent per-queue arrivals.
+   **Simulator**: done and tested (see "Repo layout"). Results so far: `fcfs_no_batch` goes
+   unstable first; sticky routing makes everything 5-15% slower and `longest_queue` wins at every
+   load (`fcfs_no_batch` 21.2 ms vs 9.9 ms at load 0.25); the periodic sweep sits near 10 ms at
+   every load (~9.9-10.0 ms for `fcfs_batch`, burst drain). Busy time and compression ratio did not always rank policies the
+   same: not conclusive on synthetic curves.
+
+   **Real curves in** (Week5 `[RESULT]`): trt_fp16 T_i(b) is far from flat and very different per
+   model (per-image cost drops ~8x for n, ~2.3x for l; m/l knee near b=8). Synthetic profile was
+   badly off. On the real profile `fcfs_no_batch` collapses past ~0.49 jobs/ms, `longest_queue`
+   ~ `fcfs_batch`, and `timeout_batch` uses ~38% less GPU busy time at +11 ms turnaround (load
+   0.3): waiting buys compute. K/I and busy time ranked the 4 policies the same on real curves
+   (leans to K/I as primary, not final). **Running**: dense trt_fp16 sweep (session `dense`, b = 1..32 step 2, then
+   40/48/56/64) on the A100. **Next**: E_i(b) via NVML sampling during the timed loop
+   (the sweep's end-of-run power reading is useless), then the score-based policy and an
+   EdgeServing-style baseline.
+
+   **Literature** (`research.md`, Week5 `[RESULT]` entries): closest is EdgeServing (arXiv
+   2605.05527): same setting, but always runs min(|Q|, 10), never waits or picks b, clocks locked
+   at max, SLO objective; its queue choice beats LQF by only 2-4 ms (early exit does the heavy
+   lifting). Camel and Nabavinejad et al. tune batch size + GPU frequency, single model only.
+
+   **Direction (Week5 `[DECISION]`)**: energy is the angle. Turnaround alone leaves little room
+   over max batching; with energy in the objective, choosing b and waiting pay off. Policy:
+   state -> score per option (serve queue i at size b, or wait) -> pick the best; score = extra
+   waiting + λ × energy, wait value from a sliding window of recent per-queue arrivals. Power
+   before MPS. No Jetson yet (ask at meet 6); A100/5070 Ti curves are flatter than a Jetson's,
+   imgsz 1280 is a labelled stand-in; E_i(b) via NVML works without root, frequency control needs
+   the Jetson.
+
+   **Roadmap**: real T_i(b) in sim -> E_i(b) + score policy + EdgeServing-style baseline -> sweep
+   load/workload/hardware/λ for a turnaround-vs-energy curve -> Jetson with frequency, sim vs real
+   -> multi-camera CCTV traces through PERTINENCE, replayed in sim and on device -> paper.
 
    **Formal problem (Week4 `[DECISION]`)**: N models, queue Q_i each, supported batch sizes B_i,
    measured batch runtime curve T_i(b); periodic arrivals (period Δ) routed to one queue by the
@@ -520,6 +568,10 @@ change.
   `dispatcher_analysis/`, `eda/`, `cifar-100/`) does not use ONNX/onnxruntime or torchao — those
   paths were dropped (see "Decisions / dead ends" above); `torch.hub` reaches relevant checkpoint
   sources directly where a pool model isn't pip-installable.
+- **A100 server env (frozen, validated)**: torch 2.3.1+cu121, torchvision 0.18.1+cu121,
+  torch_tensorrt 2.3.0+cu121, tensorrt 10.0.1, nvidia-modelopt 0.15.0, numpy 1.26.4, pandas 2.3.3,
+  ultralytics. Differs from `requirements.txt` (local). Code meant for the server targets these;
+  don't install or upgrade there. Deployment/quantization path is torch_tensorrt.
 - CUDA used when available (`torch.device("cuda:0" if torch.cuda.is_available() else "cpu")`)
 - Torch-TensorRT works in this environment (see "Decisions / dead ends" #7). ONNX Runtime's own
   `TensorrtExecutionProvider` does NOT — don't re-attempt that specific path (item #6 above).

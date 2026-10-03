@@ -14,7 +14,7 @@ imports nothing from the rest of the repo.
     workloads.py       Workload subclasses: Uniform, Weighted, Sticky, PeriodicRouted, Periodic
     schedulers.py      Scheduler subclasses: FCFSNoBatch, FCFSBatch, LongestQueue, TimeoutBatch
     run_experiment.py  the load sweeps, results CSVs and plots
-    profiles/          T_i(b) tables (resnet_example.csv is measured, synthetic_4model.csv is SYNTHETIC)
+    profiles/          T_i(b) table: yolov8_a100_trt_fp16.csv (measured, from yolo-analysis/batch_sweep)
     tests/test_sim.py  pytest tests
     results/           written by run_experiment.py, one folder per experiment
 
@@ -59,7 +59,7 @@ Quick look at one run from a Python prompt in `scheduler-sim/`:
 
 ```python
 from sim import load_raw_data
-raw = load_raw_data("results/resnet_load_sweep/raw/fcfs_batch_load0.20_seed1.npz")
+raw = load_raw_data("results/yolo_load_sweep/raw/fcfs_batch_load0.30_seed1.npz")
 done = raw["job_status"] == 0
 turnaround = raw["job_finish_time"][done] - raw["job_arrival_time"][done]
 print(turnaround.mean(), raw["batch_size"].mean())
@@ -154,7 +154,5 @@ completed.
   look like growth, and near saturation, where the fill-up from the empty start looks like growth
   (see the TODO in `sim.py`).
 - In `yolo_periodic_load_sweep` every camera starts at t=0 with the same period, so frames arrive
-  in simultaneous bursts of 8. Its turnaround reflects clearing those bursts (about 10 ms at
-  every load), a synchronized-cameras worst case rather than typical camera traffic.
-- `profiles/synthetic_4model.csv` is made up. Do not draw conclusions from it about real YOLO
-  timings.
+  in simultaneous bursts of 8. Its turnaround mostly reflects clearing those bursts (about 6 ms
+  for the batching policies at low load), a synchronized-cameras worst case rather than typical camera traffic.

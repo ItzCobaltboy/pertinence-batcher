@@ -47,56 +47,45 @@ POLICIES = [
 # i.e. 2639 / 745 / 417 / 1199 out of 5000 images.
 YOLO_WEIGHTS = [0.5278, 0.149, 0.0834, 0.2398]
 
+# Measured YOLOv8 n/s/m/l T_i(b), A100 TensorRT FP16.
+PROFILE_CSV = os.path.join(HERE, "profiles", "yolov8_a100_trt_fp16.csv")
+
+# Loads for the sweeps (jobs per ms).
+REAL_LOADS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+
 # Knob 1 lives inside each experiment: workload_class + workload_kwargs.
 EXPERIMENTS = [
+    # All three use the MEASURED A100 trt_fp16 profile (yolo-analysis/batch_sweep).
+    # Batch-1 capacity with these routing weights is about 0.49 jobs/ms, max-batch
+    # capacity about 1.9 jobs/ms, hence REAL_LOADS.
     {
-        "name": "yolo_synthetic_load_sweep",
-        "profile_csv": os.path.join(HERE, "profiles", "synthetic_4model.csv"),
-        "loads": [0.05, 0.10, 0.15, 0.20, 0.25],
+        "name": "yolo_load_sweep",
+        "profile_csv": PROFILE_CSV,
+        "loads": REAL_LOADS,
         "num_streams": 8,
         "workload_class": WeightedWorkload,
         "workload_kwargs": {"weights": YOLO_WEIGHTS},
     },
-    {
-        "name": "resnet_load_sweep",
-        "profile_csv": os.path.join(HERE, "profiles", "resnet_example.csv"),
-        "loads": [0.05, 0.10, 0.15, 0.20, 0.25, 0.30],
-        "num_streams": 8,
-        "workload_class": WeightedWorkload,
-        "workload_kwargs": {"weights": [0.5, 0.5]},  # no real routing data for this pair
-    },
-    # Same setup as yolo_synthetic_load_sweep but with bursty arrivals (a stream
-    # keeps hitting the same queue), to see whether that changes which scheduler wins.
+    # Bursty arrivals: a stream keeps hitting the same queue, like real video.
     {
         "name": "yolo_sticky_load_sweep",
-        "profile_csv": os.path.join(HERE, "profiles", "synthetic_4model.csv"),
-        "loads": [0.05, 0.10, 0.15, 0.20, 0.25],
+        "profile_csv": PROFILE_CSV,
+        "loads": REAL_LOADS,
         "num_streams": 8,
         "workload_class": StickyWorkload,
         "workload_kwargs": {"weights": YOLO_WEIGHTS, "stay_probability": 0.9},
     },
-    # Same setup as yolo_synthetic_load_sweep but with camera-like arrivals: each
-    # stream sends a frame at a fixed period instead of Poisson. All streams start
-    # at t=0 with the same period, so frames arrive in simultaneous bursts of 8 and
-    # turnaround is dominated by clearing each burst. Read it as a synchronized-
-    # cameras worst case until streams get staggered start phases.
+    # Camera-like arrivals: each stream sends a frame at a fixed period. All streams
+    # start at t=0 with the same period, so frames arrive in simultaneous bursts of 8
+    # (a synchronized-cameras worst case until start phases are staggered).
     {
         "name": "yolo_periodic_load_sweep",
-        "profile_csv": os.path.join(HERE, "profiles", "synthetic_4model.csv"),
-        "loads": [0.05, 0.10, 0.15, 0.20, 0.25],
+        "profile_csv": PROFILE_CSV,
+        "loads": REAL_LOADS,
         "num_streams": 8,
         "workload_class": PeriodicRoutedWorkload,
         "workload_kwargs": {"weights": YOLO_WEIGHTS},
     },
-    # Example of switching knob 1: uncomment to add a uniform-routing sweep.
-    # {
-    #     "name": "yolo_uniform_load_sweep",
-    #     "profile_csv": os.path.join(HERE, "profiles", "synthetic_4model.csv"),
-    #     "loads": [0.05, 0.10, 0.15, 0.20, 0.25],
-    #     "num_streams": 8,
-    #     "workload_class": UniformWorkload,
-    #     "workload_kwargs": {},
-    # },
 ]
 
 CSV_COLUMNS = [

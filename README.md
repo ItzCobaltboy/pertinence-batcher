@@ -26,11 +26,13 @@ archive/
   model_analysis/           done -- model pool selection + Torch-TensorRT precision benchmark
   quantization_experiments/ done -- calibrated PTQ + batch-size-sweep experiments
 yolo-analysis/               YOLOv8 n/s/m/l on COCO -- class-recall benchmark, self-contained
+  batch_sweep/                batched-inference timing sweep -> measured T_i(b) profiles for scheduler-sim
 scheduler-sim/               discrete-event simulator for the N-model/single-accelerator batch
                               scheduling problem (Journel/Week4.md's formal problem definition).
                               Plain OOP in 3 core files: sim.py (Job, Queue, Profile, Simulator and
                               the Workload/Scheduler base classes), workloads.py, schedulers.py.
                               Self-contained, see scheduler-sim/README.md
+research.md                 annotated bibliography for the scheduler direction (~50 papers)
 Journel/                    work session logs (narrative "why" record)
 ```
 
@@ -97,11 +99,13 @@ install above.
 | 1 | Dispatcher — labeling, training, EDA | ✅ Done |
 | 2 | NSGA-II Pareto search over dispatcher configurations | ✅ Implemented |
 | 3 | Dispatcher evaluation — Pareto-front eval on train + held-out val/test | ✅ Implemented |
-| 4 | Batching extension (route sub-batches per model, reassemble) | ⬜ Not started |
+| 4 | Batching extension (route sub-batches per model, reassemble) | ➖ Superseded by the scheduler direction (steps 5-7) |
 | — | Calibrated PTQ quantization experiments | ✅ Done (proven, not integrated into pool) |
-| — | CIFAR-100 track (`fig9c`/`fig9d`) | ✅ Both sub-tracks smoke-tested end to end; full-hyperparameter NSGA-II searches not yet run |
+| — | CIFAR-100 track (`fig9c`/`fig9d`) | ✅ Full-hyperparameter NSGA-II searches run for both sub-tracks and presented (Week4); `[RESULT]` not yet journaled |
 | 5 | YOLOv8 n/s/m/l on COCO — class-recall benchmark + correctness definition | ✅ Done |
-| 6 | Scheduler discrete-event simulator (`scheduler-sim/`) | ✅ Built, tested, example sweeps run — see `scheduler-sim/README.md` |
+| 6 | Scheduler discrete-event simulator (`scheduler-sim/`) | ✅ Built, rewritten, 16 tests, 4 example sweeps — see `scheduler-sim/README.md` |
+| 6b | Real YOLOv8 T_i(b) timing sweep (`yolo-analysis/batch_sweep/`) | ✅ Done (A100, trt_fp16 profile in `scheduler-sim/profiles/`), sim rerun on it |
+| 6c | Literature search (`research.md`) | ✅ Done |
 | 7 | Scheduler validated experimentally with PERTINENCE in the loop | ⬜ Not started |
 
 See `Journel/` for the full narrative.

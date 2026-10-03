@@ -261,3 +261,4 @@ scheduler-sim/results/*/raw/
 yolo-analysis/results/batch_sweep/engines/
 yolo-analysis/results/batch_sweep/logs/*/measure.lock
 yolo-analysis/batch_sweep/*.pt
+yolo-analysis/results/batch_sweep/raw

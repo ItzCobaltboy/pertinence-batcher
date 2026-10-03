@@ -1,8 +1,0 @@
-# SYNTHETIC runtime matrix -- placeholder for real YOLOv8 n/s/m/l batched-inference
-# curves, which have not been measured yet (see Journel/Week5.md). Do NOT treat these
-# numbers as real hardware measurements; swap this file out once the real sweep exists.
-model,1,4,8,16,32
-yolov8n_synth,1.55,2.6,4.0,6.8,12.4
-yolov8s_synth,2.35,4.0,6.2,10.6,19.4
-yolov8m_synth,4.1,7.664,13.032,25.88,60.024
-yolov8l_synth,6.4,12.898,23.424,50.86,131.268

@@ -16,6 +16,12 @@ disk budget on the target server for the full ~18GB download, see `build_train_s
 Self-contained -- meant to be copied to a server (own `requirements.txt`, no imports from the
 rest of the repo) and run there with a single command.
 
+## Batch timing sweep
+
+`batch_sweep/` is a separate tool in this folder: it times YOLOv8 n/s/m/l at several batch sizes
+(eager and torch_tensorrt FP32/FP16) and writes measured T_i(b) profiles for `scheduler-sim/`.
+See `batch_sweep/README.md`.
+
 ## Why multi-label, not top-1
 
 The existing CIFAR-100 pipeline (`cifar-100/`) uses single-label top-1 correctness: each
