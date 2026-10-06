@@ -76,8 +76,8 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
     0.240 l]`. Metrics from t=0 (warm-up dropped: it inflated compression ratio when overloaded).
   - Each run saves raw per-job data as `.npz` in `results/<exp>/raw/` (git-ignored);
     `SIMULATE = False` recomputes metrics and plots from it in ~10 s.
-  - Experiments in `results/` (each `results.csv` + 5 plots), all on the measured profile,
-    `REAL_LOADS` 0.05-0.7 jobs/ms: `yolo_load_sweep` (Poisson), `yolo_sticky_load_sweep`,
+  - Experiments in `results/` (each `results.csv` + plots, incl. `turnaround_vs_load_log.png` and `*_stable.png` that drop collapsed points), all on the measured profile,
+    `REAL_LOADS` 0.05-0.8 jobs/ms step 0.05: `yolo_load_sweep` (Poisson), `yolo_sticky_load_sweep`,
     `yolo_periodic_load_sweep`. Old synthetic/ResNet profiles and sweeps deleted (in git history).
   - Removed vs the first version: registries, ABCs/hooks, JSONL tracer, deadline/priority fields,
     trace router, `recall_labeling.py`, interpolate mode, switch cost.
@@ -382,7 +382,7 @@ every run rather than relying on a copied `.npz` weight file.
 
    **TRT engines broken** (Week5 `[DEAD-END]`): compiled engines' outputs do not match eager (14k vs
    2.2k detections after NMS, FP32 too); likely box decoding lost in export. Sim now runs on the
-   eager FP32 profile (loads 0.05-0.7); fix the export and re-verify before switching back.
+   eager FP32 profile (loads 0.05-0.8). Breakdown: no-batch past ~0.17, all batching policies knee at 0.6, collapse at 0.65; fix the export and re-verify before switching back.
 
    **Literature** (`research.md`, Week5 `[RESULT]` entries): closest is EdgeServing (arXiv
    2605.05527): same setting, but always runs min(|Q|, 10), never waits or picks b, clocks locked

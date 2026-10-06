@@ -563,3 +563,27 @@ rejects batches larger than the queue, which policy v1's padding will need relax
 **Next**: a quick server check (compare score rows vs box rows of one engine against eager), then
 fix the export (keep anchors/strides, or compile only backbone + head and decode in PyTorch),
 re-time a few configs, and switch the profile back.
+
+---
+
+## [RESULT] Load sweep extended until every policy breaks down (eager FP32 profile)
+
+Loads now 0.05 to 0.8 jobs/ms in steps of 0.05 (16 loads), 3 seeds, all three workloads. Added
+two readable turnaround plots per experiment, since the linear plot is dominated by
+`fcfs_no_batch` at ~20,000 ms: `turnaround_vs_load_log.png` (log y-axis, all points) and
+`turnaround_vs_load_stable.png` / `turnaround_p95_vs_load_stable.png` (each policy drawn only up to
+its last load stable in at least half the seeds, so where a line stops is where it breaks).
+
+Breakdown points (Poisson; sticky and periodic are close):
+- `fcfs_no_batch`: fine to 0.15 (25.6 ms), gone at 0.2 (4.3 s mean). Matches the ~0.17 jobs/ms
+  batch-1 capacity.
+- All three batching policies: smooth up to ~0.55 (28-40 ms), knee at 0.6 (55-67 ms), collapse at
+  0.65 (~270 ms) and seconds beyond 0.7. Matches the ~0.69 jobs/ms capacity at batch 64.
+- Past saturation `longest_queue` degrades slowest (0.8: 3.3 s vs 4.4 s for the other two).
+- `timeout_batch` costs ~13 ms extra at light load, the gap closes by ~0.5, and the three batching
+  policies converge from 0.55.
+- Sticky: the knee comes earlier (50 ms at 0.5, 181 ms at 0.6) because one queue backs up while
+  others idle.
+
+The `stable` flag stays a rough heuristic (it calls 0.65 stable in 2 of 3 seeds at ~270 ms mean,
+and flickers on sticky between 0.4 and 0.6); read the plots, not the flag, for the breakdown point.

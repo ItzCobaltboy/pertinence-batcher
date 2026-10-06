@@ -54,7 +54,7 @@ YOLO_WEIGHTS = [0.5278, 0.149, 0.0834, 0.2398]
 PROFILE_CSV = os.path.join(HERE, "profiles", "yolov8_a100_eager_fp32.csv")
 
 # Loads for the sweeps (jobs per ms).
-REAL_LOADS = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7]
+REAL_LOADS = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8]
 
 # Knob 1 lives inside each experiment: workload_class + workload_kwargs.
 EXPERIMENTS = [
@@ -223,6 +223,52 @@ def plot_metric_vs_load(rows, path, column, label):
     save_figure(figure, path)
 
 
+def plot_metric_vs_load_log(rows, path, column, label):
+    """Same as plot_metric_vs_load but with a log y-axis, so a policy that has
+    blown up (thousands of ms) and the ones still coping (a few ms) fit on one chart."""
+    figure, axes = plt.subplots(figsize=(7, 5))
+    table = values_by_policy_and_load(rows, column)
+    for policy_name, scheduler_class, scheduler_kwargs in POLICIES:
+        if policy_name not in table:
+            continue
+        loads = sorted(table[policy_name].keys())
+        means = [np.mean(table[policy_name][load]) for load in loads]
+        axes.plot(loads, means, marker="o", label=policy_name)
+    axes.set_yscale("log")
+    axes.set_xlabel("offered load (jobs/ms)")
+    axes.set_ylabel(label + ", log scale")
+    axes.set_title(label + " vs. load, per policy (log scale)")
+    axes.grid(True, which="both", alpha=0.3)
+    axes.legend()
+    save_figure(figure, path)
+
+
+def plot_metric_vs_load_stable_only(rows, path, column, label):
+    """Linear y-axis, but each policy is drawn only up to the last load where it
+    was still stable in at least half the seeds, so one collapsed policy does not
+    squash the others. Where each line stops is where that policy breaks down."""
+    figure, axes = plt.subplots(figsize=(7, 5))
+    table = values_by_policy_and_load(rows, column)
+    stable = values_by_policy_and_load(rows, "stable")
+    for policy_name, scheduler_class, scheduler_kwargs in POLICIES:
+        if policy_name not in table:
+            continue
+        loads, means = [], []
+        for load in sorted(table[policy_name].keys()):
+            if np.mean([float(v) for v in stable[policy_name][load]]) < 0.5:
+                break
+            loads.append(load)
+            means.append(np.mean(table[policy_name][load]))
+        if loads:
+            axes.plot(loads, means, marker="o", label=policy_name + " (stable up to " + format(loads[-1], ".2f") + ")")
+    axes.set_xlabel("offered load (jobs/ms)")
+    axes.set_ylabel(label)
+    axes.set_title(label + " vs. load, stable region only")
+    axes.grid(True, alpha=0.3)
+    axes.legend()
+    save_figure(figure, path)
+
+
 def rank_policies(mean_per_policy):
     """Policy names ordered from smallest to largest value (ties keep POLICIES order)."""
     pairs = []
@@ -286,6 +332,12 @@ def main():
         plot_turnaround_vs_busy_time(rows, os.path.join(out_dir, "turnaround_vs_busy_time.png"))
         plot_metric_vs_load(rows, os.path.join(out_dir, "turnaround_vs_load.png"),
                             "turnaround_mean_ms", "mean turnaround (ms)")
+        plot_metric_vs_load_log(rows, os.path.join(out_dir, "turnaround_vs_load_log.png"),
+                                "turnaround_mean_ms", "mean turnaround (ms)")
+        plot_metric_vs_load_stable_only(rows, os.path.join(out_dir, "turnaround_vs_load_stable.png"),
+                                        "turnaround_mean_ms", "mean turnaround (ms)")
+        plot_metric_vs_load_stable_only(rows, os.path.join(out_dir, "turnaround_p95_vs_load_stable.png"),
+                                        "turnaround_p95_ms", "p95 turnaround (ms)")
         plot_metric_vs_load(rows, os.path.join(out_dir, "utilization_vs_load.png"),
                             "utilization", "accelerator utilization")
         plot_metric_vs_load(rows, os.path.join(out_dir, "compression_ratio_vs_load.png"),
