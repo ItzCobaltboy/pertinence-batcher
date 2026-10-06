@@ -496,3 +496,70 @@ stops falling, so padding prices itself out.
 
 Status: theory only, not implemented in `scheduler-sim` yet. Planned as the policy to present at
 meet 6.
+
+---
+
+## [RESULT] Simulator rerun on the dense profile
+
+Rebuilt `scheduler-sim/profiles/yolov8_a100_trt_fp16.csv` from `results/batch_sweep_DENSE` (21
+columns, b = 1..32 step 2, 40, 48, 56, 64) and reran the three sweeps at loads 0.1-1.0 step 0.1.
+
+Poisson (`yolo_load_sweep`), seed-averaged:
+
+| load | metric | fcfs_no_batch | fcfs_batch | longest_queue | timeout_batch |
+|---|---|---|---|---|---|
+| 0.1 | mean / p95 ms | 2.35 / 4.17 | 2.33 / 4.07 | 2.32 / 4.00 | 15.04 / 18.96 |
+| 0.3 | mean / p95 ms | 3.85 / 8.92 | 3.15 / 6.28 | 3.09 / 6.52 | 14.00 / 21.17 |
+| 0.5 | mean / p95 ms | 922 (unstable) | 4.49 / 9.02 | 4.35 / 10.30 | 13.94 / 22.01 |
+| 1.0 | mean / p95 ms | unstable | 9.77 / 18.69 | 9.36 / 22.69 | 15.20 / 25.99 |
+| 0.3 | K/I, busy s | 1.0, 37.0 | 0.907, 34.5 | 0.917, 34.7 | 0.415, 21.2 |
+
+- Same picture as on the 8-point profile, numbers moved by a few percent.
+- **New**: `longest_queue` has the best mean turnaround but a worse p95 than `fcfs_batch` from
+  load ~0.3 up (22.7 vs 18.7 ms at 1.0). Serving the longest queue starves short queues, which
+  shows up in the tail. Mean-only comparisons hide this.
+- `timeout_batch` still cuts GPU busy time ~38% at load 0.3 for ~11 ms more mean turnaround.
+- Sticky: same ordering, everything slightly slower. Periodic (synced starts): batching
+  policies flat at ~6.1 ms up to load 0.7; `longest_queue` better mean and p95 at high load.
+
+---
+
+## [DEAD-END] TensorRT engines give wrong outputs; simulator switched to the eager FP32 profile
+
+Proofreading the batch-sweep methodology turned up a real problem. At compile time the sweep runs
+each TRT engine on one batch next to the eager model and stores the comparison
+(`check_vs_eager` in each compile record), but never fails on it. Across all 168 compiled engines
+(OLD and DENSE runs) the outputs do not match: after NMS, eager finds 14,093 detections and the
+trt_fp32 engines 2,249 (trt_fp16: 2,265 vs 14,574), with max output differences up to ~830
+(pixel scale). It happens in FP32 too, so it is an export bug, not precision.
+
+Most likely only the box decoding is broken: the Detect head's anchors/strides look lost in
+`torch.export` (the run logs warn "get_attr Node with no underlying reference"). The mean
+difference over the whole (B, 84, 8400) output is only ~0.7, which fits the 4 box rows being off
+by ~15 px with the 80 class-score rows near exact. If so, the convolutions are correct and the TRT
+timings are close to right, but that is not verified yet.
+
+**Decision**: until the engines pass the check, the simulator uses the eager FP32 profile
+(`scheduler-sim/profiles/yolov8_a100_eager_fp32.csv`, built from `batch_sweep_DENSE`). Eager is
+correct but launch-bound (~5 ms floor for small batches), so its latencies are an upper bound on a
+deployed engine. The trt_fp16 profile is kept for later.
+
+**Simulator rerun on eager** (capacity: ~0.17 jobs/ms at batch 1, ~0.69 at batch 64, so loads are
+now 0.05-0.7). Poisson, seed-averaged:
+- `fcfs_no_batch` saturates past ~0.17 jobs/ms; every policy saturates near 0.69.
+- `longest_queue` has the best mean; its p95 is the worst of the batching policies at loads
+  0.25-0.5 (39.3 vs 30.8 ms for `fcfs_batch` at 0.3).
+- Timeout vs longest queue: 0.05: 6.9 -> 19.9 ms for 18% less GPU time; 0.1: 8.2 -> 19.6 ms, 26%
+  less; 0.2: 11.8 -> 19.9 ms, 28% less; 0.5: 28.0 -> 30.6 ms, 3% less. Same conclusion as on TRT:
+  the fixed wait is mispriced at light load and pays off in a middle band.
+
+**Other methodology notes** (no change needed now): T(b) is forward-only (NMS, preprocessing,
+host-to-GPU copy excluded), so simulated latencies are lower bounds on end-to-end; one fixed-shape
+engine per batch size is fine on the A100 but unlikely on a Jetson; turnaround counts only jobs
+finished within the 60 s horizon (understates overload, only matters past saturation); busy time as
+an energy proxy assumes constant power, but the A100 throttles at large batches; the simulator
+rejects batches larger than the queue, which policy v1's padding will need relaxed.
+
+**Next**: a quick server check (compare score rows vs box rows of one engine against eager), then
+fix the export (keep anchors/strides, or compile only backbone + head and decode in PyTorch),
+re-time a few configs, and switch the profile back.

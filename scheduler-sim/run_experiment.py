@@ -47,17 +47,20 @@ POLICIES = [
 # i.e. 2639 / 745 / 417 / 1199 out of 5000 images.
 YOLO_WEIGHTS = [0.5278, 0.149, 0.0834, 0.2398]
 
-# Measured YOLOv8 n/s/m/l T_i(b), A100 TensorRT FP16.
-PROFILE_CSV = os.path.join(HERE, "profiles", "yolov8_a100_trt_fp16.csv")
+# Measured YOLOv8 n/s/m/l T_i(b) on the A100, eager PyTorch FP32.
+# The TensorRT profiles (yolov8_a100_trt_fp16.csv / trt_fp32) are kept but not used for now:
+# the compiled engines' outputs do not match eager (box decoding looks broken in export),
+# so their timings are unverified. Switch back once the engines are fixed and checked.
+PROFILE_CSV = os.path.join(HERE, "profiles", "yolov8_a100_eager_fp32.csv")
 
 # Loads for the sweeps (jobs per ms).
-REAL_LOADS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+REAL_LOADS = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7]
 
 # Knob 1 lives inside each experiment: workload_class + workload_kwargs.
 EXPERIMENTS = [
-    # All three use the MEASURED A100 trt_fp16 profile (yolo-analysis/batch_sweep).
-    # Batch-1 capacity with these routing weights is about 0.49 jobs/ms, max-batch
-    # capacity about 1.9 jobs/ms, hence REAL_LOADS.
+    # All three use the MEASURED A100 eager FP32 profile (yolo-analysis/batch_sweep).
+    # Batch-1 capacity with these routing weights is about 0.17 jobs/ms, max-batch (64)
+    # capacity about 0.69 jobs/ms, hence REAL_LOADS.
     {
         "name": "yolo_load_sweep",
         "profile_csv": PROFILE_CSV,

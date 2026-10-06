@@ -69,14 +69,15 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
     `compute_metrics`. `workloads.py`: Uniform, Weighted, Sticky, PeriodicRouted, Periodic.
     `schedulers.py`: `FCFSNoBatch`, `FCFSBatch`, `LongestQueue`, `TimeoutBatch` (tau = 15 ms).
     `run_experiment.py`: sweeps, CSVs, plots. `tests/test_sim.py`: 16 pytest tests, passing.
-  - `profiles/yolov8_a100_trt_fp16.csv`: the only profile, measured YOLOv8 n/s/m/l, A100
-    TensorRT FP16, b = 1..48 (written by `yolo-analysis/batch_sweep/sweep.py profile`).
+  - `profiles/`: `yolov8_a100_eager_fp32.csv` (**in use**, measured eager FP32, b = 1..32 step 2,
+    40/48/56/64) and `yolov8_a100_trt_fp16.csv` (not used: TRT engine outputs fail the eager check,
+    see Week5 `[DEAD-END]`). Both written by `yolo-analysis/batch_sweep/sweep.py profile`.
   - YOLO routing weights hardcoded from val2017 recall >= 0.80: `[0.528 n, 0.149 s, 0.083 m,
     0.240 l]`. Metrics from t=0 (warm-up dropped: it inflated compression ratio when overloaded).
   - Each run saves raw per-job data as `.npz` in `results/<exp>/raw/` (git-ignored);
     `SIMULATE = False` recomputes metrics and plots from it in ~10 s.
   - Experiments in `results/` (each `results.csv` + 5 plots), all on the measured profile,
-    `REAL_LOADS` 0.1-1.0 jobs/ms: `yolo_load_sweep` (Poisson), `yolo_sticky_load_sweep`,
+    `REAL_LOADS` 0.05-0.7 jobs/ms: `yolo_load_sweep` (Poisson), `yolo_sticky_load_sweep`,
     `yolo_periodic_load_sweep`. Old synthetic/ResNet profiles and sweeps deleted (in git history).
   - Removed vs the first version: registries, ABCs/hooks, JSONL tracer, deadline/priority fields,
     trace router, `recall_labeling.py`, interpolate mode, switch cost.
@@ -86,7 +87,7 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   us). Read before citing anything or claiming novelty.
 - `venv/` — set up locally (`python -m venv venv` + `pip install -r requirements.txt`), not committed.
 - `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape.
-- `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first.
+- `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first. `pertinence_week5.pptx` (meet 6): definitions, prior art (8 papers with links), dense A100 trt_fp16 curves, simulator baselines on the dense profile, policy v1.
 
 ## Pipeline: archive/model_analysis/ (archived — done/locked work, not part of the active pipeline)
 
@@ -371,11 +372,17 @@ every run rather than relying on a copied `.npz` weight file.
    ~ `fcfs_batch`, and `timeout_batch` uses ~38% less GPU busy time at +11 ms turnaround (load
    0.3): waiting buys compute. K/I and busy time ranked the 4 policies the same on real curves
    (leans to K/I as primary, not final). **Done**: dense sweep (all 3 variants, session `main`, b = 1..32 step 2, then
-   40/48/56/64, 1260/1260 ok); profile CSV still has the old 8 columns until rebuilt. **Next**: E_i(b) via NVML sampling during the timed loop
+   40/48/56/64, 1260/1260 ok); profile CSV rebuilt from `batch_sweep_DENSE` (21 columns) and
+   the 3 sim sweeps rerun on it (loads 0.1-1.0 step 0.1). `longest_queue` best mean, `fcfs_batch`
+   better p95 (LQ starves short queues). **Next**: E_i(b) via NVML sampling during the timed loop
    (the sweep's end-of-run power reading is useless), then implement the score-based policy and an
    EdgeServing-style baseline. **Policy v1 defined** (Week5 `[DECISION]`, not implemented):
    Cost(i, j) = β · Σ ages of jobs not served + (1 - β) · T_ij, argmin over (queue, batch size),
    padding allowed, no wait option yet.
+
+   **TRT engines broken** (Week5 `[DEAD-END]`): compiled engines' outputs do not match eager (14k vs
+   2.2k detections after NMS, FP32 too); likely box decoding lost in export. Sim now runs on the
+   eager FP32 profile (loads 0.05-0.7); fix the export and re-verify before switching back.
 
    **Literature** (`research.md`, Week5 `[RESULT]` entries): closest is EdgeServing (arXiv
    2605.05527): same setting, but always runs min(|Q|, 10), never waits or picks b, clocks locked
