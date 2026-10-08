@@ -51,7 +51,7 @@ import numpy as np
 from penalty_matrix import build_penalty_matrix
 from class_weights import compute_class_weights
 from weighting_scheme import decode_scheme
-from dispatcher_model import train_fc, predict
+from dispatcher_model import train_fc, predict, chromosome_seed
 
 
 def evaluate_individual(chromosome, train_embeddings, train_labels, val_embeddings,
@@ -64,7 +64,8 @@ def evaluate_individual(chromosome, train_embeddings, train_labels, val_embeddin
     scheme = decode_scheme(chromosome, config)
     class_weights = compute_class_weights(train_labels, scheme, config)
 
-    W, b = train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, device, config)
+    W, b = train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, device, config,
+                    seed=chromosome_seed(chromosome))
     predictions = predict(val_embeddings, W, b)
 
     cost_array = np.array(config.MODEL_COST)

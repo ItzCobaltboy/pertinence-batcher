@@ -50,6 +50,11 @@ class DispatcherProblem(Problem):
         self.logger = logger
         self.config = config
         self.total_evaluated = 0
+        # every (chromosome, objectives) pair ever evaluated, in order — the
+        # paper builds its reported front from ALL evaluated solutions, not
+        # just the final population (see non_dominated_indices below)
+        self.archive_X = []
+        self.archive_F = []
 
     def _evaluate(self, X, out, *args, **kwargs):
         """pymoo hands us a whole population/offspring batch at once via X;
@@ -74,3 +79,28 @@ class DispatcherProblem(Problem):
                               f"cost={avg_model_cost:.3f} {self.config.MODEL_COST_UNIT}")
 
         out["F"] = objectives
+        self.archive_X.append(np.array(X, dtype=np.float64, copy=True))
+        self.archive_F.append(objectives.copy())
+
+    def archive(self):
+        """Returns (X_all, F_all) over every evaluation so far."""
+        return np.concatenate(self.archive_X, axis=0), np.concatenate(self.archive_F, axis=0)
+
+
+def non_dominated_indices(F):
+    """Indices of the non-dominated rows of F (both columns minimized), one
+    index per distinct objective vector. Matches the paper's reporting: "at
+    the end of the run, all evaluated solutions are ranked and the subset of
+    non-dominated solutions ... are retained to form the reported Pareto
+    front". The final population alone can miss some of these: NSGA-II's
+    crowding truncation drops non-dominated points once the front outgrows
+    the population."""
+    _, first = np.unique(F, axis=0, return_index=True)
+    first = np.sort(first)
+    candidates = F[first]
+    keep = []
+    for i, f in enumerate(candidates):
+        dominated = np.any(np.all(candidates <= f, axis=1) & np.any(candidates < f, axis=1))
+        if not dominated:
+            keep.append(first[i])
+    return np.array(keep, dtype=int)

@@ -25,20 +25,24 @@ from PIL import Image
 
 class ImageDataset(Dataset):
     """Loads (image, label) pairs from a dataframe with image_path/label
-    columns. image_path is stored relative to config.DATASET_DIR."""
+    columns. image_path is stored relative to dataset_dir. Holds the
+    transform and directory, not the config module itself: modules can't be
+    pickled, which breaks DataLoader workers under spawn-based
+    multiprocessing (Windows) — same fix as dispatcher_analysis/embeddings.py."""
 
-    def __init__(self, dataframe, config):
+    def __init__(self, dataframe, dataset_dir, image_transform):
         self.dataframe = dataframe
-        self.config = config
+        self.dataset_dir = dataset_dir
+        self.image_transform = image_transform
 
     def __len__(self):
         return len(self.dataframe)
 
     def __getitem__(self, idx):
         row = self.dataframe.iloc[idx]
-        full_path = os.path.join(self.config.DATASET_DIR, row["image_path"])
+        full_path = os.path.join(self.dataset_dir, row["image_path"])
         image = Image.open(full_path).convert("RGB")
-        image = self.config.IMAGE_TRANSFORM(image)
+        image = self.image_transform(image)
         label = int(row["label"])
         return image, label
 
@@ -46,7 +50,7 @@ class ImageDataset(Dataset):
 def compute_embeddings(dataframe, device, config):
     """Runs the frozen embedding-extractor backbone over every image in
     dataframe. Returns (embeddings, labels) as numpy arrays."""
-    dataset = ImageDataset(dataframe, config)
+    dataset = ImageDataset(dataframe, config.DATASET_DIR, config.IMAGE_TRANSFORM)
     loader = DataLoader(dataset, batch_size=64, shuffle=False, num_workers=config.EMBEDDING_NUM_WORKERS)
 
     feature_extractor = config.build_feature_extractor(device)

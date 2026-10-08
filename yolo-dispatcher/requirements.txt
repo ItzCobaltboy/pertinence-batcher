@@ -1,0 +1,9 @@
+# Versions the A100 server already has (see repo CLAUDE.md "A100 server env");
+# nothing here needs a newer release.
+torch>=2.0
+ultralytics>=8.1
+pymoo>=0.6
+numpy
+pandas
+pillow
+matplotlib

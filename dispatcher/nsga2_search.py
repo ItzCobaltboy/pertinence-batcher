@@ -4,7 +4,9 @@ mutation, and non-dominated sorting are pymoo's implementations. Only the
 domain logic (what a chromosome means, how to train+evaluate one) is ours.
 """
 
+import os
 import time
+import numpy as np
 import torch
 import pandas as pd
 
@@ -17,7 +19,7 @@ from pymoo.optimize import minimize
 
 from embeddings import load_or_compute_train_embeddings, load_or_compute_val_embeddings
 from weighting_scheme import searches_weighting_scheme
-from dispatcher_problem import DispatcherProblem
+from dispatcher_problem import DispatcherProblem, non_dominated_indices
 from progress_logger import ProgressLogger
 from save_results import save_pareto_front
 from save_models import save_pareto_models
@@ -85,10 +87,19 @@ def run_nsga2(config):
         callback=ProgressLogger(logger, config),
         save_history=False,
         verbose=False,   # our own per-individual/per-generation logging replaces pymoo's
+        seed=getattr(config, "NSGA2_SEED", None),   # optional: reproducible GA runs
     )
 
     logger.info(f"\nSearch finished in {time.time()-start_time:.0f}s")
-    logger.info(f"Final Pareto front: {len(result.X)} individuals")
 
-    save_pareto_front(result.X, result.F, logger, config)
-    save_pareto_models(result.X, train_embeddings, train_labels, device, logger, config)
+    # Reported front = non-dominated set over EVERY evaluated individual (the
+    # paper's procedure), not only result.X (the final population's front).
+    X_all, F_all = problem.archive()
+    os.makedirs(config.NSGA2_DIR, exist_ok=True)
+    np.savez(os.path.join(config.NSGA2_DIR, "all_evaluated.npz"), X=X_all, F=F_all)
+    front = non_dominated_indices(F_all)
+    logger.info(f"Evaluated {len(F_all)} individuals in total; final population front: "
+                f"{len(result.X)}, front over all evaluations: {len(front)} individuals")
+
+    save_pareto_front(X_all[front], F_all[front], logger, config)
+    save_pareto_models(X_all[front], train_embeddings, train_labels, device, logger, config)

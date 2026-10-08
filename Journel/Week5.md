@@ -587,3 +587,63 @@ Breakdown points (Poisson; sticky and periodic are close):
 
 The `stable` flag stays a rough heuristic (it calls 0.65 stable in 2 of 3 seeds at ~270 ms mean,
 and flickers on sticky between 0.4 and 0.6); read the plots, not the flag, for the breakdown point.
+
+---
+
+## [RESULT] Dispatcher audited against the paper (arXiv 2507.01695 v3): logic matches, CIFAR-100 training labels don't
+
+Checked `dispatcher/` + `dispatcher_analysis/` against the paper line by line. Matches: Eq. 6/7
+loss (0 when correct, CE x P[true, pred], batch mean), INS/ISNS/ENS sample weights, chromosome
+(off-diagonal penalties + scheme gene; the paper's "N^2 + 1" also counts the zero diagonal), NSGA-II
+settings (pop 50, 50 generations, SBX eta 20 / p 0.9, PM eta 25, 20 FC epochs, penalties in
+[0, 100]), Eq. 3/4 objectives with the dispatcher overhead, fitness on the "test set", cheapest-
+correct relabelling.
+
+Problems found:
+- **CIFAR-100 train labels are saturated.** The chenyaofo checkpoints were trained on official
+  train, so fig9c's train labels are 96.8% shufflenet / 3.1% mobilenet / 0.1% repvgg (~50 images),
+  vs 67 / 13 / 20 on the held-out splits. The paper's Table III shows a 68% majority class on its
+  training set. The FC learned from labels that don't reflect held-out difficulty: likely the real
+  cause of the dead mid-tier class, more than the weighting scheme.
+- **The evaluated FC was not the searched FC.** No seeds anywhere, and each Pareto individual got
+  retrained twice after the search (`save_models.py`, then `build_models.py`).
+- The paper builds the front from all evaluated solutions; the code took the final population's
+  front.
+- Archived `fig9c`/`fig9d` entry points still point at `../../dispatcher` (broken by the move to
+  `archive/`).
+
+yolo-analysis checks out. The memorization issue is mild there: yolov8n is correct (recall >= 0.80)
+on 47% of the train2017 subset vs 53% of val2017, so the train subset is usable for training.
+Caveats: recall ignores false positives, GT class sets include `iscrowd` annotations, the 48
+unannotated val images score recall 1 for every model. Raw predictions turned out to be committed,
+so re-scoring is local.
+
+## [DECISION] Shared dispatcher fixes, before the YOLO run
+
+- FC training seeded from a hash of the chromosome, so search, post-search save and analysis train
+  the same weights. `pareto_front.csv` written unrounded (the seed hashes the exact genes; a rounded
+  scheme gene could also change bins).
+- Reported front = non-dominated set over every evaluated individual (paper's procedure);
+  `all_evaluated.npz` keeps all of them.
+- Loss weights gathered on-device instead of a per-sample Python loop; optional `NSGA2_SEED`.
+
+## [SETUP] yolo-dispatcher/ built: PERTINENCE over the YOLOv8 n/s/m/l pool
+
+Thin track on the shared code, one command (`python run_all.py`, `--smoke` for a tiny budget).
+- Labels from the committed recall CSVs: correct = recall >= 0.80, label = cheapest correct, no
+  model correct -> yolov8l (CIFAR convention). Train 47.2 / 22.5 / 9.2 / 21.1% (n/s/m/l); val2017
+  52.8 / 14.9 / 8.3 / 24.0%; no model correct on 15.6% of train, 19.8% of val2017.
+- Splits: train = 20k train2017 subset; val2017 split 70/30 stratified by label into test (3,499,
+  NSGA-II fitness) and final_val (1,501, reported once).
+- Extractor: frozen fused yolov8n backbone (layers 0-9), letterbox 640, GAP at P3/P4/P5 -> 448
+  dims. Chose this over the paper's own YOLO case study (ResNet8 trained from scratch with the FC):
+  retraining a CNN per individual would be ~2,500 CNN trainings.
+- Cost: GFLOPs at 640, 2 x conv/linear MACs on the fused models, measured into
+  `data/model_costs.json` and cross-checked against ultralytics' 8.7 / 28.6 / 78.9 / 165.2.
+  Extractor counted in full on every image (Eq. 4); `REUSE_EXTRACTOR_FOR_SMALLEST` would count only
+  yolov8n's neck + head when it's picked.
+- 13 genes (12 penalties + scheme), paper hyperparameters.
+
+Not run yet (written on a machine without a GPU). **Next**: smoke run, then the full run on the
+A100; check that the test-split pass reproduces the search's fitness numbers (it should now), then
+log the `[RESULT]`.

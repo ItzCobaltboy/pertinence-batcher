@@ -4,6 +4,8 @@ predicts with it. Kept identical to dispatcher/dispatcher_model.py, renamed
 here since this is the only training this pipeline does.
 """
 
+import hashlib
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -13,9 +15,12 @@ from torch.utils.data import DataLoader, TensorDataset
 from loss import penalized_loss
 
 
-def train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, device, config):
+def train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, device, config, seed=None):
     """Returns the trained weight matrix W (NUM_CLASSES, EMBEDDING_DIM) and
     bias b (NUM_CLASSES,) as numpy arrays."""
+    if seed is not None:
+        torch.manual_seed(seed)   # seeds FC init + DataLoader shuffle (CPU and CUDA)
+
     embeddings_tensor = torch.from_numpy(train_embeddings)
     labels_tensor = torch.from_numpy(train_labels)
     dataset = TensorDataset(embeddings_tensor, labels_tensor)
@@ -43,6 +48,19 @@ def train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, devi
     torch.cuda.empty_cache()
 
     return W, b
+
+
+def chromosome_seed(chromosome):
+    """Deterministic RNG seed for one chromosome's FC training. The search
+    (fitness.py), the post-search save (save_models.py) and
+    dispatcher_analysis/build_models.py all retrain the same chromosome;
+    seeding init + shuffle from the chromosome itself makes those runs
+    produce the same weights, so the model evaluated at the end is the one
+    the search actually scored. Hashes the float64 bytes, so the chromosome
+    has to round-trip pareto_front.csv at full precision (save_results.py
+    writes it unrounded)."""
+    data = np.asarray(chromosome, dtype=np.float64).tobytes()
+    return int.from_bytes(hashlib.sha256(data).digest()[:4], "little")
 
 
 def predict(embeddings, W, b):

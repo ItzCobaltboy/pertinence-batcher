@@ -4,9 +4,9 @@ Pareto front, not just their chromosomes — so using any of these configs
 later (e.g. in dispatcher_analysis) doesn't require retraining from scratch.
 
 Note: this retrains each individual one more time after the search ends.
-Random init + shuffle mean these weights won't be bit-identical to whatever
-pymoo saw during the search, but with the same chromosome, hyperparameters,
-and class weights, results should be very close.
+FC init + shuffle are seeded from the chromosome (dispatcher_model.
+chromosome_seed), so on the same device this reproduces the weights the
+search scored (up to GPU nondeterminism).
 """
 
 import os
@@ -15,7 +15,7 @@ import numpy as np
 from penalty_matrix import build_penalty_matrix
 from class_weights import compute_class_weights
 from weighting_scheme import decode_scheme
-from dispatcher_model import train_fc
+from dispatcher_model import train_fc, chromosome_seed
 
 
 def save_pareto_models(chromosomes, train_embeddings, train_labels, device,
@@ -34,7 +34,8 @@ def save_pareto_models(chromosomes, train_embeddings, train_labels, device,
         penalty_matrix = build_penalty_matrix(chromosome, config)
         scheme = decode_scheme(chromosome, config)
         class_weights = compute_class_weights(train_labels, scheme, config)
-        W, b = train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, device, config)
+        W, b = train_fc(train_embeddings, train_labels, penalty_matrix, class_weights, device, config,
+                        seed=chromosome_seed(chromosome))
 
         path = os.path.join(models_dir, f"individual_{individual_id}.npz")
         np.savez(path, W=W, b=b, chromosome=chromosome, scheme=scheme)

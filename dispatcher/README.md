@@ -61,6 +61,7 @@ or
 ```
 python cifar-10/run_dispatcher.py
 ```
+(Active track: `python yolo-dispatcher/run_dispatcher.py`, or `run_all.py` there.)
 
 Single phase: `nsga2_search.py` wires embeddings, penalty matrix, loss, and FC training
 into `pymoo`'s `NSGA2`. Backbone embeddings are computed/cached once per track
@@ -84,6 +85,10 @@ Expect on the order of hours for a full run (pop/gen/epochs are set in each trac
 - `<track>/results/nsga2/pareto_front.csv` — one row per Pareto individual
   (`individual, alpha_sys, avg_model_cost, P_*` penalty-matrix genes). `alpha_sys` here
   is the VAL-set fitness value from the search, not a train-set number.
+  Non-dominated over **every** evaluated individual (the paper's procedure), written
+  unrounded; `all_evaluated.npz` next to it keeps every (chromosome, objectives) pair.
+  FC training is seeded from the chromosome (`dispatcher_model.chromosome_seed`), so
+  `dispatcher_analysis` retraining reproduces the searched weights.
 - `<track>/results/nsga2/models/individual_*.npz` — trained FC weights per individual.
 - `<track>/results/nsga2/checkpoint_gen*.npz` — per-generation checkpoints (for
   resuming/audit).
