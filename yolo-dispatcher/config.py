@@ -144,7 +144,7 @@ else:
 EXTRACTOR_MODEL = "yolov8n"
 EXTRACTOR_TAP_LAYERS = (4, 6, 9)
 EMBEDDING_DIM = 448
-EMBEDDING_NUM_WORKERS = 8
+EMBEDDING_NUM_WORKERS = min(8, os.cpu_count() or 1)
 
 
 def build_feature_extractor(device):

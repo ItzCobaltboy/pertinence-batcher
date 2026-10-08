@@ -1,0 +1,11 @@
+{
+  "unit": "GFLOPs (2 x conv/linear MACs, fused, 640x640, batch 1)",
+  "model_gflops": {
+    "yolov8n": 8.7439872,
+    "yolov8s": 28.602624,
+    "yolov8m": 78.9367296,
+    "yolov8l": 165.1485184
+  },
+  "extractor_gflops": 3.1555584,
+  "fc_gflops": 3.584e-06
+}

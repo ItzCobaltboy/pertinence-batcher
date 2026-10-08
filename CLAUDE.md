@@ -90,7 +90,8 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   splits train = 20k train2017 subset, test/final_val = 70/30 of val2017 stratified by label;
   extractor = frozen fused yolov8n backbone, GAP at layers 4/6/9 -> 448-dim; cost = GFLOPs at 640
   (2 x conv/linear MACs, measured by `measure_costs.py` into `data/model_costs.json`); 13 genes
-  (12 penalties + scheme). **Built, not yet run** (no GPU where it was written).
+  (12 penalties + scheme). Smoke-tested end to end on CPU (sampled images; the search's fitness was reproduced
+  exactly by the analysis). Measured: 8.74 / 28.60 / 78.94 / 165.15 GFLOPs, extractor 3.16. **Full run not done yet.**
 - `research.md` — annotated bibliography for the scheduler (~50 papers, link + what differs from
   us). Read before citing anything or claiming novelty.
 - `venv/` — set up locally (`python -m venv venv` + `pip install -r requirements.txt`), not committed.
@@ -494,7 +495,7 @@ every run rather than relying on a copied `.npz` weight file.
    top-level `results/raw_predictions/` copy), so re-scoring (F1, iscrowd filtering) is local. `yolo-analysis/results/` also holds stray copies of
    `coco_gt.py` and `requirements.txt` from syncing results back.
 
-   **Built, not yet run**: `yolo-dispatcher/` (see "Repo layout") does the labeling step
+   **Built, smoke-tested, full run pending**: `yolo-dispatcher/` (see "Repo layout") does the labeling step
    (`label(x) = argmin_j cost_j s.t. recall_j(x) >= 0.80`) and the full PERTINENCE stack over the
    YOLO pool. Labels: train 47.2 / 22.5 / 9.2 / 21.1% (n/s/m/l), val2017 52.8 / 14.9 / 8.3 / 24.0%;
    no model correct on 15.6% of train, 19.8% of val2017 (labelled yolov8l). Unlike CIFAR-100, the

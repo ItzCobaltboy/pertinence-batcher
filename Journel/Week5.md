@@ -644,6 +644,8 @@ Thin track on the shared code, one command (`python run_all.py`, `--smoke` for a
   yolov8n's neck + head when it's picked.
 - 13 genes (12 penalties + scheme), paper hyperparameters.
 
-Not run yet (written on a machine without a GPU). **Next**: smoke run, then the full run on the
-A100; check that the test-split pass reproduces the search's fitness numbers (it should now), then
-log the `[RESULT]`.
+Smoke-tested end to end on CPU (torch 2.14, ultralytics 8.4, pymoo 0.6.2) on a 300 / 140 / 60
+image sample: every stage ran. Measured costs 8.74 / 28.60 / 78.94 / 165.15 GFLOPs (published 8.7 /
+28.6 / 78.9 / 165.2), extractor 3.16 GFLOPs, now committed in `data/model_costs.json`. The test-split
+pass reproduced the search's fitness exactly for all 6 front individuals, so the seeding works.
+**Next**: full run on the A100, then log the `[RESULT]`.
