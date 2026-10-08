@@ -83,10 +83,19 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
     trace router, `recall_labeling.py`, interpolate mode, switch cost.
   - TODO: `stable` heuristic wrongly flags some very light loads; periodic workload starts all
     streams at t=0 (worst case), stagger phases.
+- `yolo-dispatcher/` — PERTINENCE dispatcher over the YOLOv8 n/s/m/l pool on COCO, a thin track
+  (like `fig9c`) on the shared `dispatcher/` + `dispatcher_analysis/` code. `python run_all.py
+  [--smoke]` runs label -> images -> costs -> search -> analysis (see its README). Labels from the
+  committed `yolo-analysis` recall CSVs (recall >= 0.80, cheapest correct, no-correct -> yolov8l);
+  splits train = 20k train2017 subset, test/final_val = 70/30 of val2017 stratified by label;
+  extractor = frozen fused yolov8n backbone, GAP at layers 4/6/9 -> 448-dim; cost = GFLOPs at 640
+  (2 x conv/linear MACs, measured by `measure_costs.py` into `data/model_costs.json`); 13 genes
+  (12 penalties + scheme). Smoke-tested end to end on CPU (sampled images; the search's fitness was reproduced
+  exactly by the analysis). Measured: 8.74 / 28.60 / 78.94 / 165.15 GFLOPs, extractor 3.16. **Full run not done yet.**
 - `research.md` — annotated bibliography for the scheduler (~50 papers, link + what differs from
   us). Read before citing anything or claiming novelty.
 - `venv/` — set up locally (`python -m venv venv` + `pip install -r requirements.txt`), not committed.
-- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape.
+- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape; dispatcher audited against the paper (CIFAR-100 train labels saturated), shared dispatcher fixes, `yolo-dispatcher/` built.
 - `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first. `pertinence_week5.pptx` (meet 6): definitions, prior art (8 papers with links), dense A100 trt_fp16 curves, simulator baselines on the dense profile, policy v1.
 
 ## Pipeline: archive/model_analysis/ (archived — done/locked work, not part of the active pipeline)
@@ -185,6 +194,14 @@ is one shared copy of the code across both sub-tracks, not a per-track copy — 
 GA mechanics (selection, crossover, mutation, non-dominated sort) are `pymoo`'s; only the domain
 logic (chromosome meaning, fitness eval, FC training) is ours.
 
+**Since the YOLO track (`Journel/Week5.md` `[DECISION]`)**: FC training is seeded from a hash of the
+chromosome (`chromosome_seed`), so the search, `save_models.py` and `dispatcher_analysis/
+build_models.py` train the same weights; `pareto_front.csv` is written unrounded (the seed hashes
+the exact genes) and is the non-dominated set over **every** evaluated individual, as in the paper
+(`all_evaluated.npz` keeps them all), not the final population's front; optional
+`config.NSGA2_SEED`; loss weights gathered on-device instead of a per-sample Python loop. The
+archived CIFAR-100 results predate this.
+
 **Fitness objective: `obj1 = alpha_sys_loss = 1 - alpha_sys`, `obj2 = avg_model_cost`.**
 `alpha_sys` (paper's Eq. 3) = fraction of images where the model the dispatcher **actually
 picked** classifies correctly — looked up from each ground-truth CSV's `<model>_correct`
@@ -253,6 +270,12 @@ routing class (routing precision ≤ 0.171): the class-imbalance problem noted a
 `Journel/Week3.md` (`[REALISATION]` entry: DWB weighting paper, hand-seeded population idea), still
 open. NSGA-II hyperparameters match the paper's stated values exactly where the shared
 code allows it (pop 50 / gen 50 / FC epochs 20 / penalty range [0, 100]).
+**Likely root cause (found while auditing against the paper, `Journel/Week5.md`)**: the FC was
+trained on official-train labels, which the pool checkpoints memorized: fig9c train labels are
+96.8% / 3.1% / 0.1% (repvgg ~50 images) vs 67 / 13 / 20 on held-out data; the paper's Table III
+shows a 68% majority class on its training set. Weighting can't fix labels that don't reflect
+held-out difficulty. Also: the archived `fig9c`/`fig9d` entry points still point at
+`../../dispatcher`, broken since the move to `archive/`.
 
 All runs share one optimization: backbone frozen → all train embeddings precomputed once,
 each fitness eval only trains/evals a `Linear(embedding_dim→num_classes)` on cached tensors
@@ -260,8 +283,8 @@ each fitness eval only trains/evals a `Linear(embedding_dim→num_classes)` on c
 fragmentation.
 
 **Evaluation**: `dispatcher_analysis/` is the only place evaluation happens, always against
-whichever front `dispatcher/` most recently produced, loading its saved weights directly
-(no retraining).
+whichever front `dispatcher/` most recently produced. It retrains each Pareto individual from its
+chromosome (seeded, so it reproduces the searched weights up to GPU nondeterminism).
 
 ### Known limitation: dispatcher judgment is capped by the feature extractor
 
@@ -468,14 +491,16 @@ every run rather than relying on a copied `.npz` weight file.
 
    **On-disk notes**: `results/<split>/*_minimum_match.csv` files are the recall >= 0.80 variants
    (despite the `exact_match_` prefix); the plain `exact_match_*` files are true exact-match.
-   `raw_predictions/` caches exist only on the server (locally just `.gitkeep`): re-scoring
-   locally would mean re-running inference. `yolo-analysis/results/` also holds stray copies of
+   `raw_predictions/` caches are committed (val2017 21 MB, train2017 103 MB, plus a stray
+   top-level `results/raw_predictions/` copy), so re-scoring (F1, iscrowd filtering) is local. `yolo-analysis/results/` also holds stray copies of
    `coco_gt.py` and `requirements.txt` from syncing results back.
 
-   **Not yet started**: the actual labeling step (`label(x) = argmin_j cost_j s.t.
-   recall_j(x) >= 0.80`, the detection-pool analogue of `cifar-100/label_data.py`) and training a
-   new PERTINENCE dispatcher stack over the YOLO pool — this benchmark was data-gathering only,
-   see `yolo-analysis/README.md` and `Journel/Week4.md`.
+   **Built, smoke-tested, full run pending**: `yolo-dispatcher/` (see "Repo layout") does the labeling step
+   (`label(x) = argmin_j cost_j s.t. recall_j(x) >= 0.80`) and the full PERTINENCE stack over the
+   YOLO pool. Labels: train 47.2 / 22.5 / 9.2 / 21.1% (n/s/m/l), val2017 52.8 / 14.9 / 8.3 / 24.0%;
+   no model correct on 15.6% of train, 19.8% of val2017 (labelled yolov8l). Unlike CIFAR-100, the
+   train labels are not saturated (yolov8n correct 47% train vs 53% val). Next: smoke run then full
+   run on the A100, log the `[RESULT]`.
 2. Whether/when to integrate calibrated INT8/FP8 into the CIFAR-100 dispatcher's model pool
    (would require re-running the labeler with INT8 latency figures) — not started, deferred.
 3. `[EXPLORE]` from the prof meeting, untouched: model compression (pruning, KD) — check for useful

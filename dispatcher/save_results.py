@@ -14,6 +14,9 @@ def save_pareto_front(chromosomes, objectives, logger, config):
     avg_model_cost, P_<true><pred> for every off-diagonal penalty entry,
     plus a `scheme` column (and the raw `scheme_gene` value) when this
     track searches the weighting scheme — sorted by alpha_sys descending.
+    Values are written unrounded: dispatcher_analysis rebuilds each
+    chromosome from this CSV and seeds its FC retraining from the exact
+    float64 genes (a rounded scheme gene could also flip bins).
     avg_model_cost's unit is dataset-specific — see config.MODEL_COST_UNIT."""
     searches_scheme = searches_weighting_scheme(config)
     rows = []
@@ -24,20 +27,20 @@ def save_pareto_front(chromosomes, objectives, logger, config):
 
         row = {
             "individual": individual_id,
-            "alpha_sys": round(float(alpha_sys), 4),
-            "avg_model_cost": round(float(avg_model_cost), 4),
+            "alpha_sys": float(alpha_sys),
+            "avg_model_cost": float(avg_model_cost),
         }
 
         gene_index = 0
         for true_class in range(config.NUM_CLASSES):
             for pred_class in range(config.NUM_CLASSES):
                 if true_class != pred_class:
-                    row[f"P_{true_class}{pred_class}"] = round(float(chromosome[gene_index]), 4)
+                    row[f"P_{true_class}{pred_class}"] = float(chromosome[gene_index])
                     gene_index += 1
 
         if searches_scheme:
             row["scheme"] = decode_scheme(chromosome, config)
-            row["scheme_gene"] = round(float(chromosome[gene_index]), 4)
+            row["scheme_gene"] = float(chromosome[gene_index])
 
         rows.append(row)
 
