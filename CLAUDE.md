@@ -45,21 +45,45 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   archived — not part of the active pipeline.
 - `archive/quantization_experiments/` — Week2: standalone PTQ-calibration + batch-size-sweep
   experiments. Done/exploratory, archived.
-- `yolo-analysis/` — new, standalone: YOLOv8/COCO multi-label class-recall benchmark, prep work
-  for the Week4 scheduler direction's detection-based model pool. Self-contained (own
-  `requirements.txt`, no imports from the rest of the repo) since it's meant to be copied to a
-  server to run. Not wired to `dispatcher/`/`dispatcher_analysis/` — pure data-gathering, see
-  `yolo-analysis/README.md`.
-  `yolo-analysis/batch_sweep/` (`sweep.py`: preflight | measure | aggregate | profile): timing
-  sweep for real YOLOv8 n/s/m/l T_i(b), b = 1,2,4,8,12,16,32,48, variants eager_fp32 / trt_fp32 /
-  trt_fp16 (torch_tensorrt dynamo; engines cached in `results/batch_sweep/engines/`, git-ignored).
+- `yolo-analysis-a100/` (was `yolo-analysis/`, renamed since everything in it ran on the A100;
+  Week0-5 journal entries keep the old path): standalone YOLOv8/COCO multi-label class-recall
+  benchmark, prep work for the Week4 scheduler direction's detection-based model pool.
+  Self-contained (own `requirements.txt`, no imports from the rest of the repo) since it's meant
+  to be copied to a server to run. Not wired to `dispatcher/`/`dispatcher_analysis/`: pure
+  data-gathering, see `yolo-analysis-a100/README.md`.
+  `yolo-analysis-a100/batch_timing_analysis/` (was `batch_sweep/`; `sweep.py`: preflight | measure |
+  aggregate | profile): timing sweep for real YOLOv8 n/s/m/l T_i(b), variants eager_fp32 / trt_fp32 / trt_fp16
+  (torch_tensorrt dynamo; engines cached in `results/batch_sweep*/engines/`, git-ignored).
   Forward = fused DetectionModel incl. Detect head decode; NMS a separate column. One subprocess
-  per job (crash-safe, resumable, session lock). Raw per-run JSON in
-  `results/batch_sweep/raw/<session>/`; summaries, plots, sanity flags in `summary/<session>/`.
-  `profile --variant V` writes `scheduler-sim/profiles/yolov8_a100_<V>.csv` (no default).
+  per job (crash-safe, resumable, session lock). Raw per-run JSON in `raw/<session>/`
+  (git-ignored); summaries, plots, sanity flags in `summary/<session>/`. A new run writes
+  `results/batch_sweep/` by default (`BATCH_SWEEP_OUT_DIR` overrides). `profile --variant V` writes
+  `scheduler-sim/profiles/yolov8_a100_<V>.csv` (no default).
   Gotcha: torch 2.3 export needs `DetectionModel.stride` cloned (shared with the Detect head).
-  "fp32" on the A100 is TF32 by default. **Done** (session `main`, 480/480 runs ok): results in
-  `results/batch_sweep/summary/main/`; trt_fp16 chosen as the scheduler profile.
+  "fp32" on the A100 is TF32 by default. **Done**, session `main` both times:
+  `results/batch_sweep_OLD/` (b = 1,2,4,8,12,16,32,48, 480/480 runs ok) and
+  `results/batch_sweep_DENSE/` (b = 1..32 step 2, then 40/48/56/64, 1260/1260 ok; that grid was set
+  on the server, the local `settings.BATCH_SIZES` still holds the old one). The result folders keep
+  the `batch_sweep` name.
+  `yolo-analysis-a100/power_analysis/` (built, smoke-tested on the laptop's RTX 5070 Ti, **not run
+  on the A100 yet**): the A100 stand-in for E_i(b) until a Jetson is available. Deliberately small
+  (4 files, ~520 lines; a first, much heavier power sweep inside batch_sweep was run once on the
+  A100 and then rolled back, see Week6). `python power_sweep.py` is the only entry point.
+  - One `nvidia-smi -lms 50 -f` sampler runs for the whole sweep, giving one power trace.
+  - 20 s baseline with nothing loaded.
+  - Every (model, batch) combo once, in random order, eager FP32, n/s/m/l x the dense grid, each
+    in its own `worker.py` process. The worker loads the model and a real COCO batch, does one
+    warmup forward, then 20 s idle (model loaded), then 5 run phases (200 forwards of the batch,
+    however long that takes, then sync) with 3 s buffers. It only records `time.time()` marks.
+  - `aggregate.py` cuts the trace with those marks: phase power = mean of the samples inside;
+    energy = power x runtime; energy per batch = energy / forwards; per frame = / b.
+    `summary.csv`, `phases.csv`, one raw trace plot per combo, and power / energy-per-batch /
+    energy-per-frame vs b per model.
+  - No resume, no lock; load/unload cost not measured. `POWER_FIELD` defaults to `power.draw`
+    (a ~1 s average on the A100); switch to `power.draw.instant` if the driver supports it.
+  - Gotcha: nvidia-smi writes its `-f` file in ~4 KB chunks (~6 s), and the last chunk can be lost
+    on stop, so the sweep samples 10 s past the last combo (`END_TAIL_S`).
+  - About 2 h 10 min on the A100; output `results/power_analysis/`.
 - `scheduler-sim/` — standalone DES for the scheduler (own `requirements.txt` and `README.md`, no
   imports from the rest of the repo), plain OOP. Two knobs: a `Workload` (arrival times + target
   queue, usually just `choose_queue`) and a `Scheduler` (only `decide(now)` ->
@@ -71,7 +95,7 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
     `run_experiment.py`: sweeps, CSVs, plots. `tests/test_sim.py`: 16 pytest tests, passing.
   - `profiles/`: `yolov8_a100_eager_fp32.csv` (**in use**, measured eager FP32, b = 1..32 step 2,
     40/48/56/64) and `yolov8_a100_trt_fp16.csv` (not used: TRT engine outputs fail the eager check,
-    see Week5 `[DEAD-END]`). Both written by `yolo-analysis/batch_sweep/sweep.py profile`.
+    see Week5 `[DEAD-END]`). Both written by `yolo-analysis-a100/batch_timing_analysis/sweep.py profile`.
   - YOLO routing weights hardcoded from val2017 recall >= 0.80: `[0.528 n, 0.149 s, 0.083 m,
     0.240 l]`. Metrics from t=0 (warm-up dropped: it inflated compression ratio when overloaded).
   - Each run saves raw per-job data as `.npz` in `results/<exp>/raw/` (git-ignored);
@@ -86,7 +110,7 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
 - `yolo-dispatcher/` — PERTINENCE dispatcher over the YOLOv8 n/s/m/l pool on COCO, a thin track
   (like `fig9c`) on the shared `dispatcher/` + `dispatcher_analysis/` code. `python run_all.py
   [--smoke]` runs label -> images -> costs -> search -> analysis (see its README). Labels from the
-  committed `yolo-analysis` recall CSVs (recall >= 0.80, cheapest correct, no-correct -> yolov8l);
+  committed `yolo-analysis-a100` recall CSVs (recall >= 0.80, cheapest correct, no-correct -> yolov8l);
   splits train = 20k train2017 subset, test/final_val = 70/30 of val2017 stratified by label;
   extractor = frozen fused yolov8n backbone, GAP at layers 4/6/9 -> 448-dim; cost = GFLOPs at 640
   (2 x conv/linear MACs, measured by `measure_costs.py` into `data/model_costs.json`); 13 genes
@@ -94,8 +118,10 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   exactly by the analysis). Measured: 8.74 / 28.60 / 78.94 / 165.15 GFLOPs, extractor 3.16. **Full run not done yet.**
 - `research.md` — annotated bibliography for the scheduler (~50 papers, link + what differs from
   us). Read before citing anything or claiming novelty.
+- `research/`: exploration dump (paper notes, reading summaries, drafts); see its `README.md`.
+  Background and Motivation draft 1 lives here.
 - `venv/` — set up locally (`python -m venv venv` + `pip install -r requirements.txt`), not committed.
-- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape; dispatcher audited against the paper (CIFAR-100 train labels saturated), shared dispatcher fixes, `yolo-dispatcher/` built.
+- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape; dispatcher audited against the paper (CIFAR-100 train labels saturated), shared dispatcher fixes, `yolo-dispatcher/` built. `Week6.md`: the "why" week: Clockwork-lineage literature list; Background and Motivation draft 1 (`research/background_motivation_draft1.md`); plan to measure the gap on a Jetson.
 - `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first. `pertinence_week5.pptx` (meet 6): definitions, prior art (8 papers with links), dense A100 trt_fp16 curves, simulator baselines on the dense profile, policy v1.
 
 ## Pipeline: archive/model_analysis/ (archived — done/locked work, not part of the active pipeline)
@@ -397,9 +423,10 @@ every run rather than relying on a copied `.npz` weight file.
    (leans to K/I as primary, not final). **Done**: dense sweep (all 3 variants, session `main`, b = 1..32 step 2, then
    40/48/56/64, 1260/1260 ok); profile CSV rebuilt from `batch_sweep_DENSE` (21 columns) and
    the 3 sim sweeps rerun on it (loads 0.1-1.0 step 0.1). `longest_queue` best mean, `fcfs_batch`
-   better p95 (LQ starves short queues). **Next**: E_i(b) via NVML sampling during the timed loop
-   (the sweep's end-of-run power reading is useless), then implement the score-based policy and an
-   EdgeServing-style baseline. **Policy v1 defined** (Week5 `[DECISION]`, not implemented):
+   better p95 (LQ starves short queues). **Next**: E_i(b) (the timing sweep's end-of-run power reading
+   is useless): `yolo-analysis-a100/power_analysis/` is built (nvidia-smi sampling, not pynvml; see
+   `yolo-analysis-a100` under "Repo layout"), still to be run on the A100. Then implement the
+   score-based policy and an EdgeServing-style baseline. **Policy v1 defined** (Week5 `[DECISION]`, not implemented):
    Cost(i, j) = β · Σ ages of jobs not served + (1 - β) · T_ij, argmin over (queue, batch size),
    padding allowed, no wait option yet.
 
@@ -441,7 +468,7 @@ every run rather than relying on a copied `.npz` weight file.
    on a Single Accelerator"): Xia et al. 2002 / Chen & Wang 2022 assume batch cost independent of
    size and identical across classes; ML serving systems (Clockwork, Nexus, Symphony, Triton) have
    size-dependent cost but no optimality results. First piece built and now
-   **run to completion on both splits**: a self-contained `yolo-analysis/` folder (single entry
+   **run to completion on both splits**: a self-contained `yolo-analysis-a100/` folder (single entry
    point `run_benchmark.py`) that runs YOLOv8n/s/m/l over both COCO val2017 (full 5,000 images)
    and train2017 (a stratified 20,000-image subset, see below) and scores each as multi-label
    classification (recall + exact-match against ground-truth class sets, boxes dropped for this
@@ -492,7 +519,7 @@ every run rather than relying on a copied `.npz` weight file.
    **On-disk notes**: `results/<split>/*_minimum_match.csv` files are the recall >= 0.80 variants
    (despite the `exact_match_` prefix); the plain `exact_match_*` files are true exact-match.
    `raw_predictions/` caches are committed (val2017 21 MB, train2017 103 MB, plus a stray
-   top-level `results/raw_predictions/` copy), so re-scoring (F1, iscrowd filtering) is local. `yolo-analysis/results/` also holds stray copies of
+   top-level `results/raw_predictions/` copy), so re-scoring (F1, iscrowd filtering) is local. `yolo-analysis-a100/results/` also holds stray copies of
    `coco_gt.py` and `requirements.txt` from syncing results back.
 
    **Built, smoke-tested, full run pending**: `yolo-dispatcher/` (see "Repo layout") does the labeling step

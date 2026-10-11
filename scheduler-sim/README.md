@@ -14,7 +14,7 @@ imports nothing from the rest of the repo.
     workloads.py       Workload subclasses: Uniform, Weighted, Sticky, PeriodicRouted, Periodic
     schedulers.py      Scheduler subclasses: FCFSNoBatch, FCFSBatch, LongestQueue, TimeoutBatch
     run_experiment.py  the load sweeps, results CSVs and plots
-    profiles/          T_i(b) table: yolov8_a100_trt_fp16.csv (measured, from yolo-analysis/batch_sweep)
+    profiles/          T_i(b) table: yolov8_a100_trt_fp16.csv (measured, from yolo-analysis-a100/batch_timing_analysis)
     tests/test_sim.py  pytest tests
     results/           written by run_experiment.py, one folder per experiment
 

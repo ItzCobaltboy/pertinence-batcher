@@ -8,7 +8,7 @@ Whole pipeline, one command:
 Stages, each its own process (dispatcher/ and dispatcher_analysis/ have
 same-named modules, e.g. embeddings.py, so they can't share one interpreter):
 
-  label     label_data.py                 ground-truth CSVs from yolo-analysis results
+  label     label_data.py                 ground-truth CSVs from yolo-analysis-a100 results
   images    download_images.py            fetch any COCO images not already on disk
   costs     measure_costs.py              GFLOPs of the pool + extractor -> data/model_costs.json
   search    run_dispatcher.py             embeddings (cached) + NSGA-II + Pareto FC weights

@@ -2,7 +2,7 @@
 Makes sure every image referenced by the three ground-truth CSVs exists under
 config.DATASET_DIR, downloading only the missing ones individually from
 images.cocodataset.org (no 18GB train2017.zip). On a machine that already ran
-yolo-analysis, DATASET_DIR defaults to its dataset/ folder and nothing is
+yolo-analysis-a100, DATASET_DIR defaults to its dataset/ folder and nothing is
 downloaded.
 
 Run: python download_images.py   (stdlib + pandas only)

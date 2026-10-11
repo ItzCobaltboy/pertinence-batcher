@@ -1,6 +1,6 @@
 """
 Builds the three ground-truth CSVs the shared dispatcher/ and
-dispatcher_analysis/ code consume, straight from yolo-analysis' committed
+dispatcher_analysis/ code consume, straight from yolo-analysis-a100' committed
 per-model, per-image recall benchmark (no inference here).
 
 Schema (same as the CIFAR-100 track, plus image_id and raw recalls):

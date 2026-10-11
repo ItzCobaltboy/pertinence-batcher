@@ -1,5 +1,5 @@
 # MEASURED YOLOv8 batched-inference runtimes T_i(b) in ms, variant trt_fp16.
-# Built by yolo-analysis/batch_sweep/sweep.py profile from session 'main' raw files.
+# Built by yolo-analysis-a100/batch_timing_analysis/sweep.py profile from session 'main' raw files.
 # GPU NVIDIA A100-PCIE-40GB, driver 535.288.01, torch 2.3.1+cu121, torch_tensorrt 2.3.0+cu121, ultralytics 8.4.153.
 # Value = mean across independent runs of each run's mean forward time (runs per cell: 5). Forward only: fused DetectionModel incl. Detect head decode,
 # fp32 input (B,3,640,640) already on cuda:0, NMS excluded. Empty cell = config failed / no data.

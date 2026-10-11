@@ -25,8 +25,9 @@ cifar-100/                  CIFAR-100 track -- shared infra + two self-contained
 archive/
   model_analysis/           done -- model pool selection + Torch-TensorRT precision benchmark
   quantization_experiments/ done -- calibrated PTQ + batch-size-sweep experiments
-yolo-analysis/               YOLOv8 n/s/m/l on COCO -- class-recall benchmark, self-contained
-  batch_sweep/                batched-inference timing sweep -> measured T_i(b) profiles for scheduler-sim
+yolo-analysis-a100/               YOLOv8 n/s/m/l on COCO -- class-recall benchmark, self-contained
+  batch_timing_analysis/      batched-inference timing sweep -> measured T_i(b) profiles for scheduler-sim
+  power_analysis/             power sweep (nvidia-smi) -> power and energy per batch vs batch size
 scheduler-sim/               discrete-event simulator for the N-model/single-accelerator batch
                               scheduling problem (Journel/Week4.md's formal problem definition).
                               Plain OOP in 3 core files: sim.py (Job, Queue, Profile, Simulator and
@@ -63,7 +64,7 @@ python cifar-100/fig9d/run_dispatcher_analysis.py
 - [`dispatcher_analysis/`](dispatcher_analysis/README.md) — evaluate the resulting front
 - [`eda/`](eda/README.md) — ground-truth EDA (per-model/oracle accuracy, class balance)
 - [`cifar-100/`](cifar-100/README.md) — CIFAR-100 track specifics (shared infra + both sub-tracks)
-- [`yolo-analysis/`](yolo-analysis/README.md) — YOLOv8 n/s/m/l on COCO, class-recall benchmark
+- [`yolo-analysis-a100/`](yolo-analysis-a100/README.md) — YOLOv8 n/s/m/l on COCO, class-recall benchmark
 - [`scheduler-sim/`](scheduler-sim/README.md): discrete-event simulator for the batch
   scheduling problem. Subclass Workload (how jobs arrive and which queue gets them) or
   Scheduler (which queue and batch size runs next); both share the same Queue objects
@@ -104,7 +105,7 @@ install above.
 | — | CIFAR-100 track (`fig9c`/`fig9d`) | ✅ Full-hyperparameter NSGA-II searches run for both sub-tracks and presented (Week4); `[RESULT]` not yet journaled |
 | 5 | YOLOv8 n/s/m/l on COCO — class-recall benchmark + correctness definition | ✅ Done |
 | 6 | Scheduler discrete-event simulator (`scheduler-sim/`) | ✅ Built, rewritten, 16 tests, 4 example sweeps — see `scheduler-sim/README.md` |
-| 6b | Real YOLOv8 T_i(b) timing sweep (`yolo-analysis/batch_sweep/`) | ✅ Done (A100, trt_fp16 profile in `scheduler-sim/profiles/`), sim rerun on it |
+| 6b | Real YOLOv8 T_i(b) timing sweep (`yolo-analysis-a100/batch_timing_analysis/`) | ✅ Done (A100, trt_fp16 profile in `scheduler-sim/profiles/`), sim rerun on it |
 | 6c | Literature search (`research.md`) | ✅ Done |
 | 7 | Scheduler validated experimentally with PERTINENCE in the loop | ⬜ Not started |
 

@@ -1,7 +1,0 @@
-ultralytics
-torch
-numpy
-pandas
-pillow
-tqdm
-matplotlib

@@ -42,7 +42,7 @@ POLICIES = [
 ]
 
 # Share of COCO val2017 images whose cheapest passing model is yolov8 n, s, m, l.
-# Derived from yolo-analysis/results/val2017/coco_class_recall_benchmark.csv at
+# Derived from yolo-analysis-a100/results/val2017/coco_class_recall_benchmark.csv at
 # threshold 0.80 (cheapest model with recall >= 0.80, else the largest model),
 # i.e. 2639 / 745 / 417 / 1199 out of 5000 images.
 YOLO_WEIGHTS = [0.5278, 0.149, 0.0834, 0.2398]
@@ -58,7 +58,7 @@ REAL_LOADS = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 
 
 # Knob 1 lives inside each experiment: workload_class + workload_kwargs.
 EXPERIMENTS = [
-    # All three use the MEASURED A100 eager FP32 profile (yolo-analysis/batch_sweep).
+    # All three use the MEASURED A100 eager FP32 profile (yolo-analysis-a100/batch_timing_analysis).
     # Batch-1 capacity with these routing weights is about 0.17 jobs/ms, max-batch (64)
     # capacity about 0.69 jobs/ms, hence REAL_LOADS.
     {

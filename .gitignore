@@ -25,7 +25,7 @@ archive/cifar-100/fig9c/results/eval/model_cache/**
 archive/cifar-100/fig9d/results/eval/model_cache/**
 archive/cifar-100/PIPELINE_REPORT.md
 pptx/
-yolo-analysis/dataset/
+yolo-analysis-a100/dataset/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -256,16 +256,18 @@ codex/
 # scheduler-sim raw per-run data (regenerable from seeds, about 50 MB)
 scheduler-sim/results/*/raw/
 
-# yolo-analysis batch_sweep caches (rebuildable, not results): compiled TRT engines (~4 GB),
-# the per-session lock file, and any YOLO checkpoint ultralytics downloads next to the scripts
-yolo-analysis/results/batch_sweep/engines/
-yolo-analysis/results/batch_sweep/logs/*/measure.lock
-yolo-analysis/batch_sweep/*.pt
-yolo-analysis/results/batch_sweep/raw
+# yolo-analysis-a100 batch_timing_analysis (results in results/batch_sweep*/): raw per-run JSON, compiled TRT engines (~4 GB) and logs
+# (per-job stdout, launcher/measure logs, the session lock). The finished sweeps live in
+# batch_sweep_DENSE/ and batch_sweep_OLD/; the batch_sweep* glob also covers results/batch_sweep/,
+# which is where a new timing run writes by default. Summaries and gpu_logs stay tracked.
+yolo-analysis-a100/results/batch_sweep*/raw/
+yolo-analysis-a100/results/batch_sweep*/engines/
+yolo-analysis-a100/results/batch_sweep*/logs/
+# any YOLO checkpoint ultralytics downloads next to the scripts
+yolo-analysis-a100/batch_timing_analysis/*.pt
 
-# batch sweep logs (per-job stdout, launcher/measure logs)
-yolo-analysis/results/batch_sweep_DENSE/raw/**
-yolo-analysis/results/batch_sweep_OLD/raw/**
+# yolo-analysis-a100 power_analysis: nvidia-smi's raw output (samples.csv holds the same data, converted)
+yolo-analysis-a100/results/power_analysis/samples_raw.csv
 # yolo-dispatcher: weights, caches and bulky per-run outputs (CSVs/plots/pareto_front stay tracked)
 yolo-dispatcher/models/*.pt
 yolo-dispatcher/embeddings_cache/**
@@ -274,3 +276,5 @@ yolo-dispatcher/results*/nsga2/*.npz
 yolo-dispatcher/results*/eval/model_cache/**
 yolo-dispatcher/results*/eval/predictions/**
 yolo-dispatcher/results_smoke/**
+yolo-analysis-a100/results_A100/train2017/raw_predictions/
+yolo-analysis-a100/results_A100/val2017/raw_predictions/

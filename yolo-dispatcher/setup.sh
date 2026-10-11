@@ -27,7 +27,7 @@ try:
 except Exception:
     pass
 for split in ["train2017", "val2017"]:
-    path = os.path.join("..", "yolo-analysis", "results", split, "coco_class_recall_benchmark.csv")
+    path = os.path.join("..", "yolo-analysis-a100", "results", split, "coco_class_recall_benchmark.csv")
     present = os.path.exists(path)
     ok &= present
     print(f"  {'ok  ' if present else 'MISSING'} {path}")

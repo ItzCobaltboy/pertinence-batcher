@@ -10,7 +10,7 @@ with only numpy/pandas.
 
 Overrides via environment variables (all optional):
   PERTINENCE_COCO_DIR    where COCO images live / get downloaded
-                         (default: ../yolo-analysis/dataset, shared with the
+                         (default: ../yolo-analysis-a100/dataset, shared with the
                          benchmark, so a server that already ran it reuses them)
   PERTINENCE_SMOKE=1     tiny GA budget (pop 8, gen 2, 2 FC epochs) writing to
                          results_smoke/, to check the whole pipeline end to end
@@ -22,18 +22,18 @@ import os
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))     # yolo-dispatcher/
 REPO_ROOT = os.path.dirname(PROJECT_ROOT)
-YOLO_ANALYSIS_DIR = os.path.join(REPO_ROOT, "yolo-analysis")
+YOLO_ANALYSIS_DIR = os.path.join(REPO_ROOT, "yolo-analysis-a100")
 
 SMOKE = os.environ.get("PERTINENCE_SMOKE", "0") == "1"
 
 # ---------------------------------------------------------------------------
-# Inputs: the committed yolo-analysis benchmark (per-model, per-image recall)
+# Inputs: the committed yolo-analysis-a100 benchmark (per-model, per-image recall)
 # ---------------------------------------------------------------------------
 def benchmark_csv(split):
     return os.path.join(YOLO_ANALYSIS_DIR, "results", split, "coco_class_recall_benchmark.csv")
 
 # Images are referenced as <split>/<image_id:012d>.jpg relative to DATASET_DIR
-# (the same layout yolo-analysis/dataset/ uses).
+# (the same layout yolo-analysis-a100/dataset/ uses).
 DATASET_DIR = os.environ.get("PERTINENCE_COCO_DIR", os.path.join(YOLO_ANALYSIS_DIR, "dataset"))
 COCO_IMAGE_URL_TEMPLATE = "http://images.cocodataset.org/{split}/{image_id:012d}.jpg"
 
@@ -61,7 +61,7 @@ WEIGHT_SEARCH_DIRS = [MODELS_DIR, os.path.join(YOLO_ANALYSIS_DIR, "models"), os.
 # Splits (paper's train/test/validation; its "test set" is the one NSGA-II
 # fitness touches every generation, its "validation set" is held out)
 # ---------------------------------------------------------------------------
-#   train      : yolo-analysis' stratified 20,000-image train2017 subset.
+#   train      : yolo-analysis-a100' stratified 20,000-image train2017 subset.
 #                YOLOv8 was trained on train2017, but unlike the CIFAR-100
 #                classifiers it does not saturate there (yolov8n correct on
 #                47% of the subset vs 53% of val2017 at recall >= 0.80), so

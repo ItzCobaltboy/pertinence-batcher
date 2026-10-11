@@ -16,12 +16,12 @@ python run_all.py          # paper budget: pop 50 x 50 generations -> results/
 ```
 
 `python run_all.py --from <stage>` resumes after a failure; `--only <stage>` runs one stage.
-COCO images default to `../yolo-analysis/dataset/` (already there on a machine that ran the
+COCO images default to `../yolo-analysis-a100/dataset/` (already there on a machine that ran the
 benchmark); set `PERTINENCE_COCO_DIR` to use another folder.
 
 | stage | script | does | rough time (A100) |
 |---|---|---|---|
-| label | `label_data.py` | ground-truth CSVs from `../yolo-analysis/results/*/coco_class_recall_benchmark.csv` | seconds |
+| label | `label_data.py` | ground-truth CSVs from `../yolo-analysis-a100/results/*/coco_class_recall_benchmark.csv` | seconds |
 | images | `download_images.py` | downloads only missing images (25,000 total, ~3.9 GB) | minutes, or nothing |
 | costs | `measure_costs.py` | GFLOPs of each model + extractor -> `data/model_costs.json` | seconds |
 | search | `run_dispatcher.py` | caches embeddings, runs NSGA-II, saves Pareto FC weights | hours (2,550 FC trainings) |
