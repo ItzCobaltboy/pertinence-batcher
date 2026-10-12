@@ -116,6 +116,13 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   (2 x conv/linear MACs, measured by `measure_costs.py` into `data/model_costs.json`); 13 genes
   (12 penalties + scheme). Smoke-tested end to end on CPU (sampled images; the search's fitness was reproduced
   exactly by the analysis). Measured: 8.74 / 28.60 / 78.94 / 165.15 GFLOPs, extractor 3.16. **Full run not done yet.**
+- `cityflow-routing/`: measures how the yolo-dispatcher routes real traffic video (AI City 2022
+  Track 1 / CityFlowV2, 6 scenarios, 128,532 frames), frame by frame with D = 1. Imports
+  yolo-dispatcher's preprocessing and extractor, applies every Pareto head per frame, loads the
+  trained heads from `yolo-dispatcher/results/` at run time. `download.py` (gdown) -> `extract.py`
+  (one scenario, default S01) -> `route.py` (raw embeddings + routing CSVs, resumable per camera) ->
+  `analyze.py` (no torch: timelines, run lengths, split, drift, transitions, merged per-queue
+  arrival rates, summary with the 90:10 line). 11 CPU tests. Built, not run.
 - `research.md` — annotated bibliography for the scheduler (~50 papers, link + what differs from
   us). Read before citing anything or claiming novelty.
 - `research/`: exploration dump (paper notes, reading summaries, drafts); see its `README.md`.
@@ -429,6 +436,7 @@ every run rather than relying on a copied `.npz` weight file.
    score-based policy and an EdgeServing-style baseline. **Policy v1 defined** (Week5 `[DECISION]`, not implemented):
    Cost(i, j) = β · Σ ages of jobs not served + (1 - β) · T_ij, argmin over (queue, batch size),
    padding allowed, no wait option yet.
+   Routing measurement on CityFlowV2 built, not run (`cityflow-routing/`).
 
    **TRT engines broken** (Week5 `[DEAD-END]`): compiled engines' outputs do not match eager (14k vs
    2.2k detections after NMS, FP32 too); likely box decoding lost in export. Sim now runs on the
