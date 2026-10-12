@@ -278,3 +278,6 @@ yolo-dispatcher/results*/eval/predictions/**
 yolo-dispatcher/results_smoke/**
 yolo-analysis-a100/results_A100/train2017/raw_predictions/
 yolo-analysis-a100/results_A100/val2017/raw_predictions/
+
+# cityflow-routing: dataset zip and extracted videos (16.9 GB)
+cityflow-routing/data/
