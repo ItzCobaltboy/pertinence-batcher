@@ -1,7 +1,5 @@
 import math
 
-import pytest
-
 from common import Job, Profile
 from policies import (Clockwork, CostV1, Drop, EdgeServing, FcfsBatch, FcfsNoBatch, Lqf, Serve, State,
                       Symphony, Triton, Wait)

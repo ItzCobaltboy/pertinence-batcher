@@ -254,7 +254,8 @@ def visit(args):
         power_min = min(power_min, remaining_min() - 10)
         if power_min >= 5 and not os.path.exists(os.path.join(device_dir, "power_profile", "summary.csv")):
             step("power profile (%.0f min)" % power_min, [py, "power_profile.py", "--budget-min", str(power_min),
-                                                         "--yes", "--profile", profile_path])
+                                                         "--yes", "--profile", profile_path,
+                                                         "--out", os.path.join(device_dir, "power_profile")])
 
     order = []
     for kind_load in ["periodic_load50", "periodic_load80", "periodic_load20", "sticky_load50", "poisson_load50"]:

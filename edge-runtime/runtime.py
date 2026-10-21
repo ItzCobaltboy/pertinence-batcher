@@ -27,7 +27,7 @@ import time
 from collections import deque
 
 import config
-from common import Job, Profile, file_hash, git_commit, load_json, power_mode, save_json, versions
+from common import Job, Profile, file_hash, git_commit, power_mode, save_json, versions
 from policies import Drop, Promote, Serve, State, Wait, make_policy
 
 

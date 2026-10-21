@@ -1,8 +1,6 @@
 import json
 import os
 
-import pandas as pd
-
 import analyze
 import config
 import plan

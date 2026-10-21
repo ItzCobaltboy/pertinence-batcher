@@ -183,7 +183,6 @@ def sweep(out_dir, plan, models, backend, seed, frames_dir):
 
 # ---------------------------------------------------------------------- aggregate
 def aggregate(out_dir):
-    import numpy as np
     import pandas as pd
     import matplotlib
     matplotlib.use("Agg")

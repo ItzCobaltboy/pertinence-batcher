@@ -116,7 +116,6 @@ def check_models(report, problems, quick):
     if quick:
         return
     try:
-        import torch
         from inputs import TensorInputs
         from models import Runner
         runner = Runner(config.MODELS, nms=True, log=lambda *a: None)
