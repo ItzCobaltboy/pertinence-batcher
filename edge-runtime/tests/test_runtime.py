@@ -132,6 +132,7 @@ def test_collapse_guard():
     assert rt.run() == "collapsed"
 
 
+@pytest.mark.skipif(not sys.platform.startswith("linux"), reason="PR_SET_PDEATHSIG and /proc are Linux-only")
 def test_sampler_dies_with_a_killed_run(tmp_path):
     prof = tmp_path / "profile.json"
     import json

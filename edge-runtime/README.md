@@ -67,7 +67,7 @@ ms), `waits.csv`, `decisions.csv`, `promotions.csv`, `power.csv.raw.gz` (+ `.met
 prep modes, device, power mode, versions, git commit; written last, so its presence
 marks a complete run).
 
-All timestamps are host `time.time()` (taken as `t0_wall + monotonic - t0_mono`, so
+All timestamps are host `time.time()` (taken as `t0_wall + perf_counter - t0_perf`, so
 they never jump), the same clock the power samplers stamp with.
 
 ## Workload
@@ -272,6 +272,18 @@ python runtime.py --policy lqf --trace $T --slo-ms 100 --profile $P --input fram
 
 For a plan covering both input modes, set `"input": ["tensor", "frames"]` and
 `"prep": ["arrival", "executor"]` in the plan.
+
+### Native Windows (laptop)
+
+Works, with three differences. The power sampler is `nvidia-smi.exe`, stopped with
+`terminate()` (Windows has no SIGINT for a child), so the last ~6 s chunk of its file may
+be lost; the 10 s tail covers it. The sampler-cleanup test is skipped (it needs Linux's
+`PR_SET_PDEATHSIG`), so a hard-killed run can leave `nvidia-smi.exe` running: check Task
+Manager. Timing: use Python >= 3.11, where `time.sleep` and condition waits use
+high-resolution timers; older Windows Pythons sleep in ~15.6 ms steps, which shows up as
+arrival lateness and late `Wait` wake-ups (logged, but it skews the runs). The run clock
+uses `perf_counter`, so timestamps are fine either way. Same commands as above with
+`python` and `%VAR%` (cmd) or `$VAR` (PowerShell) instead of the bash variables.
 
 ### Jetson visit, step by step
 

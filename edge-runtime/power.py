@@ -17,7 +17,6 @@ import gzip
 import json
 import math
 import os
-import pty
 import re
 import shlex
 import shutil
@@ -56,7 +55,10 @@ def _stop_process(proc, sig=signal.SIGINT):
     if proc is None or proc.poll() is not None:
         return
     try:
-        proc.send_signal(sig)
+        if os.name == "posix":
+            proc.send_signal(sig)
+        else:
+            proc.terminate()     # Windows: only terminate/kill exist for a child process
         proc.wait(timeout=5)
     except subprocess.TimeoutExpired:
         proc.kill()
@@ -318,6 +320,7 @@ class TegrastatsSampler:
         self.path = None
 
     def start(self, path):
+        import pty   # Linux only (Jetson); importing it at the top breaks Windows
         self.path = path
         cmd = self.cmd + ["--interval", str(self.sample_ms)]
         master, slave = pty.openpty()

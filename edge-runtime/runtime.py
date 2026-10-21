@@ -10,8 +10,9 @@
 # executor. Whenever the GPU is idle and a queue is non-empty, the executor asks the
 # policy and carries out the decision (Serve / Wait / Promote / Drop), validating it.
 #
-# Clock: every timestamp is host time.time(), taken as t0_wall + (monotonic - t0_mono)
-# so it lines up with the power samplers but never jumps.
+# Clock: every timestamp is host time.time(), taken as t0_wall + (perf_counter - t0_perf)
+# so it lines up with the power samplers but never jumps. perf_counter, not monotonic:
+# on Windows before Python 3.13, time.monotonic() ticks in 15.6 ms steps.
 #
 # Output (in --out): requests.csv, batches.csv, waits.csv, decisions.csv,
 # promotions.csv, power.csv(.raw/.meta.json), run.json (written last: its presence
@@ -38,10 +39,10 @@ class InvalidDecision(Exception):
 class Clock:
     def __init__(self):
         self.t0_wall = time.time()
-        self.t0_mono = time.monotonic()
+        self.t0_perf = time.perf_counter()
 
     def __call__(self):
-        return self.t0_wall + (time.monotonic() - self.t0_mono)
+        return self.t0_wall + (time.perf_counter() - self.t0_perf)
 
 
 class Runtime:
