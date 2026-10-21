@@ -128,6 +128,16 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   embedding + n/s/m/l boxes; correct = box recall vs yolov8l >= 0.80) -> `finetune.py` (each head
   from its COCO weights, same chromosome; train S01/S03/S04, eval S02). Output uses yolo-dispatcher's
   `results/` layout for `route.py --yolo-results`. 8 CPU tests. Built, not run.
+- `edge-runtime/`: real-hardware multi-model scheduling harness (own `README.md`/`requirements.txt`),
+  replaces the DES as the evaluation path. Real YOLOv8 n/s/m/l, eager FP32, one batch at a time; a
+  trace (periodic multi-camera with random phases, sticky, Poisson, or CityFlow replay) is replayed in
+  real time against a policy (`decide(state)` -> Serve / Wait / Promote / Drop, validated by the
+  executor); per-job/batch/wait logs + one power trace (nvidia-smi, tegrastats, fake) per run.
+  `calibrate.py` (T_i(b) on the device -> `profile.json`), `power_profile.py` (Jetson port of
+  `power_analysis`), `preflight.py`, `plan.py` (resumable runs, `visit --budget-min 90`, `copyout`),
+  `analyze.py`. Policies: `fcfs_nobatch`, `fcfs_batch`, `lqf`, `triton`, `edgeserving`, `clockwork`
+  (from its source too), `symphony`, `cost_v1`; faithfulness table per policy in the README. 43 CPU
+  tests. Built, not run on a GPU yet (laptop then Jetson visit).
 - `research.md` — annotated bibliography for the scheduler (~50 papers, link + what differs from
   us). Read before citing anything or claiming novelty.
 - `research/`: exploration dump (paper notes, reading summaries, drafts); see its `README.md`.
@@ -420,6 +430,9 @@ every run rather than relying on a copied `.npz` weight file.
    so it is built and evaluated in a DES first, then validated with PERTINENCE routing. Target:
    compute-constrained edge devices (Jetsons). Later: per-job deadlines, stream priorities. Meet 6
    is two weeks after meet 5.
+
+   **Evaluation path (since Week7)**: real hardware via `edge-runtime/` (Jetson visit, laptop for
+   development); the DES below is no longer the evaluation path.
 
    **Simulator**: done and tested (see "Repo layout"). Results so far: `fcfs_no_batch` goes
    unstable first; sticky routing makes everything 5-15% slower and `longest_queue` wins at every

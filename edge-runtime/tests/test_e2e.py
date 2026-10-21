@@ -54,7 +54,7 @@ def test_fake_plan_every_policy_then_analysis(tmp_path, monkeypatch):
     assert all(s == "ok" for s in status.values()), status
     for run_id, _ in done:
         run_dir = os.path.join(dev, "runs", run_id)
-        for name in ["requests.csv", "batches.csv", "waits.csv", "decisions.csv", "power.csv.raw", "run.json"]:
+        for name in ["requests.csv", "batches.csv", "waits.csv", "decisions.csv", "power.csv.raw.gz", "run.json"]:
             assert os.path.exists(os.path.join(run_dir, name)), (run_id, name)
     # resumable: nothing left to do
     assert plan.run_plan(p, "fake", log=lambda *a: None) == []

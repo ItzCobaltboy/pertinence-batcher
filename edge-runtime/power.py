@@ -13,6 +13,7 @@
 
 import atexit
 import ctypes
+import gzip
 import json
 import math
 import os
@@ -79,6 +80,25 @@ def read_meta(path):
             return json.load(f)
     except (OSError, ValueError):
         return {}
+
+
+def compress_raw(path):
+    """<path>.raw -> <path>.raw.gz (tegrastats traces are ~1 MB per minute raw)."""
+    raw = path + ".raw"
+    if os.path.exists(raw):
+        with open(raw, "rb") as f_in, gzip.open(raw + ".gz", "wb") as f_out:
+            shutil.copyfileobj(f_in, f_out)
+        os.remove(raw)
+
+
+def _open_raw(path):
+    if os.path.exists(path + ".raw.gz"):
+        return gzip.open(path + ".raw.gz", "rt")
+    return open(path + ".raw")
+
+
+def _has_raw(path):
+    return os.path.exists(path + ".raw") or os.path.exists(path + ".raw.gz")
 
 
 def _env_cmd(var, default):
@@ -150,16 +170,17 @@ class NvidiaSmiSampler:
     def stop(self):
         _stop_process(self.proc, signal.SIGINT)   # SIGINT makes nvidia-smi flush its file
         self.proc = None
+        if self.path:
+            compress_raw(self.path)
 
 
 def _read_nvidia_smi(path, meta):
     fields = meta.get("fields", ["power.draw"])
     cols = [NVSMI_COLUMNS.get(f, f) for f in fields]
     rows = []
-    raw = path + ".raw"
-    if not os.path.exists(raw):
+    if not _has_raw(path):
         return _empty()
-    with open(raw) as f:
+    with _open_raw(path) as f:
         for line in f:
             parts = [p.strip() for p in line.strip().split(",")]
             if len(parts) != len(fields) + 1:
@@ -339,18 +360,20 @@ class TegrastatsSampler:
             except OSError:
                 pass
             self.master = None
-        if self.path:
+        if self.path and _has_raw(self.path):
             meta = read_meta(self.path)
-            meta.update(cadence(read(self.path)))
+            df = read(self.path)
+            meta.update(cadence(df))
+            meta["columns_seen"] = list(df.columns)     # what this board / image reports
             _write_meta(self.path, meta)
+            compress_raw(self.path)
 
 
 def _read_tegrastats(path):
     rows = []
-    raw = path + ".raw"
-    if not os.path.exists(raw):
+    if not _has_raw(path):
         return _empty()
-    with open(raw) as f:
+    with _open_raw(path) as f:
         for line in f:
             stamp, _, text = line.rstrip("\n").partition("\t")
             try:
@@ -399,6 +422,8 @@ class FakeSampler:
         if self.thread is not None:
             self.thread.join(timeout=3)
             self.thread = None
+        if self.path:
+            compress_raw(self.path)
 
 
 class NoSampler:
@@ -456,9 +481,10 @@ def read(path):
         return _read_nvidia_smi(path, meta)
     if backend == "tegrastats":
         return _read_tegrastats(path)
-    if backend == "fake" and os.path.exists(path + ".raw"):
+    if backend == "fake" and _has_raw(path):
         import pandas as pd
-        return pd.read_csv(path + ".raw")
+        with _open_raw(path) as f:
+            return pd.read_csv(f)
     return _empty()
 
 

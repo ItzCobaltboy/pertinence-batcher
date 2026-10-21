@@ -347,6 +347,9 @@ def main(argv=None):
     nms = not args.no_nms
     params = json.loads(args.params)
     profile = Profile.load(args.profile, stat=args.profile_stat, part="total" if nms else "forward")
+    if args.b_max > max(profile.batch_sizes):
+        print("b_max %d is past the largest profiled size; capping at %d" % (args.b_max, max(profile.batch_sizes)))
+        args.b_max = max(profile.batch_sizes)
     policy = make_policy(args.policy, params)
     trace, trace_meta = read_trace(args.trace)
     if args.duration is not None:

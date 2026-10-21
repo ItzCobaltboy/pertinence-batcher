@@ -108,9 +108,9 @@ class Runner:
         nms_ms = self.nms(out)
         return {"assemble_ms": assemble_ms, "forward_ms": forward_ms, "nms_ms": nms_ms}
 
-    def warmup(self, inputs, batch_sizes, b_max, repeats=2):
-        """A couple of forwards per (model, profiled size) so cuDNN has picked its
-        kernels before the trace starts."""
+    def warmup(self, inputs, batch_sizes, b_max, repeats=1):
+        """A forward per (model, profiled size) so the lazy CUDA/cuDNN setup for every
+        shape is done before the trace starts."""
         for m in self.nets:
             for b in batch_sizes:
                 if b > b_max:

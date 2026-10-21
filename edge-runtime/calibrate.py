@@ -110,8 +110,9 @@ def main(argv=None):
     out = args.out or os.path.join(config.device_dir(tag), "profile.json")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     print("device %s (%s), tag %s -> %s" % (device, gpu_name, tag, out))
-    print("%d models x %d sizes, each capped at %.0f s: at most ~%.0f min plus loading" % (
-        len(models), len(sizes), args.max_s, len(models) * len(sizes) * args.max_s * 1.2 / 60))
+    print("%d models x %d sizes, each capped at %.0f s (but at least %d forwards): ~%.0f min plus loading "
+          "if no combo needs the floor" % (len(models), len(sizes), args.max_s, args.min_iters,
+                                           len(models) * len(sizes) * args.max_s * 1.2 / 60))
 
     # load all four at once: do they fit?
     all_fit = True

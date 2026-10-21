@@ -12,6 +12,7 @@
 #
 #   python inputs.py export-frames --cityflow-data ../cityflow-routing/data --scenario S02
 #   python inputs.py export-frames --from-dir ../yolo-analysis-a100/dataset/val2017
+#   python inputs.py export-frames --from-coco        download COCO val2017 images (no CityFlow needed)
 
 import argparse
 import glob
@@ -140,6 +141,22 @@ def export_from_dir(src_dir, n, out_dir, quality):
     return written
 
 
+def export_from_coco(n, out_dir):
+    """Downloads n val2017 images listed in yolo-dispatcher's final_val split."""
+    import csv
+    import urllib.request
+    path = os.path.join(config.YOLO_DISPATCHER_DIR, "data", "final_val_ground_truth.csv")
+    with open(path) as f:
+        ids = [int(row["image_id"]) for row in csv.DictReader(f)]
+    step = max(1, len(ids) // n)
+    written = 0
+    for image_id in ids[::step][:n]:
+        name = "%012d.jpg" % image_id
+        urllib.request.urlretrieve("http://images.cocodataset.org/val2017/" + name, os.path.join(out_dir, name))
+        written += 1
+    return written
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Export the frame pool used by --input frames.")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -150,9 +167,12 @@ def main(argv=None):
     p.add_argument("--cityflow-data", default=os.path.join(config.CITYFLOW_ROUTING_DIR, "data"))
     p.add_argument("--scenario", default="S02", help="comma-separated CityFlow scenarios")
     p.add_argument("--from-dir", help="take JPEGs from this folder instead of CityFlow videos")
+    p.add_argument("--from-coco", action="store_true", help="download COCO val2017 images instead")
     args = parser.parse_args(argv)
     os.makedirs(args.out, exist_ok=True)
-    if args.from_dir:
+    if args.from_coco:
+        n = export_from_coco(args.n, args.out)
+    elif args.from_dir:
         n = export_from_dir(args.from_dir, args.n, args.out, args.quality)
     else:
         n = export_from_cityflow(args.cityflow_data, args.scenario.split(","), args.n, args.out, args.quality)

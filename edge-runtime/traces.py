@@ -237,7 +237,7 @@ def main(argv=None):
     else:
         cams = args.cameras.split(",") if args.cameras else None
         df = from_cityflow(args.run, args.scenario, args.point, cams, args.duration)
-        meta.update({"run": os.path.abspath(args.run), "scenario": args.scenario, "point": args.point})
+        meta.update({"run": os.path.relpath(os.path.abspath(args.run), config.REPO_ROOT), "scenario": args.scenario, "point": args.point})
     if args.load is not None:
         meta["target_load"] = args.load
     if profile is not None:

@@ -138,6 +138,7 @@ def check_models(report, problems, quick):
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Check this machine before a run or a visit.")
     parser.add_argument("--quick", action="store_true", help="skip loading and running the models")
+    parser.add_argument("--device-tag", help="override the detected device tag (results/<tag>/)")
     args = parser.parse_args(argv)
     t0 = time.time()
     problems = []
@@ -153,7 +154,7 @@ def main(argv=None):
 
     check_packages(report, problems)
     tinfo = check_torch(report, problems)
-    tag = device_tag((tinfo or {}).get("gpu_name"))
+    tag = args.device_tag or device_tag((tinfo or {}).get("gpu_name"))
     report["device_tag"] = tag
     check_power(report, problems)
 

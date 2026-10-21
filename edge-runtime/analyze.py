@@ -116,6 +116,10 @@ def run_metrics(run_dir):
         m["latency_%s_ms_mean" % q] = part["latency_%s_ms_mean" % q]
         m["latency_%s_ms_p95" % q] = part["latency_%s_ms_p95" % q]
 
+    drain_start = run.get("t_arrivals_done") or w1
+    m["drain_s"] = w1 - drain_start
+    m["drain_jobs"] = int((served["t_end"] > drain_start).sum())
+
     m["miss_rate"] = 1.0 - len(met) / float(n)
     m["drop_rate"] = float(jobs["dropped"].sum()) / n
     m["unserved_rate"] = float(jobs["unserved"].sum()) / n

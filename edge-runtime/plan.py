@@ -221,8 +221,8 @@ def visit(args):
             raise SystemExit("%s failed (exit %s)" % (name, code))
         return code
 
-    code = step("preflight", [py, "preflight.py"])
     tag = args.device_tag or detect_tag()
+    code = step("preflight", [py, "preflight.py", "--device-tag", tag])
     device_dir = config.device_dir(tag)
     if code != 0 and not args.force:
         raise SystemExit("preflight says NOT READY (see above); fix it or pass --force")
@@ -230,7 +230,8 @@ def visit(args):
     profile_path = os.path.join(device_dir, "profile.json")
     if not os.path.exists(profile_path) or args.recalibrate:
         max_s = max(5.0, min(20.0, args.budget_min * 60 * 0.12 / (len(config.MODELS) * len(config.BATCH_SIZES))))
-        step("calibration", [py, "calibrate.py", "--max-s", str(max_s), "--device-tag", tag], check=True)
+        step("calibration", [py, "calibrate.py", "--max-s", str(max_s), "--min-iters", "5", "--device-tag", tag],
+             check=True)
     profile = Profile.load(profile_path)
 
     # SLO: 100 ms if the device can make sense of it, else the profile's suggestion
