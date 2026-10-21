@@ -188,3 +188,34 @@ def power_mode():
         elif line.isdigit():
             mode["id"] = int(line)
     return mode
+
+
+def device_tag(gpu_name=None):
+    """Short name for results/<device_tag>/: Jetson board + power mode
+    (orin_nano_15W), else the GPU name (rtx5070ti, a100), else 'cpu'."""
+    import re
+    if is_jetson():
+        model = read_text("/proc/device-tree/model").lower()
+        board = "jetson"
+        for key, tag in [("orin nano", "orin_nano"), ("orin nx", "orin_nx"), ("agx orin", "agx_orin"),
+                         ("xavier nx", "xavier_nx"), ("agx xavier", "agx_xavier"), ("nano", "nano")]:
+            if key in model:
+                board = tag
+                break
+        mode = power_mode() or {}
+        name = re.sub(r"[^A-Za-z0-9]+", "", mode.get("name", ""))
+        return board + ("_" + name if name else "")
+    if gpu_name:
+        name = gpu_name.lower().replace("nvidia", "").replace("geforce", "").replace("laptop gpu", "")
+        name = re.sub(r"pcie|sxm\d*|\d+gb", "", name)
+        name = re.sub(r"[^a-z0-9]+", "", name)
+        return name or "gpu"
+    return "cpu"
+
+
+def suggest_slos(profile, models):
+    """SLOs that make sense on this device: 1.5x, 3x and 6x the slowest model's
+    p95 time at b = 1, rounded up to 10 ms."""
+    import math
+    slowest = max(profile.t(m, 1, "p95") for m in models)
+    return [int(math.ceil(slowest * k / 10.0) * 10) for k in (1.5, 3.0, 6.0)]

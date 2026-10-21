@@ -277,11 +277,18 @@ class Symphony:
     wait until the earliest exec (or an arrival, which updates the candidates).
     Jobs that cannot finish even alone are dropped. l(b) is the measured profile
     (the paper fits an affine l(b) = alpha b + beta per model).
-    no-drop: late jobs are kept and served first, oldest queue first, up to B_max."""
+    no-drop: late jobs are kept and served first, oldest queue first, up to B_max.
+    margin_ms (not in the paper, default 0): plan against deadline - margin. The
+    paper aims batches at the deadline itself, so any run longer than the profile
+    finishes late; this knob shows how much a safety margin buys."""
 
-    def __init__(self, drop=True, stat=None):
+    def __init__(self, drop=True, stat=None, margin_ms=0.0):
         self.drop = drop
         self.stat = stat
+        self.margin_s = float(margin_ms) / 1000.0
+
+    def d(self, job):
+        return job.deadline - self.margin_s
 
     def candidate(self, state, m, jobs):
         batch = []
@@ -289,7 +296,7 @@ class Symphony:
         for job in jobs:
             if len(batch) >= state.b_max:
                 break
-            d_new = min(d, job.deadline)
+            d_new = min(d, self.d(job))
             if state.now + state.t(m, len(batch) + 1, self.stat) > d_new:
                 break
             batch.append(job)
@@ -308,10 +315,10 @@ class Symphony:
         late = {}
         for m in state.nonempty():
             t1 = state.t(m, 1, self.stat)
-            late[m] = [j for j in state.queues[m] if state.now + t1 > j.deadline]
+            late[m] = [j for j in state.queues[m] if state.now + t1 > self.d(j)]
             if late[m] and self.drop:
                 return Drop(m, [j.job_id for j in late[m]])
-            c = self.candidate(state, m, [j for j in state.queues[m] if state.now + t1 <= j.deadline])
+            c = self.candidate(state, m, [j for j in state.queues[m] if state.now + t1 <= self.d(j)])
             if c is not None:
                 cands[m] = c
         with_late = [m for m in late if late[m]]

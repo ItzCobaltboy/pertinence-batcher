@@ -217,3 +217,9 @@ def test_cost_v1_beta_extremes():
     assert d.queue == "yolov8n" and d.b == 3
     # lam > 0 weighs the old l job super-linearly
     assert CostV1(beta=1.0, lam=0.1).decide(s) == Serve("yolov8l", 1)
+
+
+def test_symphony_margin_shifts_the_window():
+    q = [job("yolov8n", 1.000), job("yolov8n", 1.010)]
+    d = Symphony(margin_ms=5).decide(state(1.011, {"yolov8n": q}))
+    assert isinstance(d, Wait) and abs(d.until - 1.081) < 1e-9
