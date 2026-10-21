@@ -266,3 +266,96 @@ the trace stopped ~6 s before the end. The sweep now samples 10 s past the last 
 
 The laptop's numbers are not data: it was power-limited, at ~20x slower than the A100. About
 2 h 10 min on the A100; not run there yet.
+
+## [RESULT] A100 power sweep: energy follows runtime once the GPU saturates (Oct 10)
+
+`yolo-analysis-a100/power_analysis/` ran on the A100: n/s/m/l x dense batch grid, eager FP32,
+output in `yolo-analysis-a100/results/power_analysis/` (summary.csv, phases, raw trace, plots).
+
+| model | J/frame b1 | b4 | b8 | b64 | drop b1 -> 8 | drop b8 -> 64 |
+|---|---|---|---|---|---|---|
+| yolov8n | 0.431 | 0.173 | 0.147 | 0.144 | 66% | 2% |
+| yolov8s | 0.530 | 0.295 | 0.253 | 0.257 | 52% | -1% |
+| yolov8m | 0.939 | 0.599 | 0.563 | 0.540 | 40% | 4% |
+| yolov8l | 1.529 | 0.920 | 0.888 | 0.860 | 42% | 3% |
+
+- Run power climbs fast with batch size (yolov8l: 162 W at b1, ~243 W at b8) and sits at the
+  ~250 W cap from b8 on. Baseline with nothing loaded 32 W; idle with a model loaded ~37 W.
+- Once compute saturates, power is constant, so energy per frame = constant x time per frame:
+  past saturation the energy gain from batching is just the throughput gain. Energy only adds
+  information below saturation (b1 to ~4, where power is still rising) and while waiting (WAIT
+  costs the ~37 W loaded idle, not zero).
+- The win is avoiding tiny batches, not building big ones: almost all of it is b1 -> ~8, then
+  flat for every model. Against the kill criterion (gains flat by b = 2 to 4) the A100 is
+  borderline: flat by ~4 to 8.
+- The A100 is the wrong device for energy work: a datacenter part that always runs at the top of
+  its power curve, so batch size only decides how long it stays there. A Jetson has power modes
+  and clocks to change; that is where energy can differ from runtime. EdgeServing locks Jetson
+  clocks to max, which makes a Jetson behave like this A100.
+- Cheap pre-Jetson check (not done): rerun a few combos on the 5070 Ti at 100 / 80 / 60% power
+  limit and see whether J/frame drops more than throughput does.
+
+## [DECISION] CityFlow for the routing measurement; Jetson + storage asked for (Oct 11)
+
+- The profs asked for CityFlow. Using CityFlowV2 (AI City Challenge 2022 Track 1, MTMC): synced
+  multi-camera intersections, scenarios S01-S06, 10 FPS (c015 at 8 FPS).
+- The zip is 16.9 GB; extracting needs about the same again, so ~35 GB with working space. The
+  server had ~22 GB free.
+- Mailed Prof. Gayathri for a Jetson (Orin Nano or AGX Orin) and more server storage. The A100
+  power result is the reason for the Jetson ask.
+- What still needs a Jetson: the T_i(b) profile (A100 curves have the wrong knee), power modes /
+  clocks, and the motivation baselines run on device. Routing, literature and the harness do not.
+  Possible shortcut to ask about: profile once on the Jetson, replay baselines offline from it.
+
+## [RESULT] yolo-dispatcher full COCO run done (Oct 8)
+
+`yolo-dispatcher/run_all.py` at paper budget (pop 50 x 50 generations) on the A100. Results in
+`yolo-dispatcher/results/`: 93 Pareto points, final_val alpha_sys from 0.53 at 11.9 GFLOPs to
+0.75 at 149.2 GFLOPs. These are the heads the CityFlow routing run loads.
+
+## [RESULT] CityFlow routing: COCO heads barely discriminate on CCTV (Oct 12)
+
+`cityflow-routing/` built (PR #7) and run as `results/all`: S01, S02, S03, S04, S06 (S05 left out
+for disk), 46 cameras, 54,693 frames, every frame routed through all 93 Pareto heads, 29 min.
+
+Point 80 (highest final_val alpha_sys, the default) never routes to n or s:
+
+| scenario | cams | share m | share l | switches/min | above 90:10 |
+|---|---|---|---|---|---|
+| S01 | 5 | 25.1% | 74.9% | 18.8 | no |
+| S02 | 4 | 59.2% | 40.8% | 41.7 | no |
+| S03 | 6 | 6.5% | 93.5% | 9.0 | yes |
+| S04 | 25 | 9.8% | 90.2% | 12.8 | yes |
+| S06 | 6 | 65.4% | 34.6% | 32.2 | no |
+
+All scenarios pooled: yolov8l 68.6%. m runs average 8 to 24 frames; l runs up to 114 frames (S03).
+
+Across all 93 points: 67 send more than 95% of CityFlow frames to a single model, and which model
+depends on the point (s for 35, m for 34, n for 21, l for 3). Only ~25 points give a real mix.
+On COCO the same heads do discriminate, so on CCTV most of them collapse to a constant.
+
+Checked before blaming the data: the routing code imports yolo-dispatcher's own transform and
+extractor, loads the same head files, and predicts with the same argmax; there is no embedding
+normalisation in training to miss. So not a preprocessing bug: domain shift from COCO photos to
+wide traffic shots.
+
+## [DECISION] Fine-tune the dispatcher on CCTV labels: `cityflow-dispatcher/` (Oct 12)
+
+- New thin track `cityflow-dispatcher/`, reusing yolo-dispatcher's config, the shared
+  dispatcher_analysis loss/weighting code and cityflow-routing's reader and head loader.
+- **Correctness on CCTV**: class-set recall is useless on traffic frames (the class set is
+  basically car/truck/person, even yolov8n finds "a car"). New label: a model is correct if it
+  recovers >= 80% of yolov8l's boxes (same class, IoU >= 0.5, road classes only); label =
+  cheapest correct. yolov8l is the reference, so it is correct by definition.
+- **Fine-tune, not re-search**: every COCO Pareto head is the starting point, same chromosome
+  (penalty matrix + scheme), 10 epochs at lr 1e-4.
+- **Training data kept separate**: train on S01, S03, S04 (CityFlow train split), report on S02
+  (validation). Labels and embeddings live in `cityflow-dispatcher/data/`, apart from routing
+  runs; the code refuses data where a scenario is in both.
+- Output mirrors yolo-dispatcher's `results/` layout, so `cityflow-routing/route.py
+  --yolo-results ../cityflow-dispatcher/results` reroutes with the new heads unchanged.
+- 8 CPU tests pass; the real detector + extractor path was smoke-tested on CPU. On ultralytics'
+  bus.jpg, n/s/m each found 5 of yolov8l's 7 boxes, so that frame labels yolov8l: on crowded
+  frames the 0.80 bar may push labels toward the big models. `RECALL_THRESHOLD` in
+  `cf_config.py` is the lever if the split comes out l-heavy.
+- Not run yet. Order on the A100: extract S01-S04, `label.py`, `finetune.py`, reroute S02.

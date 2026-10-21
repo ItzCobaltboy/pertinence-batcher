@@ -1,0 +1,1112 @@
+{
+  "run_name": "all",
+  "created": "2026-10-12T19:32:02",
+  "dataset": {
+    "name": "AI City Challenge 2022 Track 1 (CityFlowV2, MTMC)",
+    "gdrive_file_id": "13wNJpS_Oaoe-7y5Dzexg_Ol7bKu1OWuC",
+    "zip_name": "AICity22_Track1_MTMC_Tracking.zip",
+    "zip_size": 16912529116,
+    "extracted_dir": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1"
+  },
+  "scenarios": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S06"
+  ],
+  "yolo_results": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results",
+  "model_names": [
+    "yolov8n",
+    "yolov8s",
+    "yolov8m",
+    "yolov8l"
+  ],
+  "heads": [
+    {
+      "point_id": 0,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_0.npz",
+      "sha256": "871e4cf007477967c0395e25f7f86aa31dee2965e88a90f98ac7913059456a37"
+    },
+    {
+      "point_id": 1,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_1.npz",
+      "sha256": "0e8bf8bbda585e435f621dc3b6c3c9f37780f8b78d278aa7f2686c903a95521c"
+    },
+    {
+      "point_id": 2,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_2.npz",
+      "sha256": "e1603a767a200c402341af2e1b7bd308310472a704df5c3f5efdbd5e5561d1dc"
+    },
+    {
+      "point_id": 3,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_3.npz",
+      "sha256": "590a39e4a334fb8bb60716b8141db75c3bcbdcb5b70cb9295b7df1b04377ebe4"
+    },
+    {
+      "point_id": 4,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_4.npz",
+      "sha256": "0111d64bc8dd706072685161f34edd2ec9eb87325aa6c607024c2f98fbddd9e0"
+    },
+    {
+      "point_id": 5,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_5.npz",
+      "sha256": "02db72e3c579be1fa1b20c44d4a8862add1cb0dd025d63393e6f789e9af8d372"
+    },
+    {
+      "point_id": 6,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_6.npz",
+      "sha256": "b2bc6d56b6271453efc3a82950facb1954161d56b597d1cdf62a9a9ee9dd2c32"
+    },
+    {
+      "point_id": 7,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_7.npz",
+      "sha256": "a93240f0d3e6e8f39a163caeefda048dab84575ef40b1d92f9febd972c36be80"
+    },
+    {
+      "point_id": 8,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_8.npz",
+      "sha256": "209cd0fe2ad0a869525fa34e1d107e555357999072a3225c2b6f656b11d7d5c8"
+    },
+    {
+      "point_id": 9,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_9.npz",
+      "sha256": "18edd372795f47972a8d8d61e0afb5419694180dd3c3ef3a0882f8c390bd9819"
+    },
+    {
+      "point_id": 10,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_10.npz",
+      "sha256": "534afb236b08b8ca0d3fdd60f2e432f1a87cd8d2258c2efd65b6abfe78ed342c"
+    },
+    {
+      "point_id": 11,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_11.npz",
+      "sha256": "c5b764e52e63ecb8aae1dd22d2e9fd3b4e231941205031c2b033f9839d3cfbfe"
+    },
+    {
+      "point_id": 12,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_12.npz",
+      "sha256": "ee3fef5fd26cd3c04fa4772f481d9e880160d04b779b5fee36bb23df4aecbe77"
+    },
+    {
+      "point_id": 13,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_13.npz",
+      "sha256": "328f215eb645b0a444492b8c5d94263f4346cdb583037cc43b14f6255fce0c4e"
+    },
+    {
+      "point_id": 14,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_14.npz",
+      "sha256": "44c6f1bc22f11fc079225655111016699e7ba6a106323d171d275d1e8dba338d"
+    },
+    {
+      "point_id": 15,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_15.npz",
+      "sha256": "760fbbb484bef3152e332933b86be004e1595e87991f320c1bf3f8f8ab89f295"
+    },
+    {
+      "point_id": 16,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_16.npz",
+      "sha256": "8a8c55e231230fab01410484bc3be930fedc26ee75def5e3353cc821814bf27a"
+    },
+    {
+      "point_id": 17,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_17.npz",
+      "sha256": "5dee31d8b35b107a570d05314eaa11124c0684af988afd62b6dce0e29cfaed97"
+    },
+    {
+      "point_id": 18,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_18.npz",
+      "sha256": "86e5fa11914e428ec45384687d46855a2a8236f30b8b46963685be326ecde9b6"
+    },
+    {
+      "point_id": 19,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_19.npz",
+      "sha256": "32326c35f82a7a076344e65545f70337ce2608c87ba9df8229e8633171c8e5d1"
+    },
+    {
+      "point_id": 20,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_20.npz",
+      "sha256": "eb5914263e1673cb8bafd72be5f316e6aaf8f6b61eab46d0ea7f9305404a3d9a"
+    },
+    {
+      "point_id": 21,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_21.npz",
+      "sha256": "d33fa234bc7b8ae0843a2fb1097a6e301f9e742753325b3793e8d768112e7ea5"
+    },
+    {
+      "point_id": 22,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_22.npz",
+      "sha256": "5c1c6a258ce58bacdeac7c3707c71f9f05433f1a1cad7c4f0b20aafa7cca6d53"
+    },
+    {
+      "point_id": 23,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_23.npz",
+      "sha256": "849b5106bf794dace124ca8365ca8efb371436f6365a666c444f8568eb32d0b2"
+    },
+    {
+      "point_id": 24,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_24.npz",
+      "sha256": "196cd345b90863d620b687effe7b191bd3a45afb9d586edd726a4da41ace691a"
+    },
+    {
+      "point_id": 25,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_25.npz",
+      "sha256": "556f739917629af1c2158966cff95cf8c2c63b7e5a9432fa6c39147c3aeacb61"
+    },
+    {
+      "point_id": 26,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_26.npz",
+      "sha256": "4f6c349f22459be4d41c2fb018e7ba0d66a6a91eef758e33eb07d8c170058801"
+    },
+    {
+      "point_id": 27,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_27.npz",
+      "sha256": "280e349eba57437b083e9a34d79ab772f6ed77c8bcc756da0e0f7d66a8236017"
+    },
+    {
+      "point_id": 28,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_28.npz",
+      "sha256": "dc1f5e74f6f43634dbe9d81d949cc2db3347a20df7a046688e9eed5bfe143115"
+    },
+    {
+      "point_id": 29,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_29.npz",
+      "sha256": "18723a3bc2c9add6b28f1f8e9380a5fc00b218b4865737ccee56bc4989c66803"
+    },
+    {
+      "point_id": 30,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_30.npz",
+      "sha256": "c915e819bf02509a28ff481cd20b0e0325d6c4401505ab6109c2783f4faf8680"
+    },
+    {
+      "point_id": 31,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_31.npz",
+      "sha256": "97068d47265d8e0b2158941f0a730983b08105df2729bcd6f0ebddef47bdc8f7"
+    },
+    {
+      "point_id": 32,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_32.npz",
+      "sha256": "1d94be2b0b09dcc191e508b855e066fcdf81aeada20e24f88f265bef1fdc9980"
+    },
+    {
+      "point_id": 33,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_33.npz",
+      "sha256": "7e63ea342ccbc1ced3a544ac1a982db5702cd062f70b324ede21c91e50514650"
+    },
+    {
+      "point_id": 34,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_34.npz",
+      "sha256": "346891adfafaab028d58bf6d3d42eab8321a2aebc8d6327bb66a0a328bb9536b"
+    },
+    {
+      "point_id": 35,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_35.npz",
+      "sha256": "5b368754d8524bce5a0c8110ebc414224cbe5e690189d80f82206cdfef659df7"
+    },
+    {
+      "point_id": 36,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_36.npz",
+      "sha256": "24e2081a00af92108779507a35fddb1b0c35ed5044ae05ac5ac7b0db1eb62f13"
+    },
+    {
+      "point_id": 37,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_37.npz",
+      "sha256": "b81d366d9c065597ee349f45a081df914e8a952c96d90e2062cf1a28ea7c6181"
+    },
+    {
+      "point_id": 38,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_38.npz",
+      "sha256": "e8640e1102183a2aed97e7e64a2cbb4b542f6d173eb241448293c5e06d3608b0"
+    },
+    {
+      "point_id": 39,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_39.npz",
+      "sha256": "703893eae6169c7e45302258edc59a0e544b9893d9fdc59c905ba4b7d2d12562"
+    },
+    {
+      "point_id": 40,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_40.npz",
+      "sha256": "634de7671f4b3edca6ee5ae83980130ab8208438b5caa173686e14da1e685dd5"
+    },
+    {
+      "point_id": 41,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_41.npz",
+      "sha256": "a453916d517d2ee3fa64f008c7609d8a7f7ccd20900e98565f17452fcd5f1deb"
+    },
+    {
+      "point_id": 42,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_42.npz",
+      "sha256": "e509c811efbcd8d58cfc53f142a62587de908a715915627208c1ebd8165fc282"
+    },
+    {
+      "point_id": 43,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_43.npz",
+      "sha256": "ed7edd533eabb6d6299669bfbaeb71bfa84abbc69e119108396a358582ae493d"
+    },
+    {
+      "point_id": 44,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_44.npz",
+      "sha256": "427908d7ca372c85cfec283a32f69a6e77c69a5967dcee512527a353679cb8e6"
+    },
+    {
+      "point_id": 45,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_45.npz",
+      "sha256": "ef60e5736f2636133189ba9fdb7dfef0985f0e32b3b387632b0ae1e95335643b"
+    },
+    {
+      "point_id": 46,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_46.npz",
+      "sha256": "4762c82aa56840061d9dbfa83788199504df72ebcb9eca557687153db74b2013"
+    },
+    {
+      "point_id": 47,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_47.npz",
+      "sha256": "30e5b32cf151b1e267b90a5c8f59a429b29d178fe99d5a773d96956a12c2cad3"
+    },
+    {
+      "point_id": 48,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_48.npz",
+      "sha256": "476bd05e4afe3d9c63a81ae5acd431c3719fd9a55bbf51bfb6c66ed674381dbb"
+    },
+    {
+      "point_id": 49,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_49.npz",
+      "sha256": "9b338d2b3dfe6073dd3c06c7b0c101c99f167b3f99fc9be170e8b6b2f3efbdb6"
+    },
+    {
+      "point_id": 50,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_50.npz",
+      "sha256": "77a4bee329e3f7da802a70eac2713e6a9e2ec5e35da99defe83a5ca4a292e249"
+    },
+    {
+      "point_id": 51,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_51.npz",
+      "sha256": "42c2bf5d50b770f6e500e722e94b21eb809d80c52bc932155fa769d809a66428"
+    },
+    {
+      "point_id": 52,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_52.npz",
+      "sha256": "1dd75b4349a2ec8dadec3846a28f1153ad87c082fd9da429ca78082436892747"
+    },
+    {
+      "point_id": 53,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_53.npz",
+      "sha256": "4644e61e288ad1d7877631ba6b36377148dc1777f09c71687e0a49797b9c58e1"
+    },
+    {
+      "point_id": 54,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_54.npz",
+      "sha256": "a4639c397b2492d260fc4164d3e622d3cdd90fbe944cb165791bb649b27690af"
+    },
+    {
+      "point_id": 55,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_55.npz",
+      "sha256": "659e46c74987f2dd76d97c143afd76bbd7901cfd545203da36f55451babd909a"
+    },
+    {
+      "point_id": 56,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_56.npz",
+      "sha256": "e1371cd569bea24b5a97063111e4787bd7584191508cd91d51e47065d12ba714"
+    },
+    {
+      "point_id": 57,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_57.npz",
+      "sha256": "5192841e36c52a53e4797fa3f814aac668676e8c776f794d931756a46db0eb5c"
+    },
+    {
+      "point_id": 58,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_58.npz",
+      "sha256": "e7a2dd9093d9002f59252caa907c0b604dc92138f67b0c852e90a72fbfa8e0a1"
+    },
+    {
+      "point_id": 59,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_59.npz",
+      "sha256": "bbf09da8a64e9b559b2238fdb6788213a0ce5df90f33f114405d750e5552a71b"
+    },
+    {
+      "point_id": 60,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_60.npz",
+      "sha256": "39d8fcd5bdf91717cbf98482151382fe7d40224a8f1160737233190b7c7c0b23"
+    },
+    {
+      "point_id": 61,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_61.npz",
+      "sha256": "21d47ef2d0965e4dd8d140abbcfd784a033e6b7ae1b023df5ec83c97cbbae535"
+    },
+    {
+      "point_id": 62,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_62.npz",
+      "sha256": "9e5d5e60762efac0a30aa4fd8e8227be004dc85900088c279d6d279bf223a5b4"
+    },
+    {
+      "point_id": 63,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_63.npz",
+      "sha256": "ff28c181c070856379876297131d566c8355f726170d1e57c10efe56492fe381"
+    },
+    {
+      "point_id": 64,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_64.npz",
+      "sha256": "c4366248284f9ba50f3e1226cab651793feb9e321d2e1148882b122cffc1ef4c"
+    },
+    {
+      "point_id": 65,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_65.npz",
+      "sha256": "87ede862229dcd284c51c0c38555d0cad4b092e4282f9fd5b58e8ec062626b56"
+    },
+    {
+      "point_id": 66,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_66.npz",
+      "sha256": "1f928d4e33fe3b739c5621762285fd14d78b4441edf2373a0e15229c6cb8b3f3"
+    },
+    {
+      "point_id": 67,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_67.npz",
+      "sha256": "5a36dd0a62f41a1b9f28e392ca886c1c52c4151afba11cf397af581de27c1625"
+    },
+    {
+      "point_id": 68,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_68.npz",
+      "sha256": "092f68753fa6b8b21ccc9b1630d4a353c1d1bda7fe41849280b0c1c9bf4cbec2"
+    },
+    {
+      "point_id": 69,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_69.npz",
+      "sha256": "77b5328a35dffc3397d566e00d815051f4fcedb458ba4954ebfef39393a18906"
+    },
+    {
+      "point_id": 70,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_70.npz",
+      "sha256": "78c2a5b76650b083119f4ca34784e44746f25c753d4b6ff7a19bb81c2fe7e5d7"
+    },
+    {
+      "point_id": 71,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_71.npz",
+      "sha256": "253ef870f64f7ee81681afe70ca9ec7a0e1a7a6ba0d8765d007ff34bf4446ed1"
+    },
+    {
+      "point_id": 72,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_72.npz",
+      "sha256": "0628dd154ca82cccb1507c212848f9fc20af7fbf4a32a293c1f364318c952550"
+    },
+    {
+      "point_id": 73,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_73.npz",
+      "sha256": "b212441e45e34975934ef719d9837f62e00ecb3ca4fbc1e4bd956b3b6403df57"
+    },
+    {
+      "point_id": 74,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_74.npz",
+      "sha256": "4ff59edc47746e2f7f81ad127499ce9b2198bba97e9aa1e330a9462633968887"
+    },
+    {
+      "point_id": 75,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_75.npz",
+      "sha256": "f41b5de03585bd50b3325f68d822c56d0ef0e996cb89179dd57ade59a15b987d"
+    },
+    {
+      "point_id": 76,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_76.npz",
+      "sha256": "da84579194481c6c4d1677512e402b4519d423013cf6314b899be72d51b4febe"
+    },
+    {
+      "point_id": 77,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_77.npz",
+      "sha256": "f4c20c592ee7d48543aff02faeb25376fac2e27409bf09fb3c9555ee0f6f768f"
+    },
+    {
+      "point_id": 78,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_78.npz",
+      "sha256": "7d37cc796b0893e9f2f4859e114598447cc938ff68ba1d1606f4c28de7e988b8"
+    },
+    {
+      "point_id": 79,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_79.npz",
+      "sha256": "de97f4c3bc2307644f31366522145197c1aa3215ed3758dcf576a31b5dbc7645"
+    },
+    {
+      "point_id": 80,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_80.npz",
+      "sha256": "0dba5d2d5a8005bda9a1b965259009820f89813a02515c2547dececc9e4fc13e"
+    },
+    {
+      "point_id": 81,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_81.npz",
+      "sha256": "202253b501b9d0a77b3bbea424b70500c598b53e1d8cb58d506a92a7853115a6"
+    },
+    {
+      "point_id": 82,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_82.npz",
+      "sha256": "030ea23d0f2cb7f6eaa9a742606aaa4c9f30780744cfec34acb30228e64780f1"
+    },
+    {
+      "point_id": 83,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_83.npz",
+      "sha256": "09f81ea6fc5ee5215dcfa3f13ea5e84f01a6cd16482782b2ce2e9df87572a6a1"
+    },
+    {
+      "point_id": 84,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_84.npz",
+      "sha256": "9155f324897086dd68b6395684e9a797201d2bb360667ae65310a61a2362e582"
+    },
+    {
+      "point_id": 85,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_85.npz",
+      "sha256": "d91cd89ce9adad6c67d28849df381d3d32cdcbce769f033f27db1e521a551f4d"
+    },
+    {
+      "point_id": 86,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_86.npz",
+      "sha256": "b123d11fcb56e06095b1b5fa6b283171250985f3cc9b28fc8982847bbd69f4c2"
+    },
+    {
+      "point_id": 87,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_87.npz",
+      "sha256": "191dd33f511d95b19167095a9bb9dcc20ba2e2073b1e32a28139fcf7dc2ee5fd"
+    },
+    {
+      "point_id": 88,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_88.npz",
+      "sha256": "371eafcfddc5100232c8c7dd42296da644f8fc24454ccd02beeffc56296050f0"
+    },
+    {
+      "point_id": 89,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_89.npz",
+      "sha256": "f1e1173bc0372c180fe224139c9edd2df6ed13c8b5fe2e282edc02e3c684656d"
+    },
+    {
+      "point_id": 90,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_90.npz",
+      "sha256": "467627820d18223ac75131bed77e4d36120f9dedbb752a58118a339b8bc48ad8"
+    },
+    {
+      "point_id": 91,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_91.npz",
+      "sha256": "251b255514ea62c485e7eb53f125d14bee7356c5e2765042290c41ef9020b3f7"
+    },
+    {
+      "point_id": 92,
+      "weights_path": "/home/cs24bt033/CS24BT033_Work/yolo-dispatcher/results/eval/model_cache/individual_92.npz",
+      "sha256": "6daf76e433c5a16c6fad0553c46a422babecb2f7f8fe84d01eae81c74f43b2e5"
+    }
+  ],
+  "embedding_dim": 448,
+  "preprocessing": "cv2 BGR frame -> cv2.cvtColor(BGR2RGB) -> PIL.Image.fromarray -> yolo-dispatcher config.IMAGE_TRANSFORM (Letterbox 640: PIL bilinear, centred, pad 114, /255, CHW float32, no mean/std) -> config.build_feature_extractor() (fused yolov8n, GAP layers 4/6/9)",
+  "dispatch_interval_frames": 1,
+  "batch_size": 64,
+  "cameras": {
+    "S01_c001": {
+      "split": "train",
+      "scenario": "S01",
+      "camera": "c001",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S01/c001/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 1955,
+      "frames_header": 1955,
+      "frames_cam_framenum": 1955,
+      "seconds": 57.0,
+      "finished": "2026-10-12T19:32:59"
+    },
+    "S01_c002": {
+      "split": "train",
+      "scenario": "S01",
+      "camera": "c002",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S01/c002/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 1.64,
+      "frames_decoded": 2110,
+      "frames_header": 2110,
+      "frames_cam_framenum": 2110,
+      "seconds": 62.3,
+      "finished": "2026-10-12T19:34:02"
+    },
+    "S01_c003": {
+      "split": "train",
+      "scenario": "S01",
+      "camera": "c003",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S01/c003/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 2.049,
+      "frames_decoded": 1996,
+      "frames_header": 1996,
+      "frames_cam_framenum": 1996,
+      "seconds": 59.1,
+      "finished": "2026-10-12T19:35:01"
+    },
+    "S01_c004": {
+      "split": "train",
+      "scenario": "S01",
+      "camera": "c004",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S01/c004/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 2.177,
+      "frames_decoded": 2110,
+      "frames_header": 2110,
+      "frames_cam_framenum": 2110,
+      "seconds": 61.1,
+      "finished": "2026-10-12T19:36:02"
+    },
+    "S01_c005": {
+      "split": "train",
+      "scenario": "S01",
+      "camera": "c005",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S01/c005/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 2.235,
+      "frames_decoded": 2110,
+      "frames_header": 2110,
+      "frames_cam_framenum": 2110,
+      "seconds": 46.2,
+      "finished": "2026-10-12T19:36:48"
+    },
+    "S03_c010": {
+      "split": "train",
+      "scenario": "S03",
+      "camera": "c010",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S03/c010/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 8.715,
+      "frames_decoded": 2141,
+      "frames_header": 2141,
+      "frames_cam_framenum": 2141,
+      "seconds": 62.0,
+      "finished": "2026-10-12T19:37:50"
+    },
+    "S03_c011": {
+      "split": "train",
+      "scenario": "S03",
+      "camera": "c011",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S03/c011/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 8.457,
+      "frames_decoded": 2279,
+      "frames_header": 2279,
+      "frames_cam_framenum": 2279,
+      "seconds": 118.1,
+      "finished": "2026-10-12T19:39:48"
+    },
+    "S03_c012": {
+      "split": "train",
+      "scenario": "S03",
+      "camera": "c012",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S03/c012/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 5.879,
+      "frames_decoded": 2422,
+      "frames_header": 2422,
+      "frames_cam_framenum": 2422,
+      "seconds": 128.2,
+      "finished": "2026-10-12T19:41:56"
+    },
+    "S03_c013": {
+      "split": "train",
+      "scenario": "S03",
+      "camera": "c013",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S03/c013/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 2415,
+      "frames_header": 2415,
+      "frames_cam_framenum": 2415,
+      "seconds": 126.9,
+      "finished": "2026-10-12T19:44:03"
+    },
+    "S03_c014": {
+      "split": "train",
+      "scenario": "S03",
+      "camera": "c014",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S03/c014/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 5.042,
+      "frames_decoded": 2332,
+      "frames_header": 2332,
+      "frames_cam_framenum": 2332,
+      "seconds": 69.9,
+      "finished": "2026-10-12T19:45:13"
+    },
+    "S03_c015": {
+      "split": "train",
+      "scenario": "S03",
+      "camera": "c015",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S03/c015/vdo.avi",
+      "fps": 8.0,
+      "offset_s": 8.492,
+      "frames_decoded": 1928,
+      "frames_header": 1928,
+      "frames_cam_framenum": 1928,
+      "seconds": 56.6,
+      "finished": "2026-10-12T19:46:10"
+    },
+    "S04_c016": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c016",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c016/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 310,
+      "frames_header": 310,
+      "frames_cam_framenum": 310,
+      "seconds": 9.3,
+      "finished": "2026-10-12T19:46:19"
+    },
+    "S04_c017": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c017",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c017/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 14.318,
+      "frames_decoded": 281,
+      "frames_header": 281,
+      "frames_cam_framenum": 281,
+      "seconds": 8.2,
+      "finished": "2026-10-12T19:46:27"
+    },
+    "S04_c018": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c018",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c018/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 29.955,
+      "frames_decoded": 418,
+      "frames_header": 418,
+      "frames_cam_framenum": 418,
+      "seconds": 21.5,
+      "finished": "2026-10-12T19:46:49"
+    },
+    "S04_c019": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c019",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c019/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 26.979,
+      "frames_decoded": 460,
+      "frames_header": 460,
+      "frames_cam_framenum": 460,
+      "seconds": 23.7,
+      "finished": "2026-10-12T19:47:13"
+    },
+    "S04_c020": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c020",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c020/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 25.905,
+      "frames_decoded": 473,
+      "frames_header": 473,
+      "frames_cam_framenum": 473,
+      "seconds": 24.2,
+      "finished": "2026-10-12T19:47:37"
+    },
+    "S04_c021": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c021",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c021/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 39.973,
+      "frames_decoded": 310,
+      "frames_header": 310,
+      "frames_cam_framenum": 310,
+      "seconds": 9.2,
+      "finished": "2026-10-12T19:47:46"
+    },
+    "S04_c022": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c022",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c022/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 49.422,
+      "frames_decoded": 310,
+      "frames_header": 310,
+      "frames_cam_framenum": 310,
+      "seconds": 9.2,
+      "finished": "2026-10-12T19:47:55"
+    },
+    "S04_c023": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c023",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c023/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 45.716,
+      "frames_decoded": 609,
+      "frames_header": 609,
+      "frames_cam_framenum": 609,
+      "seconds": 32.0,
+      "finished": "2026-10-12T19:48:27"
+    },
+    "S04_c024": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c024",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c024/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 50.853,
+      "frames_decoded": 550,
+      "frames_header": 550,
+      "frames_cam_framenum": 550,
+      "seconds": 29.2,
+      "finished": "2026-10-12T19:48:56"
+    },
+    "S04_c025": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c025",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c025/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 50.263,
+      "frames_decoded": 559,
+      "frames_header": 559,
+      "frames_cam_framenum": 559,
+      "seconds": 30.5,
+      "finished": "2026-10-12T19:49:27"
+    },
+    "S04_c026": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c026",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c026/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 70.45,
+      "frames_decoded": 710,
+      "frames_header": 710,
+      "frames_cam_framenum": 710,
+      "seconds": 22.6,
+      "finished": "2026-10-12T19:49:49"
+    },
+    "S04_c027": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c027",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c027/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 85.097,
+      "frames_decoded": 365,
+      "frames_header": 365,
+      "frames_cam_framenum": 365,
+      "seconds": 11.5,
+      "finished": "2026-10-12T19:50:01"
+    },
+    "S04_c028": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c028",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c028/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 100.11,
+      "frames_decoded": 260,
+      "frames_header": 260,
+      "frames_cam_framenum": 260,
+      "seconds": 7.7,
+      "finished": "2026-10-12T19:50:09"
+    },
+    "S04_c029": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c029",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c029/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 125.788,
+      "frames_decoded": 260,
+      "frames_header": 260,
+      "frames_cam_framenum": 260,
+      "seconds": 8.0,
+      "finished": "2026-10-12T19:50:17"
+    },
+    "S04_c030": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c030",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c030/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 124.319,
+      "frames_decoded": 632,
+      "frames_header": 632,
+      "frames_cam_framenum": 632,
+      "seconds": 18.7,
+      "finished": "2026-10-12T19:50:35"
+    },
+    "S04_c031": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c031",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c031/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 125.033,
+      "frames_decoded": 656,
+      "frames_header": 656,
+      "frames_cam_framenum": 656,
+      "seconds": 18.9,
+      "finished": "2026-10-12T19:50:54"
+    },
+    "S04_c032": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c032",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c032/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 125.199,
+      "frames_decoded": 625,
+      "frames_header": 625,
+      "frames_cam_framenum": 625,
+      "seconds": 18.1,
+      "finished": "2026-10-12T19:51:13"
+    },
+    "S04_c033": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c033",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c033/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 150.893,
+      "frames_decoded": 350,
+      "frames_header": 350,
+      "frames_cam_framenum": 350,
+      "seconds": 10.7,
+      "finished": "2026-10-12T19:51:23"
+    },
+    "S04_c034": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c034",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c034/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 140.218,
+      "frames_decoded": 410,
+      "frames_header": 410,
+      "frames_cam_framenum": 410,
+      "seconds": 12.3,
+      "finished": "2026-10-12T19:51:35"
+    },
+    "S04_c035": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c035",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c035/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 165.568,
+      "frames_decoded": 210,
+      "frames_header": 210,
+      "frames_cam_framenum": 210,
+      "seconds": 6.2,
+      "finished": "2026-10-12T19:51:42"
+    },
+    "S04_c036": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c036",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c036/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 170.797,
+      "frames_decoded": 360,
+      "frames_header": 360,
+      "frames_cam_framenum": 360,
+      "seconds": 11.0,
+      "finished": "2026-10-12T19:51:53"
+    },
+    "S04_c037": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c037",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c037/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 170.567,
+      "frames_decoded": 299,
+      "frames_header": 299,
+      "frames_cam_framenum": 299,
+      "seconds": 9.1,
+      "finished": "2026-10-12T19:52:02"
+    },
+    "S04_c038": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c038",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c038/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 175.426,
+      "frames_decoded": 457,
+      "frames_header": 457,
+      "frames_cam_framenum": 457,
+      "seconds": 28.6,
+      "finished": "2026-10-12T19:52:30"
+    },
+    "S04_c039": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c039",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c039/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 175.644,
+      "frames_decoded": 452,
+      "frames_header": 452,
+      "frames_cam_framenum": 452,
+      "seconds": 28.2,
+      "finished": "2026-10-12T19:52:59"
+    },
+    "S04_c040": {
+      "split": "train",
+      "scenario": "S04",
+      "camera": "c040",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/train/S04/c040/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 175.838,
+      "frames_decoded": 454,
+      "frames_header": 454,
+      "frames_cam_framenum": 454,
+      "seconds": 12.8,
+      "finished": "2026-10-12T19:53:11"
+    },
+    "S02_c006": {
+      "split": "validation",
+      "scenario": "S02",
+      "camera": "c006",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/validation/S02/c006/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 2110,
+      "frames_header": 2110,
+      "frames_cam_framenum": 2110,
+      "seconds": 63.9,
+      "finished": "2026-10-12T19:54:15"
+    },
+    "S02_c007": {
+      "split": "validation",
+      "scenario": "S02",
+      "camera": "c007",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/validation/S02/c007/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.061,
+      "frames_decoded": 1965,
+      "frames_header": 1965,
+      "frames_cam_framenum": 1965,
+      "seconds": 58.7,
+      "finished": "2026-10-12T19:55:14"
+    },
+    "S02_c008": {
+      "split": "validation",
+      "scenario": "S02",
+      "camera": "c008",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/validation/S02/c008/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.421,
+      "frames_decoded": 1924,
+      "frames_header": 1924,
+      "frames_cam_framenum": 1924,
+      "seconds": 57.8,
+      "finished": "2026-10-12T19:56:12"
+    },
+    "S02_c009": {
+      "split": "validation",
+      "scenario": "S02",
+      "camera": "c009",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/validation/S02/c009/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.66,
+      "frames_decoded": 2110,
+      "frames_header": 2110,
+      "frames_cam_framenum": 2110,
+      "seconds": 61.3,
+      "finished": "2026-10-12T19:57:13"
+    },
+    "S06_c041": {
+      "split": "test",
+      "scenario": "S06",
+      "camera": "c041",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/test/S06/c041/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 2001,
+      "frames_header": 2001,
+      "frames_cam_framenum": 2000,
+      "seconds": 40.1,
+      "finished": "2026-10-12T19:57:53"
+    },
+    "S06_c042": {
+      "split": "test",
+      "scenario": "S06",
+      "camera": "c042",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/test/S06/c042/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 2001,
+      "frames_header": 2001,
+      "frames_cam_framenum": 2000,
+      "seconds": 41.4,
+      "finished": "2026-10-12T19:58:35"
+    },
+    "S06_c043": {
+      "split": "test",
+      "scenario": "S06",
+      "camera": "c043",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/test/S06/c043/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 2001,
+      "frames_header": 2001,
+      "frames_cam_framenum": 2000,
+      "seconds": 40.7,
+      "finished": "2026-10-12T19:59:15"
+    },
+    "S06_c044": {
+      "split": "test",
+      "scenario": "S06",
+      "camera": "c044",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/test/S06/c044/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 2001,
+      "frames_header": 2001,
+      "frames_cam_framenum": 2000,
+      "seconds": 40.6,
+      "finished": "2026-10-12T19:59:56"
+    },
+    "S06_c045": {
+      "split": "test",
+      "scenario": "S06",
+      "camera": "c045",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/test/S06/c045/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 2001,
+      "frames_header": 2001,
+      "frames_cam_framenum": 2000,
+      "seconds": 33.5,
+      "finished": "2026-10-12T20:00:29"
+    },
+    "S06_c046": {
+      "split": "test",
+      "scenario": "S06",
+      "camera": "c046",
+      "video_path": "/home/cs24bt033/CS24BT033_Work/cityflow-routing/data/AIC22_Track1/test/S06/c046/vdo.avi",
+      "fps": 10.0,
+      "offset_s": 0.0,
+      "frames_decoded": 2001,
+      "frames_header": 2001,
+      "frames_cam_framenum": 2000,
+      "seconds": 33.7,
+      "finished": "2026-10-12T20:01:03"
+    }
+  },
+  "environment": {
+    "gpu": "NVIDIA A100-PCIE-40GB",
+    "device": "cuda:0",
+    "python": "3.10.12",
+    "torch": "2.3.1+cu121",
+    "cuda": "12.1",
+    "ultralytics": "8.4.153",
+    "opencv": "5.0.0",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "pillow": "12.3.0",
+    "host": "netweb-DSA700TU-212RT",
+    "git_commit": "unknown",
+    "git_dirty": false
+  },
+  "updated": "2026-10-12T20:01:03"
+}

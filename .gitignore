@@ -281,3 +281,9 @@ yolo-analysis-a100/results_A100/val2017/raw_predictions/
 
 # cityflow-routing: dataset zip and extracted videos (16.9 GB)
 cityflow-routing/data/
+
+# cityflow-dispatcher: embeddings and fine-tuned weights (labels CSVs, summaries, plots stay tracked)
+cityflow-dispatcher/data/embeddings/
+cityflow-dispatcher/results*/eval/model_cache/**
+# cityflow-routing: per-frame embeddings (~47 MB, regenerable by route.py); routing CSVs and analysis stay tracked
+cityflow-routing/results*/*/raw/embeddings_*.npz

@@ -65,8 +65,8 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   `results/batch_sweep_DENSE/` (b = 1..32 step 2, then 40/48/56/64, 1260/1260 ok; that grid was set
   on the server, the local `settings.BATCH_SIZES` still holds the old one). The result folders keep
   the `batch_sweep` name.
-  `yolo-analysis-a100/power_analysis/` (built, smoke-tested on the laptop's RTX 5070 Ti, **not run
-  on the A100 yet**): the A100 stand-in for E_i(b) until a Jetson is available. Deliberately small
+  `yolo-analysis-a100/power_analysis/` (**run on the A100**, results in `results/power_analysis/`;
+  see Week6 `[RESULT]`): the A100 stand-in for E_i(b) until a Jetson is available. Deliberately small
   (4 files, ~520 lines; a first, much heavier power sweep inside batch_sweep was run once on the
   A100 and then rolled back, see Week6). `python power_sweep.py` is the only entry point.
   - One `nvidia-smi -lms 50 -f` sampler runs for the whole sweep, giving one power trace.
@@ -115,20 +115,25 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   extractor = frozen fused yolov8n backbone, GAP at layers 4/6/9 -> 448-dim; cost = GFLOPs at 640
   (2 x conv/linear MACs, measured by `measure_costs.py` into `data/model_costs.json`); 13 genes
   (12 penalties + scheme). Smoke-tested end to end on CPU (sampled images; the search's fitness was reproduced
-  exactly by the analysis). Measured: 8.74 / 28.60 / 78.94 / 165.15 GFLOPs, extractor 3.16. **Full run not done yet.**
+  exactly by the analysis). Measured: 8.74 / 28.60 / 78.94 / 165.15 GFLOPs, extractor 3.16. **Full run done** (93 Pareto points, final_val alpha_sys 0.53-0.75).
 - `cityflow-routing/`: measures how the yolo-dispatcher routes real traffic video (AI City 2022
   Track 1 / CityFlowV2, 6 scenarios, 128,532 frames), frame by frame with D = 1. Imports
   yolo-dispatcher's preprocessing and extractor, applies every Pareto head per frame, loads the
   trained heads from `yolo-dispatcher/results/` at run time. `download.py` (gdown) -> `extract.py`
   (one scenario, default S01) -> `route.py` (raw embeddings + routing CSVs, resumable per camera) ->
   `analyze.py` (no torch: timelines, run lengths, split, drift, transitions, merged per-queue
-  arrival rates, summary with the 90:10 line). 11 CPU tests. Built, not run.
+  arrival rates, summary with the 90:10 line). 11 CPU tests. **Run** as `results/all` (S01-S04,
+  S06; Week6 `[RESULT]`: COCO heads barely discriminate on CCTV).
+- `cityflow-dispatcher/`: fine-tunes the COCO Pareto heads on CityFlow. `label.py` (every 5th frame:
+  embedding + n/s/m/l boxes; correct = box recall vs yolov8l >= 0.80) -> `finetune.py` (each head
+  from its COCO weights, same chromosome; train S01/S03/S04, eval S02). Output uses yolo-dispatcher's
+  `results/` layout for `route.py --yolo-results`. 8 CPU tests. Built, not run.
 - `research.md` — annotated bibliography for the scheduler (~50 papers, link + what differs from
   us). Read before citing anything or claiming novelty.
 - `research/`: exploration dump (paper notes, reading summaries, drafts); see its `README.md`.
   Background and Motivation draft 1 lives here.
 - `venv/` — set up locally (`python -m venv venv` + `pip install -r requirements.txt`), not committed.
-- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape; dispatcher audited against the paper (CIFAR-100 train labels saturated), shared dispatcher fixes, `yolo-dispatcher/` built. `Week6.md`: the "why" week: Clockwork-lineage literature list; Background and Motivation draft 1 (`research/background_motivation_draft1.md`); plan to measure the gap on a Jetson.
+- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape; dispatcher audited against the paper (CIFAR-100 train labels saturated), shared dispatcher fixes, `yolo-dispatcher/` built. `Week6.md`: the "why" week: Clockwork-lineage literature list; Background and Motivation draft 1 (`research/background_motivation_draft1.md`); plan to measure the gap on a Jetson. `Week7.md`: meet 7 (went fine); tasks: Jetson power profiling, fix CityFlow routing (CCTV fine-tuning), reimplement and run a couple of existing approaches; paper direction: a generic scheduler with better latency + power saving as the goal; next meeting cancelled while I am home, Jetson code written there and run on return.
 - `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first. `pertinence_week5.pptx` (meet 6): definitions, prior art (8 papers with links), dense A100 trt_fp16 curves, simulator baselines on the dense profile, policy v1.
 
 ## Pipeline: archive/model_analysis/ (archived — done/locked work, not part of the active pipeline)
@@ -431,12 +436,13 @@ every run rather than relying on a copied `.npz` weight file.
    40/48/56/64, 1260/1260 ok); profile CSV rebuilt from `batch_sweep_DENSE` (21 columns) and
    the 3 sim sweeps rerun on it (loads 0.1-1.0 step 0.1). `longest_queue` best mean, `fcfs_batch`
    better p95 (LQ starves short queues). **Next**: E_i(b) (the timing sweep's end-of-run power reading
-   is useless): `yolo-analysis-a100/power_analysis/` is built (nvidia-smi sampling, not pynvml; see
-   `yolo-analysis-a100` under "Repo layout"), still to be run on the A100. Then implement the
+   is useless): `yolo-analysis-a100/power_analysis/` ran on the A100 (Week6 `[RESULT]`): J/frame
+   drops 40-66% from b1 to b8, then flat; energy follows runtime once saturated. Then implement the
    score-based policy and an EdgeServing-style baseline. **Policy v1 defined** (Week5 `[DECISION]`, not implemented):
    Cost(i, j) = β · Σ ages of jobs not served + (1 - β) · T_ij, argmin over (queue, batch size),
    padding allowed, no wait option yet.
-   Routing measurement on CityFlowV2 built, not run (`cityflow-routing/`).
+   Routing on CityFlowV2 run (`cityflow-routing/results/all`): COCO heads collapse to one model on
+   most points; fine-tuning on CCTV labels built (`cityflow-dispatcher/`), not run.
 
    **TRT engines broken** (Week5 `[DEAD-END]`): compiled engines' outputs do not match eager (14k vs
    2.2k detections after NMS, FP32 too); likely box decoding lost in export. Sim now runs on the
@@ -530,12 +536,12 @@ every run rather than relying on a copied `.npz` weight file.
    top-level `results/raw_predictions/` copy), so re-scoring (F1, iscrowd filtering) is local. `yolo-analysis-a100/results/` also holds stray copies of
    `coco_gt.py` and `requirements.txt` from syncing results back.
 
-   **Built, smoke-tested, full run pending**: `yolo-dispatcher/` (see "Repo layout") does the labeling step
+   **Full run done** (Week6 `[RESULT]`): `yolo-dispatcher/` (see "Repo layout") does the labeling step
    (`label(x) = argmin_j cost_j s.t. recall_j(x) >= 0.80`) and the full PERTINENCE stack over the
    YOLO pool. Labels: train 47.2 / 22.5 / 9.2 / 21.1% (n/s/m/l), val2017 52.8 / 14.9 / 8.3 / 24.0%;
    no model correct on 15.6% of train, 19.8% of val2017 (labelled yolov8l). Unlike CIFAR-100, the
    train labels are not saturated (yolov8n correct 47% train vs 53% val). Next: smoke run then full
-   run on the A100, log the `[RESULT]`.
+   run on the A100 (done).
 2. Whether/when to integrate calibrated INT8/FP8 into the CIFAR-100 dispatcher's model pool
    (would require re-running the labeler with INT8 latency figures) — not started, deferred.
 3. `[EXPLORE]` from the prof meeting, untouched: model compression (pruning, KD) — check for useful
