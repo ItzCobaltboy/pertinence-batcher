@@ -24,8 +24,8 @@ archive/cifar-100/fig9d/results/nsga2/*.npz
 archive/cifar-100/fig9c/results/eval/model_cache/**
 archive/cifar-100/fig9d/results/eval/model_cache/**
 archive/cifar-100/PIPELINE_REPORT.md
-pptx/
-yolo-analysis-a100/dataset/
+archive/pptx/
+archive/yolo-analysis-a100/dataset/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -254,42 +254,45 @@ codex/
 
 
 # scheduler-sim raw per-run data (regenerable from seeds, about 50 MB)
-scheduler-sim/results/*/raw/
+archive/scheduler-sim/results/*/raw/
 
 # yolo-analysis-a100 batch_timing_analysis (results in results/batch_sweep*/): raw per-run JSON, compiled TRT engines (~4 GB) and logs
 # (per-job stdout, launcher/measure logs, the session lock). The finished sweeps live in
 # batch_sweep_DENSE/ and batch_sweep_OLD/; the batch_sweep* glob also covers results/batch_sweep/,
 # which is where a new timing run writes by default. Summaries and gpu_logs stay tracked.
-yolo-analysis-a100/results/batch_sweep*/raw/
-yolo-analysis-a100/results/batch_sweep*/engines/
-yolo-analysis-a100/results/batch_sweep*/logs/
+archive/yolo-analysis-a100/results/batch_sweep*/raw/
+archive/yolo-analysis-a100/results/batch_sweep*/engines/
+archive/yolo-analysis-a100/results/batch_sweep*/logs/
 # any YOLO checkpoint ultralytics downloads next to the scripts
-yolo-analysis-a100/batch_timing_analysis/*.pt
+archive/yolo-analysis-a100/batch_timing_analysis/*.pt
 
 # yolo-analysis-a100 power_analysis: nvidia-smi's raw output (samples.csv holds the same data, converted)
-yolo-analysis-a100/results/power_analysis/samples_raw.csv
+archive/yolo-analysis-a100/results/power_analysis/samples_raw.csv
 # yolo-dispatcher: weights, caches and bulky per-run outputs (CSVs/plots/pareto_front stay tracked)
-yolo-dispatcher/models/*.pt
-yolo-dispatcher/embeddings_cache/**
-yolo-dispatcher/results*/nsga2/models/**
-yolo-dispatcher/results*/nsga2/*.npz
-yolo-dispatcher/results*/eval/model_cache/**
-yolo-dispatcher/results*/eval/predictions/**
-yolo-dispatcher/results_smoke/**
-yolo-analysis-a100/results_A100/train2017/raw_predictions/
-yolo-analysis-a100/results_A100/val2017/raw_predictions/
+archive/yolo-dispatcher/models/*.pt
+archive/yolo-dispatcher/embeddings_cache/**
+archive/yolo-dispatcher/results*/nsga2/models/**
+archive/yolo-dispatcher/results*/nsga2/*.npz
+archive/yolo-dispatcher/results*/eval/model_cache/**
+archive/yolo-dispatcher/results*/eval/predictions/**
+archive/yolo-dispatcher/results_smoke/**
+archive/yolo-analysis-a100/results_A100/train2017/raw_predictions/
+archive/yolo-analysis-a100/results_A100/val2017/raw_predictions/
 
 # cityflow-routing: dataset zip and extracted videos (16.9 GB)
-cityflow-routing/data/
+archive/cityflow-routing/data/
 
 # cityflow-dispatcher: embeddings and fine-tuned weights (labels CSVs, summaries, plots stay tracked)
-cityflow-dispatcher/data/embeddings/
-cityflow-dispatcher/results*/eval/model_cache/**
+archive/cityflow-dispatcher/data/embeddings/
+archive/cityflow-dispatcher/results*/eval/model_cache/**
 # cityflow-routing: per-frame embeddings (~47 MB, regenerable by route.py); routing CSVs and analysis stay tracked
-cityflow-routing/results*/*/raw/embeddings_*.npz
+archive/cityflow-routing/results*/*/raw/embeddings_*.npz
 
 # edge-runtime: frame pool (exported per machine), copyout archives, leftovers
 edge-runtime/data/frames/
 edge-runtime/results/*.tar.gz
 edge-runtime/results/_preflight_power/
 edge-runtime/results/**/*.raw
+
+# staging folder for things to delete by hand
+_to_delete/

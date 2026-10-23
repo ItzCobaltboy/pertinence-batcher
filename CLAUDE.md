@@ -4,11 +4,15 @@ Research project (PERTINENCE line of work).
 - **Supervisor**: Prof. Gayathri Ananthanarayanan (IIT Dharwad) + Dr. Marcello Traiola (INRIA)
 - **Goal**: input-based opportunistic dynamic execution of NNs for energy-efficient edge inference
 
-Current direction (since Week4): a batching-aware scheduler for PERTINENCE on compute-constrained
-edge devices (Jetson-class), built and tested in a discrete event simulator (`scheduler-sim/`)
-before running with PERTINENCE in the loop. Earlier steps (hybrid model pool, dispatcher, NSGA-II,
+Current direction (Week7-8): a generic multi-model scheduler for one edge accelerator
+(Jetson-class), with better latency + power saving as the paper's goal. Each step it serves a
+queue at some batch size, waits, or promotes jobs into a bigger model's batch. Evaluated on real
+models on real hardware (`edge-runtime/`, spec in `research/spec_edge_runtime.md`, not built
+yet), not in the simulator (`scheduler-sim/` is kept for history only). Earlier steps (hybrid model pool, dispatcher, NSGA-II,
 CIFAR-100) are done. Full narrative log lives in `Journel/` (the "why"); this file is the
 "what/where" snapshot.
+
+> **Restructure (Week8):** all code tracks (`cityflow-dispatcher/`, `cityflow-routing/`, `dispatcher/`, `dispatcher_analysis/`, `eda/`, `scheduler-sim/`, `yolo-analysis-a100/`, `yolo-dispatcher/`) and `pptx/` were moved into `archive/` (same names, e.g. `archive/yolo-dispatcher/`). Every path written below without the `archive/` prefix refers to that archived location, and relative imports inside archived code assume the old layout. Only `Journel/` and `research/` stay active. New task-specific codebases (Jetson profile, CityFlow stream, policies) are written fresh from scratch; `edge-runtime/` (built from `research/spec_edge_runtime.md`, PR #8) is the first of them and stays outside `archive/`. The local `venv/`, `requirements.txt` and caches were moved to `_to_delete/` (git-ignored, to be deleted by hand).
 
 ## Repo layout
 
@@ -84,7 +88,7 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   - Gotcha: nvidia-smi writes its `-f` file in ~4 KB chunks (~6 s), and the last chunk can be lost
     on stop, so the sweep samples 10 s past the last combo (`END_TAIL_S`).
   - About 2 h 10 min on the A100; output `results/power_analysis/`.
-- `scheduler-sim/` — standalone DES for the scheduler (own `requirements.txt` and `README.md`, no
+- `scheduler-sim/` — (history only, no longer the evaluation path, Week8) standalone DES for the scheduler (own `requirements.txt` and `README.md`, no
   imports from the rest of the repo), plain OOP. Two knobs: a `Workload` (arrival times + target
   queue, usually just `choose_queue`) and a `Scheduler` (only `decide(now)` ->
   `("run", queue_id, batch_size)`, `("wait", until_time)` or `None`); the `Simulator` validates
@@ -141,10 +145,12 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
 - `research.md` — annotated bibliography for the scheduler (~50 papers, link + what differs from
   us). Read before citing anything or claiming novelty.
 - `research/`: exploration dump (paper notes, reading summaries, drafts); see its `README.md`.
-  Background and Motivation draft 1 lives here.
+  Background and Motivation draft 1 lives here. `spec_edge_runtime.md`: spec for the real-hardware
+  scheduling harness `edge-runtime/` (not built yet). `scheduler-sim/` is no longer the evaluation
+  path (Week8 `[DECISION]`).
 - `venv/` — set up locally (`python -m venv venv` + `pip install -r requirements.txt`), not committed.
-- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape; dispatcher audited against the paper (CIFAR-100 train labels saturated), shared dispatcher fixes, `yolo-dispatcher/` built. `Week6.md`: the "why" week: Clockwork-lineage literature list; Background and Motivation draft 1 (`research/background_motivation_draft1.md`); plan to measure the gap on a Jetson. `Week7.md`: meet 7 (went fine); tasks: Jetson power profiling, fix CityFlow routing (CCTV fine-tuning), reimplement and run a couple of existing approaches; paper direction: a generic scheduler with better latency + power saving as the goal; next meeting cancelled while I am home, Jetson code written there and run on return.
-- `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first. `pertinence_week5.pptx` (meet 6): definitions, prior art (8 papers with links), dense A100 trt_fp16 curves, simulator baselines on the dense profile, policy v1.
+- `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape; dispatcher audited against the paper (CIFAR-100 train labels saturated), shared dispatcher fixes, `yolo-dispatcher/` built. `Week6.md`: the "why" week: Clockwork-lineage literature list; Background and Motivation draft 1 (`research/background_motivation_draft1.md`); plan to measure the gap on a Jetson. `Week7.md`: meet 7 (went fine); tasks: Jetson power profiling, fix CityFlow routing (CCTV fine-tuning), reimplement and run a couple of existing approaches; paper direction: a generic scheduler with better latency + power saving as the goal; next meeting cancelled while I am home, Jetson code written there and run on return. `Week8.md`: meeting skipped (away); `[DECISION]` no simulator, real hardware only; promotion is generic for same-task variant pools; spec for `edge-runtime/` (`research/spec_edge_runtime.md`).
+- `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first. `pertinence_week5.pptx` (meet 6): definitions, prior art (8 papers with links), dense A100 trt_fp16 curves, simulator baselines on the dense profile, policy v1. `pertinence_week6.pptx` (meet 7): prior work and current challenges per paper, A100 power (energy follows runtime once saturated), CityFlow routing (COCO heads collapse on CCTV), CCTV fine-tuning plan.
 
 ## Pipeline: archive/model_analysis/ (archived — done/locked work, not part of the active pipeline)
 
@@ -426,6 +432,15 @@ every run rather than relying on a copied `.npz` weight file.
 1. **Scheduler direction (active)**. Supersedes the batching extension below; formal problem in
    `Journel/Week4.md` and summarised under "Formal problem" here.
 
+   **Current plan (meet 7, Week7/Week8)**, in order: (1) power profiling on a Jetson (no access
+   yet; code to be written first, `edge-runtime/` spec section 8); (2) fix the CityFlow routing by
+   running `cityflow-dispatcher/` on the A100 (`label.py --scenarios S01` first to check the label
+   split), then reroute S02; (3) reimplement and run existing policies on real hardware (LQF,
+   Triton dynamic batcher, EdgeServing, Clockwork INFER, Symphony) in `edge-runtime/`. No
+   simulator (Week8 `[DECISION]`). Promotion counts as generic for same-task variant pools
+   (Week8). Meet 8 skipped (away). Everything below this paragraph in this thread is history up to
+   Week6.
+
    **Plan (meet 5, `Journel/Week5.md`)**: the scheduler only sees queues, batch sizes and T_i(b),
    so it is built and evaluated in a DES first, then validated with PERTINENCE routing. Target:
    compute-constrained edge devices (Jetsons). Later: per-job deadlines, stream priorities. Meet 6
@@ -474,7 +489,7 @@ every run rather than relying on a copied `.npz` weight file.
    imgsz 1280 is a labelled stand-in; E_i(b) via NVML works without root, frequency control needs
    the Jetson.
 
-   **Roadmap**: real T_i(b) in sim -> E_i(b) + score policy + EdgeServing-style baseline -> sweep
+   **Roadmap (superseded by the current plan above)**: real T_i(b) in sim -> E_i(b) + score policy + EdgeServing-style baseline -> sweep
    load/workload/hardware/λ for a turnaround-vs-energy curve -> Jetson with frequency, sim vs real
    -> multi-camera CCTV traces through PERTINENCE, replayed in sim and on device -> paper.
 
@@ -657,7 +672,7 @@ change.
   paths were dropped (see "Decisions / dead ends" above); `torch.hub` reaches relevant checkpoint
   sources directly where a pool model isn't pip-installable.
 - **A100 server env (frozen, validated)**: torch 2.3.1+cu121, torchvision 0.18.1+cu121,
-  torch_tensorrt 2.3.0+cu121, tensorrt 10.0.1, nvidia-modelopt 0.15.0, numpy 1.26.4, pandas 2.3.3,
+  torch_tensorrt 2.3.0+cu121, tensorrt 10.0.1, nvidia-modelopt 0.15.0, numpy 2.2.6 (not 1.26.4), pandas 2.3.3,
   ultralytics. Differs from `requirements.txt` (local). Code meant for the server targets these;
   don't install or upgrade there. Deployment/quantization path is torch_tensorrt.
 - CUDA used when available (`torch.device("cuda:0" if torch.cuda.is_available() else "cpu")`)
