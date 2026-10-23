@@ -289,10 +289,10 @@ archive/cityflow-dispatcher/results*/eval/model_cache/**
 archive/cityflow-routing/results*/*/raw/embeddings_*.npz
 
 # edge-runtime: frame pool (exported per machine), copyout archives, leftovers
-edge-runtime/data/frames/
-edge-runtime/results/*.tar.gz
-edge-runtime/results/_preflight_power/
-edge-runtime/results/**/*.raw
+archive/edge-runtime/data/frames/
+archive/edge-runtime/results/*.tar.gz
+archive/edge-runtime/results/_preflight_power/
+archive/edge-runtime/results/**/*.raw
 
 # staging folder for things to delete by hand
 _to_delete/
