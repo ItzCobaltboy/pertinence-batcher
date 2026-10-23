@@ -1,0 +1,17 @@
+{
+ "source": "from-cityflow",
+ "seed": 0,
+ "run": "cityflow-routing/results/all",
+ "scenario": "S01",
+ "point": "80",
+ "jobs": 6421,
+ "duration_s": 129.977,
+ "cameras": 5,
+ "split": [
+  0.0,
+  0.0,
+  0.24419872294035197,
+  0.7558012770596481
+ ],
+ "hash": "9e4491b92acc07b1"
+}

@@ -1,0 +1,16 @@
+# edge-runtime: Python 3.8+.
+#
+# torch and torchvision are NOT listed: on a Jetson they come from NVIDIA's JetPack
+# wheel and must never be installed or upgraded by pip; on the laptop and the A100 use
+# what is already there (A100: frozen env, install nothing).
+#
+# On a Jetson, install ultralytics without its dependencies so pip leaves torch alone:
+#   pip3 install --no-deps ultralytics ultralytics-thop
+#   pip3 install pyyaml requests scipy tqdm psutil py-cpuinfo
+numpy>=1.17
+pandas>=1.1
+pillow
+ultralytics>=8.1
+matplotlib>=3.1          # analyze.py and the plots; optional on the device
+opencv-python            # only inputs.py export-frames (laptop)
+pytest                   # tests, CPU only
