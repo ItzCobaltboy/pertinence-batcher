@@ -1,0 +1,4 @@
+__pycache__/
+models/
+results/*/gpu_state_backup.json*
+results/**/tegrastats_raw.log.gz
