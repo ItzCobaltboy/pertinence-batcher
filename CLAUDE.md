@@ -480,6 +480,14 @@ every run rather than relying on a copied `.npz` weight file.
    (Week8). Meet 8 skipped (away). Everything below this paragraph in this thread is history up to
    Week6.
 
+   **Latest direction (Week9, after the DVFS meeting)**: deadline primary, energy second; little room left in the batching/deadline
+   model, so DVFS on the Jetson is the new knob. Formal problem (Week9 `[MEETING]`/`[DECISION]`): K variants with per-model queues, bursty arrivals
+   routed by input complexity, one non-preemptive GPU with discrete core and memory frequencies; per dispatch choose (queue, batch size, GPU
+   frequency, optional complexity-aware downgrade) to minimise energy per job s.t. every admitted job meets its deadline and an accuracy floor.
+   Part 1 (Oct 29 - Nov 2): latency + energy across locked GPU frequencies (thermal gaps), switching cost Nov 3; literature check Nov 4; Part 2
+   first policy Nov 5 - 11. Energy metric = total board energy over the fixed 120 s window with % dropped beside it, never energy per good
+   request (Week8's per-good-request numbers are superseded). Not built yet: `sched-harness/dvfs/`.
+
    **Plan (meet 5, `Journel/Week5.md`)**: the scheduler only sees queues, batch sizes and T_i(b),
    so it is built and evaluated in a DES first, then validated with PERTINENCE routing. Target:
    compute-constrained edge devices (Jetsons). Later: per-job deadlines, stream priorities. Meet 6
