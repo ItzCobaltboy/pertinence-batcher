@@ -11,12 +11,12 @@ INPUTS_DIR = os.path.join(HERE, "data", "inputs")  # optional images; else the t
 # ---- device ----
 GPU_DEVFREQ = "/sys/devices/17000000.gv11b/devfreq/17000000.gv11b"
 GPU_3D_SCALING = "/sys/devices/17000000.gv11b/enable_3d_scaling"
-EXPECTED_MODE_ID = 7            # nvpmodel mode 7 = MODE_15W_DESKTOP; this tool never changes the mode. None = accept any.
+EXPECTED_MODE_ID = 4            # nvpmodel mode 4 = MODE_30W_6CORE (what this board runs); this tool never changes the mode. None = accept any.
 
 # GPU clocks to profile, in Hz. Every entry must be in available_frequencies and not above the mode's max_freq,
 # else the run refuses to start (checked before any clock is written). Run `python -m dvfs.inspect` for the real list.
-# Board list (AGX Xavier, mode 7 cap 675.75 MHz): 114.75 216.75 318.75 420.75 522.75 624.75 675.75; 114.75 (about 6x slower than the cap)
-# and 624.75 (8% under the cap) are left out. Above 675.75 the board exposes 828.75 ... 1377 MHz, outside mode 7.
+# Board list read while max_freq was 675.75 MHz (check it against the mode-4 cap in /etc/nvpmodel.conf): 114.75 216.75 318.75 420.75 522.75 624.75 675.75; 114.75 (about 6x slower than the cap)
+# and 624.75 (8% under the cap) are left out. Above 675.75 the board exposes 828.75 ... 1377 MHz (cap unverified for mode 4).
 FREQS_HZ = [216750000, 318750000, 420750000, 522750000, 675750000]
 
 # ---- models and pipeline (same as sched-harness/config.py) ----

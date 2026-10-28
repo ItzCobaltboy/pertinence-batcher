@@ -1,6 +1,6 @@
 # dvfs
 
-Standalone GPU-frequency profiling for the Jetson AGX Xavier (JetPack 5.1.1, nvpmodel mode 7, mode never changed).
+Standalone GPU-frequency profiling for the Jetson AGX Xavier (JetPack 5.1.1, nvpmodel mode 4 = MODE_30W_6CORE, mode never changed).
 Python 3.8, run as root from the repo root, in `tmux`, with the same venv python as sched-harness
 (`sudo .venv/bin/python -m dvfs.<script>`; never run from inside `dvfs/`, `inspect.py` would shadow the stdlib).
 `tegrastats.py`, `models.py`, `inputs.py` are copies from `sched-harness/common/` (only the config import changed).
