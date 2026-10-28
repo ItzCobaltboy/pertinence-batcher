@@ -15,7 +15,9 @@ EXPECTED_MODE_ID = 7            # nvpmodel mode 7 = MODE_15W_DESKTOP; this tool 
 
 # GPU clocks to profile, in Hz. Every entry must be in available_frequencies and not above the mode's max_freq,
 # else the run refuses to start (checked before any clock is written). Run `python -m dvfs.inspect` for the real list.
-FREQS_HZ = [306000000, 408000000, 510000000, 599250000]
+# Board list (AGX Xavier, mode 7 cap 675.75 MHz): 114.75 216.75 318.75 420.75 522.75 624.75 675.75; 114.75 (about 6x slower than the cap)
+# and 624.75 (8% under the cap) are left out. Above 675.75 the board exposes 828.75 ... 1377 MHz, outside mode 7.
+FREQS_HZ = [216750000, 318750000, 420750000, 522750000, 675750000]
 
 # ---- models and pipeline (same as sched-harness/config.py) ----
 QUEUES = ["n", "s", "m", "l"]
@@ -31,7 +33,7 @@ WARMUP_BATCH_SIZES = [1, 2, 3, 4, 6, 8, 12, 16]     # run twice per model once a
 BATCHES = [1, 2, 3, 4, 6, 8, 12, 16]
 SUBRUNS = 4                     # subruns per (freq, model, batch) run
 SUBRUN_BATCHES = 20             # every subrun runs exactly this many back-to-back batches, whatever they take
-EST_BATCH_S = 0.5               # rough mean batch time over the grid; only used for the --dry-run time estimate
+EST_BATCH_S = 0.55              # rough mean batch time over the grid; only used for the --dry-run time estimate
 SUBRUN_GAP_S = 10               # idle between subruns
 RUN_GAP_S = 20                  # idle after the last subrun of a run (cooldown)
 PIN_SETTLE_S = 1.0              # wait after pinning, before the warm-up
