@@ -1,0 +1,25 @@
+# Installed by setup_env.sh in this order (torch/torchvision are NOT installed from this file by pip -r,
+# because pip would pull a CPU-only torch). Listed here as the record of what was pinned.
+#
+# torch 2.0.0+nv23.05, NVIDIA's JetPack 5 wheel (cp38, aarch64). Read on 2026-10-23 from the directory listing
+#   https://developer.download.nvidia.com/compute/redist/jp/v511/pytorch/  (it holds two files:
+#   torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl and torch-2.0.0a0+fe05266f.nv23.04-cp38-cp38-linux_aarch64.whl)
+#   https://developer.download.nvidia.com/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl
+#
+# torchvision 0.15.1 (the release that pairs with torch 2.0.0), PyPI cp38 manylinux2014_aarch64 wheel,
+#   installed with --no-deps. It is a CPU build: fine here, we never call torchvision ops.
+#
+# everything else, installed with the torch/torchvision pair already in place:
+numpy==1.24.4
+ultralytics==8.3.186
+ultralytics-thop
+opencv-python-headless
+pyyaml
+scipy
+psutil
+py-cpuinfo
+tqdm
+pillow
+requests
+pandas
+matplotlib

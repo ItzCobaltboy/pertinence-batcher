@@ -1,0 +1,7 @@
+policy,alpha_sys,avg_gflops,saving_vs_always_l
+dispatcher,0.85,141.72,0.1419
+always_n,0.04,8.74,0.9471
+always_s,0.45,28.6,0.8268
+always_m,0.78,78.94,0.522
+always_l,1.0,165.15,-0.0
+oracle (ideal label),1.0,70.15,0.5752

@@ -1,0 +1,4 @@
+__pycache__/
+models/
+results/*/runs/*/power_raw.log.gz
+results/*/jetson_clocks_original.conf

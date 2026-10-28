@@ -1,0 +1,6 @@
+policy,alpha_sys,avg_gflops
+always_yolov8n,0.5179,8.744
+always_yolov8s,0.7799,28.6026
+always_yolov8m,0.8674,78.9367
+always_yolov8l,1.0,165.1485
+oracle,1.0,32.1319

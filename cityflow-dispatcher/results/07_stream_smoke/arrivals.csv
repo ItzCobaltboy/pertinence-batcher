@@ -1,0 +1,9 @@
+scenario,camera,model,mean_per_sec,dispersion_index
+S02,c006,n,0.95,1.997
+S02,c006,s,0.0,
+S02,c006,m,0.0,
+S02,c006,l,4.05,0.469
+S02,ALL,n,0.95,1.997
+S02,ALL,s,0.0,
+S02,ALL,m,0.0,
+S02,ALL,l,4.05,0.469

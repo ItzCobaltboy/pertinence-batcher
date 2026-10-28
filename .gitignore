@@ -296,3 +296,14 @@ archive/edge-runtime/results/**/*.raw
 
 # staging folder for things to delete by hand
 _to_delete/
+
+# cityflow-dispatcher (fresh build)
+cityflow-dispatcher/data/
+cityflow-dispatcher/models/
+cityflow-dispatcher/.venv/
+
+# sched-harness: Jetson run results are kept local only (large, regenerable)
+sched-harness/results/
+sched-harness/results_old/
+sched-harness/**/__pycache__/
+weights/

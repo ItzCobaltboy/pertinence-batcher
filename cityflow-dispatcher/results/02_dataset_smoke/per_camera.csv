@@ -1,0 +1,4 @@
+split,scenario,camera,frames,boxes,empty_frac
+test,S02,c006,100,1497,0.0
+train,S01,c001,100,539,0.0
+val,S05,c010,100,1168,0.0

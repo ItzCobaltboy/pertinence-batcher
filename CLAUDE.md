@@ -7,8 +7,8 @@ Research project (PERTINENCE line of work).
 Current direction (Week7-8): a generic multi-model scheduler for one edge accelerator
 (Jetson-class), with better latency + power saving as the paper's goal. Each step it serves a
 queue at some batch size, waits, or promotes jobs into a bigger model's batch. Evaluated on real
-models on real hardware (`edge-runtime/`, spec in `research/spec_edge_runtime.md`, not built
-yet), not in the simulator (`scheduler-sim/` is kept for history only). Earlier steps (hybrid model pool, dispatcher, NSGA-II,
+models on real hardware (`sched-harness/`, spec in `research/spec_harness.md`, built and run on the AGX Xavier; it
+replaces the archived `edge-runtime/`), not in the simulator (`scheduler-sim/` is kept for history only). Earlier steps (hybrid model pool, dispatcher, NSGA-II,
 CIFAR-100) are done. Full narrative log lives in `Journel/` (the "why"); this file is the
 "what/where" snapshot.
 
@@ -132,8 +132,37 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   embedding + n/s/m/l boxes; correct = box recall vs yolov8l >= 0.80) -> `finetune.py` (each head
   from its COCO weights, same chromosome; train S01/S03/S04, eval S02). Output uses yolo-dispatcher's
   `results/` layout for `route.py --yolo-results`. 8 CPU tests. Built, not run.
-- `edge-runtime/`: real-hardware multi-model scheduling harness (own `README.md`/`requirements.txt`),
-  replaces the DES as the evaluation path. Real YOLOv8 n/s/m/l, eager FP32, one batch at a time; a
+- `cityflow-dispatcher/` (NEW top-level folder, Week8, untracked until committed; the entry above describes
+  the older archived version): the CityFlow routing redone with the **real PERTINENCE NSGA-II dispatcher**
+  (vendored copy of `dispatcher/` + `dispatcher_analysis/` under `pertinence/`; 13 genes, pop 50, 50 gens,
+  penalty-matrix loss, INS/ISNS/ENS). Pipeline `00_preflight` ... `07_stream_analysis` (labels, fine-tune
+  with `03_finetune.py`, pool tables `data/dispatch{TAG}/`), then `prepare_pertinence_data.py` ->
+  `08_pertinence_search.py` -> `09_pertinence_analysis.py` -> `10_pertinence_report.py`. Env: `CF_TAG` (`_v2`
+  for the fixed fine-tune), `PERT_MODE` (`s05` = head on S05 camera fold A, fitness on fold B, final once on
+  S02; `train` = old protocol, contaminated), `PERTINENCE_SMOKE=1`, `PERT_TIME_BUDGET` (resumable search).
+  `pertinence/*/fc_numpy.py` is a numpy FC trainer used only when torch is missing (sandbox run).
+  **Result (v1 pool): the dispatcher does not beat the static policies** (Week8 `[RESULT]`;
+  `results/REPORT_PERTINENCE_v1.md`). Parked pending my call; v2 fine-tune rerun still needs the laptop GPU.
+- `jetson-power/` (NEW, Week8): Jetson power sweep (`00_preflight`, `01_power_sweep`, `02_analyze`;
+  per power mode, model, batch: latency, rails, energy). Spec `research/spec_jetson_power.md`. Python 3.8.
+  First data: batch time is NOT size-independent on the AGX Xavier (yolov8n MAXN: 12.5 / 15.5 / 28.2 / 53.7 ms
+  at b = 1 / 2 / 4 / 8; energy per frame flat from b = 4). `common/tegrastats.py` and `common/powermode.py`
+  are validated on the board and are copied into `sched-harness/`.
+- `sched-harness/` (built Week8, spec `research/spec_harness.md`): real-time multi-queue harness for the Jetson AGX Xavier
+  (Python 3.8, 15W mode 7, clocks locked, run as root in `tmux`; `go.sh` runs preflight, calibration, smoke, then the plan).
+  One queue per model (n, s, m, l), seeded Poisson arrivals, eager FP16, all models resident, ready input pool (no camera or
+  decode step); metrics = mean and p99 latency, total energy (first window arrival to last completion, idle included) and energy
+  per request. Files: `00_preflight.py`, `01_calibrate.py` (profile.json: T_i(b) at b in 1,2,3,4,6,8,12,16, fit a + c*b),
+  `02_run.py` (`--policy --param --mix --lam --seed`; `--smoke` = 20 s run + checks), `03_plan.py` (Tier 1 = 18 runs, resumable),
+  `04_analyze.py` (summary.md/csv, validation.md, titled plots), `common/` (`policies.py`, `runtime.py`, `traffic.py`,
+  `metrics.py`, `models.py`, `inputs.py`, `tegrastats.py`, `device.py`). Two processes: the arrival process (own core, pipe)
+  and a single-threaded runtime (decide, serve one batch, log). Policies implemented: fcfs_nobatch, fcfs_batch, lqf, triton
+  (per-queue timer), fixed_batch_b; edgeserving (2-D: queue + batch size, SLO from `config.SLO_MS_GRID`, Tier 3), clockwork (INFER only, p99 times, cancels hopeless requests = `dropped` 2, Tier 4), symphony (Algorithm 1 for one GPU, multi-queue, frontrun/latest window, p99 times, calibrated batch sizes only, drops counted, Tier 5); all three ran on the board (skewed seed 0 at 8/16/24 req/s, then tiers 6 and 7: three paper policies at SLO 150/600/2400, seeds 0 to 2, eight mixes balanced/skewed/n40/n55/n70/n85/l55/l85, the same loads 8/16/24/36 req/s for every mix, 864 runs, about 680 analysed); stub: index_T. Offered load is a hardcoded total `--lam`
+  in req/s per mix (`config.py`; Tier 1 skewed = 8/16/24, Lambda_cap 27.4 skewed, 22.1 balanced). NMS runs on a plain-torch
+  fallback (torchvision ops unusable on the board). Results in `results/agx_xavier_jp511/` (`runs/` has the 18 old Tier 1 runs with `rho` names plus the paper-policy runs; `analysis/summary_partial_682runs.csv`; rerun `04_analyze.py` on the laptop when the board finishes, it is slow on 680 runs).
+  `index_T` slot reserved for my policy.
+- `edge-runtime/` (**ARCHIVED Week8 to `archive/edge-runtime/`, superseded by `sched-harness/`**): real-hardware
+  multi-model scheduling harness (own `README.md`/`requirements.txt`), replaced the DES as the evaluation path. Real YOLOv8 n/s/m/l, eager FP32, one batch at a time; a
   trace (periodic multi-camera with random phases, sticky, Poisson, or CityFlow replay) is replayed in
   real time against a policy (`decide(state)` -> Serve / Wait / Promote / Drop, validated by the
   executor); per-job/batch/wait logs + one power trace (nvidia-smi, tegrastats, fake) per run.
@@ -146,8 +175,8 @@ constants or paths), parameterized by a `config` module (`cifar-100/fig9c/config
   us). Read before citing anything or claiming novelty.
 - `research/`: exploration dump (paper notes, reading summaries, drafts); see its `README.md`.
   Background and Motivation draft 1 lives here. `spec_edge_runtime.md`: spec for the real-hardware
-  scheduling harness `edge-runtime/` (not built yet). `scheduler-sim/` is no longer the evaluation
-  path (Week8 `[DECISION]`).
+  scheduling harness (superseded by `spec_harness.md` for `sched-harness/`, Week8), `spec_jetson_power.md`,
+  `spec_cityflow_dispatcher.md`. `scheduler-sim/` is no longer the evaluation path (Week8 `[DECISION]`).
 - `venv/` — set up locally (`python -m venv venv` + `pip install -r requirements.txt`), not committed.
 - `Journel/`: `WeekX.md` per project week (not per-date). `Week0.md`: model-pool selection + quantization dead-ends (torchao, ONNX+CUDA), plus the first hand-tuned dispatcher + underestimation_rate NSGA-II run. `Week1.md`: dispatcher objective fixed (accuracy → alpha_sys) through correct Run #3 results, plus the Torch-TensorRT pivot (5070ti, compilation-only FP16 "win", modelopt calibration gap). `Week2.md`: modelopt calibration fixed, cross-GPU (5070ti + A100) benchmarking, calibrated PTQ + batch-size-sweep follow-up. `Week3.md`: repo restructure + fitness-on-val fix + CIFAR-100 track build. `Week4.md`: CIFAR-100 results presented, greenlit for a new direction (a batching-aware scheduler for PERTINENCE), formal scheduling problem definition; YOLO/COCO benchmark on both splits and the `recall >= 0.80` correctness decision. `Week5.md`: meeting 5 (scheduler direction accepted, simulator first, Jetson-class target); compute-metric decision; `scheduler-sim/` built, rewritten simpler, follow-ups (warm-up dropped, raw `.npz`, periodic workload); literature search (`research.md`); EdgeServing read in full; YOLO batch sweep run on the A100 (real trt_fp16 T_i(b), sim rerun on it); `[DECISION]` energy is the angle for meet 6, roadmap to a CCTV-trace evaluation; open ideas: MPS parallel batches, score-based policy shape; dispatcher audited against the paper (CIFAR-100 train labels saturated), shared dispatcher fixes, `yolo-dispatcher/` built. `Week6.md`: the "why" week: Clockwork-lineage literature list; Background and Motivation draft 1 (`research/background_motivation_draft1.md`); plan to measure the gap on a Jetson. `Week7.md`: meet 7 (went fine); tasks: Jetson power profiling, fix CityFlow routing (CCTV fine-tuning), reimplement and run a couple of existing approaches; paper direction: a generic scheduler with better latency + power saving as the goal; next meeting cancelled while I am home, Jetson code written there and run on return. `Week8.md`: meeting skipped (away); `[DECISION]` no simulator, real hardware only; promotion is generic for same-task variant pools; spec for `edge-runtime/` (`research/spec_edge_runtime.md`).
 - `pptx/`: advisor-meeting decks. `pertinence_cifar100_academic.pptx` (Week3/4 redo, the house style: 16:9, Calibri, white, grey rule under title, grey-bordered tables, one-line takeaway per table/figure) and `pertinence_week4_scheduler_yolo.pptx` (Week4 update: problem definition, prior art, YOLO threshold sweep). `pertinence_cifar100_academic-1.pptx` is an older copy of the first. `pertinence_week5.pptx` (meet 6): definitions, prior art (8 papers with links), dense A100 trt_fp16 curves, simulator baselines on the dense profile, policy v1. `pertinence_week6.pptx` (meet 7): prior work and current challenges per paper, A100 power (energy follows runtime once saturated), CityFlow routing (COCO heads collapse on CCTV), CCTV fine-tuning plan.
@@ -432,12 +461,22 @@ every run rather than relying on a copied `.npz` weight file.
 1. **Scheduler direction (active)**. Supersedes the batching extension below; formal problem in
    `Journel/Week4.md` and summarised under "Formal problem" here.
 
-   **Current plan (meet 7, Week7/Week8)**, in order: (1) power profiling on a Jetson (no access
-   yet; code to be written first, `edge-runtime/` spec section 8); (2) fix the CityFlow routing by
-   running `cityflow-dispatcher/` on the A100 (`label.py --scenarios S01` first to check the label
-   split), then reroute S02; (3) reimplement and run existing policies on real hardware (LQF,
-   Triton dynamic batcher, EdgeServing, Clockwork INFER, Symphony) in `edge-runtime/`. No
-   simulator (Week8 `[DECISION]`). Promotion counts as generic for same-task variant pools
+   **Current plan (Week8, after meet 7)**: Jetson access obtained (AGX Xavier, JetPack 5.1.1). (1) Power
+   sweep in `jetson-power/` crashed the board in MAXN after yolov8n b=8 (partial data only; the board may boot into MAXN, mode persists, so force a safe `SESSION_MODE`); first result: batch time grows ~linearly with b, so the size-
+   independent-cost assumption of Xia et al. and Chen and Wang does not hold on this board. (2) `sched-harness/` is built and Tier 1 ran (18 runs, Week8 `[RESULT]`): batching matters from about 58% of capacity up
+   (fcfs_nobatch collapses at 88%), but fcfs_batch, lqf and Triton-style are within a few percent of each other (one seed), so the claim that
+   standard policies leave something on the table is NOT yet shown. Validation: counts, overlap, arrival lateness, energy books pass; check 3 fails
+   on odd batch sizes (b = 5, 7, 9... slower than interpolation and than the next even size; calibrate every b), check 7 (tegrastats runs at
+   about 8.2 Hz, not 10) needs a looser gap limit or a shorter interval. Policies built and run (Week8): EdgeServing 2-D collapses (goodput 1-15%) once load passes about 65-85% of capacity
+   (it never sheds, falls back to b = 1); Clockwork has the best goodput at tight and mid deadlines in all mixes (30 of 32 points at 150 ms);
+   Symphony has the best energy per good request at loose deadlines (8-18% below Clockwork at SLO 2400 ms, all mixes) but drops a lot at
+   tight ones on one GPU; in overload they converge. So no policy dominates, and the gap (defer like Symphony when slack is large and the GPU is not needed
+   by other queues, shed like Clockwork otherwise) is the `index_T` hypothesis, not yet a result. Three seeds, a skew ladder of eight mixes and the same loads
+   for all mixes are running/analysed (Week8 `[DECISION]`, `[RESULT]`). Open: calibrate every b, check 7 (8.25 Hz), SYS5V overlap, Clockwork per-queue fairness,
+   Symphony collision hypothesis. fcfs/fixed-batch/no-batch are out of the comparison (collapse, tie). (3) CityFlow routing is PARKED: the real PERTINENCE NSGA-II dispatcher on the v1 fine-tuned pool does not
+   beat static policies on S02 (best +0.013 alpha_sys over the hull; oracle headroom ~80% remains). Untested
+   causes: label criterion, v1 pool (bias-lr spike, fixed for v2), single-frame features. EdgeServing, Clockwork INFER and Symphony are reimplemented in `sched-harness/` (above). No simulator (Week8
+   `[DECISION]`). Promotion counts as generic for same-task variant pools
    (Week8). Meet 8 skipped (away). Everything below this paragraph in this thread is history up to
    Week6.
 

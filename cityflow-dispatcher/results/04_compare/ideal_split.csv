@@ -1,0 +1,5 @@
+split,pool,yolov8n,yolov8s,yolov8m,yolov8l
+test,original,0.1985,0.3755,0.2256,0.2004
+test,fine-tuned,0.5179,0.3101,0.1122,0.0598
+val,original,0.1217,0.3241,0.2801,0.274
+val,fine-tuned,0.4202,0.3209,0.0536,0.2053

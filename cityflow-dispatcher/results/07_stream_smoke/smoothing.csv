@@ -1,0 +1,5 @@
+scenario,window,switches_per_min,mean_run_sec,alpha_sys
+S02,1,52.5,1.11,0.82
+S02,3,28.5,2.0,0.84
+S02,5,22.5,2.5,0.87
+S02,10,4.5,10.0,0.925

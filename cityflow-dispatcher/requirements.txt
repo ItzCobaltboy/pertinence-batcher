@@ -1,0 +1,11 @@
+# torch from https://download.pytorch.org/whl/cu128 (install with --index-url), the rest from PyPI
+torch
+torchvision
+ultralytics
+opencv-python
+numpy
+pandas
+matplotlib
+pyyaml
+gdown
+tqdm

@@ -1,0 +1,5 @@
+scenario,camera,kind,frames,mean_run_frames,median_run_frames,p90_run_frames,mean_run_sec,median_run_sec,p90_run_sec,switches_per_min
+S02,c006,pred,200,5.56,2.0,10.5,1.11,0.4,2.1,52.5
+S02,c006,ideal,200,1.87,1.0,4.0,0.37,0.2,0.8,159.0
+S02,ALL,pred,200,5.56,2.0,10.5,1.11,0.4,2.1,52.5
+S02,ALL,ideal,200,1.87,1.0,4.0,0.37,0.2,0.8,159.0

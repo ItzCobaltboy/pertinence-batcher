@@ -1,0 +1,2 @@
+camera,frames,alpha_sys,avg_gflops,routing_accuracy,routed_n,routed_s,routed_m,routed_l,ideal_n,ideal_s,ideal_m,ideal_l
+c006,100,0.85,141.72,0.19,0.17,0.0,0.0,0.83,0.04,0.41,0.38,0.17

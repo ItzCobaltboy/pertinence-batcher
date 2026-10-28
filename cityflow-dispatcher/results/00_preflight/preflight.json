@@ -1,0 +1,23 @@
+{
+  "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+  "vram_gb": 12.8,
+  "driver": "616.92",
+  "torch": "2.11.0+cu128",
+  "cuda": "12.8",
+  "arch_list": [
+    "sm_75",
+    "sm_80",
+    "sm_86",
+    "sm_90",
+    "sm_100",
+    "sm_120"
+  ],
+  "ultralytics": "8.4.184",
+  "free_disk_gb_D": 546.3,
+  "forward_ok": {
+    "n": true,
+    "s": true,
+    "m": true,
+    "l": true
+  }
+}
