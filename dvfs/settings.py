@@ -15,9 +15,9 @@ EXPECTED_MODE_ID = 4            # nvpmodel mode 4 = MODE_30W_6CORE (what this bo
 
 # GPU clocks to profile, in Hz. Every entry must be in available_frequencies and not above the mode's max_freq,
 # else the run refuses to start (checked before any clock is written). Run `python -m dvfs.inspect` for the real list.
-# Board list read while max_freq was 675.75 MHz (check it against the mode-4 cap in /etc/nvpmodel.conf): 114.75 216.75 318.75 420.75 522.75 624.75 675.75; 114.75 (about 6x slower than the cap)
-# and 624.75 (8% under the cap) are left out. Above 675.75 the board exposes 828.75 ... 1377 MHz (cap unverified for mode 4).
-FREQS_HZ = [216750000, 318750000, 420750000, 522750000, 675750000]
+# Board list (AGX Xavier, mode 4 cap 905.25 MHz): 114.75 216.75 318.75 420.75 522.75 624.75 675.75 828.75 905.25 (higher entries are
+# outside the cap). Left out: 114.75 and 216.75 (5x and 4x slower than the cap, runs take many minutes), 624.75 and 828.75 (near a neighbour).
+FREQS_HZ = [318750000, 420750000, 522750000, 675750000, 905250000]
 
 # ---- models and pipeline (same as sched-harness/config.py) ----
 QUEUES = ["n", "s", "m", "l"]
@@ -33,7 +33,7 @@ WARMUP_BATCH_SIZES = [1, 2, 3, 4, 6, 8, 12, 16]     # run twice per model once a
 BATCHES = [1, 2, 3, 4, 6, 8, 12, 16]
 SUBRUNS = 4                     # subruns per (freq, model, batch) run
 SUBRUN_BATCHES = 20             # every subrun runs exactly this many back-to-back batches, whatever they take
-EST_BATCH_S = 0.55              # rough mean batch time over the grid; only used for the --dry-run time estimate
+EST_BATCH_S = 0.5               # rough mean batch time over the grid; only used for the --dry-run time estimate
 SUBRUN_GAP_S = 10               # idle between subruns
 RUN_GAP_S = 20                  # idle after the last subrun of a run (cooldown)
 PIN_SETTLE_S = 1.0              # wait after pinning, before the warm-up
