@@ -137,6 +137,10 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
         print("  sub %d: %d batches, lat %.1f ms, power %.2f W, %.3f J/frame, %.1f C max"
               % (sub, len(batches), total.mean(), energy_j / dur, energy_j / len(batches) / b, max(temps) if temps else float("nan")))
     guard.set_target(None)
+    with sampler._lock:                      # keep RAM flat over hours; the raw gz log on disk has every sample
+        cutoff = time.monotonic() - settings.KEEP_SAMPLES_S
+        keep_from = next((i for i, x in enumerate(sampler.samples) if x[0] >= cutoff), len(sampler.samples))
+        del sampler.samples[:keep_from]
 
 
 def done_points(out_dir):

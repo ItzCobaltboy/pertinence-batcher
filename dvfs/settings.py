@@ -53,7 +53,8 @@ REQUIRE_TEGRASTATS_MATCH = True # stop if tegrastats GR3D_FREQ disagrees with th
 
 # ---- power ----
 RAILS = ["GPU", "CPU", "SOC", "CV", "VDDRQ", "SYS5V"]
-TEGRASTATS_INTERVAL_MS = 100    # sched-harness measured about 8.25 Hz at this setting; `dvfs.inspect` tries 50 and 20
+TEGRASTATS_INTERVAL_MS = 50     # sched-harness got about 8.25 Hz at 100; `dvfs.inspect` measures 100 / 50 / 20 on this board
+KEEP_SAMPLES_S = 120            # sampler samples older than this are dropped from RAM after each run (the gz log keeps all)
 PRIMARY_POWER = "total_excl_sys5v"   # key of tegrastats.powers(); also reported: "total" and "gpu"
 POWER_KEYS = ["total_excl_sys5v", "total", "gpu"]
 

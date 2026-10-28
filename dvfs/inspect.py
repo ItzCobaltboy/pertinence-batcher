@@ -62,11 +62,15 @@ def main():
         print("\nnot root: skipping the tegrastats checks (no power rails without root)")
     else:
         rates = {}
+        changing = {}       # how often the total power reading actually differs from the previous sample
         for interval in (100, 50, 20):
             sampler = tegrastats.Sampler(interval, settings.RAILS)
             sampler.start()
             time.sleep(6)
             rates[interval] = sampler.cadence_hz()
+            snap = list(sampler.samples)
+            changes = sum(1 for a, b in zip(snap, snap[1:]) if a[2]["total"] != b[2]["total"])
+            changing[interval] = changes / (snap[-1][0] - snap[0][0]) if len(snap) > 1 else 0.0
             last = sampler.latest()
             if interval == 100 and last is not None:
                 info["tegrastats_sample"] = last[1]["raw"]
@@ -75,8 +79,11 @@ def main():
                 info["gr3d_vs_cur_freq"] = {"tegrastats_mhz": tegra_mhz, "cur_freq_hz": cur}
             sampler.stop()
         info["tegrastats_hz_by_interval_ms"] = rates
+        info["power_value_changes_hz_by_interval_ms"] = changing
         print("\ntegrastats sample:", info.get("tegrastats_sample", "none (no rails?)"))
         print("achieved sample rate by --interval (ms):", {k: round(v, 2) for k, v in rates.items()})
+        print("rate at which the total power value actually changes (idle, so a floor):", {k: round(v, 2) for k, v in changing.items()})
+        print("-> pick the smallest interval whose sample rate still grows; if the changing rate stops growing, the sensor is the limit")
         print("idle GR3D_FREQ vs cur_freq:", info.get("gr3d_vs_cur_freq"))
 
     os.makedirs(settings.RESULTS_DIR, exist_ok=True)
