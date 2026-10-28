@@ -1,16 +1,33 @@
 # One profiling session: checks (root, mode, nothing else running), backs up the GPU clock state, validates the
-# frequency list, starts the tegrastats sampler and the safety guard, and on any exit (normal, error, Ctrl-C,
-# SIGTERM, ssh hangup, abort) stops the sampler and puts the clocks back. Used by profile_switch and profile_models.
+# frequency list, starts the tegrastats sampler (which also measures the held clock and throttle messages in parallel),
+# and on any exit (normal, error, Ctrl-C, SIGTERM, ssh hangup) stops the sampler and puts the clocks back. Used by profile_switch and profile_models.
 import json
 import os
 import platform
 import signal
+import subprocess
 import sys
 import time
 
 from dvfs import settings, tegrastats
 from dvfs.gpu import Gpu
-from dvfs.guard import Guard, SafetyAbort, busy_processes, run
+
+
+def run(cmd):
+    p = subprocess.run(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    return p.returncode, p.stdout
+
+
+def busy_processes():
+    """Other python processes and tegrastats already running (own pid and the sudo parent are skipped)."""
+    mine = {os.getpid(), os.getppid()}
+    found = []
+    for cmd in (["pgrep", "-af", "python"], ["pgrep", "-af", "tegrastats"]):
+        for line in run(cmd)[1].splitlines():
+            pid = line.split(" ", 1)[0]
+            if pid.isdigit() and int(pid) not in mine and line not in found:
+                found.append(line)
+    return found
 
 
 def current_mode():
@@ -39,7 +56,6 @@ class Session:
         self.ignore_busy = ignore_busy
         self.gpu = None
         self.sampler = None
-        self.guard = None
 
     def __enter__(self):
         if os.geteuid() != 0:
@@ -59,19 +75,25 @@ class Session:
             for sig in (signal.SIGTERM, signal.SIGHUP):
                 signal.signal(sig, lambda s, f: sys.exit(128 + s))      # SystemExit unwinds through __exit__
             self.sampler = tegrastats.Sampler(settings.TEGRASTATS_INTERVAL_MS, settings.RAILS,
-                                              os.path.join(self.out_dir, "tegrastats_raw.log.gz"))
+                                              os.path.join(self.out_dir, "tegrastats_raw.log.gz"),
+                                              cur_freq_path=self.gpu_path("cur_freq"), cur_freq_interval_s=settings.CUR_FREQ_INTERVAL_S,
+                                              dmesg_pattern=settings.DMESG_PATTERN, dmesg_interval_s=settings.DMESG_INTERVAL_S,
+                                              aux_log_path=os.path.join(self.out_dir, "clock_dmesg_raw.log.gz"))
             self.sampler.start()
             deadline = time.monotonic() + 5
             while self.sampler.latest() is None and time.monotonic() < deadline:
                 time.sleep(0.1)
             if self.sampler.latest() is None:
                 raise RuntimeError("no tegrastats samples with power rails in 5 s (%d lines without rails)" % self.sampler.bad_lines)
-            self.guard = Guard(self.gpu)
             self.write_meta(mode_id, mode_text)
         except BaseException:
             self.close()
             raise
         return self
+
+    @staticmethod
+    def gpu_path(name):
+        return os.path.join(settings.GPU_DEVFREQ, name)
 
     def write_meta(self, mode_id, mode_text):
         meta = {"started": time.strftime("%Y-%m-%d %H:%M:%S"), "argv": sys.argv, "python": platform.python_version(),
@@ -99,9 +121,5 @@ class Session:
         chown_to_invoker(settings.RESULTS_DIR)
 
     def __exit__(self, exc_type, exc, tb):
-        if isinstance(exc, SafetyAbort):
-            print("SAFETY ABORT:", exc)
-            with open(os.path.join(self.out_dir, "abort.txt"), "a") as f:
-                f.write("%s %s\n" % (time.strftime("%Y-%m-%d %H:%M:%S"), exc))
         self.close()
         return False

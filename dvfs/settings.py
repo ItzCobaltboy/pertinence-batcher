@@ -47,8 +47,7 @@ SWITCH_WAIT_S = 5               # settle after pinning the "from" clock, and wat
 SWITCH_POLL_TIMEOUT_S = 2.0     # give up waiting for cur_freq to reach the target
 
 # ---- frequency check ----
-TEGRA_MATCH_TOL_MHZ = 1.5       # tegrastats GR3D_FREQ prints whole MHz; 599250000 Hz shows as 599
-REQUIRE_TEGRASTATS_MATCH = True # stop if tegrastats GR3D_FREQ disagrees with the pinned clock under load
+TEGRA_MATCH_TOL_MHZ = 1.5       # tegrastats GR3D_FREQ prints whole MHz; 599250000 Hz shows as 599 (gr3d_ok column)
 
 # ---- power ----
 RAILS = ["GPU", "CPU", "SOC", "CV", "VDDRQ", "SYS5V"]
@@ -57,7 +56,8 @@ KEEP_SAMPLES_S = 120            # sampler samples older than this are dropped fr
 PRIMARY_POWER = "total_excl_sys5v"   # key of tegrastats.powers(); also reported: "total" and "gpu"
 POWER_KEYS = ["total_excl_sys5v", "total", "gpu"]
 
-# ---- safety: only two run-time checks, the pinned clock is held and dmesg stays clean ----
+# ---- parallel measurement of the held clock and of throttle messages (recorded, never acted on) ----
+CUR_FREQ_INTERVAL_S = 0.02     # the sampler reads sysfs cur_freq this often
 TEMP_IGNORE = ("PMIC",)         # temperatures are only recorded, never acted on; tegrastats prints PMIC@100C constantly on Xavier
-GUARD_PERIOD_S = 5              # how often dmesg is looked at (also once at the end of every subrun)
+DMESG_INTERVAL_S = 1.0          # how often the sampler reads dmesg for new lines
 DMESG_PATTERN = r"over[- ]?current|throttl|thermal|overheat|emergency"

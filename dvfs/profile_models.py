@@ -15,12 +15,15 @@ import time
 import numpy as np
 
 from dvfs import settings, tegrastats
-from dvfs.guard import SafetyAbort, hot_c
+
+def hot_c(parsed):
+    return tegrastats.max_temp(parsed, settings.TEMP_IGNORE)
+
 
 SUBRUN_FIELDS = ["order_index", "freq_hz", "model", "batch", "subrun", "n_batches", "t_start", "t_end", "duration_s",
                  "lat_mean_ms", "lat_p50_ms", "lat_p95_ms", "lat_p99_ms", "lat_max_ms", "fwd_mean_ms",
                  "energy_per_batch_j", "energy_per_frame_j", "avg_power_w", "power_total_w", "power_gpu_w",
-                 "gap_power_w", "n_power_samples", "n_cur_freq_reads", "cur_freq_min_hz", "cur_freq_max_hz", "n_dmesg_checks", "cur_freq_end_hz", "gr3d_mhz_median", "t_start_c", "t_end_c",
+                 "gap_power_w", "n_power_samples", "n_cur_freq_reads", "cur_freq_min_hz", "cur_freq_max_hz", "clock_held", "gr3d_mhz_median", "gr3d_ok", "dmesg_hits", "t_start_c", "t_end_c",
                  "t_max_c", "timestamp"]
 BATCH_FIELDS = ["freq_hz", "model", "batch", "subrun", "k", "t_start", "t_end", "h2d_ms", "forward_ms", "nms_ms",
                 "total_ms", "n_boxes"]
@@ -58,33 +61,25 @@ def median_mhz(sampler, t0, t1):
 
 
 def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
-    guard, gpu, sampler = s.guard, s.gpu, s.sampler
+    gpu, sampler = s.gpu, s.sampler
     net, buf = nets[m], buffers[m]
-    guard.set_target(None)
     gpu.pin(f)
     t, cur = gpu.wait_cur(f, settings.SWITCH_POLL_TIMEOUT_S)
     if t is None:
         raise RuntimeError("cur_freq stayed at %d after pinning %d" % (cur, f))
-    guard.set_target(f)
-    guard.sleep(settings.PIN_SETTLE_S)
+    time.sleep(settings.PIN_SETTLE_S)
 
-    # warm-up at the new clock, discarded; tegrastats is also cross-checked against the pinned clock here
+    # warm-up at the new clock, discarded
     t_w0 = time.monotonic()
     k = 0
     while k < settings.WARMUP_MIN_BATCHES or time.monotonic() - t_w0 < settings.WARMUP_S:
-        guard.check()
         models.run_batch(net, buf, batch_arrays(pool, k, b))
         k += 1
-    mhz = median_mhz(sampler, t_w0 + 0.5, time.monotonic())
-    if settings.REQUIRE_TEGRASTATS_MATCH and (mhz is None or abs(mhz - f / 1e6) > settings.TEGRA_MATCH_TOL_MHZ):
-        raise SafetyAbort("tegrastats GR3D_FREQ shows %s MHz under load while cur_freq and the request say %g MHz" % (mhz, f / 1e6))
 
     sub_rows = []
     for sub in range(settings.SUBRUNS):
         batches = []
-        guard.reset_stats()
         for k in range(settings.SUBRUN_BATCHES):
-            guard.check()
             t0 = time.monotonic()
             h2d, fwd, nms, n_boxes = models.run_batch(net, buf, batch_arrays(pool, k, b))
             t1 = time.monotonic()
@@ -94,9 +89,7 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
                    [{"freq_hz": f, "model": m, "batch": b, "subrun": sub, "k": i, "t_start": "%.6f" % x[0], "t_end": "%.6f" % x[1],
                      "h2d_ms": "%.4f" % x[2], "forward_ms": "%.4f" % x[3], "nms_ms": "%.4f" % x[4],
                      "total_ms": "%.4f" % (x[2] + x[3] + x[4]), "n_boxes": x[5]} for i, x in enumerate(batches)])
-        guard.check_dmesg()
-        guard_stats = guard.stats()
-        guard.sleep(settings.POWER_TAIL_S)                 # a tegrastats sample past t_end for the interpolation
+        time.sleep(settings.POWER_TAIL_S)                      # a tegrastats sample past t_end for the interpolation
 
         total = np.array([x[2] + x[3] + x[4] for x in batches])
         samples = sampler.window(t_start, t_end, pad=0.5)
@@ -107,8 +100,9 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
         energy_j = tegrastats.energy_mj(times, [x[2][settings.PRIMARY_POWER] for x in samples], t_start, t_end) / 1000.0
         dur = t_end - t_start
         mhz_sub = median_mhz(sampler, t_start, t_end)
-        if mhz_sub is not None and abs(mhz_sub - f / 1e6) > settings.TEGRA_MATCH_TOL_MHZ:
-            raise SafetyAbort("tegrastats GR3D_FREQ median %.1f MHz during a subrun at %g MHz (clock dropped?)" % (mhz_sub, f / 1e6))
+        freqs = [x[1] for x in sampler.freq_window(t_start, t_end)]       # the held clock, read every CUR_FREQ_INTERVAL_S
+        clock_held = bool(freqs) and min(freqs) == max(freqs) == f
+        gr3d_ok = None if mhz_sub is None else abs(mhz_sub - f / 1e6) <= settings.TEGRA_MATCH_TOL_MHZ
         temps = [hot_c(x[1]) for x in inside]
         temps = [x for x in temps if x is not None]
         before = [x for x in sampler.window(t_start - 1.0, t_start, pad=0) if x[0] <= t_start]
@@ -123,29 +117,31 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
                "avg_power_w": "%.4f" % (energy_j / dur),
                "power_total_w": "%.4f" % (tegrastats.mean_power(samples, "total", t_start, t_end) / 1000.0),
                "power_gpu_w": "%.4f" % (tegrastats.mean_power(samples, "gpu", t_start, t_end) / 1000.0),
-               "n_power_samples": len(inside), "cur_freq_end_hz": gpu.cur_freq(),
-               "n_cur_freq_reads": guard_stats["n_cur_freq_reads"], "cur_freq_min_hz": guard_stats["cur_freq_min_hz"],
-               "cur_freq_max_hz": guard_stats["cur_freq_max_hz"], "n_dmesg_checks": guard_stats["n_dmesg_checks"],
-               "gr3d_mhz_median": "" if mhz_sub is None else "%.1f" % mhz_sub,
+               "n_power_samples": len(inside), "n_cur_freq_reads": len(freqs),
+               "cur_freq_min_hz": min(freqs) if freqs else "", "cur_freq_max_hz": max(freqs) if freqs else "",
+               "clock_held": int(clock_held), "gr3d_mhz_median": "" if mhz_sub is None else "%.1f" % mhz_sub,
+               "gr3d_ok": "" if gr3d_ok is None else int(gr3d_ok),
                "t_start_c": "" if t_before is None else "%.1f" % t_before, "t_end_c": "" if t_after is None else "%.1f" % t_after,
                "t_max_c": "" if not temps else "%.1f" % max(temps), "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")}
 
         # idle gap with the clock still pinned; its power (first GAP_SKIP_S left out) is the idle power at this clock
         gap = settings.SUBRUN_GAP_S if sub < settings.SUBRUNS - 1 else settings.RUN_GAP_S
-        guard.sleep(max(0.0, t_end + gap - time.monotonic()))
+        time.sleep(max(0.0, t_end + gap - time.monotonic()))
         g0, g1 = t_end + settings.GAP_SKIP_S, t_end + gap
         gap_samples = sampler.window(g0, g1, pad=0.5)
         row["gap_power_w"] = ("%.4f" % (tegrastats.mean_power(gap_samples, settings.PRIMARY_POWER, g0, g1) / 1000.0)
                               if len(gap_samples) >= 2 else "")
+        hits = sampler.dmesg_hits(t_start, time.monotonic())               # new throttle/thermal/over-current dmesg lines
+        row["dmesg_hits"] = len(hits)
         sub_rows.append(row)
         append_csv(os.path.join(out_dir, "subruns.csv"), SUBRUN_FIELDS, [row])
         print("  sub %d: %d batches, lat %.1f ms, power %.2f W, %.3f J/frame, %.1f C max"
               % (sub, len(batches), total.mean(), energy_j / dur, energy_j / len(batches) / b, max(temps) if temps else float("nan")))
-    guard.set_target(None)
-    with sampler._lock:                      # keep RAM flat over hours; the raw gz log on disk has every sample
-        cutoff = time.monotonic() - settings.KEEP_SAMPLES_S
-        keep_from = next((i for i, x in enumerate(sampler.samples) if x[0] >= cutoff), len(sampler.samples))
-        del sampler.samples[:keep_from]
+        if not clock_held or gr3d_ok is False or hits:
+            print("  WARNING sub %d: clock_held=%s (cur_freq %s..%s, want %d) gr3d_ok=%s dmesg_hits=%d %s"
+                  % (sub, clock_held, min(freqs) if freqs else None, max(freqs) if freqs else None, f, gr3d_ok, len(hits),
+                     " | ".join(h[1] for h in hits[:2])))
+    sampler.trim(time.monotonic() - settings.KEEP_SAMPLES_S)             # keep RAM flat; the raw logs on disk have everything
 
 
 def done_points(out_dir):
@@ -188,7 +184,9 @@ def summarize(out_dir):
                     "avg_power_w": float(energy.sum() / dur.sum()), "power_subrun_std_w": float(pw.std()),
                     "energy_per_batch_j": float(energy.sum() / nb.sum()), "energy_per_frame_j": float(energy.sum() / nb.sum() / key[1]),
                     "idle_gap_power_w": float(np.nanmean(gap)) if not np.all(np.isnan(gap)) else float("nan"),
-                    "t_max_c": float(np.nanmax([num(r["t_max_c"]) for r in g]))})
+                    "t_max_c": float(np.nanmax([num(r["t_max_c"]) for r in g])),
+                    "clock_held_all": int(all(r["clock_held"] == "1" for r in g)),
+                    "dmesg_hits": int(sum(num(r["dmesg_hits"]) for r in g))})
     with open(os.path.join(out_dir, "run_summary.csv"), "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(out[0].keys()))
         writer.writeheader()

@@ -12,7 +12,7 @@ import platform
 import time
 
 from dvfs import gpu, settings, tegrastats
-from dvfs.guard import run
+from dvfs.session import run
 
 
 def read(path):

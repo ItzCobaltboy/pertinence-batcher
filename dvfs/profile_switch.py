@@ -14,12 +14,16 @@ import time
 import numpy as np
 
 from dvfs import settings
-from dvfs.guard import hot_c
+from dvfs import tegrastats
 
 FIELDS = ["rep_id", "order_index", "from_hz", "to_hz", "direction", "rep", "cur_before_hz", "t_write_start",
           "write_first", "write_first_ms", "write_second_ms", "write_total_ms", "t_cur_match", "cur_switch_ms",
-          "cur_after_hz", "tegra_switch_ms", "temp_max_c", "timestamp"]
+          "cur_after_hz", "tegra_switch_ms", "dmesg_hits", "temp_max_c", "timestamp"]
 TRACE_FIELDS = ["rep_id", "dt_s", "gr3d_mhz", "gr3d_load"]       # tegrastats samples around each switch, dt from the write start
+
+
+def hot_c(parsed):
+    return tegrastats.max_temp(parsed, settings.TEMP_IGNORE)
 
 
 def plan():
@@ -43,22 +47,16 @@ def tegra_match(sampler, t_from, to_hz):
 
 
 def one_rep(s, order_index, frm, to, rep, rows, traces):
-    guard, gpu = s.guard, s.gpu
-    guard.set_target(None)
+    gpu = s.gpu
     gpu.pin(frm)
     t, cur = gpu.wait_cur(frm, settings.SWITCH_POLL_TIMEOUT_S)
     if t is None:
         raise RuntimeError("cur_freq stayed at %d after pinning %d" % (cur, frm))
-    guard.set_target(frm)
-    guard.sleep(settings.SWITCH_WAIT_S)
+    time.sleep(settings.SWITCH_WAIT_S)
     cur_before = gpu.cur_freq()
-    guard.set_target(None)                       # the clock is about to move on purpose
     w = gpu.pin(to)
     t_match, cur_after = gpu.wait_cur(to, settings.SWITCH_POLL_TIMEOUT_S)
-    if t_match is not None:
-        guard.set_target(to)
-    guard.sleep(max(0.0, settings.SWITCH_WAIT_S - (time.monotonic() - w["t_start"])))
-    guard.set_target(None)
+    time.sleep(max(0.0, settings.SWITCH_WAIT_S - (time.monotonic() - w["t_start"])))
     t_tegra = tegra_match(s.sampler, w["t_start"], to)
     rep_id = "%d_%d_%d" % (frm, to, rep)
     window = s.sampler.window(w["t_start"] - 0.5, w["t_start"] + settings.SWITCH_WAIT_S, pad=0)
@@ -76,6 +74,7 @@ def one_rep(s, order_index, frm, to, rep, rows, traces):
                  "cur_switch_ms": "" if t_match is None else "%.3f" % ((t_match - w["t_start"]) * 1000.0),
                  "cur_after_hz": cur_after,
                  "tegra_switch_ms": "" if t_tegra is None else "%.3f" % ((t_tegra - w["t_start"]) * 1000.0),
+                 "dmesg_hits": len(s.sampler.dmesg_hits(w["t_start"] - 1.0, time.monotonic())),
                  "temp_max_c": "" if not temps else "%.1f" % max(temps), "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")})
 
 

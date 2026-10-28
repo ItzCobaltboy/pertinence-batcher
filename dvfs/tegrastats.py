@@ -1,7 +1,10 @@
-# Copied unchanged from sched-harness/common/tegrastats.py.
+# Copied from sched-harness/common/tegrastats.py, then extended for dvfs: the Sampler also measures, in parallel with
+# the power lines, the GPU clock actually held (sysfs cur_freq, polled fast) and any new dmesg lines, flagging the ones
+# that look like throttling. Nothing here stops a run; it only records (samples, raw aux log, window queries).
 # tegrastats sampler (runs the tool in a pty so lines arrive one by one), line parser,
 # and the power/energy helpers that cut the trace with wall-clock marks.
 # Every line is stamped with time.monotonic() when read; tegrastats' own timestamp is ignored.
+import bisect
 import gzip
 import os
 import re
@@ -56,11 +59,27 @@ def powers(parsed, rails):
     return out
 
 
+def max_temp(parsed, ignore=()):
+    """Highest temperature in one parsed line, names in `ignore` left out. None if the line has none."""
+    temps = [v for k, v in parsed.get("temps", {}).items() if k not in ignore]
+    return max(temps) if temps else None
+
+
 class Sampler:
-    def __init__(self, interval_ms, rails, raw_log_path=None):
+    def __init__(self, interval_ms, rails, raw_log_path=None, cur_freq_path=None, cur_freq_interval_s=0.02,
+                 dmesg_pattern=None, dmesg_interval_s=1.0, aux_log_path=None):
         self.interval_ms = interval_ms
         self.rails = rails
         self.raw_log_path = raw_log_path
+        # parallel measurement of the held clock and of throttle messages (both optional)
+        self.cur_freq_path = cur_freq_path
+        self.cur_freq_interval_s = cur_freq_interval_s
+        self.dmesg_re = re.compile(dmesg_pattern, re.IGNORECASE) if dmesg_pattern else None
+        self.dmesg_interval_s = dmesg_interval_s
+        self.aux_log_path = aux_log_path
+        self.freq_samples = []   # list of (t_monotonic, cur_freq_hz)
+        self.dmesg_lines = []    # list of (t_monotonic seen, line, matches the throttle pattern)
+        self._dmesg_seen = set()
         self.samples = []        # list of (t_monotonic, parsed dict, powers dict)
         self.bad_lines = 0
         self._stop = threading.Event()
@@ -76,6 +95,50 @@ class Sampler:
         self._log = gzip.open(self.raw_log_path, "at") if self.raw_log_path else None
         self._thread = threading.Thread(target=self._read_loop, daemon=True)
         self._thread.start()
+        self._aux_log = None
+        self._aux_thread = None
+        if self.cur_freq_path or self.dmesg_re:
+            self._aux_log = gzip.open(self.aux_log_path, "at") if self.aux_log_path else None
+            if self.dmesg_re:
+                self._dmesg_seen = set(self._dmesg())     # lines already there at the start are not events
+            self._aux_thread = threading.Thread(target=self._aux_loop, daemon=True)
+            self._aux_thread.start()
+
+    def _dmesg(self):
+        p = subprocess.run(["dmesg"], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, universal_newlines=True)
+        return p.stdout.splitlines() if p.returncode == 0 else []
+
+    def _aux_write(self, t, kind, value):
+        if self._aux_log:
+            self._aux_log.write("%.4f %s %s\n" % (t, kind, value))
+
+    def _aux_loop(self):
+        next_dmesg = time.monotonic()
+        while not self._stop.is_set():
+            t = time.monotonic()
+            if self.cur_freq_path:
+                try:
+                    with open(self.cur_freq_path) as f:
+                        value = int(f.read().strip())
+                except (OSError, ValueError):
+                    value = None
+                if value is not None:
+                    with self._lock:
+                        self.freq_samples.append((t, value))
+                    self._aux_write(t, "cur_freq", value)
+            if self.dmesg_re and t >= next_dmesg:
+                next_dmesg = t + self.dmesg_interval_s
+                for line in self._dmesg():
+                    if line in self._dmesg_seen:
+                        continue
+                    self._dmesg_seen.add(line)
+                    hit = bool(self.dmesg_re.search(line))
+                    with self._lock:
+                        self.dmesg_lines.append((t, line, hit))
+                    self._aux_write(t, "dmesg_hit" if hit else "dmesg", line)
+                if self._aux_log:
+                    self._aux_log.flush()
+            self._stop.wait(self.cur_freq_interval_s)
 
     def _read_loop(self):
         buf = b""
@@ -117,11 +180,33 @@ class Sampler:
         self._thread.join(timeout=5)
         if self._log:
             self._log.close()
+        if self._aux_thread:
+            self._aux_thread.join(timeout=5)
+        if self._aux_log:
+            self._aux_log.close()
 
     def window(self, t0, t1, pad=0.5):
         """Samples with t0-pad <= t <= t1+pad (the pad gives neighbours for interpolation)."""
         with self._lock:
             return [s for s in self.samples if t0 - pad <= s[0] <= t1 + pad]
+
+    def freq_window(self, t0, t1):
+        """cur_freq reads (t, hz) with t0 <= t <= t1."""
+        with self._lock:
+            return [x for x in self.freq_samples if t0 <= x[0] <= t1]
+
+    def dmesg_hits(self, t0, t1):
+        """New dmesg lines that matched the throttle pattern, seen in [t0, t1]. dmesg is polled every dmesg_interval_s."""
+        with self._lock:
+            return [x for x in self.dmesg_lines if t0 <= x[0] <= t1 and x[2]]
+
+    def trim(self, before_t):
+        """Drop samples older than before_t from memory (the raw logs on disk keep everything)."""
+        with self._lock:
+            i = bisect.bisect_left([s[0] for s in self.samples], before_t)
+            del self.samples[:i]
+            j = bisect.bisect_left([s[0] for s in self.freq_samples], before_t)
+            del self.freq_samples[:j]
 
     def latest(self):
         with self._lock:
