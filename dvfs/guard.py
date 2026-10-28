@@ -1,8 +1,7 @@
-# Safety for a profiling session: refuse to start next to another benchmark, and abort (the session then
-# restores the clocks) on high temperature, a clock that moved off the pinned value, a new over-current
-# count, or new thermal/throttle lines in dmesg. NVIDIA documents that hardware throttling is not reported to
-# the OS, so a changed cur_freq and the over-current counters are the only signals besides temperature.
-import glob
+# Run-time checks of a profiling session, only two: the GPU clock stays where it was pinned, and dmesg shows no new
+# over-current / throttle / thermal lines. Either one aborts the run (the session then restores the clocks). Both are
+# also counted, so every subrun row records that the checks ran and what cur_freq did. Also: refuse to start next
+# to another benchmark.
 import os
 import re
 import subprocess
@@ -21,7 +20,7 @@ def run(cmd):
 
 
 def hot_c(parsed):
-    """Highest temperature in one parsed tegrastats line, PMIC excluded. None if the line has none."""
+    """Highest temperature in one parsed tegrastats line, PMIC excluded. None if the line has none. Recorded, never acted on."""
     temps = [v for k, v in parsed.get("temps", {}).items() if k not in settings.TEMP_IGNORE]
     return max(temps) if temps else None
 
@@ -39,55 +38,53 @@ def busy_processes():
 
 
 class Guard:
-    def __init__(self, sampler, gpu):
-        self.sampler = sampler
+    def __init__(self, gpu):
         self.gpu = gpu
         self.target_hz = None       # while set, cur_freq must equal it
         self.pattern = re.compile(settings.DMESG_PATTERN, re.IGNORECASE)
-        self.oc_base = self._oc()
         self.dmesg_base = set(self._dmesg())
-        self.last_slow = time.monotonic()
+        self.last_dmesg = time.monotonic()
+        self.dmesg_checks = 0
+        self.reset_stats()
 
     def set_target(self, freq_hz):
         self.target_hz = freq_hz
 
-    def _oc(self):
-        counts = {}
-        for path in glob.glob(settings.HWMON_OC_GLOB):
-            try:
-                with open(path) as f:
-                    counts[path] = int(f.read().strip())
-            except (OSError, ValueError):
-                pass
-        return counts
+    def reset_stats(self):
+        """Start counting cur_freq reads for the next subrun."""
+        self.freq_reads = 0
+        self.freq_min = None
+        self.freq_max = None
+        self.dmesg_checks_at_reset = self.dmesg_checks
+
+    def stats(self):
+        return {"n_cur_freq_reads": self.freq_reads, "cur_freq_min_hz": self.freq_min, "cur_freq_max_hz": self.freq_max,
+                "n_dmesg_checks": self.dmesg_checks - self.dmesg_checks_at_reset}
 
     def _dmesg(self):
         code, text = run(["dmesg"])
         return text.splitlines() if code == 0 else []
 
+    def check_dmesg(self):
+        self.last_dmesg = time.monotonic()
+        self.dmesg_checks += 1
+        new = [l for l in self._dmesg() if l not in self.dmesg_base and self.pattern.search(l)]
+        if new:
+            raise SafetyAbort("new dmesg lines: " + " | ".join(new[:3]))
+
     def check(self):
-        now = time.monotonic()
-        latest = self.sampler.latest()
-        if latest is None or now - latest[0] > settings.SAMPLER_STALE_S:
-            raise SafetyAbort("tegrastats stopped delivering samples (temperature is unwatched)")
-        temp = hot_c(latest[1])
-        if temp is not None and temp > settings.TEMP_CAP_C:
-            raise SafetyAbort("temperature %.1f C above the cap of %s C" % (temp, settings.TEMP_CAP_C))
         if self.target_hz is not None:
             cur = self.gpu.cur_freq()
+            self.freq_reads += 1
+            self.freq_min = cur if self.freq_min is None else min(self.freq_min, cur)
+            self.freq_max = cur if self.freq_max is None else max(self.freq_max, cur)
             if cur != self.target_hz:
-                raise SafetyAbort("GPU clock moved: cur_freq %d while %d is pinned (throttle?)" % (cur, self.target_hz))
-        if now - self.last_slow >= settings.GUARD_PERIOD_S:
-            self.last_slow = now
-            for path, count in self._oc().items():
-                if count > self.oc_base.get(path, count):
-                    raise SafetyAbort("over-current counter rose: %s %d -> %d" % (path, self.oc_base[path], count))
-            new = [l for l in self._dmesg() if l not in self.dmesg_base and self.pattern.search(l)]
-            if new:
-                raise SafetyAbort("new dmesg lines: " + " | ".join(new[:3]))
+                raise SafetyAbort("GPU clock moved: cur_freq %d while %d is pinned" % (cur, self.target_hz))
+        if time.monotonic() - self.last_dmesg >= settings.GUARD_PERIOD_S:
+            self.check_dmesg()
 
     def sleep(self, seconds):
-        """Sleep in short slices, checking safety between them."""
+        """Sleep in short slices, checking between them."""
         end = time.monotonic() + seconds
         while True:
             left = end - time.monotonic()

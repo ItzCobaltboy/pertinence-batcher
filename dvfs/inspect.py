@@ -36,7 +36,6 @@ def main():
     info["settings_freqs_ok"] = {str(f): (f in available and f <= cap) for f in settings.FREQS_HZ}
     info["thermal_zones"] = {os.path.basename(z): {"type": read(z + "/type"), "temp_mC": read(z + "/temp")}
                              for z in sorted(glob.glob("/sys/devices/virtual/thermal/thermal_zone*"))}
-    info["oc_counters"] = {p: read(p) for p in glob.glob(settings.HWMON_OC_GLOB)}
     info["ina3221_hwmon"] = {p: read(p) for p in sorted(glob.glob("/sys/bus/i2c/drivers/ina3221/*/hwmon/hwmon*/in*_label"))}
     try:
         import torch
@@ -55,7 +54,6 @@ def main():
     print("settings.FREQS_HZ (MHz):", [f / 1e6 for f in settings.FREQS_HZ], "->",
           "all usable" if all(info["settings_freqs_ok"].values()) else "NOT USABLE: " + str([k for k, v in info["settings_freqs_ok"].items() if not v]))
     print("thermal zones:", {v["type"]: int(v["temp_mC"]) / 1000.0 for v in info["thermal_zones"].values() if v["temp_mC"].lstrip("-").isdigit()})
-    print("over-current counters:", info["oc_counters"] or "none found")
     print("INA3221 rail labels:", list(info["ina3221_hwmon"].values()) or "none found at the JetPack 5 path (report only)")
 
     if not info["root"]:

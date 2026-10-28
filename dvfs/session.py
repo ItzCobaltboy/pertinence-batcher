@@ -66,7 +66,7 @@ class Session:
                 time.sleep(0.1)
             if self.sampler.latest() is None:
                 raise RuntimeError("no tegrastats samples with power rails in 5 s (%d lines without rails)" % self.sampler.bad_lines)
-            self.guard = Guard(self.sampler, self.gpu)
+            self.guard = Guard(self.gpu)
             self.write_meta(mode_id, mode_text)
         except BaseException:
             self.close()

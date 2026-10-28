@@ -11,7 +11,6 @@ INPUTS_DIR = os.path.join(HERE, "data", "inputs")  # optional images; else the t
 # ---- device ----
 GPU_DEVFREQ = "/sys/devices/17000000.gv11b/devfreq/17000000.gv11b"
 GPU_3D_SCALING = "/sys/devices/17000000.gv11b/enable_3d_scaling"
-HWMON_OC_GLOB = "/sys/class/hwmon/hwmon*/oc*_irq_cnt"    # over-current event counters
 EXPECTED_MODE_ID = 7            # nvpmodel mode 7 = MODE_15W_DESKTOP; this tool never changes the mode. None = accept any.
 
 # GPU clocks to profile, in Hz. Every entry must be in available_frequencies and not above the mode's max_freq,
@@ -58,9 +57,7 @@ KEEP_SAMPLES_S = 120            # sampler samples older than this are dropped fr
 PRIMARY_POWER = "total_excl_sys5v"   # key of tegrastats.powers(); also reported: "total" and "gpu"
 POWER_KEYS = ["total_excl_sys5v", "total", "gpu"]
 
-# ---- safety ----
-TEMP_CAP_C = 80                 # abort above this (max over tegrastats temperatures, PMIC excluded)
-TEMP_IGNORE = ("PMIC",)         # tegrastats prints PMIC@100C constantly on Xavier; it is not a reading
-GUARD_PERIOD_S = 5              # how often the over-current counters and dmesg are looked at
-SAMPLER_STALE_S = 3             # abort if tegrastats stops delivering samples for this long (temperature unwatched)
+# ---- safety: only two run-time checks, the pinned clock is held and dmesg stays clean ----
+TEMP_IGNORE = ("PMIC",)         # temperatures are only recorded, never acted on; tegrastats prints PMIC@100C constantly on Xavier
+GUARD_PERIOD_S = 5              # how often dmesg is looked at (also once at the end of every subrun)
 DMESG_PATTERN = r"over[- ]?current|throttl|thermal|overheat|emergency"

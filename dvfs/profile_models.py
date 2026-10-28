@@ -20,7 +20,7 @@ from dvfs.guard import SafetyAbort, hot_c
 SUBRUN_FIELDS = ["order_index", "freq_hz", "model", "batch", "subrun", "n_batches", "t_start", "t_end", "duration_s",
                  "lat_mean_ms", "lat_p50_ms", "lat_p95_ms", "lat_p99_ms", "lat_max_ms", "fwd_mean_ms",
                  "energy_per_batch_j", "energy_per_frame_j", "avg_power_w", "power_total_w", "power_gpu_w",
-                 "gap_power_w", "n_power_samples", "cur_freq_end_hz", "gr3d_mhz_median", "t_start_c", "t_end_c",
+                 "gap_power_w", "n_power_samples", "n_cur_freq_reads", "cur_freq_min_hz", "cur_freq_max_hz", "n_dmesg_checks", "cur_freq_end_hz", "gr3d_mhz_median", "t_start_c", "t_end_c",
                  "t_max_c", "timestamp"]
 BATCH_FIELDS = ["freq_hz", "model", "batch", "subrun", "k", "t_start", "t_end", "h2d_ms", "forward_ms", "nms_ms",
                 "total_ms", "n_boxes"]
@@ -82,6 +82,7 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
     sub_rows = []
     for sub in range(settings.SUBRUNS):
         batches = []
+        guard.reset_stats()
         for k in range(settings.SUBRUN_BATCHES):
             guard.check()
             t0 = time.monotonic()
@@ -93,6 +94,8 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
                    [{"freq_hz": f, "model": m, "batch": b, "subrun": sub, "k": i, "t_start": "%.6f" % x[0], "t_end": "%.6f" % x[1],
                      "h2d_ms": "%.4f" % x[2], "forward_ms": "%.4f" % x[3], "nms_ms": "%.4f" % x[4],
                      "total_ms": "%.4f" % (x[2] + x[3] + x[4]), "n_boxes": x[5]} for i, x in enumerate(batches)])
+        guard.check_dmesg()
+        guard_stats = guard.stats()
         guard.sleep(settings.POWER_TAIL_S)                 # a tegrastats sample past t_end for the interpolation
 
         total = np.array([x[2] + x[3] + x[4] for x in batches])
@@ -121,6 +124,8 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
                "power_total_w": "%.4f" % (tegrastats.mean_power(samples, "total", t_start, t_end) / 1000.0),
                "power_gpu_w": "%.4f" % (tegrastats.mean_power(samples, "gpu", t_start, t_end) / 1000.0),
                "n_power_samples": len(inside), "cur_freq_end_hz": gpu.cur_freq(),
+               "n_cur_freq_reads": guard_stats["n_cur_freq_reads"], "cur_freq_min_hz": guard_stats["cur_freq_min_hz"],
+               "cur_freq_max_hz": guard_stats["cur_freq_max_hz"], "n_dmesg_checks": guard_stats["n_dmesg_checks"],
                "gr3d_mhz_median": "" if mhz_sub is None else "%.1f" % mhz_sub,
                "t_start_c": "" if t_before is None else "%.1f" % t_before, "t_end_c": "" if t_after is None else "%.1f" % t_after,
                "t_max_c": "" if not temps else "%.1f" % max(temps), "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")}
