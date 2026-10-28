@@ -1,6 +1,6 @@
 # Latency and power of every model at every pinned GPU clock and batch size. All four nets stay loaded.
-# One run = (freq, model, batch): pin, warm up, then SUBRUNS subruns of back-to-back batches (SUBRUN_S seconds each,
-# SUBRUN_GAP_S idle between them), then RUN_GAP_S of cooldown. Runs are in a seeded random order.
+# One run = (freq, model, batch): pin, warm up, then SUBRUNS subruns of exactly SUBRUN_BATCHES back-to-back batches
+# (SUBRUN_GAP_S idle between them), then RUN_GAP_S of cooldown. Runs are in a seeded random order.
 # Latency = h2d + forward + nms per batch (the profile.json definition). Power = tegrastats total_excl_sys5v
 # integrated over exactly [first batch start, last batch end] of the subrun.
 # Run:  sudo python3 -m dvfs.profile_models [--dry-run] [--resume DIR] [--ignore-busy]     (summary only: --summary-only DIR)
@@ -34,7 +34,7 @@ def plan():
 
 def run_s():
     gaps = (settings.SUBRUNS - 1) * settings.SUBRUN_GAP_S + settings.RUN_GAP_S
-    return settings.PIN_SETTLE_S + settings.WARMUP_S + settings.SUBRUNS * settings.SUBRUN_S + gaps
+    return (settings.PIN_SETTLE_S + settings.WARMUP_S + settings.SUBRUNS * settings.SUBRUN_BATCHES * settings.EST_BATCH_S + gaps)
 
 
 def batch_arrays(pool, k, b):
@@ -82,16 +82,12 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
     sub_rows = []
     for sub in range(settings.SUBRUNS):
         batches = []
-        k = 0
-        while True:
+        for k in range(settings.SUBRUN_BATCHES):
             guard.check()
             t0 = time.monotonic()
             h2d, fwd, nms, n_boxes = models.run_batch(net, buf, batch_arrays(pool, k, b))
             t1 = time.monotonic()
             batches.append((t0, t1, h2d, fwd, nms, n_boxes))
-            k += 1
-            if k >= settings.MIN_BATCHES and t1 - batches[0][0] >= settings.SUBRUN_S:
-                break
         t_start, t_end = batches[0][0], batches[-1][1]
         append_csv(os.path.join(out_dir, "batches.csv"), BATCH_FIELDS,
                    [{"freq_hz": f, "model": m, "batch": b, "subrun": sub, "k": i, "t_start": "%.6f" % x[0], "t_end": "%.6f" % x[1],
@@ -103,8 +99,8 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
         samples = sampler.window(t_start, t_end, pad=0.5)
         times = [x[0] for x in samples]
         inside = [x for x in samples if t_start <= x[0] <= t_end]
-        if len(samples) < 2 or not inside:
-            raise RuntimeError("no tegrastats samples in the %.1f s window (%d samples)" % (t_end - t_start, len(inside)))
+        if len(samples) < 2:          # short windows (fast model, small batch) may hold no sample; the neighbours interpolate
+            raise RuntimeError("fewer than 2 tegrastats samples around the %.2f s window" % (t_end - t_start))
         energy_j = tegrastats.energy_mj(times, [x[2][settings.PRIMARY_POWER] for x in samples], t_start, t_end) / 1000.0
         dur = t_end - t_start
         mhz_sub = median_mhz(sampler, t_start, t_end)
@@ -114,7 +110,7 @@ def run_point(s, models, nets, buffers, pool, order_index, f, m, b, out_dir):
         temps = [x for x in temps if x is not None]
         before = [x for x in sampler.window(t_start - 1.0, t_start, pad=0) if x[0] <= t_start]
         t_before = hot_c(before[-1][1]) if before else None
-        t_after = hot_c(inside[-1][1])
+        t_after = hot_c((inside or samples)[-1][1])
         row = {"order_index": order_index, "freq_hz": f, "model": m, "batch": b, "subrun": sub, "n_batches": len(batches),
                "t_start": "%.6f" % t_start, "t_end": "%.6f" % t_end, "duration_s": "%.4f" % dur,
                "lat_mean_ms": "%.4f" % total.mean(), "lat_p50_ms": "%.4f" % np.percentile(total, 50),

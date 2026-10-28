@@ -11,7 +11,7 @@ Weights: copy `sched-harness/models/*.pt` to `dvfs/models/` to skip the download
 | look at the board (read only) | `sudo python3 -m dvfs.inspect` | ~1 min |
 | plan and estimate, touches nothing | `python3 -m dvfs.profile_switch --dry-run`, `python3 -m dvfs.profile_models --dry-run` | instant |
 | clock switch cost | `sudo python3 -m dvfs.profile_switch` | ~10 min |
-| latency + power per freq/model/batch | `sudo python3 -m dvfs.profile_models [--resume DIR]` | ~3.3 h |
+| latency + power per freq/model/batch | `sudo python3 -m dvfs.profile_models [--resume DIR]` | ~3.3 h (20 batches per subrun) |
 | recompute the averages | `python3 -m dvfs.profile_models --summary-only DIR` (same for `profile_switch`) | seconds |
 | manual clock recovery | `sudo python3 -m dvfs.gpu --restore` | instant |
 

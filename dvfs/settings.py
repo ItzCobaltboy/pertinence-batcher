@@ -31,8 +31,8 @@ WARMUP_BATCH_SIZES = [1, 2, 3, 4, 6, 8, 12, 16]     # run twice per model once a
 # ---- profile_models ----
 BATCHES = [1, 2, 3, 4, 6, 8, 12, 16]
 SUBRUNS = 4                     # subruns per (freq, model, batch) run
-SUBRUN_S = 10                   # a subrun lasts at least this long ...
-MIN_BATCHES = 3                 # ... and at least this many batches (slow clock + big batch)
+SUBRUN_BATCHES = 20             # every subrun runs exactly this many back-to-back batches, whatever they take
+EST_BATCH_S = 0.5               # rough mean batch time over the grid; only used for the --dry-run time estimate
 SUBRUN_GAP_S = 10               # idle between subruns
 RUN_GAP_S = 20                  # idle after the last subrun of a run (cooldown)
 PIN_SETTLE_S = 1.0              # wait after pinning, before the warm-up
