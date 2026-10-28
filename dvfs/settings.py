@@ -16,8 +16,8 @@ EXPECTED_MODE_ID = 4            # nvpmodel mode 4 = MODE_30W_6CORE (what this bo
 # GPU clocks to profile, in Hz. Every entry must be in available_frequencies and not above the mode's max_freq,
 # else the run refuses to start (checked before any clock is written). Run `python -m dvfs.inspect` for the real list.
 # Board list (AGX Xavier, mode 4 cap 905.25 MHz): 114.75 216.75 318.75 420.75 522.75 624.75 675.75 828.75 905.25 (higher entries are
-# outside the cap). Left out: 114.75 and 216.75 (5x and 4x slower than the cap, runs take many minutes), 624.75 and 828.75 (near a neighbour).
-FREQS_HZ = [318750000, 420750000, 522750000, 675750000, 905250000]
+# outside the cap). Left out: 114.75 (8x slower than the cap, runs take many minutes), 624.75 and 828.75 (near a neighbour).
+FREQS_HZ = [216750000, 318750000, 420750000, 522750000, 675750000, 905250000]
 
 # ---- models and pipeline (same as sched-harness/config.py) ----
 QUEUES = ["n", "s", "m", "l"]
