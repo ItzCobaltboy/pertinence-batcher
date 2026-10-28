@@ -19,14 +19,18 @@ def run(cmd):
 
 
 def busy_processes():
-    """Other python processes and tegrastats already running (own pid and the sudo parent are skipped)."""
+    """Other benchmark-looking python processes (settings.BUSY_PATTERNS) and any tegrastats already running.
+    Own pid and the parent shell are skipped."""
     mine = {os.getpid(), os.getppid()}
     found = []
-    for cmd in (["pgrep", "-af", "python"], ["pgrep", "-af", "tegrastats"]):
+    for cmd, needs_pattern in ((["pgrep", "-af", "python"], True), (["pgrep", "-af", "tegrastats"], False)):
         for line in run(cmd)[1].splitlines():
             pid = line.split(" ", 1)[0]
-            if pid.isdigit() and int(pid) not in mine and line not in found:
-                found.append(line)
+            if not pid.isdigit() or int(pid) in mine or line in found:
+                continue
+            if needs_pattern and not any(p in line for p in settings.BUSY_PATTERNS):
+                continue
+            found.append(line)
     return found
 
 

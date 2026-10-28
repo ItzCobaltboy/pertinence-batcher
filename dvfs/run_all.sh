@@ -31,14 +31,17 @@ echo "=== dvfs run_all: steps [$STEPS], python $PYTHON, log $LOG ==="
 trap 'echo "=== interrupted: the python step restores the clocks; state below ==="; "$PYTHON" -m dvfs.gpu --show; exit 130' INT TERM
 
 step() {
-    echo "--- $1: $* ---"
+    local name="$1"
     shift
+    echo "--- $name: $* ---"
     "$@"
     local code=$?
     if [ $code -ne 0 ]; then
-        echo "=== FAILED (exit $code) at: $* ==="
+        echo "=== FAILED (exit $code) at: $name ==="
         "$PYTHON" -m dvfs.gpu --show
-        echo "If profile_models stopped part way: RESUME=<its results folder> sudo -E bash run_all.sh with STEPS=models"
+        if [ "$name" = "profile_models" ]; then
+            echo "To continue: RESUME=<the models_<stamp> folder above> STEPS=models sudo -E bash run_all.sh"
+        fi
         exit $code
     fi
 }

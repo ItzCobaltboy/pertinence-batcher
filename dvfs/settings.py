@@ -11,6 +11,9 @@ INPUTS_DIR = os.path.join(HERE, "data", "inputs")  # optional images; else the t
 # ---- device ----
 GPU_DEVFREQ = "/sys/devices/17000000.gv11b/devfreq/17000000.gv11b"
 GPU_3D_SCALING = "/sys/devices/17000000.gv11b/enable_3d_scaling"
+# python processes whose command line contains one of these block a run (system daemons like networkd-dispatcher do not); tegrastats always blocks
+BUSY_PATTERNS = ("dvfs", "sched-harness", "jetson-power", "00_preflight", "01_calibrate", "02_run", "03_plan", "01_power_sweep",
+                 "ultralytics", "yolo", "torch", "benchmark")
 EXPECTED_MODE_ID = 4            # nvpmodel mode 4 = MODE_30W_6CORE (what this board runs); this tool never changes the mode. None = accept any.
 
 # GPU clocks to profile, in Hz. Every entry must be in available_frequencies and not above the mode's max_freq,
