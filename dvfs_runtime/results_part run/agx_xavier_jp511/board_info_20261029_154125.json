@@ -1,0 +1,99 @@
+{
+  "time": "2026-10-29 15:40:57",
+  "python": "3.8.10",
+  "root": true,
+  "board": "Jetson-AGX",
+  "l4t": "# R35 (release), REVISION: 3.1, GCID: 32827747, BOARD: t186ref, EABI: aarch64, DATE: Sun Mar 19 15:19:21 UTC 2023",
+  "nvpmodel_q": "NV Power Mode: MODE_30W_6CORE\n4",
+  "jetson_clocks_show": "SOC family:tegra194  Machine:Jetson-AGX\nOnline CPUs: 0-5\ncpu0: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu1: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu2: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu3: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu4: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu5: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu6: Online=0 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu7: Online=0 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \nGPU MinFreq=114750000 MaxFreq=905250000 CurrentFreq=905250000\nEMC MinFreq=204000000 MaxFreq=1600000000 CurrentFreq=800000000 FreqOverride=0\nDLA0_CORE:   Online=1 MinFreq=0 MaxFreq=1054100000 CurrentFreq=1054100000\nDLA0_FALCON: Online=1 MinFreq=0 MaxFreq=630000000 CurrentFreq=630000000\nDLA1_CORE:   Online=1 MinFreq=0 MaxFreq=1054100000 CurrentFreq=1054100000\nDLA1_FALCON: Online=1 MinFreq=0 MaxFreq=630000000 CurrentFreq=630000000\nPVA0_VPS0: Online=1 MinFreq=0 MaxFreq=762000000 CurrentFreq=762000000\nPVA0_VPS1: Online=1 MinFreq=0 MaxFreq=762000000 CurrentFreq=762000000\nPVA0_AXI:  Online=1 MinFreq=0 MaxFreq=533400000 CurrentFreq=533400000\nPVA1_VPS0: Online=1 MinFreq=0 MaxFreq=762000000 CurrentFreq=762000000\nPVA1_VPS1: Online=1 MinFreq=0 MaxFreq=762000000 CurrentFreq=762000000\nPVA1_AXI:  Online=1 MinFreq=0 MaxFreq=533400000 CurrentFreq=533400000\nCVNAS MinFreq=0 MaxFreq=1011200000 CurrentFreq=1011200000\nFAN Dynamic Speed control=active hwmon3_pwm1=0\nNV Power Mode: MODE_30W_6CORE",
+  "gpu": {
+    "min_freq": "114750000",
+    "max_freq": "905250000",
+    "cur_freq": "905250000",
+    "governor": "nvhost_podgov",
+    "available_frequencies": "114750000 216750000 318750000 420750000 522750000 624750000 675750000 828750000 905250000 1032750000 1198500000 1236750000 1338750000 1377000000",
+    "enable_3d_scaling": "1",
+    "recorded_at": "2026-10-29 15:40:59"
+  },
+  "sweepable_hz": [
+    114750000,
+    216750000,
+    318750000,
+    420750000,
+    522750000,
+    624750000,
+    675750000,
+    828750000,
+    905250000
+  ],
+  "settings_freqs_ok": {
+    "216750000": true,
+    "318750000": true,
+    "420750000": true,
+    "522750000": true,
+    "675750000": true,
+    "905250000": true
+  },
+  "thermal_zones": {
+    "thermal_zone0": {
+      "type": "CPU-therm",
+      "temp_mC": "29000"
+    },
+    "thermal_zone1": {
+      "type": "GPU-therm",
+      "temp_mC": "29000"
+    },
+    "thermal_zone2": {
+      "type": "AUX-therm",
+      "temp_mC": "28500"
+    },
+    "thermal_zone3": {
+      "type": "AO-therm",
+      "temp_mC": "28500"
+    },
+    "thermal_zone4": {
+      "type": "PMIC-Die",
+      "temp_mC": "50000"
+    },
+    "thermal_zone5": {
+      "type": "Tboard_tegra",
+      "temp_mC": "31000"
+    },
+    "thermal_zone6": {
+      "type": "Tdiode_tegra",
+      "temp_mC": "33000"
+    },
+    "thermal_zone7": {
+      "type": "thermal_fan_est",
+      "temp_mC": "28800"
+    }
+  },
+  "ina3221_hwmon": {
+    "/sys/bus/i2c/drivers/ina3221/1-0040/hwmon/hwmon4/in1_label": "GPU",
+    "/sys/bus/i2c/drivers/ina3221/1-0040/hwmon/hwmon4/in2_label": "CPU",
+    "/sys/bus/i2c/drivers/ina3221/1-0040/hwmon/hwmon4/in3_label": "SOC",
+    "/sys/bus/i2c/drivers/ina3221/1-0040/hwmon/hwmon4/in7_label": "sum of shunt voltages",
+    "/sys/bus/i2c/drivers/ina3221/1-0041/hwmon/hwmon5/in1_label": "CV",
+    "/sys/bus/i2c/drivers/ina3221/1-0041/hwmon/hwmon5/in2_label": "VDDRQ",
+    "/sys/bus/i2c/drivers/ina3221/1-0041/hwmon/hwmon5/in3_label": "SYS5V",
+    "/sys/bus/i2c/drivers/ina3221/1-0041/hwmon/hwmon5/in7_label": "sum of shunt voltages"
+  },
+  "torch": "2.0.0+nv23.05",
+  "torch_cuda": "11.4",
+  "ultralytics": "8.3.186",
+  "tegrastats_sample": "10-29-2026 15:41:13 RAM 5548/31012MB (lfb 5079x4MB) SWAP 0/15506MB (cached 0MB) CPU [7%@1182,15%@1184,0%@1183,0%@1183,0%@1183,0%@1185,off,off] EMC_FREQ 0%@800 GR3D_FREQ 0%@905 VIC_FREQ 1036 APE 150 AUX@28.5C CPU@29C thermal@29.1C Tboard@31C AO@28.5C GPU@29C Tdiode@32.75C PMIC@50C GPU 0mW/0mW CPU 468mW/571mW SOC 935mW/935mW CV 0mW/0mW VDDRQ 311mW/311mW SYS5V 2363mW/2363mW",
+  "gr3d_vs_cur_freq": {
+    "tegrastats_mhz": 905,
+    "cur_freq_hz": "905250000"
+  },
+  "tegrastats_hz_by_interval_ms": {
+    "100": 8.059303873813072,
+    "50": 13.491415633997695,
+    "20": 22.601716357861118
+  },
+  "power_value_changes_hz_by_interval_ms": {
+    "100": 1.886220055573272,
+    "50": 0.3415548261771569,
+    "20": 1.5294394527875945
+  }
+}

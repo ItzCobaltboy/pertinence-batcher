@@ -1,0 +1,50 @@
+DVFS analysis
+models run : results/agx_xavier_jp511/models_20261031_100223_resnet
+switch runs: switch_20261028_193920, switch_20261029_154127, switch_20261029_190404, switch_20261029_191106
+nvpmodel   : NV Power Mode: MAXN
+0 (mode id 0), clock cap 1377000000 Hz
+
+points: 264, clock_held_all==1 on 264, dmesg hits total 0, max temperature 47.0 C
+
+Best clock for energy per frame, against the top clock (1377.00 MHz):
+model    batch best MHz   saving %  latency %   J/frame
+resnet18     1   828.75       24.8       13.3     0.076
+resnet18     2   905.25       21.9       35.3     0.055
+resnet18     3   828.75       22.3       46.2     0.048
+resnet18     4   828.75       22.9       50.0     0.043
+resnet18     6   828.75       24.7       48.1     0.037
+resnet18     8   828.75       25.3       47.4     0.034
+resnet18    12   828.75       24.5       49.9     0.030
+resnet18    16   828.75       23.9       48.5     0.030
+resnet50     1   828.75       26.7        7.8     0.149
+resnet50     2   828.75       21.4       44.2     0.121
+resnet50     3   905.25       20.7       36.6     0.111
+resnet50     4   828.75       22.5       49.2     0.103
+resnet50     6   828.75       25.1       46.6     0.089
+resnet50     8   828.75       24.2       47.4     0.087
+resnet50    12   828.75       23.1       47.0     0.082
+resnet50    16   905.25       23.1       36.5     0.079
+resnet152     1   675.75       27.0       10.9     0.369
+resnet152     2   905.25       22.8       23.9     0.297
+resnet152     3   905.25       22.1       37.0     0.270
+resnet152     4   828.75       22.4       48.2     0.253
+resnet152     6   905.25       23.5       38.3     0.211
+resnet152     8   828.75       23.5       48.6     0.209
+resnet152    12   905.25       22.1       38.2     0.195
+resnet152    16   828.75       22.4       47.8     0.185
+
+Median over batch sizes, per model: saving at the best clock and the latency it costs
+  resnet18: saving 24.2 %, latency +47.7 %
+  resnet50: saving 23.1 %, latency +45.4 %
+  resnet152: saving 22.6 %, latency +38.3 %
+
+Latency fit t = a * f^-b + c (f in GHz): exponent b per model, mean over batch sizes; c < 0 means the fit is not physical
+  resnet18: b = 1.30 (range 1.10 - 1.96), c < 0 in 0 of 8 fits
+  resnet50: b = 1.34 (range 1.14 - 2.46), c < 0 in 0 of 8 fits
+  resnet152: b = 1.41 (range 1.12 - 2.99), c < 0 in 0 of 8 fits
+
+Data-quality flags (window < 2 s, or < 10 power samples in some subrun, or energy spread > 5 %): 0 of 264 points
+
+Switching, over 482 switches in 4 runs (ms):
+  up   write 88.3   cur_freq 89.2   tegrastats 143.3
+  down write 88.2   cur_freq 89.1   tegrastats 145.1

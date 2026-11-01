@@ -1,0 +1,143 @@
+{
+  "started": "2026-10-29 19:11:07",
+  "argv": [
+    "/home/agx2/cs24bt033/dvfs_runtime/profile_switch.py"
+  ],
+  "python": "3.8.10",
+  "nvpmodel": "NV Power Mode: MODE_30W_6CORE\n4",
+  "mode_id": 4,
+  "gpu_original_state": {
+    "min_freq": "114750000",
+    "max_freq": "905250000",
+    "cur_freq": "114750000",
+    "governor": "nvhost_podgov",
+    "available_frequencies": "114750000 216750000 318750000 420750000 522750000 624750000 675750000 828750000 905250000 1032750000 1198500000 1236750000 1338750000 1377000000",
+    "enable_3d_scaling": "1",
+    "recorded_at": "2026-10-29 19:04:05"
+  },
+  "available_frequencies": [
+    114750000,
+    216750000,
+    318750000,
+    420750000,
+    522750000,
+    624750000,
+    675750000,
+    828750000,
+    905250000,
+    1032750000,
+    1198500000,
+    1236750000,
+    1338750000,
+    1377000000
+  ],
+  "cap_hz": 905250000,
+  "jetson_clocks_show": "SOC family:tegra194  Machine:Jetson-AGX\nOnline CPUs: 0-5\ncpu0: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu1: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu2: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu3: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu4: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu5: Online=1 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu6: Online=0 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \ncpu7: Online=0 Governor=schedutil MinFreq=1190400 MaxFreq=1420800 CurrentFreq=1420800 IdleStates: C1=1 c6=1 \nGPU MinFreq=905250000 MaxFreq=905250000 CurrentFreq=905250000\nEMC MinFreq=204000000 MaxFreq=1600000000 CurrentFreq=800000000 FreqOverride=0\nDLA0_CORE:   Online=1 MinFreq=0 MaxFreq=1054100000 CurrentFreq=1054100000\nDLA0_FALCON: Online=1 MinFreq=0 MaxFreq=630000000 CurrentFreq=630000000\nDLA1_CORE:   Online=1 MinFreq=0 MaxFreq=1054100000 CurrentFreq=1054100000\nDLA1_FALCON: Online=1 MinFreq=0 MaxFreq=630000000 CurrentFreq=630000000\nPVA0_VPS0: Online=1 MinFreq=0 MaxFreq=762000000 CurrentFreq=762000000\nPVA0_VPS1: Online=1 MinFreq=0 MaxFreq=762000000 CurrentFreq=762000000\nPVA0_AXI:  Online=1 MinFreq=0 MaxFreq=533400000 CurrentFreq=533400000\nPVA1_VPS0: Online=1 MinFreq=0 MaxFreq=762000000 CurrentFreq=762000000\nPVA1_VPS1: Online=1 MinFreq=0 MaxFreq=762000000 CurrentFreq=762000000\nPVA1_AXI:  Online=1 MinFreq=0 MaxFreq=533400000 CurrentFreq=533400000\nCVNAS MinFreq=0 MaxFreq=1011200000 CurrentFreq=1011200000\nFAN Dynamic Speed control=active hwmon3_pwm1=0\nNV Power Mode: MODE_30W_6CORE\n",
+  "settings": {
+    "HERE": "/home/agx2/cs24bt033/dvfs_runtime",
+    "DEVICE_TAG": "agx_xavier_jp511",
+    "RESULTS_DIR": "/home/agx2/cs24bt033/dvfs_runtime/results/agx_xavier_jp511",
+    "MODELS_DIR": "/home/agx2/cs24bt033/dvfs_runtime/models",
+    "INPUTS_DIR": "/home/agx2/cs24bt033/dvfs_runtime/data/inputs",
+    "GPU_DEVFREQ": "/sys/devices/17000000.gv11b/devfreq/17000000.gv11b",
+    "GPU_3D_SCALING": "/sys/devices/17000000.gv11b/enable_3d_scaling",
+    "BUSY_PATTERNS": [
+      "dvfs",
+      "sched-harness",
+      "jetson-power",
+      "00_preflight",
+      "01_calibrate",
+      "02_run",
+      "03_plan",
+      "01_power_sweep",
+      "ultralytics",
+      "yolo",
+      "torch",
+      "benchmark"
+    ],
+    "EXPECTED_MODE_ID": 4,
+    "FREQS_HZ": [
+      216750000,
+      318750000,
+      420750000,
+      522750000,
+      675750000,
+      905250000
+    ],
+    "QUEUES": [
+      "n",
+      "s",
+      "m",
+      "l"
+    ],
+    "MODELS": {
+      "n": "yolov8n.pt",
+      "s": "yolov8s.pt",
+      "m": "yolov8m.pt",
+      "l": "yolov8l.pt"
+    },
+    "IMGSZ": 640,
+    "B_MAX": 16,
+    "INPUT_POOL_SIZE": 64,
+    "NMS_CONF": 0.25,
+    "NMS_IOU": 0.45,
+    "WARMUP_BATCH_SIZES": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "BATCHES": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "SUBRUNS": 4,
+    "SUBRUN_BATCHES": 20,
+    "EST_BATCH_S": 0.5,
+    "SUBRUN_GAP_S": 10,
+    "RUN_GAP_S": 20,
+    "PIN_SETTLE_S": 1.0,
+    "WARMUP_S": 2.0,
+    "WARMUP_MIN_BATCHES": 5,
+    "GAP_SKIP_S": 2.0,
+    "POWER_TAIL_S": 0.6,
+    "SEED": 0,
+    "SWITCH_REPEATS": 5,
+    "SWITCH_WAIT_S": 5,
+    "SWITCH_POLL_TIMEOUT_S": 2.0,
+    "TEGRA_MATCH_TOL_MHZ": 1.5,
+    "RAILS": [
+      "GPU",
+      "CPU",
+      "SOC",
+      "CV",
+      "VDDRQ",
+      "SYS5V"
+    ],
+    "TEGRASTATS_INTERVAL_MS": 50,
+    "KEEP_SAMPLES_S": 120,
+    "PRIMARY_POWER": "total_excl_sys5v",
+    "POWER_KEYS": [
+      "total_excl_sys5v",
+      "total",
+      "gpu"
+    ],
+    "CUR_FREQ_INTERVAL_S": 0.02,
+    "TEMP_IGNORE": [
+      "PMIC"
+    ],
+    "DMESG_INTERVAL_S": 1.0,
+    "DMESG_PATTERN": "over[- ]?current|throttl|thermal|overheat|emergency"
+  },
+  "torch": "2.0.0+nv23.05"
+}

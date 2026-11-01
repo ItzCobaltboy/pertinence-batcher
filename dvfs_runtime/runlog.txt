@@ -1,0 +1,1208 @@
+2026-10-30 13:36:56 === dvfs run_all: steps [models], python /home/agx2/cs24bt033/jetson-power/.venv/bin/python3, log /home/agx2/cs24bt033/dvfs_runtime/runlog.txt ===
+2026-10-30 13:36:56 --- GPU clock state before ---
+2026-10-30 13:36:56 {
+2026-10-30 13:36:56   "min_freq": "114750000",
+2026-10-30 13:36:56   "max_freq": "905250000",
+2026-10-30 13:36:56   "cur_freq": "114750000",
+2026-10-30 13:36:56   "governor": "nvhost_podgov",
+2026-10-30 13:36:56   "available_frequencies": "114750000 216750000 318750000 420750000 522750000 624750000 675750000 828750000 905250000 1032750000 1198500000 1236750000 1338750000 1377000000",
+2026-10-30 13:36:56   "enable_3d_scaling": "1",
+2026-10-30 13:36:56   "recorded_at": "2026-10-30 13:36:56"
+2026-10-30 13:36:56 }
+2026-10-30 13:36:56 --- plan (dry runs): bash -c '/home/agx2/cs24bt033/jetson-power/.venv/bin/python3' -m dvfs_runtime.profile_switch --dry-run && '/home/agx2/cs24bt033/jetson-power/.venv/bin/python3' -m dvfs_runtime.profile_models --dry-run ---
+2026-10-30 13:36:57 6 clocks [216.75, 318.75, 420.75, 522.75, 675.75, 905.25] MHz -> 30 ordered pairs x 5 repeats = 150 switches, about 26 min
+2026-10-30 13:36:57 6 clocks [216.75, 318.75, 420.75, 522.75, 675.75, 905.25] MHz x 4 models x 8 batch sizes [1, 2, 3, 4, 6, 8, 12, 16] = 192 runs of 93 s each: about 5.0 h
+2026-10-30 13:36:57     0: 522.75 MHz  yolov8m  b=8
+2026-10-30 13:36:57     1: 675.75 MHz  yolov8n  b=12
+2026-10-30 13:36:57     2: 905.25 MHz  yolov8n  b=3
+2026-10-30 13:36:57     3: 905.25 MHz  yolov8n  b=16
+2026-10-30 13:36:57     4: 675.75 MHz  yolov8n  b=16
+2026-10-30 13:36:57     5: 318.75 MHz  yolov8n  b=1
+2026-10-30 13:36:57     6: 522.75 MHz  yolov8l  b=4
+2026-10-30 13:36:57     7: 420.75 MHz  yolov8n  b=2
+2026-10-30 13:36:57     8: 675.75 MHz  yolov8s  b=2
+2026-10-30 13:36:57     9: 420.75 MHz  yolov8l  b=16
+2026-10-30 13:36:57    10: 675.75 MHz  yolov8s  b=4
+2026-10-30 13:36:57    11: 522.75 MHz  yolov8s  b=8
+2026-10-30 13:36:57   ... (seed 0)
+2026-10-30 13:36:57 --- profile_models: /home/agx2/cs24bt033/jetson-power/.venv/bin/python3 -m dvfs_runtime.profile_models ---
+2026-10-30 13:36:58 6 clocks [216.75, 318.75, 420.75, 522.75, 675.75, 905.25] MHz x 4 models x 8 batch sizes [1, 2, 3, 4, 6, 8, 12, 16] = 192 runs of 93 s each: about 5.0 h
+2026-10-30 13:37:05 NOTICE: /home/agx2/cs24bt033/dvfs_runtime/results/agx_xavier_jp511/gpu_state_backup.json exists (an earlier session did not restore); using it as the original state
+2026-10-30 13:37:07 loading the four nets
+2026-10-30 13:37:10 *** NOTICE: /home/agx2/cs24bt033/dvfs_runtime/data/inputs is empty or missing; the pool is just the two ultralytics sample images ***
+2026-10-30 13:37:10 /home/agx2/cs24bt033/jetson-power/.venv/lib/python3.8/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/home/agx2/cs24bt033/jetson-power/.venv/lib/python3.8/site-packages/torchvision/image.so: undefined symbol: _ZN5torch3jit17parseSchemaOrNameERKSs'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+2026-10-30 13:37:10   warn(
+2026-10-30 13:37:14 NOTICE: plain torch nms (torchvision ops unusable: Couldn't load custom C++ ops)
+2026-10-30 13:37:15 YOLOv8n summary (fused): 72 layers, 3,151,904 parameters, 0 gradients, 8.7 GFLOPs
+2026-10-30 13:37:17 YOLOv8s summary (fused): 72 layers, 11,156,544 parameters, 0 gradients, 28.6 GFLOPs
+2026-10-30 13:37:20 YOLOv8m summary (fused): 92 layers, 25,886,080 parameters, 0 gradients, 78.9 GFLOPs
+2026-10-30 13:37:25 YOLOv8l summary (fused): 112 layers, 43,668,288 parameters, 0 gradients, 165.1 GFLOPs
+2026-10-30 13:38:01 192 runs to do (0 already done)
+2026-10-30 13:38:01 [1/192] order 0: 522.75 MHz yolov8m b=8
+2026-10-30 13:38:27   sub 0: 20 batches, lat 584.9 ms, power 9.05 W, 0.662 J/frame, 37.8 C max
+2026-10-30 13:38:48   sub 1: 20 batches, lat 583.2 ms, power 8.69 W, 0.634 J/frame, 38.0 C max
+2026-10-30 13:39:10   sub 2: 20 batches, lat 583.4 ms, power 8.68 W, 0.633 J/frame, 37.8 C max
+2026-10-30 13:39:42   sub 3: 20 batches, lat 582.9 ms, power 8.70 W, 0.634 J/frame, 38.0 C max
+2026-10-30 13:39:42 [2/192] order 1: 675.75 MHz yolov8n b=12
+2026-10-30 13:39:59   sub 0: 20 batches, lat 219.2 ms, power 8.63 W, 0.158 J/frame, 37.8 C max
+2026-10-30 13:40:14   sub 1: 20 batches, lat 219.4 ms, power 8.11 W, 0.148 J/frame, 37.8 C max
+2026-10-30 13:40:28   sub 2: 20 batches, lat 217.8 ms, power 8.10 W, 0.147 J/frame, 37.8 C max
+2026-10-30 13:40:53   sub 3: 20 batches, lat 216.8 ms, power 8.15 W, 0.147 J/frame, 37.8 C max
+2026-10-30 13:40:53 [3/192] order 2: 905.25 MHz yolov8n b=3
+2026-10-30 13:41:07   sub 0: 20 batches, lat 50.6 ms, power 10.34 W, 0.175 J/frame, 37.8 C max
+2026-10-30 13:41:18   sub 1: 20 batches, lat 53.4 ms, power 7.61 W, 0.136 J/frame, 37.8 C max
+2026-10-30 13:41:29   sub 2: 20 batches, lat 51.1 ms, power 7.56 W, 0.129 J/frame, 37.5 C max
+2026-10-30 13:41:50   sub 3: 20 batches, lat 50.5 ms, power 7.54 W, 0.127 J/frame, 37.8 C max
+2026-10-30 13:41:50 [4/192] order 3: 905.25 MHz yolov8n b=16
+2026-10-30 13:42:08   sub 0: 20 batches, lat 235.9 ms, power 10.64 W, 0.157 J/frame, 38.2 C max
+2026-10-30 13:42:22   sub 1: 20 batches, lat 236.8 ms, power 9.96 W, 0.148 J/frame, 38.2 C max
+2026-10-30 13:42:37   sub 2: 20 batches, lat 234.7 ms, power 10.00 W, 0.147 J/frame, 38.5 C max
+2026-10-30 13:43:02   sub 3: 20 batches, lat 233.0 ms, power 10.00 W, 0.146 J/frame, 38.5 C max
+2026-10-30 13:43:02 [5/192] order 4: 675.75 MHz yolov8n b=16
+2026-10-30 13:43:21   sub 0: 20 batches, lat 280.2 ms, power 8.65 W, 0.152 J/frame, 38.5 C max
+2026-10-30 13:43:36   sub 1: 20 batches, lat 278.3 ms, power 8.25 W, 0.144 J/frame, 38.5 C max
+2026-10-30 13:43:52   sub 2: 20 batches, lat 279.5 ms, power 8.33 W, 0.146 J/frame, 38.5 C max
+2026-10-30 13:44:17   sub 3: 20 batches, lat 278.8 ms, power 8.26 W, 0.144 J/frame, 38.5 C max
+2026-10-30 13:44:17 [6/192] order 5: 318.75 MHz yolov8n b=1
+2026-10-30 13:44:31   sub 0: 20 batches, lat 44.0 ms, power 4.97 W, 0.220 J/frame, 37.8 C max
+2026-10-30 13:44:42   sub 1: 20 batches, lat 44.4 ms, power 3.70 W, 0.165 J/frame, 37.8 C max
+2026-10-30 13:44:53   sub 2: 20 batches, lat 44.2 ms, power 3.67 W, 0.163 J/frame, 37.5 C max
+2026-10-30 13:45:14   sub 3: 20 batches, lat 44.1 ms, power 3.72 W, 0.165 J/frame, 37.5 C max
+2026-10-30 13:45:14 [7/192] order 6: 522.75 MHz yolov8l b=4
+2026-10-30 13:45:36   sub 0: 20 batches, lat 454.9 ms, power 9.15 W, 1.041 J/frame, 38.5 C max
+2026-10-30 13:45:56   sub 1: 20 batches, lat 456.0 ms, power 8.62 W, 0.983 J/frame, 38.8 C max
+2026-10-30 13:46:15   sub 2: 20 batches, lat 454.7 ms, power 8.68 W, 0.988 J/frame, 38.8 C max
+2026-10-30 13:46:44   sub 3: 20 batches, lat 455.3 ms, power 8.65 W, 0.986 J/frame, 38.8 C max
+2026-10-30 13:46:44 [8/192] order 7: 420.75 MHz yolov8n b=2
+2026-10-30 13:46:58   sub 0: 20 batches, lat 61.9 ms, power 5.87 W, 0.182 J/frame, 38.0 C max
+2026-10-30 13:47:09   sub 1: 20 batches, lat 62.2 ms, power 4.72 W, 0.147 J/frame, 37.8 C max
+2026-10-30 13:47:21   sub 2: 20 batches, lat 62.0 ms, power 4.71 W, 0.146 J/frame, 37.5 C max
+2026-10-30 13:47:42   sub 3: 20 batches, lat 61.8 ms, power 4.71 W, 0.146 J/frame, 37.5 C max
+2026-10-30 13:47:42 [9/192] order 8: 675.75 MHz yolov8s b=2
+2026-10-30 13:47:56   sub 0: 20 batches, lat 69.7 ms, power 9.56 W, 0.334 J/frame, 38.0 C max
+2026-10-30 13:48:08   sub 1: 20 batches, lat 69.9 ms, power 7.61 W, 0.266 J/frame, 37.8 C max
+2026-10-30 13:48:19   sub 2: 20 batches, lat 72.1 ms, power 7.50 W, 0.271 J/frame, 38.0 C max
+2026-10-30 13:48:41   sub 3: 20 batches, lat 69.8 ms, power 7.62 W, 0.267 J/frame, 38.0 C max
+2026-10-30 13:48:41 [10/192] order 9: 420.75 MHz yolov8l b=16
+2026-10-30 13:49:44   sub 0: 20 batches, lat 2071.4 ms, power 7.50 W, 0.971 J/frame, 39.2 C max
+2026-10-30 13:50:35   sub 1: 20 batches, lat 2070.1 ms, power 7.35 W, 0.951 J/frame, 39.5 C max
+2026-10-30 13:51:26   sub 2: 20 batches, lat 2072.0 ms, power 7.32 W, 0.949 J/frame, 39.8 C max
+2026-10-30 13:52:28   sub 3: 20 batches, lat 2072.1 ms, power 7.34 W, 0.950 J/frame, 40.0 C max
+2026-10-30 13:52:28 [11/192] order 10: 675.75 MHz yolov8s b=4
+2026-10-30 13:52:44   sub 0: 20 batches, lat 124.3 ms, power 9.69 W, 0.302 J/frame, 39.5 C max
+2026-10-30 13:52:56   sub 1: 20 batches, lat 124.4 ms, power 8.53 W, 0.266 J/frame, 39.0 C max
+2026-10-30 13:53:09   sub 2: 20 batches, lat 124.3 ms, power 8.53 W, 0.265 J/frame, 39.0 C max
+2026-10-30 13:53:31   sub 3: 20 batches, lat 126.1 ms, power 8.51 W, 0.269 J/frame, 39.0 C max
+2026-10-30 13:53:31 [12/192] order 11: 522.75 MHz yolov8s b=8
+2026-10-30 13:53:50   sub 0: 20 batches, lat 285.3 ms, power 8.60 W, 0.307 J/frame, 39.2 C max
+2026-10-30 13:54:06   sub 1: 20 batches, lat 287.2 ms, power 7.92 W, 0.285 J/frame, 39.2 C max
+2026-10-30 13:54:21   sub 2: 20 batches, lat 289.7 ms, power 7.88 W, 0.286 J/frame, 39.0 C max
+2026-10-30 13:54:47   sub 3: 20 batches, lat 288.2 ms, power 7.94 W, 0.286 J/frame, 39.0 C max
+2026-10-30 13:54:47 [13/192] order 12: 318.75 MHz yolov8s b=12
+2026-10-30 13:55:14   sub 0: 20 batches, lat 637.0 ms, power 6.00 W, 0.319 J/frame, 39.0 C max
+2026-10-30 13:55:37   sub 1: 20 batches, lat 638.5 ms, power 5.80 W, 0.309 J/frame, 38.8 C max
+2026-10-30 13:56:00   sub 2: 20 batches, lat 638.3 ms, power 5.77 W, 0.307 J/frame, 38.8 C max
+2026-10-30 13:56:33   sub 3: 20 batches, lat 637.7 ms, power 5.81 W, 0.309 J/frame, 38.8 C max
+2026-10-30 13:56:33 [14/192] order 13: 420.75 MHz yolov8m b=3
+2026-10-30 13:56:51   sub 0: 20 batches, lat 279.8 ms, power 7.93 W, 0.740 J/frame, 38.8 C max
+2026-10-30 13:57:07   sub 1: 20 batches, lat 281.2 ms, power 7.26 W, 0.681 J/frame, 38.5 C max
+2026-10-30 13:57:23   sub 2: 20 batches, lat 281.4 ms, power 7.34 W, 0.689 J/frame, 38.5 C max
+2026-10-30 13:57:48   sub 3: 20 batches, lat 283.8 ms, power 7.10 W, 0.672 J/frame, 38.8 C max
+2026-10-30 13:57:48 [15/192] order 14: 905.25 MHz yolov8n b=8
+2026-10-30 13:58:04   sub 0: 20 batches, lat 118.2 ms, power 10.89 W, 0.161 J/frame, 38.8 C max
+2026-10-30 13:58:16   sub 1: 20 batches, lat 121.9 ms, power 9.38 W, 0.143 J/frame, 38.8 C max
+2026-10-30 13:58:29   sub 2: 20 batches, lat 118.1 ms, power 9.52 W, 0.141 J/frame, 38.8 C max
+2026-10-30 13:58:51   sub 3: 20 batches, lat 118.5 ms, power 9.50 W, 0.141 J/frame, 38.5 C max
+2026-10-30 13:58:51 [16/192] order 15: 905.25 MHz yolov8s b=2
+2026-10-30 13:59:05   sub 0: 20 batches, lat 56.4 ms, power 12.10 W, 0.342 J/frame, 38.8 C max
+2026-10-30 13:59:16   sub 1: 20 batches, lat 58.9 ms, power 8.78 W, 0.259 J/frame, 38.5 C max
+2026-10-30 13:59:28   sub 2: 20 batches, lat 56.8 ms, power 8.87 W, 0.253 J/frame, 38.2 C max
+2026-10-30 13:59:49   sub 3: 20 batches, lat 56.6 ms, power 8.89 W, 0.252 J/frame, 38.2 C max
+2026-10-30 13:59:49 [17/192] order 16: 675.75 MHz yolov8l b=4
+2026-10-30 14:00:09   sub 0: 20 batches, lat 362.1 ms, power 10.74 W, 0.973 J/frame, 39.2 C max
+2026-10-30 14:00:26   sub 1: 20 batches, lat 362.2 ms, power 10.20 W, 0.924 J/frame, 39.2 C max
+2026-10-30 14:00:44   sub 2: 20 batches, lat 362.0 ms, power 10.19 W, 0.923 J/frame, 39.2 C max
+2026-10-30 14:01:11   sub 3: 20 batches, lat 362.4 ms, power 10.15 W, 0.920 J/frame, 39.2 C max
+2026-10-30 14:01:11 [18/192] order 17: 522.75 MHz yolov8n b=4
+2026-10-30 14:01:26   sub 0: 20 batches, lat 90.1 ms, power 7.74 W, 0.175 J/frame, 38.5 C max
+2026-10-30 14:01:38   sub 1: 20 batches, lat 92.0 ms, power 6.23 W, 0.144 J/frame, 38.2 C max
+2026-10-30 14:01:50   sub 2: 20 batches, lat 92.0 ms, power 6.18 W, 0.142 J/frame, 38.0 C max
+2026-10-30 14:02:11   sub 3: 20 batches, lat 92.7 ms, power 6.05 W, 0.141 J/frame, 38.0 C max
+2026-10-30 14:02:11 [19/192] order 18: 216.75 MHz yolov8l b=8
+2026-10-30 14:03:13   sub 0: 20 batches, lat 2018.7 ms, power 4.76 W, 1.200 J/frame, 38.2 C max
+2026-10-30 14:04:03   sub 1: 20 batches, lat 2003.9 ms, power 4.68 W, 1.173 J/frame, 38.2 C max
+2026-10-30 14:04:53   sub 2: 20 batches, lat 2003.6 ms, power 4.68 W, 1.172 J/frame, 38.2 C max
+2026-10-30 14:05:53   sub 3: 20 batches, lat 2003.4 ms, power 4.68 W, 1.173 J/frame, 38.2 C max
+2026-10-30 14:05:53 [20/192] order 19: 420.75 MHz yolov8l b=12
+2026-10-30 14:06:44   sub 0: 20 batches, lat 1579.4 ms, power 7.48 W, 0.985 J/frame, 39.2 C max
+2026-10-30 14:07:25   sub 1: 20 batches, lat 1580.6 ms, power 7.27 W, 0.958 J/frame, 39.2 C max
+2026-10-30 14:08:07   sub 2: 20 batches, lat 1580.3 ms, power 7.27 W, 0.957 J/frame, 39.5 C max
+2026-10-30 14:08:59   sub 3: 20 batches, lat 1579.0 ms, power 7.27 W, 0.957 J/frame, 39.8 C max
+2026-10-30 14:08:59 [21/192] order 20: 216.75 MHz yolov8s b=8
+2026-10-30 14:09:25   sub 0: 20 batches, lat 625.0 ms, power 4.70 W, 0.367 J/frame, 38.8 C max
+2026-10-30 14:09:48   sub 1: 20 batches, lat 627.0 ms, power 4.53 W, 0.356 J/frame, 38.8 C max
+2026-10-30 14:10:10   sub 2: 20 batches, lat 626.1 ms, power 4.54 W, 0.355 J/frame, 38.5 C max
+2026-10-30 14:10:43   sub 3: 20 batches, lat 626.2 ms, power 4.51 W, 0.353 J/frame, 38.8 C max
+2026-10-30 14:10:43 [22/192] order 21: 216.75 MHz yolov8m b=2
+2026-10-30 14:11:04   sub 0: 20 batches, lat 378.1 ms, power 4.68 W, 0.886 J/frame, 38.2 C max
+2026-10-30 14:11:21   sub 1: 20 batches, lat 379.1 ms, power 4.52 W, 0.858 J/frame, 38.2 C max
+2026-10-30 14:11:39   sub 2: 20 batches, lat 378.1 ms, power 4.49 W, 0.850 J/frame, 38.0 C max
+2026-10-30 14:12:07   sub 3: 20 batches, lat 378.3 ms, power 4.53 W, 0.858 J/frame, 38.0 C max
+2026-10-30 14:12:07 [23/192] order 22: 675.75 MHz yolov8m b=4
+2026-10-30 14:12:25   sub 0: 20 batches, lat 238.3 ms, power 10.57 W, 0.630 J/frame, 38.8 C max
+2026-10-30 14:12:39   sub 1: 20 batches, lat 238.8 ms, power 9.80 W, 0.586 J/frame, 38.8 C max
+2026-10-30 14:12:54   sub 2: 20 batches, lat 238.0 ms, power 9.83 W, 0.586 J/frame, 39.0 C max
+2026-10-30 14:13:19   sub 3: 20 batches, lat 238.2 ms, power 9.82 W, 0.585 J/frame, 39.0 C max
+2026-10-30 14:13:19 [24/192] order 23: 905.25 MHz yolov8m b=2
+2026-10-30 14:13:34   sub 0: 20 batches, lat 104.8 ms, power 13.21 W, 0.693 J/frame, 39.5 C max
+2026-10-30 14:13:46   sub 1: 20 batches, lat 105.2 ms, power 11.16 W, 0.588 J/frame, 39.8 C max
+2026-10-30 14:13:58   sub 2: 20 batches, lat 105.1 ms, power 11.14 W, 0.586 J/frame, 39.0 C max
+2026-10-30 14:14:20   sub 3: 20 batches, lat 105.1 ms, power 11.16 W, 0.587 J/frame, 39.0 C max
+2026-10-30 14:14:20 [25/192] order 24: 522.75 MHz yolov8n b=8
+2026-10-30 14:14:37   sub 0: 20 batches, lat 172.9 ms, power 7.73 W, 0.167 J/frame, 38.8 C max
+2026-10-30 14:14:51   sub 1: 20 batches, lat 174.3 ms, power 6.91 W, 0.151 J/frame, 38.8 C max
+2026-10-30 14:15:04   sub 2: 20 batches, lat 174.3 ms, power 6.88 W, 0.150 J/frame, 38.5 C max
+2026-10-30 14:15:28   sub 3: 20 batches, lat 177.3 ms, power 6.79 W, 0.151 J/frame, 38.8 C max
+2026-10-30 14:15:28 [26/192] order 25: 905.25 MHz yolov8n b=1
+2026-10-30 14:15:41   sub 0: 20 batches, lat 28.6 ms, power 7.42 W, 0.213 J/frame, 38.5 C max
+2026-10-30 14:15:52   sub 1: 20 batches, lat 28.7 ms, power 5.06 W, 0.145 J/frame, 38.2 C max
+2026-10-30 14:16:02   sub 2: 20 batches, lat 29.4 ms, power 5.04 W, 0.149 J/frame, 38.2 C max
+2026-10-30 14:16:23   sub 3: 20 batches, lat 30.0 ms, power 5.07 W, 0.153 J/frame, 38.0 C max
+2026-10-30 14:16:23 [27/192] order 26: 905.25 MHz yolov8s b=8
+2026-10-30 14:16:40   sub 0: 20 batches, lat 190.8 ms, power 12.32 W, 0.294 J/frame, 39.5 C max
+2026-10-30 14:16:54   sub 1: 20 batches, lat 191.0 ms, power 11.24 W, 0.269 J/frame, 39.2 C max
+2026-10-30 14:17:08   sub 2: 20 batches, lat 191.6 ms, power 11.24 W, 0.269 J/frame, 39.5 C max
+2026-10-30 14:17:32   sub 3: 20 batches, lat 192.4 ms, power 11.21 W, 0.270 J/frame, 39.2 C max
+2026-10-30 14:17:32 [28/192] order 27: 318.75 MHz yolov8l b=3
+2026-10-30 14:17:57   sub 0: 20 batches, lat 571.8 ms, power 6.33 W, 1.206 J/frame, 39.0 C max
+2026-10-30 14:18:19   sub 1: 20 batches, lat 585.1 ms, power 5.96 W, 1.162 J/frame, 39.0 C max
+2026-10-30 14:18:40   sub 2: 20 batches, lat 572.5 ms, power 6.06 W, 1.156 J/frame, 39.0 C max
+2026-10-30 14:19:12   sub 3: 20 batches, lat 573.4 ms, power 6.06 W, 1.159 J/frame, 38.8 C max
+2026-10-30 14:19:12 [29/192] order 28: 675.75 MHz yolov8l b=1
+2026-10-30 14:19:27   sub 0: 20 batches, lat 112.1 ms, power 10.43 W, 1.171 J/frame, 39.0 C max
+2026-10-30 14:19:39   sub 1: 20 batches, lat 112.1 ms, power 9.04 W, 1.014 J/frame, 39.0 C max
+2026-10-30 14:19:51   sub 2: 20 batches, lat 112.7 ms, power 9.03 W, 1.018 J/frame, 38.8 C max
+2026-10-30 14:20:14   sub 3: 20 batches, lat 112.3 ms, power 9.04 W, 1.016 J/frame, 38.8 C max
+2026-10-30 14:20:14 [30/192] order 29: 318.75 MHz yolov8l b=4
+2026-10-30 14:20:43   sub 0: 20 batches, lat 728.2 ms, power 6.07 W, 1.106 J/frame, 38.8 C max
+2026-10-30 14:21:08   sub 1: 20 batches, lat 729.6 ms, power 5.85 W, 1.068 J/frame, 38.8 C max
+2026-10-30 14:21:32   sub 2: 20 batches, lat 730.1 ms, power 6.00 W, 1.095 J/frame, 39.0 C max
+2026-10-30 14:22:07   sub 3: 20 batches, lat 728.9 ms, power 5.87 W, 1.070 J/frame, 39.0 C max
+2026-10-30 14:22:07 [31/192] order 30: 216.75 MHz yolov8m b=12
+2026-10-30 14:23:06   sub 0: 20 batches, lat 1935.2 ms, power 4.80 W, 0.774 J/frame, 38.8 C max
+2026-10-30 14:23:55   sub 1: 20 batches, lat 1934.7 ms, power 4.70 W, 0.757 J/frame, 38.8 C max
+2026-10-30 14:24:44   sub 2: 20 batches, lat 1935.7 ms, power 4.69 W, 0.757 J/frame, 38.8 C max
+2026-10-30 14:25:43   sub 3: 20 batches, lat 1937.7 ms, power 4.68 W, 0.757 J/frame, 38.8 C max
+2026-10-30 14:25:43 [32/192] order 31: 905.25 MHz yolov8l b=16
+2026-10-30 14:26:20   sub 0: 20 batches, lat 1052.5 ms, power 14.17 W, 0.932 J/frame, 41.5 C max
+2026-10-30 14:26:51   sub 1: 20 batches, lat 1053.8 ms, power 13.72 W, 0.904 J/frame, 42.2 C max
+2026-10-30 14:27:22   sub 2: 20 batches, lat 1052.5 ms, power 13.75 W, 0.905 J/frame, 42.8 C max
+2026-10-30 14:28:03   sub 3: 20 batches, lat 1052.5 ms, power 13.75 W, 0.905 J/frame, 42.8 C max
+2026-10-30 14:28:03 [33/192] order 32: 420.75 MHz yolov8n b=16
+2026-10-30 14:28:24   sub 0: 20 batches, lat 387.1 ms, power 6.96 W, 0.169 J/frame, 40.8 C max
+2026-10-30 14:28:42   sub 1: 20 batches, lat 388.1 ms, power 6.61 W, 0.161 J/frame, 40.5 C max
+2026-10-30 14:28:59   sub 2: 20 batches, lat 387.5 ms, power 6.65 W, 0.161 J/frame, 40.5 C max
+2026-10-30 14:29:27   sub 3: 20 batches, lat 387.2 ms, power 6.60 W, 0.160 J/frame, 40.2 C max
+2026-10-30 14:29:27 [34/192] order 33: 522.75 MHz yolov8m b=4
+2026-10-30 14:29:46   sub 0: 20 batches, lat 295.6 ms, power 9.23 W, 0.683 J/frame, 40.5 C max
+2026-10-30 14:30:02   sub 1: 20 batches, lat 296.9 ms, power 8.48 W, 0.630 J/frame, 40.2 C max
+2026-10-30 14:30:18   sub 2: 20 batches, lat 296.6 ms, power 8.49 W, 0.630 J/frame, 40.2 C max
+2026-10-30 14:30:44   sub 3: 20 batches, lat 297.0 ms, power 8.59 W, 0.639 J/frame, 40.2 C max
+2026-10-30 14:30:44 [35/192] order 34: 522.75 MHz yolov8n b=6
+2026-10-30 14:31:00   sub 0: 20 batches, lat 132.1 ms, power 7.82 W, 0.172 J/frame, 39.8 C max
+2026-10-30 14:31:13   sub 1: 20 batches, lat 134.6 ms, power 6.68 W, 0.150 J/frame, 39.8 C max
+2026-10-30 14:31:25   sub 2: 20 batches, lat 134.7 ms, power 6.66 W, 0.150 J/frame, 39.8 C max
+2026-10-30 14:31:48   sub 3: 20 batches, lat 135.1 ms, power 6.59 W, 0.148 J/frame, 39.5 C max
+2026-10-30 14:31:48 [36/192] order 35: 318.75 MHz yolov8n b=16
+2026-10-30 14:32:11   sub 0: 20 batches, lat 487.8 ms, power 5.69 W, 0.174 J/frame, 39.5 C max
+2026-10-30 14:32:31   sub 1: 20 batches, lat 488.1 ms, power 5.45 W, 0.166 J/frame, 39.2 C max
+2026-10-30 14:32:51   sub 2: 20 batches, lat 489.9 ms, power 5.46 W, 0.167 J/frame, 39.2 C max
+2026-10-30 14:33:21   sub 3: 20 batches, lat 488.4 ms, power 5.47 W, 0.167 J/frame, 39.2 C max
+2026-10-30 14:33:21 [37/192] order 36: 522.75 MHz yolov8s b=3
+2026-10-30 14:33:36   sub 0: 20 batches, lat 118.7 ms, power 8.52 W, 0.338 J/frame, 39.2 C max
+2026-10-30 14:33:49   sub 1: 20 batches, lat 120.2 ms, power 7.16 W, 0.287 J/frame, 39.0 C max
+2026-10-30 14:34:01   sub 2: 20 batches, lat 120.3 ms, power 7.14 W, 0.287 J/frame, 39.0 C max
+2026-10-30 14:34:23   sub 3: 20 batches, lat 121.7 ms, power 7.15 W, 0.290 J/frame, 39.0 C max
+2026-10-30 14:34:24 [38/192] order 37: 216.75 MHz yolov8n b=8
+2026-10-30 14:34:44   sub 0: 20 batches, lat 363.2 ms, power 4.40 W, 0.200 J/frame, 38.8 C max
+2026-10-30 14:35:01   sub 1: 20 batches, lat 362.6 ms, power 4.25 W, 0.193 J/frame, 38.8 C max
+2026-10-30 14:35:19   sub 2: 20 batches, lat 365.0 ms, power 4.25 W, 0.194 J/frame, 38.8 C max
+2026-10-30 14:35:46   sub 3: 20 batches, lat 363.6 ms, power 4.26 W, 0.194 J/frame, 38.5 C max
+2026-10-30 14:35:46 [39/192] order 38: 905.25 MHz yolov8n b=4
+2026-10-30 14:36:00   sub 0: 20 batches, lat 62.1 ms, power 10.59 W, 0.165 J/frame, 39.0 C max
+2026-10-30 14:36:12   sub 1: 20 batches, lat 63.2 ms, power 8.17 W, 0.129 J/frame, 38.8 C max
+2026-10-30 14:36:23   sub 2: 20 batches, lat 62.0 ms, power 8.23 W, 0.128 J/frame, 38.5 C max
+2026-10-30 14:36:44   sub 3: 20 batches, lat 62.0 ms, power 8.26 W, 0.128 J/frame, 38.5 C max
+2026-10-30 14:36:44 [40/192] order 39: 905.25 MHz yolov8m b=6
+2026-10-30 14:37:03   sub 0: 20 batches, lat 278.4 ms, power 14.06 W, 0.653 J/frame, 40.0 C max
+2026-10-30 14:37:18   sub 1: 20 batches, lat 278.8 ms, power 13.06 W, 0.607 J/frame, 39.8 C max
+2026-10-30 14:37:34   sub 2: 20 batches, lat 278.0 ms, power 13.07 W, 0.606 J/frame, 40.2 C max
+2026-10-30 14:38:00   sub 3: 20 batches, lat 277.8 ms, power 13.06 W, 0.605 J/frame, 40.5 C max
+2026-10-30 14:38:00 [41/192] order 40: 318.75 MHz yolov8m b=4
+2026-10-30 14:38:22   sub 0: 20 batches, lat 471.2 ms, power 6.17 W, 0.727 J/frame, 39.2 C max
+2026-10-30 14:38:42   sub 1: 20 batches, lat 470.7 ms, power 5.90 W, 0.694 J/frame, 39.2 C max
+2026-10-30 14:39:01   sub 2: 20 batches, lat 470.9 ms, power 5.91 W, 0.696 J/frame, 39.0 C max
+2026-10-30 14:39:31   sub 3: 20 batches, lat 471.6 ms, power 5.88 W, 0.694 J/frame, 39.2 C max
+2026-10-30 14:39:31 [42/192] order 41: 675.75 MHz yolov8l b=8
+2026-10-30 14:39:59   sub 0: 20 batches, lat 687.8 ms, power 10.94 W, 0.941 J/frame, 40.5 C max
+2026-10-30 14:40:23   sub 1: 20 batches, lat 687.9 ms, power 10.54 W, 0.906 J/frame, 40.5 C max
+2026-10-30 14:40:47   sub 2: 20 batches, lat 688.4 ms, power 10.52 W, 0.905 J/frame, 40.8 C max
+2026-10-30 14:41:20   sub 3: 20 batches, lat 687.6 ms, power 10.56 W, 0.908 J/frame, 41.0 C max
+2026-10-30 14:41:20 [43/192] order 42: 216.75 MHz yolov8s b=6
+2026-10-30 14:41:43   sub 0: 20 batches, lat 480.4 ms, power 4.86 W, 0.389 J/frame, 39.8 C max
+2026-10-30 14:42:03   sub 1: 20 batches, lat 481.1 ms, power 4.64 W, 0.372 J/frame, 39.5 C max
+2026-10-30 14:42:23   sub 2: 20 batches, lat 482.9 ms, power 4.63 W, 0.373 J/frame, 39.2 C max
+2026-10-30 14:42:52   sub 3: 20 batches, lat 480.8 ms, power 4.62 W, 0.371 J/frame, 39.2 C max
+2026-10-30 14:42:52 [44/192] order 43: 905.25 MHz yolov8l b=2
+2026-10-30 14:43:09   sub 0: 20 batches, lat 158.1 ms, power 14.18 W, 1.122 J/frame, 40.0 C max
+2026-10-30 14:43:22   sub 1: 20 batches, lat 159.0 ms, power 12.57 W, 1.000 J/frame, 39.8 C max
+2026-10-30 14:43:35   sub 2: 20 batches, lat 158.2 ms, power 12.56 W, 0.994 J/frame, 40.2 C max
+2026-10-30 14:43:58   sub 3: 20 batches, lat 158.4 ms, power 12.59 W, 0.998 J/frame, 40.0 C max
+2026-10-30 14:43:58 [45/192] order 44: 216.75 MHz yolov8n b=16
+2026-10-30 14:44:27   sub 0: 20 batches, lat 688.3 ms, power 4.45 W, 0.192 J/frame, 39.2 C max
+2026-10-30 14:44:50   sub 1: 20 batches, lat 687.6 ms, power 4.36 W, 0.187 J/frame, 39.0 C max
+2026-10-30 14:45:14   sub 2: 20 batches, lat 687.7 ms, power 4.32 W, 0.186 J/frame, 38.8 C max
+2026-10-30 14:45:48   sub 3: 20 batches, lat 689.5 ms, power 4.30 W, 0.185 J/frame, 38.8 C max
+2026-10-30 14:45:48 [46/192] order 45: 216.75 MHz yolov8n b=2
+2026-10-30 14:46:03   sub 0: 20 batches, lat 107.0 ms, power 4.35 W, 0.233 J/frame, 38.5 C max
+2026-10-30 14:46:15   sub 1: 20 batches, lat 109.5 ms, power 3.87 W, 0.212 J/frame, 38.2 C max
+2026-10-30 14:46:27   sub 2: 20 batches, lat 107.2 ms, power 3.90 W, 0.209 J/frame, 38.2 C max
+2026-10-30 14:46:50   sub 3: 20 batches, lat 107.0 ms, power 3.89 W, 0.208 J/frame, 38.0 C max
+2026-10-30 14:46:50 [47/192] order 46: 420.75 MHz yolov8l b=8
+2026-10-30 14:47:27   sub 0: 20 batches, lat 1055.7 ms, power 7.73 W, 1.020 J/frame, 39.2 C max
+2026-10-30 14:47:58   sub 1: 20 batches, lat 1058.7 ms, power 7.40 W, 0.980 J/frame, 39.5 C max
+2026-10-30 14:48:29   sub 2: 20 batches, lat 1055.9 ms, power 7.47 W, 0.986 J/frame, 39.8 C max
+2026-10-30 14:49:11   sub 3: 20 batches, lat 1057.6 ms, power 7.41 W, 0.980 J/frame, 39.8 C max
+2026-10-30 14:49:11 [48/192] order 47: 318.75 MHz yolov8s b=4
+2026-10-30 14:49:28   sub 0: 20 batches, lat 231.6 ms, power 5.95 W, 0.345 J/frame, 39.0 C max
+2026-10-30 14:49:43   sub 1: 20 batches, lat 232.2 ms, power 5.57 W, 0.324 J/frame, 39.0 C max
+2026-10-30 14:49:58   sub 2: 20 batches, lat 231.4 ms, power 5.57 W, 0.323 J/frame, 39.0 C max
+2026-10-30 14:50:22   sub 3: 20 batches, lat 232.4 ms, power 5.53 W, 0.322 J/frame, 38.8 C max
+2026-10-30 14:50:22 [49/192] order 48: 318.75 MHz yolov8n b=12
+2026-10-30 14:50:43   sub 0: 20 batches, lat 371.2 ms, power 5.68 W, 0.176 J/frame, 38.8 C max
+2026-10-30 14:51:01   sub 1: 20 batches, lat 373.1 ms, power 5.45 W, 0.170 J/frame, 38.8 C max
+2026-10-30 14:51:18   sub 2: 20 batches, lat 375.6 ms, power 5.43 W, 0.170 J/frame, 38.8 C max
+2026-10-30 14:51:46   sub 3: 20 batches, lat 374.5 ms, power 5.40 W, 0.169 J/frame, 38.5 C max
+2026-10-30 14:51:46 [50/192] order 49: 905.25 MHz yolov8m b=12
+2026-10-30 14:52:10   sub 0: 20 batches, lat 532.9 ms, power 14.09 W, 0.626 J/frame, 40.5 C max
+2026-10-30 14:52:31   sub 1: 20 batches, lat 532.5 ms, power 13.47 W, 0.598 J/frame, 40.8 C max
+2026-10-30 14:52:51   sub 2: 20 batches, lat 532.9 ms, power 13.44 W, 0.597 J/frame, 40.8 C max
+2026-10-30 14:53:22   sub 3: 20 batches, lat 533.7 ms, power 13.45 W, 0.598 J/frame, 41.5 C max
+2026-10-30 14:53:22 [51/192] order 50: 522.75 MHz yolov8m b=1
+2026-10-30 14:53:37   sub 0: 20 batches, lat 91.5 ms, power 8.68 W, 0.795 J/frame, 39.8 C max
+2026-10-30 14:53:49   sub 1: 20 batches, lat 92.8 ms, power 6.97 W, 0.647 J/frame, 39.5 C max
+2026-10-30 14:54:01   sub 2: 20 batches, lat 92.6 ms, power 6.95 W, 0.645 J/frame, 39.2 C max
+2026-10-30 14:54:23   sub 3: 20 batches, lat 93.6 ms, power 6.96 W, 0.653 J/frame, 39.2 C max
+2026-10-30 14:54:23 [52/192] order 51: 675.75 MHz yolov8n b=6
+2026-10-30 14:54:38   sub 0: 20 batches, lat 109.4 ms, power 8.86 W, 0.162 J/frame, 39.5 C max
+2026-10-30 14:54:50   sub 1: 20 batches, lat 110.1 ms, power 7.67 W, 0.141 J/frame, 39.2 C max
+2026-10-30 14:55:02   sub 2: 20 batches, lat 109.5 ms, power 7.68 W, 0.140 J/frame, 39.2 C max
+2026-10-30 14:55:25   sub 3: 20 batches, lat 112.1 ms, power 7.59 W, 0.142 J/frame, 39.2 C max
+2026-10-30 14:55:25 [53/192] order 52: 420.75 MHz yolov8n b=6
+2026-10-30 14:55:41   sub 0: 20 batches, lat 158.3 ms, power 6.59 W, 0.174 J/frame, 39.0 C max
+2026-10-30 14:55:54   sub 1: 20 batches, lat 159.0 ms, power 5.98 W, 0.159 J/frame, 39.0 C max
+2026-10-30 14:56:07   sub 2: 20 batches, lat 158.2 ms, power 6.03 W, 0.159 J/frame, 38.8 C max
+2026-10-30 14:56:31   sub 3: 20 batches, lat 161.8 ms, power 5.95 W, 0.161 J/frame, 38.8 C max
+2026-10-30 14:56:31 [54/192] order 53: 522.75 MHz yolov8l b=16
+2026-10-30 14:57:24   sub 0: 20 batches, lat 1685.1 ms, power 9.20 W, 0.969 J/frame, 40.5 C max
+2026-10-30 14:58:07   sub 1: 20 batches, lat 1685.6 ms, power 8.97 W, 0.946 J/frame, 41.0 C max
+2026-10-30 14:58:51   sub 2: 20 batches, lat 1685.6 ms, power 8.98 W, 0.946 J/frame, 41.5 C max
+2026-10-30 14:59:45   sub 3: 20 batches, lat 1686.2 ms, power 8.97 W, 0.946 J/frame, 41.5 C max
+2026-10-30 14:59:45 [55/192] order 54: 318.75 MHz yolov8s b=6
+2026-10-30 15:00:05   sub 0: 20 batches, lat 335.3 ms, power 6.12 W, 0.342 J/frame, 40.0 C max
+2026-10-30 15:00:21   sub 1: 20 batches, lat 338.0 ms, power 5.81 W, 0.328 J/frame, 40.0 C max
+2026-10-30 15:00:38   sub 2: 20 batches, lat 338.4 ms, power 5.75 W, 0.324 J/frame, 39.8 C max
+2026-10-30 15:01:05   sub 3: 20 batches, lat 338.3 ms, power 5.70 W, 0.322 J/frame, 39.8 C max
+2026-10-30 15:01:05 [56/192] order 55: 318.75 MHz yolov8m b=12
+2026-10-30 15:01:50   sub 0: 20 batches, lat 1339.6 ms, power 6.18 W, 0.689 J/frame, 40.0 C max
+2026-10-30 15:02:26   sub 1: 20 batches, lat 1338.5 ms, power 6.01 W, 0.670 J/frame, 40.0 C max
+2026-10-30 15:03:03   sub 2: 20 batches, lat 1340.8 ms, power 6.00 W, 0.670 J/frame, 40.0 C max
+2026-10-30 15:03:50   sub 3: 20 batches, lat 1341.0 ms, power 5.98 W, 0.669 J/frame, 39.8 C max
+2026-10-30 15:03:50 [57/192] order 56: 216.75 MHz yolov8s b=2
+2026-10-30 15:04:07   sub 0: 20 batches, lat 190.1 ms, power 4.53 W, 0.431 J/frame, 39.0 C max
+2026-10-30 15:04:21   sub 1: 20 batches, lat 192.6 ms, power 4.25 W, 0.409 J/frame, 38.8 C max
+2026-10-30 15:04:35   sub 2: 20 batches, lat 190.4 ms, power 4.26 W, 0.406 J/frame, 38.5 C max
+2026-10-30 15:04:59   sub 3: 20 batches, lat 196.5 ms, power 4.22 W, 0.415 J/frame, 38.5 C max
+2026-10-30 15:04:59 [58/192] order 57: 420.75 MHz yolov8l b=1
+2026-10-30 15:05:15   sub 0: 20 batches, lat 170.5 ms, power 8.00 W, 1.364 J/frame, 38.8 C max
+2026-10-30 15:05:29   sub 1: 20 batches, lat 171.2 ms, power 7.15 W, 1.224 J/frame, 38.8 C max
+2026-10-30 15:05:42   sub 2: 20 batches, lat 171.4 ms, power 7.16 W, 1.227 J/frame, 38.8 C max
+2026-10-30 15:06:06   sub 3: 20 batches, lat 171.2 ms, power 7.10 W, 1.217 J/frame, 38.8 C max
+2026-10-30 15:06:06 [59/192] order 58: 216.75 MHz yolov8n b=12
+2026-10-30 15:06:30   sub 0: 20 batches, lat 524.3 ms, power 4.44 W, 0.194 J/frame, 38.5 C max
+2026-10-30 15:06:50   sub 1: 20 batches, lat 524.8 ms, power 4.30 W, 0.188 J/frame, 38.2 C max
+2026-10-30 15:07:11   sub 2: 20 batches, lat 525.1 ms, power 4.32 W, 0.189 J/frame, 38.2 C max
+2026-10-30 15:07:41   sub 3: 20 batches, lat 524.5 ms, power 4.42 W, 0.193 J/frame, 38.2 C max
+2026-10-30 15:07:41 [60/192] order 59: 675.75 MHz yolov8m b=12
+2026-10-30 15:08:09   sub 0: 20 batches, lat 673.5 ms, power 10.71 W, 0.601 J/frame, 39.5 C max
+2026-10-30 15:08:33   sub 1: 20 batches, lat 674.4 ms, power 10.32 W, 0.580 J/frame, 39.5 C max
+2026-10-30 15:08:56   sub 2: 20 batches, lat 673.5 ms, power 10.30 W, 0.578 J/frame, 40.0 C max
+2026-10-30 15:09:30   sub 3: 20 batches, lat 673.5 ms, power 10.33 W, 0.580 J/frame, 40.2 C max
+2026-10-30 15:09:30 [61/192] order 60: 905.25 MHz yolov8s b=12
+2026-10-30 15:09:48   sub 0: 20 batches, lat 275.8 ms, power 12.49 W, 0.287 J/frame, 40.0 C max
+2026-10-30 15:10:04   sub 1: 20 batches, lat 276.2 ms, power 11.68 W, 0.269 J/frame, 39.8 C max
+2026-10-30 15:10:20   sub 2: 20 batches, lat 276.8 ms, power 11.64 W, 0.269 J/frame, 40.0 C max
+2026-10-30 15:10:45   sub 3: 20 batches, lat 275.8 ms, power 11.65 W, 0.268 J/frame, 40.0 C max
+2026-10-30 15:10:45 [62/192] order 61: 905.25 MHz yolov8n b=6
+2026-10-30 15:11:00   sub 0: 20 batches, lat 90.4 ms, power 10.91 W, 0.165 J/frame, 39.5 C max
+2026-10-30 15:11:12   sub 1: 20 batches, lat 91.5 ms, power 9.02 W, 0.138 J/frame, 39.2 C max
+2026-10-30 15:11:24   sub 2: 20 batches, lat 91.5 ms, power 9.09 W, 0.139 J/frame, 39.0 C max
+2026-10-30 15:11:46   sub 3: 20 batches, lat 92.0 ms, power 9.01 W, 0.138 J/frame, 39.2 C max
+2026-10-30 15:11:46 [63/192] order 62: 522.75 MHz yolov8l b=2
+2026-10-30 15:12:04   sub 0: 20 batches, lat 252.6 ms, power 9.18 W, 1.160 J/frame, 39.5 C max
+2026-10-30 15:12:19   sub 1: 20 batches, lat 253.1 ms, power 8.48 W, 1.073 J/frame, 39.2 C max
+2026-10-30 15:12:34   sub 2: 20 batches, lat 252.8 ms, power 8.46 W, 1.070 J/frame, 39.2 C max
+2026-10-30 15:12:59   sub 3: 20 batches, lat 252.8 ms, power 8.45 W, 1.068 J/frame, 39.0 C max
+2026-10-30 15:12:59 [64/192] order 63: 216.75 MHz yolov8m b=8
+2026-10-30 15:13:43   sub 0: 20 batches, lat 1319.1 ms, power 4.81 W, 0.793 J/frame, 38.8 C max
+2026-10-30 15:14:19   sub 1: 20 batches, lat 1319.1 ms, power 4.69 W, 0.773 J/frame, 38.8 C max
+2026-10-30 15:14:56   sub 2: 20 batches, lat 1321.0 ms, power 4.67 W, 0.771 J/frame, 38.5 C max
+2026-10-30 15:15:42   sub 3: 20 batches, lat 1319.1 ms, power 4.68 W, 0.772 J/frame, 38.2 C max
+2026-10-30 15:15:42 [65/192] order 64: 318.75 MHz yolov8s b=16
+2026-10-30 15:16:14   sub 0: 20 batches, lat 837.0 ms, power 5.93 W, 0.311 J/frame, 38.5 C max
+2026-10-30 15:16:41   sub 1: 20 batches, lat 842.7 ms, power 5.69 W, 0.300 J/frame, 38.5 C max
+2026-10-30 15:17:08   sub 2: 20 batches, lat 839.2 ms, power 5.76 W, 0.302 J/frame, 38.5 C max
+2026-10-30 15:17:45   sub 3: 20 batches, lat 839.0 ms, power 5.75 W, 0.302 J/frame, 38.5 C max
+2026-10-30 15:17:45 [66/192] order 65: 216.75 MHz yolov8l b=6
+2026-10-30 15:18:34   sub 0: 20 batches, lat 1524.7 ms, power 4.78 W, 1.215 J/frame, 38.2 C max
+2026-10-30 15:19:14   sub 1: 20 batches, lat 1525.2 ms, power 4.68 W, 1.189 J/frame, 38.2 C max
+2026-10-30 15:19:55   sub 2: 20 batches, lat 1524.8 ms, power 4.68 W, 1.189 J/frame, 38.2 C max
+2026-10-30 15:20:46   sub 3: 20 batches, lat 1539.4 ms, power 4.65 W, 1.194 J/frame, 38.2 C max
+2026-10-30 15:20:46 [67/192] order 66: 905.25 MHz yolov8n b=2
+2026-10-30 15:20:59   sub 0: 20 batches, lat 34.2 ms, power 10.08 W, 0.173 J/frame, 38.2 C max
+2026-10-30 15:21:10   sub 1: 20 batches, lat 35.1 ms, power 6.58 W, 0.116 J/frame, 38.0 C max
+2026-10-30 15:21:21   sub 2: 20 batches, lat 34.7 ms, power 6.53 W, 0.114 J/frame, 37.8 C max
+2026-10-30 15:21:42   sub 3: 20 batches, lat 34.6 ms, power 6.61 W, 0.115 J/frame, 38.0 C max
+2026-10-30 15:21:42 [68/192] order 67: 318.75 MHz yolov8n b=3
+2026-10-30 15:21:57   sub 0: 20 batches, lat 108.5 ms, power 5.28 W, 0.191 J/frame, 38.0 C max
+2026-10-30 15:22:09   sub 1: 20 batches, lat 109.0 ms, power 4.66 W, 0.169 J/frame, 37.8 C max
+2026-10-30 15:22:21   sub 2: 20 batches, lat 110.5 ms, power 4.65 W, 0.172 J/frame, 37.5 C max
+2026-10-30 15:22:43   sub 3: 20 batches, lat 109.4 ms, power 4.67 W, 0.170 J/frame, 37.5 C max
+2026-10-30 15:22:43 [69/192] order 68: 216.75 MHz yolov8n b=3
+2026-10-30 15:23:00   sub 0: 20 batches, lat 152.1 ms, power 4.35 W, 0.221 J/frame, 37.5 C max
+2026-10-30 15:23:13   sub 1: 20 batches, lat 152.6 ms, power 4.07 W, 0.207 J/frame, 37.2 C max
+2026-10-30 15:23:26   sub 2: 20 batches, lat 151.6 ms, power 4.05 W, 0.205 J/frame, 37.2 C max
+2026-10-30 15:23:49   sub 3: 20 batches, lat 151.6 ms, power 4.06 W, 0.205 J/frame, 37.2 C max
+2026-10-30 15:23:49 [70/192] order 69: 675.75 MHz yolov8n b=1
+2026-10-30 15:24:02   sub 0: 20 batches, lat 27.7 ms, power 7.14 W, 0.198 J/frame, 37.5 C max
+2026-10-30 15:24:13   sub 1: 20 batches, lat 29.3 ms, power 4.80 W, 0.141 J/frame, 37.2 C max
+2026-10-30 15:24:24   sub 2: 20 batches, lat 28.0 ms, power 4.73 W, 0.133 J/frame, 37.2 C max
+2026-10-30 15:24:44   sub 3: 20 batches, lat 28.0 ms, power 4.80 W, 0.135 J/frame, 37.2 C max
+2026-10-30 15:24:44 [71/192] order 70: 905.25 MHz yolov8l b=12
+2026-10-30 15:25:15   sub 0: 20 batches, lat 804.6 ms, power 14.44 W, 0.968 J/frame, 40.0 C max
+2026-10-30 15:25:41   sub 1: 20 batches, lat 804.3 ms, power 13.91 W, 0.933 J/frame, 40.8 C max
+2026-10-30 15:26:08   sub 2: 20 batches, lat 804.3 ms, power 13.89 W, 0.931 J/frame, 41.0 C max
+2026-10-30 15:26:44   sub 3: 20 batches, lat 805.3 ms, power 13.93 W, 0.935 J/frame, 41.5 C max
+2026-10-30 15:26:44 [72/192] order 71: 318.75 MHz yolov8s b=3
+2026-10-30 15:27:00   sub 0: 20 batches, lat 184.2 ms, power 5.94 W, 0.365 J/frame, 39.5 C max
+2026-10-30 15:27:14   sub 1: 20 batches, lat 187.0 ms, power 5.44 W, 0.339 J/frame, 39.2 C max
+2026-10-30 15:27:28   sub 2: 20 batches, lat 185.4 ms, power 5.47 W, 0.338 J/frame, 39.0 C max
+2026-10-30 15:27:52   sub 3: 20 batches, lat 185.7 ms, power 5.48 W, 0.340 J/frame, 39.0 C max
+2026-10-30 15:27:52 [73/192] order 72: 675.75 MHz yolov8m b=1
+2026-10-30 15:28:06   sub 0: 20 batches, lat 73.3 ms, power 10.07 W, 0.739 J/frame, 39.0 C max
+2026-10-30 15:28:18   sub 1: 20 batches, lat 75.5 ms, power 7.99 W, 0.604 J/frame, 39.0 C max
+2026-10-30 15:28:29   sub 2: 20 batches, lat 73.3 ms, power 8.06 W, 0.592 J/frame, 38.8 C max
+2026-10-30 15:28:51   sub 3: 20 batches, lat 74.3 ms, power 8.07 W, 0.600 J/frame, 38.8 C max
+2026-10-30 15:28:51 [74/192] order 73: 216.75 MHz yolov8s b=12
+2026-10-30 15:29:25   sub 0: 20 batches, lat 915.1 ms, power 4.59 W, 0.350 J/frame, 38.8 C max
+2026-10-30 15:29:53   sub 1: 20 batches, lat 912.9 ms, power 4.52 W, 0.344 J/frame, 38.5 C max
+2026-10-30 15:30:21   sub 2: 20 batches, lat 912.0 ms, power 4.57 W, 0.347 J/frame, 38.5 C max
+2026-10-30 15:30:59   sub 3: 20 batches, lat 912.8 ms, power 4.45 W, 0.339 J/frame, 38.5 C max
+2026-10-30 15:31:00 [75/192] order 74: 318.75 MHz yolov8s b=2
+2026-10-30 15:31:15   sub 0: 20 batches, lat 133.8 ms, power 5.70 W, 0.382 J/frame, 38.0 C max
+2026-10-30 15:31:28   sub 1: 20 batches, lat 134.2 ms, power 5.08 W, 0.341 J/frame, 38.0 C max
+2026-10-30 15:31:41   sub 2: 20 batches, lat 134.0 ms, power 5.09 W, 0.341 J/frame, 38.0 C max
+2026-10-30 15:32:03   sub 3: 20 batches, lat 133.7 ms, power 5.10 W, 0.341 J/frame, 38.0 C max
+2026-10-30 15:32:03 [76/192] order 75: 420.75 MHz yolov8l b=6
+2026-10-30 15:32:35   sub 0: 20 batches, lat 803.5 ms, power 7.76 W, 1.040 J/frame, 38.8 C max
+2026-10-30 15:33:01   sub 1: 20 batches, lat 804.0 ms, power 7.49 W, 1.003 J/frame, 39.0 C max
+2026-10-30 15:33:27   sub 2: 20 batches, lat 805.9 ms, power 7.44 W, 1.000 J/frame, 39.2 C max
+2026-10-30 15:34:03   sub 3: 20 batches, lat 804.5 ms, power 7.51 W, 1.007 J/frame, 39.2 C max
+2026-10-30 15:34:03 [77/192] order 76: 318.75 MHz yolov8s b=8
+2026-10-30 15:34:25   sub 0: 20 batches, lat 435.4 ms, power 6.10 W, 0.332 J/frame, 38.8 C max
+2026-10-30 15:34:44   sub 1: 20 batches, lat 438.4 ms, power 5.78 W, 0.317 J/frame, 38.5 C max
+2026-10-30 15:35:02   sub 2: 20 batches, lat 437.4 ms, power 5.77 W, 0.316 J/frame, 38.5 C max
+2026-10-30 15:35:31   sub 3: 20 batches, lat 438.5 ms, power 5.79 W, 0.318 J/frame, 38.8 C max
+2026-10-30 15:35:31 [78/192] order 77: 318.75 MHz yolov8l b=16
+2026-10-30 15:36:50   sub 0: 20 batches, lat 2707.6 ms, power 6.29 W, 1.064 J/frame, 39.2 C max
+2026-10-30 15:37:54   sub 1: 20 batches, lat 2708.8 ms, power 6.22 W, 1.053 J/frame, 39.2 C max
+2026-10-30 15:38:59   sub 2: 20 batches, lat 2711.2 ms, power 6.20 W, 1.051 J/frame, 39.2 C max
+2026-10-30 15:40:13   sub 3: 20 batches, lat 2710.6 ms, power 6.22 W, 1.054 J/frame, 39.5 C max
+2026-10-30 15:40:13 [79/192] order 78: 318.75 MHz yolov8l b=2
+2026-10-30 15:40:34   sub 0: 20 batches, lat 405.4 ms, power 6.16 W, 1.249 J/frame, 39.0 C max
+2026-10-30 15:40:52   sub 1: 20 batches, lat 405.9 ms, power 5.86 W, 1.190 J/frame, 38.8 C max
+2026-10-30 15:41:10   sub 2: 20 batches, lat 406.3 ms, power 5.84 W, 1.187 J/frame, 38.8 C max
+2026-10-30 15:41:39   sub 3: 20 batches, lat 406.8 ms, power 5.83 W, 1.187 J/frame, 38.8 C max
+2026-10-30 15:41:39 [80/192] order 79: 522.75 MHz yolov8n b=2
+2026-10-30 15:41:53   sub 0: 20 batches, lat 52.6 ms, power 6.52 W, 0.172 J/frame, 38.5 C max
+2026-10-30 15:42:04   sub 1: 20 batches, lat 52.8 ms, power 4.94 W, 0.131 J/frame, 38.0 C max
+2026-10-30 15:42:15   sub 2: 20 batches, lat 56.3 ms, power 4.89 W, 0.138 J/frame, 38.0 C max
+2026-10-30 15:42:36   sub 3: 20 batches, lat 53.2 ms, power 4.93 W, 0.131 J/frame, 37.8 C max
+2026-10-30 15:42:36 [81/192] order 80: 905.25 MHz yolov8m b=4
+2026-10-30 15:42:53   sub 0: 20 batches, lat 188.3 ms, power 13.89 W, 0.655 J/frame, 39.2 C max
+2026-10-30 15:43:07   sub 1: 20 batches, lat 188.2 ms, power 12.57 W, 0.592 J/frame, 39.5 C max
+2026-10-30 15:43:20   sub 2: 20 batches, lat 189.1 ms, power 12.53 W, 0.593 J/frame, 39.5 C max
+2026-10-30 15:43:44   sub 3: 20 batches, lat 188.7 ms, power 12.58 W, 0.594 J/frame, 39.5 C max
+2026-10-30 15:43:44 [82/192] order 81: 318.75 MHz yolov8m b=8
+2026-10-30 15:44:18   sub 0: 20 batches, lat 913.7 ms, power 6.19 W, 0.707 J/frame, 39.0 C max
+2026-10-30 15:44:46   sub 1: 20 batches, lat 914.1 ms, power 6.00 W, 0.686 J/frame, 39.0 C max
+2026-10-30 15:45:15   sub 2: 20 batches, lat 913.8 ms, power 5.99 W, 0.684 J/frame, 39.0 C max
+2026-10-30 15:45:53   sub 3: 20 batches, lat 914.1 ms, power 5.98 W, 0.684 J/frame, 39.0 C max
+2026-10-30 15:45:53 [83/192] order 82: 522.75 MHz yolov8m b=16
+2026-10-30 15:46:32   sub 0: 20 batches, lat 1105.5 ms, power 9.15 W, 0.632 J/frame, 39.8 C max
+2026-10-30 15:47:04   sub 1: 20 batches, lat 1106.5 ms, power 8.86 W, 0.613 J/frame, 40.2 C max
+2026-10-30 15:47:36   sub 2: 20 batches, lat 1106.2 ms, power 8.89 W, 0.615 J/frame, 40.2 C max
+2026-10-30 15:48:18   sub 3: 20 batches, lat 1106.4 ms, power 8.87 W, 0.613 J/frame, 40.5 C max
+2026-10-30 15:48:18 [84/192] order 83: 675.75 MHz yolov8n b=4
+2026-10-30 15:48:33   sub 0: 20 batches, lat 74.8 ms, power 8.73 W, 0.164 J/frame, 39.5 C max
+2026-10-30 15:48:44   sub 1: 20 batches, lat 75.3 ms, power 7.24 W, 0.137 J/frame, 39.2 C max
+2026-10-30 15:48:56   sub 2: 20 batches, lat 75.0 ms, power 7.23 W, 0.136 J/frame, 39.2 C max
+2026-10-30 15:49:17   sub 3: 20 batches, lat 74.8 ms, power 7.17 W, 0.134 J/frame, 39.0 C max
+2026-10-30 15:49:17 [85/192] order 84: 522.75 MHz yolov8s b=12
+2026-10-30 15:49:39   sub 0: 20 batches, lat 413.5 ms, power 8.63 W, 0.298 J/frame, 39.5 C max
+2026-10-30 15:49:57   sub 1: 20 batches, lat 413.1 ms, power 8.18 W, 0.282 J/frame, 39.8 C max
+2026-10-30 15:50:15   sub 2: 20 batches, lat 414.3 ms, power 8.19 W, 0.283 J/frame, 39.8 C max
+2026-10-30 15:50:44   sub 3: 20 batches, lat 415.0 ms, power 8.17 W, 0.283 J/frame, 39.8 C max
+2026-10-30 15:50:44 [86/192] order 85: 675.75 MHz yolov8l b=2
+2026-10-30 15:51:01   sub 0: 20 batches, lat 201.6 ms, power 10.74 W, 1.083 J/frame, 39.8 C max
+2026-10-30 15:51:15   sub 1: 20 batches, lat 201.8 ms, power 9.83 W, 0.992 J/frame, 39.8 C max
+2026-10-30 15:51:29   sub 2: 20 batches, lat 202.3 ms, power 9.81 W, 0.993 J/frame, 39.5 C max
+2026-10-30 15:51:53   sub 3: 20 batches, lat 201.4 ms, power 9.81 W, 0.989 J/frame, 39.8 C max
+2026-10-30 15:51:53 [87/192] order 86: 905.25 MHz yolov8m b=1
+2026-10-30 15:52:07   sub 0: 20 batches, lat 58.5 ms, power 13.11 W, 0.769 J/frame, 39.8 C max
+2026-10-30 15:52:18   sub 1: 20 batches, lat 59.9 ms, power 9.55 W, 0.574 J/frame, 39.2 C max
+2026-10-30 15:52:30   sub 2: 20 batches, lat 58.4 ms, power 9.70 W, 0.567 J/frame, 39.2 C max
+2026-10-30 15:52:51   sub 3: 20 batches, lat 58.7 ms, power 9.59 W, 0.564 J/frame, 39.5 C max
+2026-10-30 15:52:51 [88/192] order 87: 420.75 MHz yolov8n b=4
+2026-10-30 15:53:06   sub 0: 20 batches, lat 108.9 ms, power 6.45 W, 0.176 J/frame, 39.0 C max
+2026-10-30 15:53:18   sub 1: 20 batches, lat 113.7 ms, power 5.44 W, 0.155 J/frame, 38.5 C max
+2026-10-30 15:53:31   sub 2: 20 batches, lat 110.5 ms, power 5.50 W, 0.152 J/frame, 38.5 C max
+2026-10-30 15:53:53   sub 3: 20 batches, lat 109.9 ms, power 5.59 W, 0.154 J/frame, 38.5 C max
+2026-10-30 15:53:53 [89/192] order 88: 318.75 MHz yolov8m b=3
+2026-10-30 15:54:13   sub 0: 20 batches, lat 367.7 ms, power 6.07 W, 0.744 J/frame, 38.5 C max
+2026-10-30 15:54:31   sub 1: 20 batches, lat 368.8 ms, power 5.77 W, 0.710 J/frame, 38.8 C max
+2026-10-30 15:54:48   sub 2: 20 batches, lat 368.3 ms, power 5.81 W, 0.714 J/frame, 38.8 C max
+2026-10-30 15:55:16   sub 3: 20 batches, lat 367.7 ms, power 5.81 W, 0.712 J/frame, 38.5 C max
+2026-10-30 15:55:16 [90/192] order 89: 420.75 MHz yolov8m b=16
+2026-10-30 15:56:00   sub 0: 20 batches, lat 1348.1 ms, power 7.99 W, 0.673 J/frame, 39.5 C max
+2026-10-30 15:56:37   sub 1: 20 batches, lat 1347.9 ms, power 7.76 W, 0.654 J/frame, 39.8 C max
+2026-10-30 15:57:14   sub 2: 20 batches, lat 1348.7 ms, power 7.72 W, 0.651 J/frame, 39.8 C max
+2026-10-30 15:58:01   sub 3: 20 batches, lat 1348.5 ms, power 7.76 W, 0.654 J/frame, 40.0 C max
+2026-10-30 15:58:01 [91/192] order 90: 905.25 MHz yolov8l b=3
+2026-10-30 15:58:19   sub 0: 20 batches, lat 223.1 ms, power 14.77 W, 1.099 J/frame, 40.2 C max
+2026-10-30 15:58:33   sub 1: 20 batches, lat 223.2 ms, power 13.48 W, 1.003 J/frame, 40.5 C max
+2026-10-30 15:58:48   sub 2: 20 batches, lat 222.5 ms, power 13.40 W, 0.995 J/frame, 40.5 C max
+2026-10-30 15:59:12   sub 3: 20 batches, lat 222.8 ms, power 13.50 W, 1.003 J/frame, 40.5 C max
+2026-10-30 15:59:12 [92/192] order 91: 420.75 MHz yolov8l b=2
+2026-10-30 15:59:32   sub 0: 20 batches, lat 308.9 ms, power 7.75 W, 1.198 J/frame, 39.8 C max
+2026-10-30 15:59:48   sub 1: 20 batches, lat 309.7 ms, power 7.30 W, 1.131 J/frame, 39.8 C max
+2026-10-30 16:00:04   sub 2: 20 batches, lat 309.6 ms, power 7.23 W, 1.120 J/frame, 39.8 C max
+2026-10-30 16:00:30   sub 3: 20 batches, lat 310.3 ms, power 7.21 W, 1.119 J/frame, 39.5 C max
+2026-10-30 16:00:30 [93/192] order 92: 905.25 MHz yolov8l b=8
+2026-10-30 16:00:55   sub 0: 20 batches, lat 540.5 ms, power 14.59 W, 0.986 J/frame, 41.2 C max
+2026-10-30 16:01:16   sub 1: 20 batches, lat 541.0 ms, power 13.95 W, 0.944 J/frame, 41.2 C max
+2026-10-30 16:01:37   sub 2: 20 batches, lat 540.7 ms, power 13.92 W, 0.941 J/frame, 41.5 C max
+2026-10-30 16:02:07   sub 3: 20 batches, lat 540.4 ms, power 13.96 W, 0.943 J/frame, 41.8 C max
+2026-10-30 16:02:07 [94/192] order 93: 675.75 MHz yolov8m b=3
+2026-10-30 16:02:24   sub 0: 20 batches, lat 185.4 ms, power 10.46 W, 0.647 J/frame, 40.8 C max
+2026-10-30 16:02:38   sub 1: 20 batches, lat 185.6 ms, power 9.52 W, 0.590 J/frame, 40.2 C max
+2026-10-30 16:02:52   sub 2: 20 batches, lat 185.7 ms, power 9.54 W, 0.591 J/frame, 40.2 C max
+2026-10-30 16:03:15   sub 3: 20 batches, lat 185.5 ms, power 9.59 W, 0.594 J/frame, 40.2 C max
+2026-10-30 16:03:15 [95/192] order 94: 216.75 MHz yolov8m b=4
+2026-10-30 16:03:43   sub 0: 20 batches, lat 678.1 ms, power 4.85 W, 0.822 J/frame, 39.5 C max
+2026-10-30 16:04:07   sub 1: 20 batches, lat 679.6 ms, power 4.68 W, 0.796 J/frame, 39.2 C max
+2026-10-30 16:04:31   sub 2: 20 batches, lat 679.0 ms, power 4.67 W, 0.793 J/frame, 39.2 C max
+2026-10-30 16:05:04   sub 3: 20 batches, lat 678.0 ms, power 4.67 W, 0.793 J/frame, 39.0 C max
+2026-10-30 16:05:04 [96/192] order 95: 675.75 MHz yolov8s b=12
+2026-10-30 16:05:24   sub 0: 20 batches, lat 338.4 ms, power 9.90 W, 0.279 J/frame, 39.8 C max
+2026-10-30 16:05:41   sub 1: 20 batches, lat 339.0 ms, power 9.36 W, 0.265 J/frame, 39.8 C max
+2026-10-30 16:05:58   sub 2: 20 batches, lat 338.4 ms, power 9.40 W, 0.265 J/frame, 39.8 C max
+2026-10-30 16:06:25   sub 3: 20 batches, lat 347.4 ms, power 9.27 W, 0.268 J/frame, 39.8 C max
+2026-10-30 16:06:25 [97/192] order 96: 522.75 MHz yolov8n b=1
+2026-10-30 16:06:38   sub 0: 20 batches, lat 32.3 ms, power 5.75 W, 0.186 J/frame, 39.0 C max
+2026-10-30 16:06:49   sub 1: 20 batches, lat 32.0 ms, power 3.98 W, 0.128 J/frame, 38.5 C max
+2026-10-30 16:07:00   sub 2: 20 batches, lat 32.0 ms, power 3.99 W, 0.128 J/frame, 38.5 C max
+2026-10-30 16:07:20   sub 3: 20 batches, lat 32.9 ms, power 4.03 W, 0.133 J/frame, 38.5 C max
+2026-10-30 16:07:20 [98/192] order 97: 420.75 MHz yolov8m b=12
+2026-10-30 16:07:57   sub 0: 20 batches, lat 1024.8 ms, power 7.77 W, 0.664 J/frame, 39.8 C max
+2026-10-30 16:08:27   sub 1: 20 batches, lat 1026.4 ms, power 7.48 W, 0.640 J/frame, 39.8 C max
+2026-10-30 16:08:58   sub 2: 20 batches, lat 1025.0 ms, power 7.55 W, 0.645 J/frame, 39.8 C max
+2026-10-30 16:09:39   sub 3: 20 batches, lat 1026.0 ms, power 7.51 W, 0.642 J/frame, 40.0 C max
+2026-10-30 16:09:39 [99/192] order 98: 522.75 MHz yolov8m b=6
+2026-10-30 16:10:00   sub 0: 20 batches, lat 436.5 ms, power 9.19 W, 0.669 J/frame, 39.8 C max
+2026-10-30 16:10:19   sub 1: 20 batches, lat 438.2 ms, power 8.68 W, 0.634 J/frame, 40.8 C max
+2026-10-30 16:10:38   sub 2: 20 batches, lat 437.7 ms, power 8.72 W, 0.636 J/frame, 40.0 C max
+2026-10-30 16:11:07   sub 3: 20 batches, lat 437.0 ms, power 8.71 W, 0.635 J/frame, 40.0 C max
+2026-10-30 16:11:07 [100/192] order 99: 216.75 MHz yolov8s b=1
+2026-10-30 16:11:22   sub 0: 20 batches, lat 102.8 ms, power 4.51 W, 0.464 J/frame, 39.0 C max
+2026-10-30 16:11:34   sub 1: 20 batches, lat 102.9 ms, power 4.01 W, 0.414 J/frame, 38.8 C max
+2026-10-30 16:11:46   sub 2: 20 batches, lat 103.1 ms, power 4.00 W, 0.413 J/frame, 38.5 C max
+2026-10-30 16:12:08   sub 3: 20 batches, lat 103.1 ms, power 3.99 W, 0.412 J/frame, 38.5 C max
+2026-10-30 16:12:08 [101/192] order 100: 318.75 MHz yolov8l b=6
+2026-10-30 16:12:46   sub 0: 20 batches, lat 1053.1 ms, power 6.28 W, 1.102 J/frame, 39.0 C max
+2026-10-30 16:13:17   sub 1: 20 batches, lat 1052.7 ms, power 6.13 W, 1.075 J/frame, 39.2 C max
+2026-10-30 16:13:48   sub 2: 20 batches, lat 1054.5 ms, power 6.20 W, 1.089 J/frame, 39.0 C max
+2026-10-30 16:14:29   sub 3: 20 batches, lat 1052.7 ms, power 6.09 W, 1.068 J/frame, 39.2 C max
+2026-10-30 16:14:29 [102/192] order 101: 318.75 MHz yolov8n b=2
+2026-10-30 16:14:43   sub 0: 20 batches, lat 75.0 ms, power 5.22 W, 0.196 J/frame, 38.2 C max
+2026-10-30 16:14:55   sub 1: 20 batches, lat 77.9 ms, power 4.27 W, 0.167 J/frame, 38.2 C max
+2026-10-30 16:15:07   sub 2: 20 batches, lat 78.4 ms, power 4.26 W, 0.167 J/frame, 38.2 C max
+2026-10-30 16:15:28   sub 3: 20 batches, lat 82.0 ms, power 4.20 W, 0.172 J/frame, 38.2 C max
+2026-10-30 16:15:28 [103/192] order 102: 905.25 MHz yolov8n b=12
+2026-10-30 16:15:45   sub 0: 20 batches, lat 173.6 ms, power 10.85 W, 0.157 J/frame, 39.0 C max
+2026-10-30 16:15:58   sub 1: 20 batches, lat 173.8 ms, power 9.89 W, 0.143 J/frame, 39.2 C max
+2026-10-30 16:16:12   sub 2: 20 batches, lat 174.2 ms, power 9.86 W, 0.143 J/frame, 39.0 C max
+2026-10-30 16:16:35   sub 3: 20 batches, lat 173.3 ms, power 9.92 W, 0.143 J/frame, 39.0 C max
+2026-10-30 16:16:35 [104/192] order 103: 420.75 MHz yolov8s b=12
+2026-10-30 16:16:59   sub 0: 20 batches, lat 494.3 ms, power 7.65 W, 0.315 J/frame, 39.8 C max
+2026-10-30 16:17:19   sub 1: 20 batches, lat 494.1 ms, power 7.29 W, 0.301 J/frame, 39.0 C max
+2026-10-30 16:17:38   sub 2: 20 batches, lat 495.1 ms, power 7.32 W, 0.302 J/frame, 39.0 C max
+2026-10-30 16:18:08   sub 3: 20 batches, lat 495.3 ms, power 7.28 W, 0.301 J/frame, 39.2 C max
+2026-10-30 16:18:08 [105/192] order 104: 216.75 MHz yolov8n b=6
+2026-10-30 16:18:27   sub 0: 20 batches, lat 279.8 ms, power 4.42 W, 0.206 J/frame, 38.5 C max
+2026-10-30 16:18:43   sub 1: 20 batches, lat 280.6 ms, power 4.22 W, 0.198 J/frame, 38.2 C max
+2026-10-30 16:18:58   sub 2: 20 batches, lat 280.8 ms, power 4.22 W, 0.198 J/frame, 38.2 C max
+2026-10-30 16:19:24   sub 3: 20 batches, lat 281.4 ms, power 4.22 W, 0.198 J/frame, 38.2 C max
+2026-10-30 16:19:24 [106/192] order 105: 522.75 MHz yolov8s b=6
+2026-10-30 16:19:42   sub 0: 20 batches, lat 218.4 ms, power 8.63 W, 0.314 J/frame, 38.5 C max
+2026-10-30 16:19:56   sub 1: 20 batches, lat 220.6 ms, power 7.81 W, 0.287 J/frame, 38.8 C max
+2026-10-30 16:20:10   sub 2: 20 batches, lat 219.8 ms, power 7.86 W, 0.288 J/frame, 38.8 C max
+2026-10-30 16:20:35   sub 3: 20 batches, lat 219.9 ms, power 7.82 W, 0.287 J/frame, 38.8 C max
+2026-10-30 16:20:35 [107/192] order 106: 522.75 MHz yolov8s b=2
+2026-10-30 16:20:50   sub 0: 20 batches, lat 85.2 ms, power 8.24 W, 0.351 J/frame, 38.5 C max
+2026-10-30 16:21:01   sub 1: 20 batches, lat 87.1 ms, power 6.47 W, 0.282 J/frame, 38.2 C max
+2026-10-30 16:21:13   sub 2: 20 batches, lat 88.3 ms, power 6.50 W, 0.287 J/frame, 38.2 C max
+2026-10-30 16:21:35   sub 3: 20 batches, lat 87.3 ms, power 6.42 W, 0.280 J/frame, 38.2 C max
+2026-10-30 16:21:35 [108/192] order 107: 905.25 MHz yolov8s b=16
+2026-10-30 16:21:55   sub 0: 20 batches, lat 362.3 ms, power 12.34 W, 0.280 J/frame, 39.5 C max
+2026-10-30 16:22:13   sub 1: 20 batches, lat 362.5 ms, power 11.70 W, 0.265 J/frame, 39.5 C max
+2026-10-30 16:22:30   sub 2: 20 batches, lat 362.2 ms, power 11.72 W, 0.265 J/frame, 39.8 C max
+2026-10-30 16:22:57   sub 3: 20 batches, lat 362.6 ms, power 11.74 W, 0.266 J/frame, 40.0 C max
+2026-10-30 16:22:57 [109/192] order 108: 905.25 MHz yolov8s b=6
+2026-10-30 16:23:13   sub 0: 20 batches, lat 146.8 ms, power 12.48 W, 0.306 J/frame, 39.5 C max
+2026-10-30 16:23:26   sub 1: 20 batches, lat 146.6 ms, power 11.00 W, 0.269 J/frame, 39.2 C max
+2026-10-30 16:23:39   sub 2: 20 batches, lat 147.8 ms, power 10.96 W, 0.270 J/frame, 39.5 C max
+2026-10-30 16:24:02   sub 3: 20 batches, lat 147.9 ms, power 11.03 W, 0.272 J/frame, 39.2 C max
+2026-10-30 16:24:02 [110/192] order 109: 905.25 MHz yolov8s b=3
+2026-10-30 16:24:17   sub 0: 20 batches, lat 79.4 ms, power 12.29 W, 0.326 J/frame, 39.5 C max
+2026-10-30 16:24:28   sub 1: 20 batches, lat 78.3 ms, power 9.92 W, 0.259 J/frame, 39.0 C max
+2026-10-30 16:24:40   sub 2: 20 batches, lat 78.2 ms, power 9.95 W, 0.260 J/frame, 39.0 C max
+2026-10-30 16:25:02   sub 3: 20 batches, lat 78.3 ms, power 9.93 W, 0.260 J/frame, 39.0 C max
+2026-10-30 16:25:02 [111/192] order 110: 216.75 MHz yolov8l b=12
+2026-10-30 16:26:28   sub 0: 20 batches, lat 3000.9 ms, power 4.75 W, 1.188 J/frame, 39.0 C max
+2026-10-30 16:27:38   sub 1: 20 batches, lat 2998.9 ms, power 4.64 W, 1.159 J/frame, 39.0 C max
+2026-10-30 16:28:48   sub 2: 20 batches, lat 2999.8 ms, power 4.64 W, 1.161 J/frame, 39.0 C max
+2026-10-30 16:30:08   sub 3: 20 batches, lat 3001.4 ms, power 4.63 W, 1.158 J/frame, 39.0 C max
+2026-10-30 16:30:08 [112/192] order 111: 420.75 MHz yolov8s b=2
+2026-10-30 16:30:23   sub 0: 20 batches, lat 103.9 ms, power 6.83 W, 0.355 J/frame, 38.5 C max
+2026-10-30 16:30:35   sub 1: 20 batches, lat 104.2 ms, power 5.98 W, 0.312 J/frame, 38.8 C max
+2026-10-30 16:30:47   sub 2: 20 batches, lat 105.8 ms, power 5.78 W, 0.306 J/frame, 38.2 C max
+2026-10-30 16:31:09   sub 3: 20 batches, lat 104.3 ms, power 5.94 W, 0.310 J/frame, 38.2 C max
+2026-10-30 16:31:09 [113/192] order 112: 318.75 MHz yolov8s b=1
+2026-10-30 16:31:24   sub 0: 20 batches, lat 73.1 ms, power 5.36 W, 0.392 J/frame, 38.0 C max
+2026-10-30 16:31:35   sub 1: 20 batches, lat 75.4 ms, power 4.37 W, 0.330 J/frame, 38.0 C max
+2026-10-30 16:31:47   sub 2: 20 batches, lat 74.8 ms, power 4.38 W, 0.328 J/frame, 38.0 C max
+2026-10-30 16:32:08   sub 3: 20 batches, lat 74.3 ms, power 4.37 W, 0.325 J/frame, 37.8 C max
+2026-10-30 16:32:08 [114/192] order 113: 318.75 MHz yolov8m b=2
+2026-10-30 16:32:27   sub 0: 20 batches, lat 262.5 ms, power 5.95 W, 0.781 J/frame, 38.0 C max
+2026-10-30 16:32:42   sub 1: 20 batches, lat 263.1 ms, power 5.55 W, 0.731 J/frame, 38.2 C max
+2026-10-30 16:32:57   sub 2: 20 batches, lat 263.3 ms, power 5.56 W, 0.733 J/frame, 38.0 C max
+2026-10-30 16:33:23   sub 3: 20 batches, lat 263.8 ms, power 5.53 W, 0.730 J/frame, 38.0 C max
+2026-10-30 16:33:23 [115/192] order 114: 675.75 MHz yolov8l b=16
+2026-10-30 16:34:07   sub 0: 20 batches, lat 1341.8 ms, power 10.70 W, 0.897 J/frame, 40.2 C max
+2026-10-30 16:34:44   sub 1: 20 batches, lat 1342.6 ms, power 10.44 W, 0.877 J/frame, 40.5 C max
+2026-10-30 16:35:21   sub 2: 20 batches, lat 1342.4 ms, power 10.49 W, 0.880 J/frame, 41.2 C max
+2026-10-30 16:36:08   sub 3: 20 batches, lat 1341.7 ms, power 10.45 W, 0.877 J/frame, 41.8 C max
+2026-10-30 16:36:08 [116/192] order 115: 420.75 MHz yolov8s b=6
+2026-10-30 16:36:26   sub 0: 20 batches, lat 261.2 ms, power 7.68 W, 0.335 J/frame, 40.5 C max
+2026-10-30 16:36:41   sub 1: 20 batches, lat 262.4 ms, power 7.09 W, 0.310 J/frame, 40.5 C max
+2026-10-30 16:36:57   sub 2: 20 batches, lat 261.5 ms, power 7.16 W, 0.312 J/frame, 40.2 C max
+2026-10-30 16:37:22   sub 3: 20 batches, lat 261.2 ms, power 7.12 W, 0.310 J/frame, 40.2 C max
+2026-10-30 16:37:22 [117/192] order 116: 216.75 MHz yolov8s b=4
+2026-10-30 16:37:42   sub 0: 20 batches, lat 331.2 ms, power 4.71 W, 0.390 J/frame, 39.8 C max
+2026-10-30 16:37:59   sub 1: 20 batches, lat 333.7 ms, power 4.48 W, 0.374 J/frame, 39.5 C max
+2026-10-30 16:38:15   sub 2: 20 batches, lat 332.3 ms, power 4.47 W, 0.371 J/frame, 39.5 C max
+2026-10-30 16:38:42   sub 3: 20 batches, lat 331.8 ms, power 4.49 W, 0.372 J/frame, 39.2 C max
+2026-10-30 16:38:42 [118/192] order 117: 675.75 MHz yolov8m b=16
+2026-10-30 16:39:15   sub 0: 20 batches, lat 886.4 ms, power 10.83 W, 0.600 J/frame, 41.0 C max
+2026-10-30 16:39:43   sub 1: 20 batches, lat 886.9 ms, power 10.46 W, 0.580 J/frame, 41.2 C max
+2026-10-30 16:40:11   sub 2: 20 batches, lat 886.0 ms, power 10.46 W, 0.580 J/frame, 41.8 C max
+2026-10-30 16:40:48   sub 3: 20 batches, lat 886.2 ms, power 10.38 W, 0.575 J/frame, 41.8 C max
+2026-10-30 16:40:48 [119/192] order 118: 675.75 MHz yolov8s b=3
+2026-10-30 16:41:03   sub 0: 20 batches, lat 97.7 ms, power 9.72 W, 0.317 J/frame, 40.8 C max
+2026-10-30 16:41:15   sub 1: 20 batches, lat 99.3 ms, power 8.24 W, 0.273 J/frame, 40.5 C max
+2026-10-30 16:41:27   sub 2: 20 batches, lat 99.1 ms, power 8.23 W, 0.272 J/frame, 40.5 C max
+2026-10-30 16:41:49   sub 3: 20 batches, lat 99.5 ms, power 8.16 W, 0.271 J/frame, 40.2 C max
+2026-10-30 16:41:49 [120/192] order 119: 420.75 MHz yolov8s b=4
+2026-10-30 16:42:06   sub 0: 20 batches, lat 179.5 ms, power 7.57 W, 0.340 J/frame, 40.2 C max
+2026-10-30 16:42:20   sub 1: 20 batches, lat 181.5 ms, power 6.78 W, 0.308 J/frame, 40.0 C max
+2026-10-30 16:42:33   sub 2: 20 batches, lat 180.0 ms, power 6.77 W, 0.305 J/frame, 40.0 C max
+2026-10-30 16:42:57   sub 3: 20 batches, lat 180.2 ms, power 6.79 W, 0.306 J/frame, 40.0 C max
+2026-10-30 16:42:57 [121/192] order 120: 420.75 MHz yolov8n b=12
+2026-10-30 16:43:16   sub 0: 20 batches, lat 292.9 ms, power 7.07 W, 0.173 J/frame, 40.0 C max
+2026-10-30 16:43:32   sub 1: 20 batches, lat 296.3 ms, power 6.56 W, 0.162 J/frame, 40.0 C max
+2026-10-30 16:43:48   sub 2: 20 batches, lat 293.6 ms, power 6.59 W, 0.161 J/frame, 39.8 C max
+2026-10-30 16:44:14   sub 3: 20 batches, lat 293.5 ms, power 6.63 W, 0.162 J/frame, 40.0 C max
+2026-10-30 16:44:14 [122/192] order 121: 905.25 MHz yolov8s b=4
+2026-10-30 16:44:29   sub 0: 20 batches, lat 98.8 ms, power 12.30 W, 0.304 J/frame, 40.0 C max
+2026-10-30 16:44:41   sub 1: 20 batches, lat 99.4 ms, power 10.38 W, 0.258 J/frame, 40.0 C max
+2026-10-30 16:44:53   sub 2: 20 batches, lat 100.9 ms, power 10.24 W, 0.259 J/frame, 40.0 C max
+2026-10-30 16:45:15   sub 3: 20 batches, lat 99.4 ms, power 10.31 W, 0.256 J/frame, 40.0 C max
+2026-10-30 16:45:15 [123/192] order 122: 675.75 MHz yolov8m b=6
+2026-10-30 16:45:35   sub 0: 20 batches, lat 349.8 ms, power 10.86 W, 0.634 J/frame, 40.5 C max
+2026-10-30 16:45:52   sub 1: 20 batches, lat 350.3 ms, power 10.26 W, 0.599 J/frame, 40.5 C max
+2026-10-30 16:46:09   sub 2: 20 batches, lat 350.0 ms, power 10.24 W, 0.598 J/frame, 40.5 C max
+2026-10-30 16:46:36   sub 3: 20 batches, lat 350.1 ms, power 10.23 W, 0.597 J/frame, 40.5 C max
+2026-10-30 16:46:36 [124/192] order 123: 216.75 MHz yolov8l b=3
+2026-10-30 16:47:08   sub 0: 20 batches, lat 829.0 ms, power 4.87 W, 1.346 J/frame, 39.8 C max
+2026-10-30 16:47:34   sub 1: 20 batches, lat 829.5 ms, power 4.71 W, 1.304 J/frame, 39.8 C max
+2026-10-30 16:48:01   sub 2: 20 batches, lat 829.1 ms, power 4.72 W, 1.304 J/frame, 39.2 C max
+2026-10-30 16:48:37   sub 3: 20 batches, lat 830.2 ms, power 4.74 W, 1.311 J/frame, 39.5 C max
+2026-10-30 16:48:38 [125/192] order 124: 420.75 MHz yolov8n b=8
+2026-10-30 16:48:55   sub 0: 20 batches, lat 201.2 ms, power 6.94 W, 0.175 J/frame, 39.5 C max
+2026-10-30 16:49:09   sub 1: 20 batches, lat 201.9 ms, power 6.34 W, 0.160 J/frame, 39.2 C max
+2026-10-30 16:49:23   sub 2: 20 batches, lat 202.8 ms, power 6.35 W, 0.161 J/frame, 39.0 C max
+2026-10-30 16:49:47   sub 3: 20 batches, lat 202.9 ms, power 6.28 W, 0.160 J/frame, 39.0 C max
+2026-10-30 16:49:47 [126/192] order 125: 522.75 MHz yolov8m b=12
+2026-10-30 16:50:19   sub 0: 20 batches, lat 839.6 ms, power 9.13 W, 0.639 J/frame, 40.0 C max
+2026-10-30 16:50:46   sub 1: 20 batches, lat 839.7 ms, power 8.82 W, 0.617 J/frame, 40.2 C max
+2026-10-30 16:51:12   sub 2: 20 batches, lat 840.0 ms, power 8.77 W, 0.614 J/frame, 40.5 C max
+2026-10-30 16:51:49   sub 3: 20 batches, lat 839.5 ms, power 8.79 W, 0.615 J/frame, 40.5 C max
+2026-10-30 16:51:49 [127/192] order 126: 522.75 MHz yolov8s b=1
+2026-10-30 16:52:03   sub 0: 20 batches, lat 45.3 ms, power 8.05 W, 0.365 J/frame, 39.5 C max
+2026-10-30 16:52:14   sub 1: 20 batches, lat 50.8 ms, power 5.12 W, 0.260 J/frame, 39.0 C max
+2026-10-30 16:52:25   sub 2: 20 batches, lat 48.1 ms, power 5.14 W, 0.248 J/frame, 39.0 C max
+2026-10-30 16:52:46   sub 3: 20 batches, lat 51.0 ms, power 5.10 W, 0.261 J/frame, 38.8 C max
+2026-10-30 16:52:46 [128/192] order 127: 675.75 MHz yolov8m b=2
+2026-10-30 16:53:02   sub 0: 20 batches, lat 132.2 ms, power 10.29 W, 0.680 J/frame, 39.5 C max
+2026-10-30 16:53:15   sub 1: 20 batches, lat 132.9 ms, power 9.04 W, 0.601 J/frame, 39.5 C max
+2026-10-30 16:53:27   sub 2: 20 batches, lat 132.2 ms, power 9.07 W, 0.600 J/frame, 39.5 C max
+2026-10-30 16:53:50   sub 3: 20 batches, lat 132.4 ms, power 9.05 W, 0.599 J/frame, 39.5 C max
+2026-10-30 16:53:50 [129/192] order 128: 216.75 MHz yolov8l b=16
+2026-10-30 16:55:39   sub 0: 20 batches, lat 3924.0 ms, power 5.08 W, 1.246 J/frame, 39.2 C max
+2026-10-30 16:57:08   sub 1: 20 batches, lat 3925.8 ms, power 5.04 W, 1.237 J/frame, 39.2 C max
+2026-10-30 16:58:36   sub 2: 20 batches, lat 3926.5 ms, power 5.04 W, 1.238 J/frame, 39.0 C max
+2026-10-30 17:00:15   sub 3: 20 batches, lat 3930.8 ms, power 5.03 W, 1.236 J/frame, 39.0 C max
+2026-10-30 17:00:15 [130/192] order 129: 420.75 MHz yolov8s b=3
+2026-10-30 17:00:31   sub 0: 20 batches, lat 143.6 ms, power 7.06 W, 0.338 J/frame, 38.8 C max
+2026-10-30 17:00:44   sub 1: 20 batches, lat 145.4 ms, power 6.27 W, 0.304 J/frame, 38.8 C max
+2026-10-30 17:00:57   sub 2: 20 batches, lat 143.1 ms, power 6.48 W, 0.310 J/frame, 38.5 C max
+2026-10-30 17:01:20   sub 3: 20 batches, lat 144.0 ms, power 6.26 W, 0.301 J/frame, 38.5 C max
+2026-10-30 17:01:20 [131/192] order 130: 905.25 MHz yolov8l b=1
+2026-10-30 17:01:35   sub 0: 20 batches, lat 87.9 ms, power 13.86 W, 1.221 J/frame, 39.2 C max
+2026-10-30 17:01:46   sub 1: 20 batches, lat 88.1 ms, power 11.23 W, 0.991 J/frame, 39.0 C max
+2026-10-30 17:01:58   sub 2: 20 batches, lat 88.1 ms, power 11.27 W, 0.994 J/frame, 39.2 C max
+2026-10-30 17:02:20   sub 3: 20 batches, lat 88.2 ms, power 11.23 W, 0.992 J/frame, 39.0 C max
+2026-10-30 17:02:20 [132/192] order 131: 216.75 MHz yolov8l b=4
+2026-10-30 17:02:57   sub 0: 20 batches, lat 1052.3 ms, power 4.70 W, 1.237 J/frame, 38.8 C max
+2026-10-30 17:03:28   sub 1: 20 batches, lat 1052.8 ms, power 4.58 W, 1.206 J/frame, 38.8 C max
+2026-10-30 17:03:59   sub 2: 20 batches, lat 1052.3 ms, power 4.57 W, 1.202 J/frame, 38.5 C max
+2026-10-30 17:04:40   sub 3: 20 batches, lat 1053.6 ms, power 4.57 W, 1.203 J/frame, 38.5 C max
+2026-10-30 17:04:41 [133/192] order 132: 522.75 MHz yolov8l b=8
+2026-10-30 17:05:13   sub 0: 20 batches, lat 860.5 ms, power 9.33 W, 1.004 J/frame, 39.5 C max
+2026-10-30 17:05:40   sub 1: 20 batches, lat 861.4 ms, power 9.00 W, 0.969 J/frame, 39.8 C max
+2026-10-30 17:06:08   sub 2: 20 batches, lat 861.7 ms, power 9.00 W, 0.969 J/frame, 40.0 C max
+2026-10-30 17:06:45   sub 3: 20 batches, lat 861.2 ms, power 9.02 W, 0.972 J/frame, 40.0 C max
+2026-10-30 17:06:45 [134/192] order 133: 905.25 MHz yolov8l b=4
+2026-10-30 17:07:04   sub 0: 20 batches, lat 282.8 ms, power 14.30 W, 1.012 J/frame, 40.5 C max
+2026-10-30 17:07:19   sub 1: 20 batches, lat 283.7 ms, power 13.30 W, 0.944 J/frame, 40.5 C max
+2026-10-30 17:07:35   sub 2: 20 batches, lat 282.7 ms, power 13.25 W, 0.937 J/frame, 40.5 C max
+2026-10-30 17:08:01   sub 3: 20 batches, lat 282.7 ms, power 13.27 W, 0.939 J/frame, 40.8 C max
+2026-10-30 17:08:01 [135/192] order 134: 420.75 MHz yolov8m b=2
+2026-10-30 17:08:18   sub 0: 20 batches, lat 201.3 ms, power 7.21 W, 0.726 J/frame, 39.5 C max
+2026-10-30 17:08:32   sub 1: 20 batches, lat 201.4 ms, power 6.70 W, 0.675 J/frame, 39.2 C max
+2026-10-30 17:08:46   sub 2: 20 batches, lat 201.7 ms, power 6.61 W, 0.667 J/frame, 39.2 C max
+2026-10-30 17:09:10   sub 3: 20 batches, lat 201.2 ms, power 6.70 W, 0.675 J/frame, 39.2 C max
+2026-10-30 17:09:10 [136/192] order 135: 216.75 MHz yolov8m b=6
+2026-10-30 17:09:46   sub 0: 20 batches, lat 1001.8 ms, power 4.81 W, 0.803 J/frame, 38.8 C max
+2026-10-30 17:10:16   sub 1: 20 batches, lat 1001.0 ms, power 4.68 W, 0.781 J/frame, 38.8 C max
+2026-10-30 17:10:46   sub 2: 20 batches, lat 1001.0 ms, power 4.70 W, 0.784 J/frame, 38.5 C max
+2026-10-30 17:11:26   sub 3: 20 batches, lat 1002.5 ms, power 4.65 W, 0.777 J/frame, 38.8 C max
+2026-10-30 17:11:26 [137/192] order 136: 905.25 MHz yolov8m b=8
+2026-10-30 17:11:47   sub 0: 20 batches, lat 364.2 ms, power 14.12 W, 0.643 J/frame, 40.0 C max
+2026-10-30 17:12:04   sub 1: 20 batches, lat 364.5 ms, power 13.31 W, 0.607 J/frame, 40.2 C max
+2026-10-30 17:12:21   sub 2: 20 batches, lat 364.4 ms, power 13.31 W, 0.606 J/frame, 40.2 C max
+2026-10-30 17:12:49   sub 3: 20 batches, lat 364.4 ms, power 13.30 W, 0.606 J/frame, 40.5 C max
+2026-10-30 17:12:49 [138/192] order 137: 522.75 MHz yolov8m b=3
+2026-10-30 17:13:07   sub 0: 20 batches, lat 229.9 ms, power 9.03 W, 0.692 J/frame, 39.5 C max
+2026-10-30 17:13:21   sub 1: 20 batches, lat 231.5 ms, power 8.25 W, 0.637 J/frame, 39.2 C max
+2026-10-30 17:13:36   sub 2: 20 batches, lat 230.2 ms, power 8.29 W, 0.637 J/frame, 39.2 C max
+2026-10-30 17:14:00   sub 3: 20 batches, lat 230.6 ms, power 8.27 W, 0.637 J/frame, 39.2 C max
+2026-10-30 17:14:00 [139/192] order 138: 318.75 MHz yolov8n b=6
+2026-10-30 17:14:18   sub 0: 20 batches, lat 199.9 ms, power 5.43 W, 0.181 J/frame, 38.5 C max
+2026-10-30 17:14:32   sub 1: 20 batches, lat 199.8 ms, power 5.13 W, 0.171 J/frame, 38.5 C max
+2026-10-30 17:14:46   sub 2: 20 batches, lat 200.2 ms, power 5.19 W, 0.173 J/frame, 38.2 C max
+2026-10-30 17:15:10   sub 3: 20 batches, lat 199.4 ms, power 5.16 W, 0.172 J/frame, 38.2 C max
+2026-10-30 17:15:10 [140/192] order 139: 318.75 MHz yolov8l b=8
+2026-10-30 17:15:55   sub 0: 20 batches, lat 1380.4 ms, power 6.20 W, 1.069 J/frame, 38.8 C max
+2026-10-30 17:16:33   sub 1: 20 batches, lat 1381.8 ms, power 6.00 W, 1.037 J/frame, 38.8 C max
+2026-10-30 17:17:10   sub 2: 20 batches, lat 1382.3 ms, power 6.00 W, 1.037 J/frame, 39.0 C max
+2026-10-30 17:17:58   sub 3: 20 batches, lat 1381.1 ms, power 6.02 W, 1.039 J/frame, 38.8 C max
+2026-10-30 17:17:58 [141/192] order 140: 318.75 MHz yolov8l b=1
+2026-10-30 17:18:16   sub 0: 20 batches, lat 224.2 ms, power 6.17 W, 1.385 J/frame, 38.2 C max
+2026-10-30 17:18:30   sub 1: 20 batches, lat 223.8 ms, power 5.73 W, 1.282 J/frame, 38.2 C max
+2026-10-30 17:18:45   sub 2: 20 batches, lat 225.1 ms, power 5.67 W, 1.277 J/frame, 38.2 C max
+2026-10-30 17:19:09   sub 3: 20 batches, lat 224.6 ms, power 5.74 W, 1.290 J/frame, 38.8 C max
+2026-10-30 17:19:09 [142/192] order 141: 318.75 MHz yolov8m b=1
+2026-10-30 17:19:25   sub 0: 20 batches, lat 146.2 ms, power 5.74 W, 0.841 J/frame, 38.0 C max
+2026-10-30 17:19:38   sub 1: 20 batches, lat 147.0 ms, power 5.19 W, 0.763 J/frame, 37.8 C max
+2026-10-30 17:19:51   sub 2: 20 batches, lat 147.5 ms, power 5.21 W, 0.769 J/frame, 37.8 C max
+2026-10-30 17:20:14   sub 3: 20 batches, lat 147.9 ms, power 5.22 W, 0.774 J/frame, 37.8 C max
+2026-10-30 17:20:14 [143/192] order 142: 216.75 MHz yolov8m b=1
+2026-10-30 17:20:32   sub 0: 20 batches, lat 210.2 ms, power 4.76 W, 1.002 J/frame, 37.8 C max
+2026-10-30 17:20:46   sub 1: 20 batches, lat 210.3 ms, power 4.51 W, 0.950 J/frame, 37.8 C max
+2026-10-30 17:21:00   sub 2: 20 batches, lat 210.5 ms, power 4.50 W, 0.948 J/frame, 37.8 C max
+2026-10-30 17:21:24   sub 3: 20 batches, lat 210.0 ms, power 4.49 W, 0.943 J/frame, 37.8 C max
+2026-10-30 17:21:24 [144/192] order 143: 420.75 MHz yolov8m b=4
+2026-10-30 17:21:45   sub 0: 20 batches, lat 360.9 ms, power 7.43 W, 0.670 J/frame, 38.2 C max
+2026-10-30 17:22:02   sub 1: 20 batches, lat 360.8 ms, power 7.07 W, 0.638 J/frame, 38.5 C max
+2026-10-30 17:22:19   sub 2: 20 batches, lat 361.4 ms, power 7.14 W, 0.645 J/frame, 38.5 C max
+2026-10-30 17:22:46   sub 3: 20 batches, lat 360.1 ms, power 7.13 W, 0.642 J/frame, 38.5 C max
+2026-10-30 17:22:46 [145/192] order 144: 318.75 MHz yolov8l b=12
+2026-10-30 17:23:49   sub 0: 20 batches, lat 2076.0 ms, power 5.96 W, 1.031 J/frame, 38.8 C max
+2026-10-30 17:24:40   sub 1: 20 batches, lat 2063.1 ms, power 5.88 W, 1.011 J/frame, 38.8 C max
+2026-10-30 17:25:32   sub 2: 20 batches, lat 2064.9 ms, power 5.87 W, 1.010 J/frame, 39.0 C max
+2026-10-30 17:26:33   sub 3: 20 batches, lat 2065.8 ms, power 5.87 W, 1.010 J/frame, 39.2 C max
+2026-10-30 17:26:33 [146/192] order 145: 420.75 MHz yolov8m b=8
+2026-10-30 17:27:02   sub 0: 20 batches, lat 697.2 ms, power 7.89 W, 0.688 J/frame, 39.2 C max
+2026-10-30 17:27:26   sub 1: 20 batches, lat 697.6 ms, power 7.63 W, 0.666 J/frame, 39.2 C max
+2026-10-30 17:27:50   sub 2: 20 batches, lat 698.4 ms, power 7.61 W, 0.664 J/frame, 39.2 C max
+2026-10-30 17:28:24   sub 3: 20 batches, lat 697.0 ms, power 7.68 W, 0.669 J/frame, 39.5 C max
+2026-10-30 17:28:24 [147/192] order 146: 522.75 MHz yolov8l b=12
+2026-10-30 17:29:07   sub 0: 20 batches, lat 1285.1 ms, power 9.28 W, 0.994 J/frame, 40.5 C max
+2026-10-30 17:29:43   sub 1: 20 batches, lat 1287.6 ms, power 8.93 W, 0.959 J/frame, 40.5 C max
+2026-10-30 17:30:18   sub 2: 20 batches, lat 1287.2 ms, power 8.96 W, 0.961 J/frame, 40.8 C max
+2026-10-30 17:31:04   sub 3: 20 batches, lat 1286.7 ms, power 8.94 W, 0.959 J/frame, 41.0 C max
+2026-10-30 17:31:04 [148/192] order 147: 216.75 MHz yolov8n b=1
+2026-10-30 17:31:18   sub 0: 20 batches, lat 58.3 ms, power 4.20 W, 0.245 J/frame, 39.0 C max
+2026-10-30 17:31:30   sub 1: 20 batches, lat 58.1 ms, power 3.47 W, 0.202 J/frame, 39.0 C max
+2026-10-30 17:31:41   sub 2: 20 batches, lat 58.1 ms, power 3.47 W, 0.202 J/frame, 39.0 C max
+2026-10-30 17:32:02   sub 3: 20 batches, lat 58.1 ms, power 3.49 W, 0.203 J/frame, 38.5 C max
+2026-10-30 17:32:02 [149/192] order 148: 522.75 MHz yolov8n b=12
+2026-10-30 17:32:20   sub 0: 20 batches, lat 248.4 ms, power 7.93 W, 0.164 J/frame, 39.2 C max
+2026-10-30 17:32:35   sub 1: 20 batches, lat 250.3 ms, power 7.26 W, 0.151 J/frame, 39.0 C max
+2026-10-30 17:32:50   sub 2: 20 batches, lat 250.2 ms, power 7.26 W, 0.151 J/frame, 39.2 C max
+2026-10-30 17:33:15   sub 3: 20 batches, lat 249.8 ms, power 7.28 W, 0.152 J/frame, 39.0 C max
+2026-10-30 17:33:15 [150/192] order 149: 216.75 MHz yolov8m b=16
+2026-10-30 17:34:30   sub 0: 20 batches, lat 2543.0 ms, power 4.80 W, 0.763 J/frame, 39.0 C max
+2026-10-30 17:35:31   sub 1: 20 batches, lat 2544.1 ms, power 4.69 W, 0.745 J/frame, 38.8 C max
+2026-10-30 17:36:31   sub 2: 20 batches, lat 2542.5 ms, power 4.69 W, 0.746 J/frame, 38.8 C max
+2026-10-30 17:37:42   sub 3: 20 batches, lat 2546.1 ms, power 4.67 W, 0.743 J/frame, 38.8 C max
+2026-10-30 17:37:42 [151/192] order 150: 216.75 MHz yolov8n b=4
+2026-10-30 17:37:59   sub 0: 20 batches, lat 193.0 ms, power 4.53 W, 0.219 J/frame, 38.0 C max
+2026-10-30 17:38:13   sub 1: 20 batches, lat 196.0 ms, power 4.24 W, 0.208 J/frame, 38.0 C max
+2026-10-30 17:38:27   sub 2: 20 batches, lat 192.7 ms, power 4.26 W, 0.206 J/frame, 37.8 C max
+2026-10-30 17:38:51   sub 3: 20 batches, lat 193.2 ms, power 4.26 W, 0.206 J/frame, 37.8 C max
+2026-10-30 17:38:51 [152/192] order 151: 675.75 MHz yolov8s b=6
+2026-10-30 17:39:08   sub 0: 20 batches, lat 178.7 ms, power 9.84 W, 0.293 J/frame, 38.2 C max
+2026-10-30 17:39:21   sub 1: 20 batches, lat 180.4 ms, power 8.95 W, 0.270 J/frame, 38.5 C max
+2026-10-30 17:39:35   sub 2: 20 batches, lat 179.2 ms, power 8.99 W, 0.269 J/frame, 38.5 C max
+2026-10-30 17:39:59   sub 3: 20 batches, lat 178.9 ms, power 8.99 W, 0.268 J/frame, 38.5 C max
+2026-10-30 17:39:59 [153/192] order 152: 216.75 MHz yolov8s b=16
+2026-10-30 17:40:40   sub 0: 20 batches, lat 1201.9 ms, power 4.53 W, 0.340 J/frame, 38.2 C max
+2026-10-30 17:41:14   sub 1: 20 batches, lat 1200.2 ms, power 4.46 W, 0.335 J/frame, 38.2 C max
+2026-10-30 17:41:48   sub 2: 20 batches, lat 1199.3 ms, power 4.44 W, 0.333 J/frame, 38.2 C max
+2026-10-30 17:42:32   sub 3: 20 batches, lat 1200.0 ms, power 4.44 W, 0.333 J/frame, 38.2 C max
+2026-10-30 17:42:32 [154/192] order 153: 905.25 MHz yolov8l b=6
+2026-10-30 17:42:53   sub 0: 20 batches, lat 411.8 ms, power 14.59 W, 1.002 J/frame, 39.8 C max
+2026-10-30 17:43:12   sub 1: 20 batches, lat 412.4 ms, power 13.81 W, 0.949 J/frame, 40.0 C max
+2026-10-30 17:43:30   sub 2: 20 batches, lat 411.7 ms, power 13.80 W, 0.947 J/frame, 40.2 C max
+2026-10-30 17:43:58   sub 3: 20 batches, lat 411.5 ms, power 13.85 W, 0.950 J/frame, 40.2 C max
+2026-10-30 17:43:58 [155/192] order 154: 675.75 MHz yolov8n b=8
+2026-10-30 17:44:14   sub 0: 20 batches, lat 142.0 ms, power 8.79 W, 0.156 J/frame, 39.0 C max
+2026-10-30 17:44:27   sub 1: 20 batches, lat 143.8 ms, power 7.99 W, 0.144 J/frame, 38.8 C max
+2026-10-30 17:44:40   sub 2: 20 batches, lat 142.5 ms, power 7.92 W, 0.141 J/frame, 38.8 C max
+2026-10-30 17:45:03   sub 3: 20 batches, lat 143.8 ms, power 7.86 W, 0.142 J/frame, 38.8 C max
+2026-10-30 17:45:03 [156/192] order 155: 522.75 MHz yolov8m b=2
+2026-10-30 17:45:19   sub 0: 20 batches, lat 164.0 ms, power 8.89 W, 0.730 J/frame, 39.0 C max
+2026-10-30 17:45:32   sub 1: 20 batches, lat 165.4 ms, power 7.77 W, 0.643 J/frame, 38.8 C max
+2026-10-30 17:45:46   sub 2: 20 batches, lat 165.9 ms, power 7.90 W, 0.656 J/frame, 38.8 C max
+2026-10-30 17:46:09   sub 3: 20 batches, lat 164.6 ms, power 7.83 W, 0.645 J/frame, 38.5 C max
+2026-10-30 17:46:09 [157/192] order 156: 905.25 MHz yolov8m b=16
+2026-10-30 17:46:38   sub 0: 20 batches, lat 698.7 ms, power 14.07 W, 0.615 J/frame, 40.5 C max
+2026-10-30 17:47:02   sub 1: 20 batches, lat 700.3 ms, power 13.43 W, 0.588 J/frame, 41.0 C max
+2026-10-30 17:47:26   sub 2: 20 batches, lat 700.5 ms, power 13.45 W, 0.589 J/frame, 41.2 C max
+2026-10-30 17:48:00   sub 3: 20 batches, lat 699.5 ms, power 13.50 W, 0.591 J/frame, 41.2 C max
+2026-10-30 17:48:00 [158/192] order 157: 675.75 MHz yolov8s b=8
+2026-10-30 17:48:17   sub 0: 20 batches, lat 232.5 ms, power 9.82 W, 0.286 J/frame, 40.2 C max
+2026-10-30 17:48:32   sub 1: 20 batches, lat 232.7 ms, power 9.12 W, 0.265 J/frame, 40.0 C max
+2026-10-30 17:48:47   sub 2: 20 batches, lat 232.5 ms, power 9.15 W, 0.266 J/frame, 40.0 C max
+2026-10-30 17:49:11   sub 3: 20 batches, lat 233.0 ms, power 9.13 W, 0.266 J/frame, 39.8 C max
+2026-10-30 17:49:11 [159/192] order 158: 318.75 MHz yolov8m b=6
+2026-10-30 17:49:40   sub 0: 20 batches, lat 693.2 ms, power 6.15 W, 0.710 J/frame, 39.5 C max
+2026-10-30 17:50:04   sub 1: 20 batches, lat 694.6 ms, power 5.90 W, 0.683 J/frame, 39.2 C max
+2026-10-30 17:50:28   sub 2: 20 batches, lat 695.0 ms, power 5.89 W, 0.682 J/frame, 39.2 C max
+2026-10-30 17:51:02   sub 3: 20 batches, lat 693.7 ms, power 5.94 W, 0.687 J/frame, 39.0 C max
+2026-10-30 17:51:02 [160/192] order 159: 675.75 MHz yolov8l b=6
+2026-10-30 17:51:26   sub 0: 20 batches, lat 523.8 ms, power 10.95 W, 0.956 J/frame, 40.0 C max
+2026-10-30 17:51:46   sub 1: 20 batches, lat 523.4 ms, power 10.51 W, 0.917 J/frame, 40.0 C max
+2026-10-30 17:52:07   sub 2: 20 batches, lat 523.5 ms, power 10.51 W, 0.918 J/frame, 40.2 C max
+2026-10-30 17:52:37   sub 3: 20 batches, lat 523.5 ms, power 10.52 W, 0.918 J/frame, 40.2 C max
+2026-10-30 17:52:37 [161/192] order 160: 420.75 MHz yolov8m b=1
+2026-10-30 17:52:53   sub 0: 20 batches, lat 113.5 ms, power 6.89 W, 0.783 J/frame, 39.2 C max
+2026-10-30 17:53:05   sub 1: 20 batches, lat 114.6 ms, power 5.94 W, 0.681 J/frame, 39.0 C max
+2026-10-30 17:53:17   sub 2: 20 batches, lat 115.7 ms, power 5.91 W, 0.685 J/frame, 38.8 C max
+2026-10-30 17:53:40   sub 3: 20 batches, lat 114.7 ms, power 5.92 W, 0.680 J/frame, 38.5 C max
+2026-10-30 17:53:40 [162/192] order 161: 522.75 MHz yolov8s b=16
+2026-10-30 17:54:04   sub 0: 20 batches, lat 541.2 ms, power 8.54 W, 0.289 J/frame, 39.2 C max
+2026-10-30 17:54:25   sub 1: 20 batches, lat 543.3 ms, power 8.15 W, 0.277 J/frame, 39.2 C max
+2026-10-30 17:54:46   sub 2: 20 batches, lat 542.2 ms, power 8.15 W, 0.276 J/frame, 39.5 C max
+2026-10-30 17:55:17   sub 3: 20 batches, lat 542.7 ms, power 8.13 W, 0.276 J/frame, 39.5 C max
+2026-10-30 17:55:17 [163/192] order 162: 420.75 MHz yolov8l b=3
+2026-10-30 17:55:39   sub 0: 20 batches, lat 435.0 ms, power 8.07 W, 1.170 J/frame, 39.2 C max
+2026-10-30 17:55:57   sub 1: 20 batches, lat 435.5 ms, power 7.69 W, 1.116 J/frame, 39.2 C max
+2026-10-30 17:56:16   sub 2: 20 batches, lat 434.8 ms, power 7.68 W, 1.114 J/frame, 39.5 C max
+2026-10-30 17:56:45   sub 3: 20 batches, lat 434.8 ms, power 7.68 W, 1.114 J/frame, 39.2 C max
+2026-10-30 17:56:45 [164/192] order 163: 905.25 MHz yolov8s b=1
+2026-10-30 17:56:59   sub 0: 20 batches, lat 30.4 ms, power 11.46 W, 0.350 J/frame, 39.0 C max
+2026-10-30 17:57:09   sub 1: 20 batches, lat 31.0 ms, power 6.99 W, 0.217 J/frame, 38.5 C max
+2026-10-30 17:57:20   sub 2: 20 batches, lat 32.4 ms, power 6.94 W, 0.226 J/frame, 38.5 C max
+2026-10-30 17:57:40   sub 3: 20 batches, lat 30.9 ms, power 6.92 W, 0.214 J/frame, 38.8 C max
+2026-10-30 17:57:40 [165/192] order 164: 675.75 MHz yolov8s b=16
+2026-10-30 17:58:03   sub 0: 20 batches, lat 443.4 ms, power 9.82 W, 0.272 J/frame, 39.5 C max
+2026-10-30 17:58:21   sub 1: 20 batches, lat 444.7 ms, power 9.34 W, 0.260 J/frame, 39.5 C max
+2026-10-30 17:58:40   sub 2: 20 batches, lat 443.6 ms, power 9.37 W, 0.260 J/frame, 39.8 C max
+2026-10-30 17:59:09   sub 3: 20 batches, lat 443.6 ms, power 9.37 W, 0.260 J/frame, 39.8 C max
+2026-10-30 17:59:09 [166/192] order 165: 522.75 MHz yolov8l b=1
+2026-10-30 17:59:25   sub 0: 20 batches, lat 139.9 ms, power 9.01 W, 1.261 J/frame, 39.0 C max
+2026-10-30 17:59:38   sub 1: 20 batches, lat 140.5 ms, power 7.87 W, 1.106 J/frame, 38.8 C max
+2026-10-30 17:59:51   sub 2: 20 batches, lat 140.7 ms, power 7.84 W, 1.105 J/frame, 38.8 C max
+2026-10-30 18:00:14   sub 3: 20 batches, lat 140.8 ms, power 7.86 W, 1.108 J/frame, 38.5 C max
+2026-10-30 18:00:14 [167/192] order 166: 420.75 MHz yolov8m b=6
+2026-10-30 18:00:38   sub 0: 20 batches, lat 531.6 ms, power 7.64 W, 0.678 J/frame, 38.8 C max
+2026-10-30 18:00:59   sub 1: 20 batches, lat 530.3 ms, power 7.49 W, 0.662 J/frame, 38.8 C max
+2026-10-30 18:01:19   sub 2: 20 batches, lat 532.5 ms, power 7.41 W, 0.658 J/frame, 39.0 C max
+2026-10-30 18:01:50   sub 3: 20 batches, lat 530.4 ms, power 7.49 W, 0.662 J/frame, 39.0 C max
+2026-10-30 18:01:50 [168/192] order 167: 216.75 MHz yolov8m b=3
+2026-10-30 18:02:14   sub 0: 20 batches, lat 529.7 ms, power 4.73 W, 0.835 J/frame, 38.2 C max
+2026-10-30 18:02:35   sub 1: 20 batches, lat 529.4 ms, power 4.56 W, 0.805 J/frame, 38.2 C max
+2026-10-30 18:02:55   sub 2: 20 batches, lat 529.6 ms, power 4.54 W, 0.802 J/frame, 38.2 C max
+2026-10-30 18:03:26   sub 3: 20 batches, lat 528.8 ms, power 4.56 W, 0.804 J/frame, 38.2 C max
+2026-10-30 18:03:26 [169/192] order 168: 216.75 MHz yolov8l b=2
+2026-10-30 18:03:52   sub 0: 20 batches, lat 586.1 ms, power 4.77 W, 1.398 J/frame, 38.0 C max
+2026-10-30 18:04:14   sub 1: 20 batches, lat 586.4 ms, power 4.59 W, 1.345 J/frame, 38.0 C max
+2026-10-30 18:04:35   sub 2: 20 batches, lat 585.9 ms, power 4.59 W, 1.345 J/frame, 37.8 C max
+2026-10-30 18:05:07   sub 3: 20 batches, lat 586.1 ms, power 4.61 W, 1.351 J/frame, 37.8 C max
+2026-10-30 18:05:07 [170/192] order 169: 420.75 MHz yolov8s b=16
+2026-10-30 18:05:34   sub 0: 20 batches, lat 648.8 ms, power 7.53 W, 0.306 J/frame, 38.2 C max
+2026-10-30 18:05:57   sub 1: 20 batches, lat 650.8 ms, power 7.21 W, 0.293 J/frame, 38.2 C max
+2026-10-30 18:06:20   sub 2: 20 batches, lat 650.9 ms, power 7.20 W, 0.293 J/frame, 38.5 C max
+2026-10-30 18:06:53   sub 3: 20 batches, lat 648.7 ms, power 7.24 W, 0.294 J/frame, 38.5 C max
+2026-10-30 18:06:53 [171/192] order 170: 318.75 MHz yolov8n b=8
+2026-10-30 18:07:12   sub 0: 20 batches, lat 253.6 ms, power 5.77 W, 0.183 J/frame, 38.0 C max
+2026-10-30 18:07:27   sub 1: 20 batches, lat 255.6 ms, power 5.38 W, 0.172 J/frame, 38.0 C max
+2026-10-30 18:07:42   sub 2: 20 batches, lat 257.6 ms, power 5.30 W, 0.171 J/frame, 37.8 C max
+2026-10-30 18:08:07   sub 3: 20 batches, lat 256.5 ms, power 5.31 W, 0.170 J/frame, 37.8 C max
+2026-10-30 18:08:07 [172/192] order 171: 675.75 MHz yolov8l b=3
+2026-10-30 18:08:26   sub 0: 20 batches, lat 283.5 ms, power 11.05 W, 1.045 J/frame, 38.5 C max
+2026-10-30 18:08:41   sub 1: 20 batches, lat 283.6 ms, power 10.30 W, 0.974 J/frame, 38.8 C max
+2026-10-30 18:08:57   sub 2: 20 batches, lat 282.9 ms, power 10.35 W, 0.976 J/frame, 38.8 C max
+2026-10-30 18:09:23   sub 3: 20 batches, lat 283.2 ms, power 10.34 W, 0.977 J/frame, 38.8 C max
+2026-10-30 18:09:23 [173/192] order 172: 675.75 MHz yolov8s b=1
+2026-10-30 18:09:37   sub 0: 20 batches, lat 37.1 ms, power 8.99 W, 0.334 J/frame, 38.2 C max
+2026-10-30 18:09:47   sub 1: 20 batches, lat 37.3 ms, power 6.16 W, 0.231 J/frame, 37.8 C max
+2026-10-30 18:09:58   sub 2: 20 batches, lat 37.2 ms, power 6.24 W, 0.232 J/frame, 37.8 C max
+2026-10-30 18:10:19   sub 3: 20 batches, lat 37.1 ms, power 6.17 W, 0.230 J/frame, 37.5 C max
+2026-10-30 18:10:19 [174/192] order 173: 420.75 MHz yolov8n b=1
+2026-10-30 18:10:33   sub 0: 20 batches, lat 33.4 ms, power 5.59 W, 0.187 J/frame, 37.5 C max
+2026-10-30 18:10:43   sub 1: 20 batches, lat 33.7 ms, power 3.93 W, 0.133 J/frame, 37.2 C max
+2026-10-30 18:10:54   sub 2: 20 batches, lat 33.7 ms, power 3.89 W, 0.131 J/frame, 37.0 C max
+2026-10-30 18:11:15   sub 3: 20 batches, lat 33.7 ms, power 3.93 W, 0.133 J/frame, 37.0 C max
+2026-10-30 18:11:15 [175/192] order 174: 675.75 MHz yolov8l b=12
+2026-10-30 18:11:51   sub 0: 20 batches, lat 1025.1 ms, power 10.90 W, 0.932 J/frame, 39.2 C max
+2026-10-30 18:12:22   sub 1: 20 batches, lat 1025.3 ms, power 10.50 W, 0.897 J/frame, 39.8 C max
+2026-10-30 18:12:52   sub 2: 20 batches, lat 1024.7 ms, power 10.52 W, 0.898 J/frame, 40.0 C max
+2026-10-30 18:13:33   sub 3: 20 batches, lat 1025.8 ms, power 10.53 W, 0.900 J/frame, 40.2 C max
+2026-10-30 18:13:33 [176/192] order 175: 216.75 MHz yolov8l b=1
+2026-10-30 18:13:53   sub 0: 20 batches, lat 325.6 ms, power 4.77 W, 1.553 J/frame, 38.8 C max
+2026-10-30 18:14:09   sub 1: 20 batches, lat 325.0 ms, power 4.50 W, 1.463 J/frame, 38.5 C max
+2026-10-30 18:14:26   sub 2: 20 batches, lat 325.4 ms, power 4.56 W, 1.483 J/frame, 38.2 C max
+2026-10-30 18:14:52   sub 3: 20 batches, lat 325.4 ms, power 4.50 W, 1.464 J/frame, 38.2 C max
+2026-10-30 18:14:52 [177/192] order 176: 905.25 MHz yolov8m b=3
+2026-10-30 18:15:08   sub 0: 20 batches, lat 146.5 ms, power 13.64 W, 0.667 J/frame, 39.0 C max
+2026-10-30 18:15:21   sub 1: 20 batches, lat 147.0 ms, power 11.91 W, 0.584 J/frame, 39.0 C max
+2026-10-30 18:15:34   sub 2: 20 batches, lat 147.3 ms, power 11.93 W, 0.587 J/frame, 39.0 C max
+2026-10-30 18:15:57   sub 3: 20 batches, lat 147.5 ms, power 11.97 W, 0.589 J/frame, 39.0 C max
+2026-10-30 18:15:57 [178/192] order 177: 420.75 MHz yolov8s b=1
+2026-10-30 18:16:12   sub 0: 20 batches, lat 57.1 ms, power 6.35 W, 0.363 J/frame, 38.0 C max
+2026-10-30 18:16:23   sub 1: 20 batches, lat 57.2 ms, power 4.83 W, 0.277 J/frame, 37.8 C max
+2026-10-30 18:16:34   sub 2: 20 batches, lat 57.2 ms, power 4.82 W, 0.276 J/frame, 37.8 C max
+2026-10-30 18:16:55   sub 3: 20 batches, lat 57.2 ms, power 4.83 W, 0.277 J/frame, 37.5 C max
+2026-10-30 18:16:55 [179/192] order 178: 318.75 MHz yolov8n b=4
+2026-10-30 18:17:11   sub 0: 20 batches, lat 138.7 ms, power 5.28 W, 0.184 J/frame, 37.8 C max
+2026-10-30 18:17:24   sub 1: 20 batches, lat 138.5 ms, power 4.84 W, 0.168 J/frame, 37.5 C max
+2026-10-30 18:17:36   sub 2: 20 batches, lat 138.3 ms, power 4.82 W, 0.167 J/frame, 37.5 C max
+2026-10-30 18:17:59   sub 3: 20 batches, lat 138.5 ms, power 4.83 W, 0.167 J/frame, 37.5 C max
+2026-10-30 18:17:59 [180/192] order 179: 675.75 MHz yolov8n b=2
+2026-10-30 18:18:13   sub 0: 20 batches, lat 40.7 ms, power 8.37 W, 0.171 J/frame, 37.5 C max
+2026-10-30 18:18:24   sub 1: 20 batches, lat 40.9 ms, power 5.99 W, 0.123 J/frame, 37.2 C max
+2026-10-30 18:18:35   sub 2: 20 batches, lat 41.1 ms, power 6.00 W, 0.123 J/frame, 37.0 C max
+2026-10-30 18:18:56   sub 3: 20 batches, lat 40.9 ms, power 5.96 W, 0.122 J/frame, 37.2 C max
+2026-10-30 18:18:56 [181/192] order 180: 318.75 MHz yolov8m b=16
+2026-10-30 18:19:51   sub 0: 20 batches, lat 1752.0 ms, power 6.11 W, 0.669 J/frame, 38.2 C max
+2026-10-30 18:20:36   sub 1: 20 batches, lat 1750.9 ms, power 5.98 W, 0.655 J/frame, 38.5 C max
+2026-10-30 18:21:21   sub 2: 20 batches, lat 1751.2 ms, power 5.98 W, 0.655 J/frame, 38.8 C max
+2026-10-30 18:22:16   sub 3: 20 batches, lat 1753.1 ms, power 6.00 W, 0.657 J/frame, 38.5 C max
+2026-10-30 18:22:16 [182/192] order 181: 675.75 MHz yolov8m b=8
+2026-10-30 18:22:38   sub 0: 20 batches, lat 459.7 ms, power 10.78 W, 0.619 J/frame, 39.0 C max
+2026-10-30 18:22:57   sub 1: 20 batches, lat 459.4 ms, power 10.31 W, 0.592 J/frame, 39.0 C max
+2026-10-30 18:23:17   sub 2: 20 batches, lat 459.4 ms, power 10.33 W, 0.594 J/frame, 39.2 C max
+2026-10-30 18:23:46   sub 3: 20 batches, lat 460.4 ms, power 10.29 W, 0.593 J/frame, 39.8 C max
+2026-10-30 18:23:46 [183/192] order 182: 420.75 MHz yolov8l b=4
+2026-10-30 18:24:11   sub 0: 20 batches, lat 555.0 ms, power 7.51 W, 1.042 J/frame, 38.8 C max
+2026-10-30 18:24:32   sub 1: 20 batches, lat 556.8 ms, power 7.12 W, 0.991 J/frame, 38.8 C max
+2026-10-30 18:24:53   sub 2: 20 batches, lat 555.6 ms, power 7.18 W, 0.997 J/frame, 38.8 C max
+2026-10-30 18:25:24   sub 3: 20 batches, lat 556.3 ms, power 7.15 W, 0.994 J/frame, 38.8 C max
+2026-10-30 18:25:24 [184/192] order 183: 522.75 MHz yolov8l b=3
+2026-10-30 18:25:45   sub 0: 20 batches, lat 355.1 ms, power 9.35 W, 1.107 J/frame, 38.8 C max
+2026-10-30 18:26:02   sub 1: 20 batches, lat 356.1 ms, power 8.77 W, 1.042 J/frame, 39.0 C max
+2026-10-30 18:26:19   sub 2: 20 batches, lat 356.6 ms, power 8.80 W, 1.046 J/frame, 39.0 C max
+2026-10-30 18:26:46   sub 3: 20 batches, lat 355.6 ms, power 8.79 W, 1.042 J/frame, 39.0 C max
+2026-10-30 18:26:46 [185/192] order 184: 420.75 MHz yolov8s b=8
+2026-10-30 18:27:06   sub 0: 20 batches, lat 338.0 ms, power 7.61 W, 0.322 J/frame, 38.5 C max
+2026-10-30 18:27:23   sub 1: 20 batches, lat 339.8 ms, power 7.14 W, 0.303 J/frame, 38.5 C max
+2026-10-30 18:27:39   sub 2: 20 batches, lat 339.3 ms, power 7.14 W, 0.303 J/frame, 38.2 C max
+2026-10-30 18:28:06   sub 3: 20 batches, lat 339.3 ms, power 7.12 W, 0.302 J/frame, 38.5 C max
+2026-10-30 18:28:06 [186/192] order 185: 522.75 MHz yolov8n b=16
+2026-10-30 18:28:26   sub 0: 20 batches, lat 325.1 ms, power 7.90 W, 0.161 J/frame, 38.2 C max
+2026-10-30 18:28:42   sub 1: 20 batches, lat 326.5 ms, power 7.39 W, 0.151 J/frame, 38.2 C max
+2026-10-30 18:28:59   sub 2: 20 batches, lat 327.3 ms, power 7.37 W, 0.151 J/frame, 38.5 C max
+2026-10-30 18:29:25   sub 3: 20 batches, lat 328.1 ms, power 7.36 W, 0.151 J/frame, 38.2 C max
+2026-10-30 18:29:26 [187/192] order 186: 522.75 MHz yolov8l b=6
+2026-10-30 18:29:53   sub 0: 20 batches, lat 655.3 ms, power 9.36 W, 1.023 J/frame, 39.0 C max
+2026-10-30 18:30:16   sub 1: 20 batches, lat 656.7 ms, power 8.92 W, 0.976 J/frame, 39.0 C max
+2026-10-30 18:30:39   sub 2: 20 batches, lat 655.8 ms, power 8.94 W, 0.977 J/frame, 39.0 C max
+2026-10-30 18:31:12   sub 3: 20 batches, lat 656.1 ms, power 8.92 W, 0.976 J/frame, 39.0 C max
+2026-10-30 18:31:12 [188/192] order 187: 675.75 MHz yolov8n b=3
+2026-10-30 18:31:27   sub 0: 20 batches, lat 58.2 ms, power 8.55 W, 0.166 J/frame, 38.2 C max
+2026-10-30 18:31:38   sub 1: 20 batches, lat 58.4 ms, power 6.69 W, 0.130 J/frame, 38.2 C max
+2026-10-30 18:31:49   sub 2: 20 batches, lat 58.2 ms, power 6.69 W, 0.130 J/frame, 38.0 C max
+2026-10-30 18:32:10   sub 3: 20 batches, lat 58.3 ms, power 6.69 W, 0.130 J/frame, 38.0 C max
+2026-10-30 18:32:10 [189/192] order 188: 420.75 MHz yolov8n b=3
+2026-10-30 18:32:25   sub 0: 20 batches, lat 84.1 ms, power 6.38 W, 0.179 J/frame, 38.0 C max
+2026-10-30 18:32:37   sub 1: 20 batches, lat 85.3 ms, power 5.16 W, 0.147 J/frame, 37.8 C max
+2026-10-30 18:32:48   sub 2: 20 batches, lat 85.5 ms, power 5.18 W, 0.148 J/frame, 37.8 C max
+2026-10-30 18:33:10   sub 3: 20 batches, lat 86.2 ms, power 5.14 W, 0.148 J/frame, 37.8 C max
+2026-10-30 18:33:10 [190/192] order 189: 216.75 MHz yolov8s b=3
+2026-10-30 18:33:29   sub 0: 20 batches, lat 262.7 ms, power 4.60 W, 0.403 J/frame, 37.5 C max
+2026-10-30 18:33:44   sub 1: 20 batches, lat 262.8 ms, power 4.35 W, 0.381 J/frame, 37.8 C max
+2026-10-30 18:33:59   sub 2: 20 batches, lat 263.6 ms, power 4.34 W, 0.382 J/frame, 37.2 C max
+2026-10-30 18:34:24   sub 3: 20 batches, lat 263.1 ms, power 4.33 W, 0.380 J/frame, 37.5 C max
+2026-10-30 18:34:24 [191/192] order 190: 522.75 MHz yolov8s b=4
+2026-10-30 18:34:41   sub 0: 20 batches, lat 149.2 ms, power 8.53 W, 0.319 J/frame, 37.5 C max
+2026-10-30 18:34:54   sub 1: 20 batches, lat 150.4 ms, power 7.42 W, 0.280 J/frame, 37.2 C max
+2026-10-30 18:35:07   sub 2: 20 batches, lat 150.5 ms, power 7.46 W, 0.281 J/frame, 37.8 C max
+2026-10-30 18:35:30   sub 3: 20 batches, lat 152.4 ms, power 7.35 W, 0.280 J/frame, 37.5 C max
+2026-10-30 18:35:30 [192/192] order 191: 522.75 MHz yolov8n b=3
+2026-10-30 18:35:44   sub 0: 20 batches, lat 70.5 ms, power 7.40 W, 0.174 J/frame, 37.2 C max
+2026-10-30 18:35:56   sub 1: 20 batches, lat 73.5 ms, power 5.44 W, 0.134 J/frame, 37.5 C max
+2026-10-30 18:36:07   sub 2: 20 batches, lat 74.4 ms, power 5.40 W, 0.134 J/frame, 37.0 C max
+2026-10-30 18:36:29   sub 3: 20 batches, lat 76.7 ms, power 5.40 W, 0.138 J/frame, 37.0 C max
+2026-10-30 18:36:29 restoring GPU clocks: min 114750000 max 905250000
+2026-10-30 18:36:29 
+2026-10-30 18:36:29 model batch      MHz |   lat mean    lat p95 |  power W   J/frame |   idle W  max C
+2026-10-30 18:36:29 l     1       216.75 |    325.33     326.55  |    4.581    1.4910 |    2.156   38.8
+2026-10-30 18:36:29 l     1       318.75 |    224.41     226.39  |    5.828    1.3086 |    2.198   38.8
+2026-10-30 18:36:29 l     1       420.75 |    171.07     173.21  |    7.350    1.2582 |    2.335   38.8
+2026-10-30 18:36:29 l     1       522.75 |    140.49     144.00  |    8.143    1.1449 |    2.335   39.0
+2026-10-30 18:36:29 l     1       675.75 |    112.28     113.21  |    9.385    1.0547 |    2.957   39.0
+2026-10-30 18:36:29 l     1       905.25 |     88.09      88.84  |   11.900    1.0494 |    3.112   39.2
+2026-10-30 18:36:29 l     2       216.75 |    586.12     588.58  |    4.638    1.3598 |    2.132   38.0
+2026-10-30 18:36:29 l     2       318.75 |    406.10     411.28  |    5.924    1.2033 |    2.250   39.0
+2026-10-30 18:36:29 l     2       420.75 |    309.61     316.38  |    7.373    1.1419 |    2.335   39.8
+2026-10-30 18:36:29 l     2       522.75 |    252.81     255.35  |    8.641    1.0928 |    2.335   39.5
+2026-10-30 18:36:29 l     2       675.75 |    201.75     203.21  |   10.047    1.0142 |    2.959   39.8
+2026-10-30 18:36:29 l     2       905.25 |    158.44     159.36  |   12.971    1.0285 |    3.127   40.2
+2026-10-30 18:36:29 l     3       216.75 |    829.43     835.07  |    4.759    1.3160 |    2.222   39.8
+2026-10-30 18:36:29 l     3       318.75 |    575.71     579.67  |    6.100    1.1710 |    2.248   39.0
+2026-10-30 18:36:29 l     3       420.75 |    435.00     438.12  |    7.780    1.1285 |    2.335   39.5
+2026-10-30 18:36:29 l     3       522.75 |    355.86     359.23  |    8.926    1.0593 |    2.434   39.0
+2026-10-30 18:36:29 l     3       675.75 |    283.31     284.20  |   10.511    0.9931 |    2.955   38.8
+2026-10-30 18:36:29 l     3       905.25 |    222.88     223.98  |   13.789    1.0251 |    3.113   40.5
+2026-10-30 18:36:29 l     4       216.75 |   1052.76    1055.75  |    4.604    1.2121 |    2.178   38.8
+2026-10-30 18:36:29 l     4       318.75 |    729.22     734.02  |    5.947    1.0845 |    2.267   39.0
+2026-10-30 18:36:29 l     4       420.75 |    555.90     560.63  |    7.238    1.0062 |    2.337   38.8
+2026-10-30 18:36:29 l     4       522.75 |    455.23     459.19  |    8.779    0.9995 |    2.335   38.8
+2026-10-30 18:36:29 l     4       675.75 |    362.15     363.18  |   10.322    0.9350 |    2.957   39.2
+2026-10-30 18:36:29 l     4       905.25 |    283.00     284.34  |   13.530    0.9580 |    3.114   40.8
+2026-10-30 18:36:29 l     6       216.75 |   1528.53    1533.95  |    4.698    1.1971 |    2.152   38.2
+2026-10-30 18:36:29 l     6       318.75 |   1053.25    1059.51  |    6.171    1.0835 |    2.257   39.2
+2026-10-30 18:36:29 l     6       420.75 |    804.49     808.49  |    7.550    1.0126 |    2.335   39.2
+2026-10-30 18:36:29 l     6       522.75 |    655.99     658.47  |    9.034    0.9880 |    2.335   39.0
+2026-10-30 18:36:29 l     6       675.75 |    523.57     525.22  |   10.621    0.9272 |    2.957   40.2
+2026-10-30 18:36:29 l     6       905.25 |    411.83     413.61  |   14.012    0.9622 |    3.112   40.2
+2026-10-30 18:36:29 l     8       216.75 |   2007.39    2012.67  |    4.700    1.1796 |    2.165   38.2
+2026-10-30 18:36:29 l     8       318.75 |   1381.39    1385.92  |    6.054    1.0455 |    2.293   39.0
+2026-10-30 18:36:29 l     8       420.75 |   1056.99    1064.08  |    7.501    0.9914 |    2.387   39.8
+2026-10-30 18:36:29 l     8       522.75 |    861.18     864.64  |    9.088    0.9785 |    2.335   40.0
+2026-10-30 18:36:29 l     8       675.75 |    687.93     690.03  |   10.640    0.9152 |    2.958   41.0
+2026-10-30 18:36:29 l     8       905.25 |    540.65     542.40  |   14.106    0.9537 |    3.131   41.8
+2026-10-30 18:36:29 l     12      216.75 |   3000.27    3007.52  |    4.666    1.1666 |    2.201   39.0
+2026-10-30 18:36:29 l     12      318.75 |   2067.43    2073.93  |    5.894    1.0157 |    2.239   39.2
+2026-10-30 18:36:29 l     12      420.75 |   1579.83    1585.06  |    7.323    0.9643 |    2.335   39.8
+2026-10-30 18:36:29 l     12      522.75 |   1286.63    1290.00  |    9.026    0.9679 |    2.335   41.0
+2026-10-30 18:36:29 l     12      675.75 |   1025.21    1027.48  |   10.612    0.9068 |    2.955   40.2
+2026-10-30 18:36:29 l     12      905.25 |    804.60     806.68  |   14.042    0.9417 |    3.115   41.5
+2026-10-30 18:36:29 l     16      216.75 |   3926.77    3936.58  |    5.049    1.2392 |    2.196   39.2
+2026-10-30 18:36:29 l     16      318.75 |   2709.55    2720.43  |    6.232    1.0556 |    2.264   39.5
+2026-10-30 18:36:29 l     16      420.75 |   2071.41    2079.12  |    7.377    0.9552 |    2.335   40.0
+2026-10-30 18:36:29 l     16      522.75 |   1685.61    1690.59  |    9.031    0.9516 |    2.335   41.5
+2026-10-30 18:36:29 l     16      675.75 |   1342.14    1346.94  |   10.522    0.8828 |    2.964   41.8
+2026-10-30 18:36:29 l     16      905.25 |   1052.80    1055.44  |   13.849    0.9115 |    3.160   42.8
+2026-10-30 18:36:29 m     1       216.75 |    210.23     211.26  |    4.565    0.9605 |    2.427   37.8
+2026-10-30 18:36:29 m     1       318.75 |    147.16     150.88  |    5.340    0.7865 |    2.268   38.0
+2026-10-30 18:36:29 m     1       420.75 |    114.64     116.19  |    6.164    0.7074 |    2.335   39.2
+2026-10-30 18:36:29 m     1       522.75 |     92.62      96.24  |    7.385    0.6849 |    2.335   39.8
+2026-10-30 18:36:29 m     1       675.75 |     74.08      75.17  |    8.542    0.6336 |    2.957   39.0
+2026-10-30 18:36:29 m     1       905.25 |     58.89      59.77  |   10.482    0.6183 |    3.112   39.8
+2026-10-30 18:36:29 m     2       216.75 |    378.43     380.53  |    4.558    0.8629 |    2.168   38.2
+2026-10-30 18:36:29 m     2       318.75 |    263.19     265.70  |    5.648    0.7437 |    2.211   38.2
+2026-10-30 18:36:29 m     2       420.75 |    201.38     205.66  |    6.804    0.6855 |    2.335   39.5
+2026-10-30 18:36:29 m     2       522.75 |    164.96     168.89  |    8.099    0.6685 |    2.335   39.0
+2026-10-30 18:36:29 m     2       675.75 |    132.40     133.85  |    9.358    0.6200 |    2.956   39.5
+2026-10-30 18:36:29 m     2       905.25 |    105.07     106.20  |   11.666    0.6136 |    3.125   39.8
+2026-10-30 18:36:29 m     3       216.75 |    529.36     531.66  |    4.599    0.8119 |    2.150   38.2
+2026-10-30 18:36:29 m     3       318.75 |    368.13     370.11  |    5.864    0.7199 |    2.244   38.8
+2026-10-30 18:36:29 m     3       420.75 |    281.55     287.45  |    7.406    0.6954 |    2.380   38.8
+2026-10-30 18:36:29 m     3       522.75 |    230.59     232.20  |    8.460    0.6506 |    2.335   39.5
+2026-10-30 18:36:29 m     3       675.75 |    185.56     186.62  |    9.778    0.6053 |    2.961   40.8
+2026-10-30 18:36:29 m     3       905.25 |    147.08     148.46  |   12.362    0.6067 |    3.111   39.0
+2026-10-30 18:36:29 m     4       216.75 |    678.70     681.33  |    4.719    0.8010 |    2.232   39.5
+2026-10-30 18:36:29 m     4       318.75 |    471.11     474.31  |    5.966    0.7029 |    2.259   39.2
+2026-10-30 18:36:30 m     4       420.75 |    360.80     363.41  |    7.191    0.6490 |    2.464   38.5
+2026-10-30 18:36:30 m     4       522.75 |    296.54     300.09  |    8.697    0.6452 |    2.413   40.5
+2026-10-30 18:36:30 m     4       675.75 |    238.32     240.03  |   10.005    0.5966 |    2.957   39.0
+2026-10-30 18:36:30 m     4       905.25 |    188.58     190.37  |   12.894    0.6085 |    3.119   39.5
+2026-10-30 18:36:30 m     6       216.75 |   1001.60    1004.70  |    4.709    0.7863 |    2.179   38.8
+2026-10-30 18:36:30 m     6       318.75 |    694.12     698.74  |    5.968    0.6906 |    2.238   39.5
+2026-10-30 18:36:30 m     6       420.75 |    531.21     534.42  |    7.509    0.6650 |    2.335   39.0
+2026-10-30 18:36:30 m     6       522.75 |    437.35     440.13  |    8.824    0.6434 |    2.374   40.8
+2026-10-30 18:36:30 m     6       675.75 |    350.07     351.30  |   10.400    0.6071 |    2.958   40.5
+2026-10-30 18:36:30 m     6       905.25 |    278.23     280.08  |   13.314    0.6178 |    3.112   40.5
+2026-10-30 18:36:30 m     8       216.75 |   1319.59    1324.14  |    4.711    0.7773 |    2.173   38.8
+2026-10-30 18:36:30 m     8       318.75 |    913.91     917.71  |    6.042    0.6904 |    2.266   39.0
+2026-10-30 18:36:30 m     8       420.75 |    697.55     702.93  |    7.701    0.6717 |    2.410   39.5
+2026-10-30 18:36:30 m     8       522.75 |    583.58     586.30  |    8.781    0.6408 |    2.406   38.0
+2026-10-30 18:36:30 m     8       675.75 |    459.72     461.10  |   10.427    0.5994 |    2.956   39.8
+2026-10-30 18:36:30 m     8       905.25 |    364.35     366.41  |   13.509    0.6156 |    3.111   40.5
+2026-10-30 18:36:30 m     12      216.75 |   1935.84    1943.41  |    4.718    0.7611 |    2.187   38.8
+2026-10-30 18:36:30 m     12      318.75 |   1339.98    1346.52  |    6.041    0.6746 |    2.277   40.0
+2026-10-30 18:36:30 m     12      420.75 |   1025.55    1031.93  |    7.577    0.6476 |    2.335   40.0
+2026-10-30 18:36:30 m     12      522.75 |    839.69     842.07  |    8.875    0.6212 |    2.335   40.5
+2026-10-30 18:36:30 m     12      675.75 |    673.73     676.21  |   10.415    0.5849 |    2.959   40.2
+2026-10-30 18:36:30 m     12      905.25 |    533.01     534.30  |   13.611    0.6048 |    3.114   41.5
+2026-10-30 18:36:30 m     16      216.75 |   2543.91    2552.97  |    4.712    0.7493 |    2.201   39.0
+2026-10-30 18:36:30 m     16      318.75 |   1751.80    1759.62  |    6.016    0.6588 |    2.292   38.8
+2026-10-30 18:36:30 m     16      420.75 |   1348.29    1355.21  |    7.807    0.6580 |    2.335   40.0
+2026-10-30 18:36:30 m     16      522.75 |   1106.13    1109.27  |    8.942    0.6183 |    2.335   40.5
+2026-10-30 18:36:30 m     16      675.75 |    886.37     888.32  |   10.534    0.5837 |    2.991   41.8
+2026-10-30 18:36:30 m     16      905.25 |    699.75     701.54  |   13.614    0.5956 |    3.113   41.2
+2026-10-30 18:36:30 n     1       216.75 |     58.15      59.19  |    3.660    0.2133 |    2.193   39.0
+2026-10-30 18:36:30 n     1       318.75 |     44.17      46.83  |    4.015    0.1779 |    2.204   37.8
+2026-10-30 18:36:30 n     1       420.75 |     33.62      34.47  |    4.333    0.1461 |    2.335   37.5
+2026-10-30 18:36:30 n     1       522.75 |     32.30      34.74  |    4.438    0.1438 |    2.335   39.0
+2026-10-30 18:36:30 n     1       675.75 |     28.21      29.29  |    5.357    0.1517 |    2.957   37.5
+2026-10-30 18:36:30 n     1       905.25 |     29.19      30.93  |    5.636    0.1650 |    3.112   38.5
+2026-10-30 18:36:30 n     2       216.75 |    107.66     109.87  |    4.001    0.2157 |    2.182   38.5
+2026-10-30 18:36:30 n     2       318.75 |     78.31      80.47  |    4.476    0.1756 |    2.236   38.2
+2026-10-30 18:36:30 n     2       420.75 |     61.99      63.49  |    5.004    0.1555 |    2.336   38.0
+2026-10-30 18:36:30 n     2       522.75 |     53.70      55.70  |    5.309    0.1429 |    2.335   38.5
+2026-10-30 18:36:30 n     2       675.75 |     40.88      41.70  |    6.577    0.1348 |    2.956   37.5
+2026-10-30 18:36:30 n     2       905.25 |     34.65      36.22  |    7.441    0.1294 |    3.112   38.2
+2026-10-30 18:36:30 n     3       216.75 |    151.96     153.87  |    4.131    0.2095 |    2.116   37.5
+2026-10-30 18:36:30 n     3       318.75 |    109.37     113.23  |    4.814    0.1758 |    2.209   38.0
+2026-10-30 18:36:30 n     3       420.75 |     85.28      88.17  |    5.463    0.1555 |    2.335   38.0
+2026-10-30 18:36:30 n     3       522.75 |     73.80      75.81  |    5.886    0.1451 |    2.335   37.5
+2026-10-30 18:36:30 n     3       675.75 |     58.26      59.00  |    7.156    0.1392 |    2.956   38.2
+2026-10-30 18:36:30 n     3       905.25 |     51.39      52.35  |    8.253    0.1418 |    3.152   37.8
+2026-10-30 18:36:30 n     4       216.75 |    193.71     197.68  |    4.323    0.2096 |    2.265   38.0
+2026-10-30 18:36:30 n     4       318.75 |    138.48     142.24  |    4.942    0.1714 |    2.180   37.8
+2026-10-30 18:36:30 n     4       420.75 |    110.73     115.16  |    5.742    0.1592 |    2.335   39.0
+2026-10-30 18:36:30 n     4       522.75 |     91.73      96.24  |    6.543    0.1503 |    2.335   38.5
+2026-10-30 18:36:30 n     4       675.75 |     74.98      75.72  |    7.591    0.1426 |    2.957   39.5
+2026-10-30 18:36:30 n     4       905.25 |     62.33      64.22  |    8.810    0.1376 |    3.112   39.0
+2026-10-30 18:36:30 n     6       216.75 |    280.63     283.22  |    4.271    0.1999 |    2.177   38.5
+2026-10-30 18:36:30 n     6       318.75 |    199.82     203.06  |    5.230    0.1743 |    2.215   38.5
+2026-10-30 18:36:30 n     6       420.75 |    159.32     163.87  |    6.138    0.1632 |    2.335   39.0
+2026-10-30 18:36:30 n     6       522.75 |    134.12     140.26  |    6.932    0.1552 |    2.395   39.8
+2026-10-30 18:36:30 n     6       675.75 |    110.27     112.98  |    7.947    0.1463 |    2.958   39.5
+2026-10-30 18:36:30 n     6       905.25 |     91.36      92.92  |    9.500    0.1449 |    3.112   39.5
+2026-10-30 18:36:30 n     8       216.75 |    363.59     371.89  |    4.290    0.1951 |    2.196   38.8
+2026-10-30 18:36:30 n     8       318.75 |    255.82     259.48  |    5.438    0.1740 |    2.188   38.0
+2026-10-30 18:36:30 n     8       420.75 |    202.19     206.37  |    6.479    0.1639 |    2.335   39.5
+2026-10-30 18:36:30 n     8       522.75 |    174.69     183.08  |    7.074    0.1546 |    2.335   38.8
+2026-10-30 18:36:30 n     8       675.75 |    143.01     147.34  |    8.138    0.1457 |    2.993   39.0
+2026-10-30 18:36:30 n     8       905.25 |    119.21     121.78  |    9.820    0.1465 |    3.112   38.8
+2026-10-30 18:36:30 n     12      216.75 |    524.67     528.79  |    4.370    0.1912 |    2.233   38.5
+2026-10-30 18:36:30 n     12      318.75 |    373.62     384.97  |    5.487    0.1710 |    2.255   38.8
+2026-10-30 18:36:30 n     12      420.75 |    294.07     301.27  |    6.713    0.1646 |    2.335   40.0
+2026-10-30 18:36:30 n     12      522.75 |    249.65     256.40  |    7.430    0.1547 |    2.335   39.2
+2026-10-30 18:36:30 n     12      675.75 |    218.28     221.54  |    8.246    0.1502 |    2.990   37.8
+2026-10-30 18:36:30 n     12      905.25 |    173.70     176.16  |   10.131    0.1468 |    3.112   39.2
+2026-10-30 18:36:30 n     16      216.75 |    688.28     692.45  |    4.358    0.1876 |    2.213   39.2
+2026-10-30 18:36:30 n     16      318.75 |    488.59     494.81  |    5.518    0.1686 |    2.275   39.5
+2026-10-30 18:36:30 n     16      420.75 |    387.51     392.59  |    6.707    0.1626 |    2.335   40.8
+2026-10-30 18:36:30 n     16      522.75 |    326.76     334.45  |    7.505    0.1534 |    2.335   38.5
+2026-10-30 18:36:30 n     16      675.75 |    279.21     284.32  |    8.370    0.1462 |    3.006   38.5
+2026-10-30 18:36:30 n     16      905.25 |    235.11     238.61  |   10.152    0.1494 |    3.131   38.5
+2026-10-30 18:36:30 s     1       216.75 |    102.97     104.19  |    4.128    0.4257 |    2.193   39.0
+2026-10-30 18:36:30 s     1       318.75 |     74.38      75.75  |    4.615    0.3439 |    2.221   38.0
+2026-10-30 18:36:30 s     1       420.75 |     57.16      58.01  |    5.209    0.2984 |    2.335   38.0
+2026-10-30 18:36:30 s     1       522.75 |     48.79      49.82  |    5.799    0.2835 |    2.337   39.5
+2026-10-30 18:36:30 s     1       675.75 |     37.18      37.82  |    6.887    0.2567 |    2.990   38.2
+2026-10-30 18:36:30 s     1       905.25 |     31.19      32.58  |    8.047    0.2518 |    3.112   39.0
+2026-10-30 18:36:30 s     2       216.75 |    192.39     195.62  |    4.314    0.4153 |    2.184   39.0
+2026-10-30 18:36:30 s     2       318.75 |    133.91     137.09  |    5.244    0.3515 |    2.210   38.0
+2026-10-30 18:36:30 s     2       420.75 |    104.57     108.21  |    6.131    0.3210 |    2.335   38.8
+2026-10-30 18:36:30 s     2       522.75 |     86.95      90.76  |    6.898    0.3003 |    2.336   38.5
+2026-10-30 18:36:30 s     2       675.75 |     70.39      71.50  |    8.068    0.2845 |    2.957   38.0
+2026-10-30 18:36:30 s     2       905.25 |     57.18      58.17  |    9.648    0.2764 |    3.112   38.8
+2026-10-30 18:36:30 s     3       216.75 |    263.05     265.02  |    4.406    0.3866 |    2.116   37.8
+2026-10-30 18:36:30 s     3       318.75 |    185.58     190.22  |    5.581    0.3455 |    2.278   39.5
+2026-10-30 18:36:30 s     3       420.75 |    144.04     148.74  |    6.517    0.3132 |    2.335   38.8
+2026-10-30 18:36:30 s     3       522.75 |    120.22     125.84  |    7.490    0.3005 |    2.335   39.2
+2026-10-30 18:36:30 s     3       675.75 |     98.91     101.37  |    8.581    0.2833 |    2.980   40.8
+2026-10-30 18:36:30 s     3       905.25 |     78.57      81.09  |   10.525    0.2761 |    3.112   39.5
+2026-10-30 18:36:30 s     4       216.75 |    332.27     337.15  |    4.537    0.3771 |    2.233   39.8
+2026-10-30 18:36:30 s     4       318.75 |    231.89     236.14  |    5.656    0.3282 |    2.253   39.0
+2026-10-30 18:36:30 s     4       420.75 |    180.30     185.34  |    6.980    0.3150 |    2.336   40.2
+2026-10-30 18:36:30 s     4       522.75 |    150.64     157.50  |    7.689    0.2899 |    2.374   37.8
+2026-10-30 18:36:30 s     4       675.75 |    124.77     126.62  |    8.812    0.2753 |    2.957   39.5
+2026-10-30 18:36:30 s     4       905.25 |     99.61     101.79  |   10.803    0.2694 |    3.112   40.0
+2026-10-30 18:36:30 s     6       216.75 |    481.29     488.44  |    4.686    0.3761 |    2.224   39.8
+2026-10-30 18:36:30 s     6       318.75 |    337.50     343.72  |    5.845    0.3290 |    2.293   40.0
+2026-10-30 18:36:30 s     6       420.75 |    261.57     265.11  |    7.263    0.3169 |    2.337   40.5
+2026-10-30 18:36:30 s     6       522.75 |    219.67     226.47  |    8.029    0.2942 |    2.335   38.8
+2026-10-30 18:36:30 s     6       675.75 |    179.30     180.91  |    9.192    0.2750 |    2.957   38.5
+2026-10-30 18:36:30 s     6       905.25 |    147.24     149.72  |   11.363    0.2792 |    3.112   39.5
+2026-10-30 18:36:30 s     8       216.75 |    626.07     629.20  |    4.571    0.3578 |    2.204   38.8
+2026-10-30 18:36:30 s     8       318.75 |    437.44     449.03  |    5.860    0.3206 |    2.243   38.8
+2026-10-30 18:36:30 s     8       420.75 |    339.11     345.47  |    7.254    0.3077 |    2.374   38.5
+2026-10-30 18:36:30 s     8       522.75 |    287.61     297.43  |    8.085    0.2909 |    2.335   39.2
+2026-10-30 18:36:30 s     8       675.75 |    232.68     234.53  |    9.303    0.2708 |    2.956   40.2
+2026-10-30 18:36:30 s     8       905.25 |    191.44     193.75  |   11.501    0.2755 |    3.113   39.5
+2026-10-30 18:36:30 s     12      216.75 |    913.22     917.61  |    4.533    0.3451 |    2.162   38.8
+2026-10-30 18:36:30 s     12      318.75 |    637.89     643.98  |    5.845    0.3108 |    2.253   39.0
+2026-10-30 18:36:30 s     12      420.75 |    494.71     498.85  |    7.386    0.3046 |    2.338   39.8
+2026-10-30 18:36:30 s     12      522.75 |    413.98     418.56  |    8.293    0.2862 |    2.336   39.8
+2026-10-30 18:36:30 s     12      675.75 |    340.80     344.08  |    9.480    0.2694 |    2.957   39.8
+2026-10-30 18:36:30 s     12      905.25 |    276.14     278.23  |   11.866    0.2733 |    3.112   40.0
+2026-10-30 18:36:30 s     16      216.75 |   1200.34    1205.58  |    4.467    0.3352 |    2.212   38.2
+2026-10-30 18:36:30 s     16      318.75 |    839.48     846.50  |    5.784    0.3036 |    2.227   38.5
+2026-10-30 18:36:30 s     16      420.75 |    649.80     655.78  |    7.297    0.2965 |    2.335   38.5
+2026-10-30 18:36:30 s     16      522.75 |    542.35     547.70  |    8.242    0.2795 |    2.337   39.5
+2026-10-30 18:36:30 s     16      675.75 |    443.82     448.02  |    9.474    0.2629 |    2.956   39.8
+2026-10-30 18:36:30 s     16      905.25 |    362.41     365.01  |   11.874    0.2691 |    3.112   40.0
+2026-10-30 18:36:30 
+2026-10-30 18:36:30 summary: /home/agx2/cs24bt033/dvfs_runtime/results/agx_xavier_jp511/models_20261030_133704/run_summary.csv
+2026-10-30 18:36:32 --- GPU clock state after (min/max/governor must equal the 'before' block) ---
+2026-10-30 18:36:32 {
+2026-10-30 18:36:32   "min_freq": "114750000",
+2026-10-30 18:36:32   "max_freq": "905250000",
+2026-10-30 18:36:32   "cur_freq": "114750000",
+2026-10-30 18:36:32   "governor": "nvhost_podgov",
+2026-10-30 18:36:32   "available_frequencies": "114750000 216750000 318750000 420750000 522750000 624750000 675750000 828750000 905250000 1032750000 1198500000 1236750000 1338750000 1377000000",
+2026-10-30 18:36:32   "enable_3d_scaling": "1",
+2026-10-30 18:36:32   "recorded_at": "2026-10-30 18:36:32"
+2026-10-30 18:36:32 }
+2026-10-30 18:36:32 === dvfs run_all: done ===

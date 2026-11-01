@@ -1,0 +1,75 @@
+DVFS analysis
+models run : /sessions/rcw-016xv7weydj5bg1yir7sh5uu/mnt/pertinence-batcher/dvfs/results/agx_xavier_jp511/models_20261030_133704
+switch runs: switch_20261028_193920, switch_20261029_154127, switch_20261029_190404, switch_20261029_191106
+nvpmodel   : NV Power Mode: MODE_30W_6CORE
+4 (mode id 4), clock cap 905250000 Hz
+
+points: 192, clock_held_all==1 on 192, dmesg hits total 0, max temperature 42.8 C
+
+Best clock for energy per frame, against the top clock (905.25 MHz):
+model    batch best MHz   saving %  latency %   J/frame
+yolov8n      1   522.75       12.8       10.7     0.144
+yolov8n      2   905.25        0.0        0.0     0.129
+yolov8n      3   675.75        1.8       13.4     0.139
+yolov8n      4   905.25        0.0        0.0     0.138
+yolov8n      6   905.25        0.0        0.0     0.145
+yolov8n      8   675.75        0.6       20.0     0.146
+yolov8n     12   905.25        0.0        0.0     0.147
+yolov8n     16   675.75        2.1       18.8     0.146
+yolov8s      1   905.25        0.0        0.0     0.252
+yolov8s      2   905.25        0.0        0.0     0.276
+yolov8s      3   905.25        0.0        0.0     0.276
+yolov8s      4   905.25        0.0        0.0     0.269
+yolov8s      6   675.75        1.5       21.8     0.275
+yolov8s      8   675.75        1.7       21.5     0.271
+yolov8s     12   675.75        1.4       23.4     0.269
+yolov8s     16   675.75        2.3       22.5     0.263
+yolov8m      1   905.25        0.0        0.0     0.618
+yolov8m      2   905.25        0.0        0.0     0.614
+yolov8m      3   675.75        0.2       26.2     0.605
+yolov8m      4   675.75        1.9       26.4     0.597
+yolov8m      6   675.75        1.7       25.8     0.607
+yolov8m      8   675.75        2.6       26.2     0.599
+yolov8m     12   675.75        3.3       26.4     0.585
+yolov8m     16   675.75        2.0       26.7     0.584
+yolov8l      1   905.25        0.0        0.0     1.049
+yolov8l      2   675.75        1.4       27.3     1.014
+yolov8l      3   675.75        3.1       27.1     0.993
+yolov8l      4   675.75        2.4       28.0     0.935
+yolov8l      6   675.75        3.6       27.1     0.927
+yolov8l      8   675.75        4.0       27.2     0.915
+yolov8l     12   675.75        3.7       27.4     0.907
+yolov8l     16   675.75        3.2       27.5     0.883
+
+Median over batch sizes, per model: saving at the best clock and the latency it costs
+  yolov8n: saving 0.3 %, latency +5.3 %
+  yolov8s: saving 0.7 %, latency +10.8 %
+  yolov8m: saving 1.8 %, latency +26.2 %
+  yolov8l: saving 3.1 %, latency +27.3 %
+
+Latency fit t = a * f^-b + c (f in GHz): exponent b per model, mean over batch sizes; c < 0 means the fit is not physical
+  yolov8n: b = 1.14 (range 0.86 - 1.75), c < 0 in 0 of 8 fits
+  yolov8s: b = 1.06 (range 0.91 - 1.10), c < 0 in 0 of 8 fits
+  yolov8m: b = 1.04 (range 0.98 - 1.06), c < 0 in 0 of 8 fits
+  yolov8l: b = 1.05 (range 1.03 - 1.06), c < 0 in 0 of 8 fits
+
+Data-quality flags (window < 2 s, or < 10 power samples in some subrun, or energy spread > 5 %): 53 of 192 points
+  yolov8s b=1   905.25 MHz  window 0.63 s  min samples   8  spread 22.5 %
+  yolov8n b=2   905.25 MHz  window 0.70 s  min samples   9  spread 19.5 %
+  yolov8n b=1   675.75 MHz  window 0.57 s  min samples   8  spread 17.8 %
+  yolov8s b=1   675.75 MHz  window 0.75 s  min samples  10  spread 17.4 %
+  yolov8n b=1   522.75 MHz  window 0.65 s  min samples   8  spread 17.1 %
+  yolov8n b=1   905.25 MHz  window 0.59 s  min samples   8  spread 16.9 %
+  yolov8s b=1   522.75 MHz  window 0.98 s  min samples  12  spread 16.7 %
+  yolov8n b=1   420.75 MHz  window 0.67 s  min samples   9  spread 16.3 %
+  yolov8n b=2   675.75 MHz  window 0.82 s  min samples  11  spread 15.4 %
+  yolov8m b=1   905.25 MHz  window 1.18 s  min samples  16  spread 14.0 %
+  yolov8s b=2   905.25 MHz  window 1.15 s  min samples  15  spread 13.7 %
+  yolov8n b=3   905.25 MHz  window 1.03 s  min samples  13  spread 13.7 %
+  yolov8n b=1   318.75 MHz  window 0.89 s  min samples  11  spread 13.5 %
+  yolov8s b=1   420.75 MHz  window 1.15 s  min samples  15  spread 12.6 %
+  yolov8n b=2   522.75 MHz  window 1.08 s  min samples  14  spread 11.9 %
+
+Switching, over 482 switches in 4 runs (ms):
+  up   write 88.3   cur_freq 89.2   tegrastats 143.3
+  down write 88.2   cur_freq 89.1   tegrastats 145.1
