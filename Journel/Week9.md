@@ -180,6 +180,19 @@ Run `models_20261031_100223_resnet` (nvpmodel MAXN, mode 0, 8 cores, GPU cap 137
 - Policy reading: 905 to 1377 buys 27% latency for about 30% energy, so the clock above about 905 is a deadline-only resource. Default 829-905, go up only when slack requires.
 - YOLO in MAXN (`models_20261031_152516`) did not run: the board went down about 10 s after start, during model loading (tegrastats and dmesg logs truncated, GPU idle at 114 MHz, all 8 CPUs at 100% at 2259 MHz, board draw about 13 W, well below the ResNet run's peak). Cause not established; a high GPU clock is not the trigger. Candidates: CPU-load transient or the supply.
 
+## [DECISION] Policy v1 written up; documents now go out as artifacts (Nov 2)
+
+Plan for the week: (1) build the theoretical policy, (2) the literature check; the policy is run on the board next week. Documents are artifacts from now on (nothing new goes into the project's `claude/` folder except the weekly slides).
+- Policy spec v1 (artifact, "Scheduling policy v1: deadline first, energy second"): https://claude.ai/artifact/PHjhkeprpfqE1vaLLaCe4U
+- Rule in one line: EDF for the queue, clock = max(f*, f_feas) with f* the fastest clock within 2% of the energy minimum, an admission test that prices the round-trip switch, hysteresis, max clock under overload, no lookahead.
+- Claim to test offline: v1 lands near fixed-f* on energy and near always-max on deadline misses (miss rate never above always-max).
+- Board inputs still missing: MAXN switch cost, stall during the write, switch energy, YOLO tables in MAXN, a repeat pass for the noise level.
+- Decisions for Gayathri: energy metric (board vs GPU rail), power mode for the evaluation, idle clock.
+
+## [SETUP] Week 9 supervisor deck: DVFS only (Nov 3)
+
+`pertinence_week9_dvfs.pptx`, 12 slides with speaker notes, native charts from the run data: setup and runs, mode-4 YOLO (flat bottom), latency vs clock (batch 1 floor), MAXN energy curve, why the top is expensive, savings vs the top clock (22-24%), the 88 ms switch, policy v1 in words (two slides), offline test plan, caveats and next steps. Built outside the repo; a copy goes to the project's `claude/` folder only after Affan has looked at it.
+
 ## Open
 
 - **Power mode:** the Part 1 table is mode 4 (30W, cap 905.25 MHz), the harness results are mode 7 (15W). Decide which mode Part 2 runs in; if mode 7, rerun a reduced Part 1 there. Until then the table cannot be combined with the Week 8 policy results.

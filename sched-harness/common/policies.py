@@ -5,9 +5,10 @@ import math
 
 
 class Serve:
-    def __init__(self, queue, b, drops=None):
+    def __init__(self, queue, b, drops=None, freq=None):
         self.queue = queue
         self.b = b
+        self.freq = freq        # optional GPU clock in MHz to run this batch at (DVFS policies); None = leave the clock alone
         self.drops = drops      # optional {queue: n}: cancel the n oldest jobs of that queue first (logged as dropped = 2)
 
 
@@ -20,7 +21,8 @@ class Wait:
 class State:
     """Read-only snapshot taken by the executor under the lock."""
 
-    def __init__(self, now, arrivals, service_ms, b_max, draining=False):
+    def __init__(self, now, arrivals, service_ms, b_max, draining=False, freq_now=None):
+        self.freq_now = freq_now        # GPU clock in MHz the last batch ran at (None when no clock control)
         self.now = now
         self.arrivals = arrivals        # per queue: enqueue times of its jobs, oldest first
         self.service_ms = service_ms    # function (queue, b, stat=None) -> milliseconds; stat 'p50' (default) or 'p99'
@@ -263,6 +265,15 @@ def make_policy(name, params):
         return Clockwork(float(params["slo_ms"]))
     if name == "symphony":
         return Symphony(float(params["slo_ms"]))
+    if name in ("dvfs_alpha", "dvfs_fixed"):
+        import config
+        from common import dvfs
+        table = dvfs.load_table(config.DVFS_TABLE, config.DVFS_MAX_MHZ)
+        if name == "dvfs_alpha":
+            return dvfs.DvfsAlpha(float(params["alpha"]), float(params["slo_ms"]), table, config.QUEUES,
+                                  float(params.get("switch_ms", config.DVFS_SWITCH_MS)), drop_expired=config.DVFS_DROP_EXPIRED)
+        return dvfs.DvfsFixed(int(params["freq_mhz"]), float(params["slo_ms"]), table, config.QUEUES,
+                              drop_expired=config.DVFS_DROP_EXPIRED)
     if name in STUBS:
         return NotBuilt(name)
     raise ValueError("unknown policy %r" % name)

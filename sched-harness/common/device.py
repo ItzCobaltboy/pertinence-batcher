@@ -31,7 +31,9 @@ def start_session():
     state = {"original_mode": powermode.current_mode(), "changed_mode": False, "locked": False}
     # An existing backup means an earlier session died while clocks were locked; keep it, it holds the real original.
     state["clocks_backup"] = os.path.join(config.RESULTS_DIR, "jetson_clocks_original.conf")
-    if not os.path.exists(state["clocks_backup"]):
+    # jetson_clocks is only touched when this session locks clocks with it; the DVFS study never does (LOCK_CLOCKS = False),
+    # and Clock has its own backup of the GPU min/max. So no store, and no restore at the end.
+    if config.LOCK_CLOCKS and not os.path.exists(state["clocks_backup"]):
         powermode.store_clocks(state["clocks_backup"])
     if config.SESSION_MODE is not None:
         wanted = resolve_mode(config.SESSION_MODE)
@@ -56,11 +58,12 @@ def end_session(state):
             powermode.set_mode(state["original_mode"])
         except RuntimeError as e:
             print("COULD NOT RESTORE MODE:", e, "-> run: sudo nvpmodel -m %d" % state["original_mode"])
-    try:
-        powermode.restore_clocks(state["clocks_backup"])
-        os.remove(state["clocks_backup"])
-    except RuntimeError as e:
-        print("COULD NOT RESTORE CLOCKS:", e, "-> run: sudo jetson_clocks --restore " + state["clocks_backup"])
+    if state["locked"]:
+        try:
+            powermode.restore_clocks(state["clocks_backup"])
+            os.remove(state["clocks_backup"])
+        except RuntimeError as e:
+            print("COULD NOT RESTORE CLOCKS:", e, "-> run: sudo jetson_clocks --restore " + state["clocks_backup"])
     powermode.chown_to_invoker(config.RESULTS_DIR)
     powermode.chown_to_invoker(config.MODELS_DIR)
 

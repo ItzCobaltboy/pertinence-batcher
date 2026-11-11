@@ -1,10 +1,11 @@
-# ONE run: one policy, one load, one mix, one seed. Poisson arrivals feed four queues, the policy decides,
+# ONE run: one policy, one load, one mix, one seed. Poisson arrivals feed the queues, the policy decides,
 # the GPU serves one batch at a time, tegrastats records power on the same clock. Writes the run folder.
 # Run: sudo python3 02_run.py --smoke
 #      sudo python3 02_run.py --policy triton --param delay_ms=5 --mix skewed --lam 16 --seed 0
 import sys
 sys.dont_write_bytecode = True
 import argparse
+import atexit
 import csv
 import datetime
 import gzip
@@ -88,10 +89,12 @@ def write_logs(run_dir, rt, sampler):
               [[j.job_id, j.queue, j.pool_index, "%.6f" % j.t_target, blank(j.t_enq, "%.6f"), blank(j.t_start, "%.6f"),
                 blank(j.t_end, "%.6f"), "" if j.batch_id is None else j.batch_id, "" if j.batch_size is None else j.batch_size,
                 blank(j.lateness_ms, "%.3f"), j.in_window, j.dropped] for j in rt.jobs])
-    fields = ["batch_id", "queue", "b", "t_start", "t_end", "h2d_ms", "forward_ms", "nms_ms", "n_boxes", "decide_ms", "queue_len_before"]
+    fields = ["batch_id", "queue", "b", "t_start", "t_end", "h2d_ms", "forward_ms", "nms_ms", "n_boxes", "decide_ms", "queue_len_before",
+              "freq_mhz", "switch_ms"]
     write_csv(os.path.join(run_dir, "batches.csv"), fields,
               [[b["batch_id"], b["queue"], b["b"], "%.6f" % b["t_start"], "%.6f" % b["t_end"], "%.3f" % b["h2d_ms"],
-                "%.3f" % b["forward_ms"], "%.3f" % b["nms_ms"], b["n_boxes"], "%.4f" % b["decide_ms"], b["queue_len_before"]]
+                "%.3f" % b["forward_ms"], "%.3f" % b["nms_ms"], b["n_boxes"], "%.4f" % b["decide_ms"], b["queue_len_before"],
+                b.get("freq_mhz", ""), "%.3f" % b.get("switch_ms", 0.0)]
                for b in rt.batches])
     write_csv(os.path.join(run_dir, "waits.csv"), ["t_start", "t_end", "reason"],
               [["%.6f" % s, "%.6f" % e, r] for s, e, r in rt.waits])
@@ -148,8 +151,13 @@ def main():
             "profile_stat": config.PROFILE_STAT, "b_max": config.B_MAX, "queue_cap": config.QUEUE_CAP,
             "primary_power": config.PRIMARY_POWER, "git_commit": git_commit(), "python": sys.version.split()[0],
             "torch": torch.__version__, "start": datetime.datetime.now().isoformat(), "status": "aborted", "flags": []}
-    import ultralytics
-    info["ultralytics"] = ultralytics.__version__
+    info["family"] = "resnet"
+    try:        # the CPU cap in force (run_resnet.sh sets it); runs are only comparable at the same cap
+        with open("/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq") as f:
+            info["cpu_max_khz"] = int(f.read())
+        info["dvfs_max_mhz"] = config.DVFS_MAX_MHZ
+    except OSError:
+        pass
 
     # The job maker is its own process, forked now, before any CUDA work. Then the main process is kept off its core.
     main_cores, arrival_core = runtime.pin_cores()
@@ -164,11 +172,18 @@ def main():
     session = None if args.session_managed else device.start_session()
     sampler = None
     rt = None
+    clock = None
     try:
+        if True:
+            from common import dvfs
+            clock = dvfs.Clock(os.path.join(config.RESULTS_DIR, "gpu_clock_backup.json"), config.DVFS_MAX_MHZ)
+            if hasattr(policy, "table"):
+                clock.check(policy.table.freqs)          # every clock the table knows must exist in this mode
+            atexit.register(clock.restore)
+            clock.set(max(f for f in clock.available_mhz if f <= config.DVFS_MAX_MHZ + 1) if not hasattr(policy, "f_max") else policy.f_max)   # warm-up and first batch at the top clock
         sampler = start_sampler(run_dir)
         pool, info["input_source"] = inputs.build_pool()
         nets = models.load_nets()
-        info["nms_backend"] = models.NMS_BACKEND
         buffers = {letter: inputs.BatchBuffer() for letter in config.QUEUES}
         models.warm_up(nets, buffers, pool)
         mode_id = powermode.current_mode()
@@ -177,7 +192,7 @@ def main():
         info["temp_start_c"] = runtime.wait_cool(sampler)
         t0 = time.monotonic() + 1.0
         info["t0"] = t0
-        rt = runtime.Runtime(policy, nets, buffers, pool, service_ms, arrivals)
+        rt = runtime.Runtime(policy, nets, buffers, pool, service_ms, arrivals, clock)
         print("running: %d s warmup + %d s measurement, then drain" % (warmup_s, duration_s))
         arrivals.go(t0)
         rt.run()
@@ -195,6 +210,11 @@ def main():
             info["policy_drops"] = sum(1 for j in rt.jobs if j.dropped == 2)
             info["drain_timeout"] = rt.drain_timeout
             info["decide_calls"] = rt.decide_calls
+            if clock is not None:
+                info["clock_switches"] = clock.switches
+                info["clock_switch_ms_mean"] = sum(clock.switch_ms) / len(clock.switch_ms) if clock.switch_ms else None
+            if hasattr(policy, "counters"):
+                info["policy_counters"] = policy.counters()
             info["decide_ms_mean"] = rt.decide_total_ms / rt.decide_calls if rt.decide_calls else None
             late = [j.lateness_ms for j in rt.jobs if j.lateness_ms is not None]
             if late:
@@ -210,6 +230,8 @@ def main():
                 info["error"] = rt.error
             if sampler:
                 write_logs(run_dir, rt, sampler)
+        if clock is not None:
+            info["clock_restored"] = clock.restore()
         if session:
             info["device_state"] = device.describe(session)
             device.end_session(session)

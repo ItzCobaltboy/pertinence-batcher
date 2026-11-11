@@ -1,5 +1,5 @@
 # Measures the service time T_i(b) of the whole serving pipeline (stack + H2D + forward + NMS) for every model
-# and batch size, the cost of switching models, and the idle power with all four nets loaded.
+# and batch size, the cost of switching models, and the idle power with all nets loaded.
 # Run: sudo python3 01_calibrate.py   -> results/<device_tag>/profile.json
 import sys
 sys.dont_write_bytecode = True
@@ -57,20 +57,21 @@ def measure_switch_cost(nets, buffers, pool):
     n_batches = config.SWITCH_BATCHES
     alternating = []
     for k in range(n_batches):
-        letter = "n" if k % 2 == 0 else "l"
+        letter = config.QUEUES[0] if k % 2 == 0 else config.QUEUES[-1]
         h2d, fwd, nms, _ = models.run_batch(nets[letter], buffers[letter], batch_arrays(pool, k, 1))
         alternating.append(h2d + fwd + nms)
     same = {}
-    for letter in ["n", "l"]:
+    first, last = config.QUEUES[0], config.QUEUES[-1]
+    for letter in [first, last]:
         times = []
         for k in range(n_batches):
             h2d, fwd, nms, _ = models.run_batch(nets[letter], buffers[letter], batch_arrays(pool, k, 1))
             times.append(h2d + fwd + nms)
         same[letter] = float(np.mean(times))
     alt_mean = float(np.mean(alternating))
-    same_mean = (same["n"] + same["l"]) / 2.0
+    same_mean = (same[first] + same[last]) / 2.0
     return {"alternating_n_l_mean_ms": alt_mean, "same_model_mean_ms": same_mean, "difference_ms": alt_mean - same_mean,
-            "same_model_n_mean_ms": same["n"], "same_model_l_mean_ms": same["l"]}
+            "same_model_n_mean_ms": same[first], "same_model_l_mean_ms": same[last]}
 
 
 def measure_idle_power(seconds):
@@ -93,24 +94,31 @@ def measure_idle_power(seconds):
 def main():
     assert max(config.CALIB_BATCHES) == config.B_MAX, "the largest CALIB_BATCHES entry must equal B_MAX"
     session = device.start_session()
+    clock = None
     try:
-        print("loading the four nets")
+        if True:
+            # the profile (Lambda_cap, idle power) is defined at the top clock; the governor would otherwise pick one
+            from common import dvfs
+            clock = dvfs.Clock(os.path.join(config.RESULTS_DIR, "gpu_clock_backup.json"), config.DVFS_MAX_MHZ)
+            clock.set(max(f for f in clock.available_mhz if f <= config.DVFS_MAX_MHZ + 1))
+            print("GPU pinned at %d MHz for the calibration" % clock.current_mhz)
+        print("loading the nets")
         pool, pool_source = inputs.build_pool()
         nets = models.load_nets()
         buffers = {letter: inputs.BatchBuffer() for letter in config.QUEUES}
         profile = {"meta": {"device_tag": config.DEVICE_TAG, "date": datetime.datetime.now().isoformat(),
                             "device_state": device.describe(session), "torch": torch.__version__,
-                            "input_pool": pool_source, "nms_backend": models.NMS_BACKEND, "warmup": config.CALIB_WARMUP, "timed": config.CALIB_TIMED},
+                            "input_pool": pool_source, "warmup": config.CALIB_WARMUP, "timed": config.CALIB_TIMED},
                    "models": {}}
         for letter in config.QUEUES:
             table = {}
-            print("yolov8%s" % letter)
+            print(config.MODELS[letter])
             for b in config.CALIB_BATCHES:
                 try:
                     table[str(b)] = calibrate_cell(nets[letter], buffers[letter], pool, b)
                 except Exception as e:
                     if models.is_oom(e):
-                        sys.exit("FLAG: out of memory for yolov8%s at b=%d with all four nets loaded. B_MAX=%d does not fit; "
+                        sys.exit("FLAG: out of memory for %s at b=%d with all nets loaded. B_MAX=%d does not fit; "
                                  "stopping instead of guessing." % (letter, b, config.B_MAX))
                     raise
                 t = table[str(b)]
@@ -121,11 +129,6 @@ def main():
                                                               "rel_err_per_b": dict(zip([str(b) for b in config.CALIB_BATCHES], resid))}}
             print("  batch time grows by %.2f ms per frame, floor %.2f ms (worst fit error %.1f%%)" % (c, a, worst * 100))
 
-        nms_share = (profile["models"]["n"]["b"]["1"]["nms"]["p50_ms"] / profile["models"]["n"]["b"]["1"]["total"]["p50_ms"])
-        profile["meta"]["nms_share_n_b1"] = nms_share
-        print("NMS share of yolov8n service time at b=1: %.0f%%" % (nms_share * 100))
-        if nms_share > config.NMS_DOMINATES_SHARE:
-            print("FLAG: NMS dominates yolov8n service time (above %.0f%%)" % (config.NMS_DOMINATES_SHARE * 100))
 
         print("switch cost (alternate n/l at b=1 vs back-to-back)")
         profile["switch_cost"] = measure_switch_cost(nets, buffers, pool)
@@ -133,7 +136,7 @@ def main():
             profile["switch_cost"]["alternating_n_l_mean_ms"], profile["switch_cost"]["same_model_mean_ms"],
             profile["switch_cost"]["difference_ms"]))
 
-        print("idle power with all four nets loaded (%d s)" % config.CALIB_IDLE_S)
+        print("idle power with all nets loaded (%d s)" % config.CALIB_IDLE_S)
         torch.cuda.synchronize()
         profile["p_idle_loaded_mw"] = measure_idle_power(config.CALIB_IDLE_S)
         print("  idle: " + ", ".join("%s %.0f mW" % (k, v) for k, v in profile["p_idle_loaded_mw"].items()))
@@ -143,6 +146,8 @@ def main():
             json.dump(profile, f, indent=2)
         print("saved", config.PROFILE_PATH)
     finally:
+        if clock is not None:
+            clock.restore()
         device.end_session(session)
 
 

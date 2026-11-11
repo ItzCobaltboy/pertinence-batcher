@@ -1,5 +1,5 @@
 # Checks the board before anything else: versions, root, a 3 s parsed tegrastats sample, power mode and clocks,
-# RAM and disk, the input pool, all four nets resident together, one real forward + NMS at b=1 and b=8.
+# RAM and disk, the input pool, all the nets resident together, one real forward at b=1, 8 and 16.
 # Run: sudo python3 00_preflight.py   -> results/<device_tag>/preflight.json, ends with READY or NOT READY.
 import sys
 sys.dont_write_bytecode = True
@@ -14,6 +14,10 @@ from common import powermode, tegrastats
 
 info = {}
 problems = []
+
+
+def name_of(letter):
+    return config.MODELS[letter]
 
 
 def read_text(path):
@@ -44,16 +48,9 @@ def check_torch():
     if not info["cuda_available"]:
         problems.append("torch.cuda.is_available() is False")
         return
-    import cv2
-    import ultralytics
-    info["ultralytics"] = ultralytics.__version__
-    info["opencv"] = cv2.__version__
-    print("ultralytics:", ultralytics.__version__, "| opencv:", cv2.__version__)
-    try:
-        from ultralytics.utils import ops
-        ops.non_max_suppression
-    except Exception as e:
-        problems.append("FLAG: ultralytics NMS import failed on %s: %s" % (ultralytics.__version__, e))
+    import torchvision
+    info["torchvision"] = torchvision.__version__
+    print("torchvision:", torchvision.__version__)
 
 
 def check_tegrastats():
@@ -111,11 +108,11 @@ def check_pipeline():
     try:
         nets = models.load_nets()
     except Exception as e:
-        problems.append("loading the four nets together failed: %s" % e)
+        problems.append("loading the nets together failed: %s" % e)
         return
     buffers = {letter: inputs.BatchBuffer() for letter in config.QUEUES}
     info["gpu_mem_after_load_mb"] = round(torch.cuda.memory_allocated() / 1e6)
-    print("all four nets resident, GPU memory allocated: %d MB" % info["gpu_mem_after_load_mb"])
+    print("all nets resident, GPU memory allocated: %d MB" % info["gpu_mem_after_load_mb"])
     info["pipeline_ms"] = {}
     for letter in config.QUEUES:
         for b in [1, 8, config.B_MAX]:
@@ -124,13 +121,13 @@ def check_pipeline():
                 h2d, fwd, nms, boxes = models.run_batch(nets[letter], buffers[letter], pool[:b])
             except Exception as e:
                 if models.is_oom(e):
-                    problems.append("FLAG: out of memory for yolov8%s at b=%d with all four nets loaded" % (letter, b))
+                    problems.append("FLAG: out of memory for %s at b=%d with all nets loaded" % (name_of(letter), b))
                 else:
-                    problems.append("yolov8%s b=%d failed: %s" % (letter, b, e))
+                    problems.append("%s b=%d failed: %s" % (name_of(letter), b, e))
                 torch.cuda.empty_cache()
                 continue
             info["pipeline_ms"]["%s_b%d" % (letter, b)] = {"h2d": h2d, "forward": fwd, "nms": nms, "boxes": boxes}
-            print("yolov8%s b=%-2d: h2d %.1f ms, forward %.1f ms, nms %.1f ms (%d boxes)" % (letter, b, h2d, fwd, nms, boxes))
+            print("%s b=%-2d: h2d %.1f ms, forward %.1f ms (clock not pinned here, timings are rough)" % (name_of(letter), b, h2d, fwd))
     info["gpu_mem_peak_mb"] = round(torch.cuda.max_memory_allocated() / 1e6)
     print("GPU memory peak allocated: %d MB" % info["gpu_mem_peak_mb"])
 

@@ -2,7 +2,7 @@
 # job maker:
 #   - ArrivalProcess (own process, no torch, pinned to its own core): sleeps to each planned arrival time and
 #     sends the job through a pipe, stamped with time.monotonic().
-#   - Runtime (main process): reads the pipe, keeps the four queues, asks the policy what to do and runs one
+#   - Runtime (main process): reads the pipe, keeps the queues, asks the policy what to do and runs one
 #     batch at a time on the GPU.
 # time.monotonic() is one clock for the whole machine, so job stamps, batch stamps and the tegrastats Sampler
 # share one time axis.
@@ -91,13 +91,14 @@ class ArrivalProcess:
 
 
 class Runtime:
-    def __init__(self, policy, nets, buffers, pool, service_ms, arrivals):
+    def __init__(self, policy, nets, buffers, pool, service_ms, arrivals, clock=None):
         self.policy = policy
         self.nets = nets
         self.buffers = buffers
         self.pool = pool
         self.service_ms = service_ms        # function (queue, b) -> ms
         self.arrivals = arrivals            # ArrivalProcess
+        self.clock = clock                  # dvfs.Clock or None; a Serve with freq set changes the GPU clock before the batch
 
         self.queues = [collections.deque() for _ in config.QUEUES]
         self.jobs = []
@@ -161,7 +162,8 @@ class Runtime:
                 self.drain_timeout = True
                 return
             state = State(now, [[j.t_enq for j in q] for q in self.queues], self.service_ms,
-                          config.B_MAX, self.arrivals_done)
+                          config.B_MAX, self.arrivals_done,
+                          freq_now=self.clock.current_mhz if self.clock else None)
             t = time.perf_counter()
             decision = self.policy.decide(state)
             decide_ms = (time.perf_counter() - t) * 1000.0
@@ -187,9 +189,12 @@ class Runtime:
                                    % (self.policy.name, q, b, len(self.queues[q]) if 0 <= q < len(self.queues) else -1))
             queue_len_before = len(self.queues[q])
             jobs = [self.queues[q].popleft() for _ in range(b)]
-            self.run_batch(q, jobs, decide_ms, queue_len_before)
+            switch_ms = 0.0
+            if self.clock is not None and getattr(decision, "freq", None) is not None:
+                switch_ms = self.clock.set(decision.freq)       # blocks about 88 ms when the clock changes, 0 when it does not
+            self.run_batch(q, jobs, decide_ms, queue_len_before, switch_ms)
 
-    def run_batch(self, q, jobs, decide_ms, queue_len_before):
+    def run_batch(self, q, jobs, decide_ms, queue_len_before, switch_ms=0.0):
         letter = config.QUEUES[q]
         arrays = [self.pool[j.pool_index] for j in jobs]
         t_start = time.monotonic()
@@ -203,7 +208,8 @@ class Runtime:
             j.batch_size = len(jobs)
         self.batches.append({"batch_id": batch_id, "queue": q, "b": len(jobs), "t_start": t_start, "t_end": t_end,
                              "h2d_ms": h2d_ms, "forward_ms": forward_ms, "nms_ms": nms_ms, "n_boxes": n_boxes,
-                             "decide_ms": decide_ms, "queue_len_before": queue_len_before})
+                             "decide_ms": decide_ms, "queue_len_before": queue_len_before,
+                             "freq_mhz": self.clock.current_mhz if self.clock else "", "switch_ms": switch_ms})
 
 
 def wait_cool(sampler):

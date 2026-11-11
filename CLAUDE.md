@@ -501,6 +501,8 @@ every run rather than relying on a copied `.npz` weight file.
    policy Nov 5 - 11. Energy metric = total board energy over the fixed 120 s window with % dropped beside it, never energy per good
    request (Week8's per-good-request numbers are superseded).
 
+   **Update (Week9 end, Nov 4)**: MAXN ResNet run (Oct 31, 264 points, clocks 421 - 1377 MHz) shows the full curve: flat bottom 676 - 905 MHz, +28 - 30% energy per frame at 1377 vs 905; best clock saves 22 - 24% vs the top clock at +38 - 48% latency. Policy v1 (deadline first, energy second, greedy batching, per-batch lowest-energy clock that still meets the deadline counting the 88 ms switch) is specified, not yet run; Week9 `[DECISION]`. YOLO in MAXN crashed the board (cause unknown), so not run. Week 9 deck: `archive/pptx/pertinence_week9_dvfs.pptx`. **Week 10 meeting** (`Journel/Week10.md`): profile more families, consider predictive modelling and equation-based runtime profiles instead of a lookup table, and make the policy account for indirect energy (slower clock -> longer queues -> more energy later).
+
    **Plan (meet 5, `Journel/Week5.md`)**: the scheduler only sees queues, batch sizes and T_i(b),
    so it is built and evaluated in a DES first, then validated with PERTINENCE routing. Target:
    compute-constrained edge devices (Jetsons). Later: per-job deadlines, stream priorities. Meet 6
@@ -738,3 +740,5 @@ change.
 - CUDA used when available (`torch.device("cuda:0" if torch.cuda.is_available() else "cpu")`)
 - Torch-TensorRT works in this environment (see "Decisions / dead ends" #7). ONNX Runtime's own
   `TensorrtExecutionProvider` does NOT — don't re-attempt that specific path (item #6 above).
+
+**Update (Nov 6):** DVFS policy v2 (prune, then rank by alpha*E + (1-alpha)*L) is coded in `sched-harness/common/dvfs.py`; ResNet family via `SCHED_FAMILY=resnet`; the sweep is `TIER1` in `sched-harness/config.py` (axes via env `DVFS_ALPHAS/SLOS/LAMS/SEEDS`; 5 alphas + 3 fixed clocks (829/1033/1198) x SLO 900/300 x loads 100/200/300 x seeds 0-2 on the skewed light3 mix, expired jobs dropped (144 runs, 48 per seed), 1888 s per run since Nov 7: inputs are 128 CIFAR-10 images, `DURATION_S` = 1800). See `Journel/Week10.md`. See `Journel/Week10.md`. **Update (Nov 11):** 140 of 144 runs done (3 seeds, deadlines 900/300 ms, fixed clocks 829/1033/1198). The policy matches the best fixed clock at 900 ms (22% and 31% saving at 100 and 200 req/s is a lower-clock result) and beats it only at 300 ms / 200 req/s (9%). Open: re-measure the clock-change cost in MAXN (about 2 ms seen vs 88 assumed), make the policy rate-aware, test with changing load. Deck: `archive/pptx/pertinence_week10.pptx`.

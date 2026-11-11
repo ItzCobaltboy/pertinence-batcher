@@ -307,3 +307,6 @@ sched-harness/results/
 sched-harness/results_old/
 sched-harness/**/__pycache__/
 weights/
+
+# CIFAR-10 source tarball (170 MB); only data/cifar10_128.npz is kept in the repo
+sched-harness/data/*.tar.gz

@@ -72,14 +72,14 @@ def command_for(run):
 
 
 def main():
-    if os.geteuid() != 0:
+    if os.geteuid() != 0 and "--dry-run" not in sys.argv:
         sys.exit("run with sudo")
     signal.signal(signal.SIGTERM, on_sigterm)
     runs = apply_budget(build_runs())
     todo = [r for r in runs if not is_done(r)]
     print("%d runs in the plan, %d already done, %d to go" % (len(runs), len(runs) - len(todo), len(todo)))
     print("estimated wall time: %.0f min (%.0f s per run)" % (len(todo) * seconds_per_run() / 60.0, seconds_per_run()))
-    if not todo:
+    if "--dry-run" in sys.argv or not todo:
         return
     os.makedirs(config.RUNS_DIR, exist_ok=True)
     session = device.start_session()

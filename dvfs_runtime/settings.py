@@ -52,8 +52,24 @@ elif FAMILY == "resnet":
     EST_BATCH_S = 0.1
     MIN_SUBRUN_S = 5.0          # ResNet batches are short: 20 of them would give a window with almost no power samples
     RANDOM_IMAGES = 10          # with no files in INPUTS_DIR the pool is this many seeded random-noise images (a classifier's compute ignores content)
+elif FAMILY == "mobile":                     # small depthwise / grouped-conv CNNs (memory-bound, launch-bound at small batches)
+    QUEUES = ["mb3", "sh2"]
+    TORCHVISION_NAMES = {"mb3": "mobilenet_v3_large", "sh2": "shufflenet_v2_x1_0"}
+    LABELS = dict(TORCHVISION_NAMES)
+    IMGSZ = 224
+    EST_BATCH_S = 0.05
+    MIN_SUBRUN_S = 5.0
+    RANDOM_IMAGES = 10
+elif FAMILY == "vit":                        # transformer: attention and large matmuls
+    QUEUES = ["vit_b"]
+    TORCHVISION_NAMES = {"vit_b": "vit_b_16"}
+    LABELS = dict(TORCHVISION_NAMES)
+    IMGSZ = 224
+    EST_BATCH_S = 0.15
+    MIN_SUBRUN_S = 5.0
+    RANDOM_IMAGES = 10
 else:
-    raise ValueError("DVFS_FAMILY must be yolo or resnet, got %r" % FAMILY)
+    raise ValueError("DVFS_FAMILY must be yolo, resnet, mobile or vit, got %r" % FAMILY)
 B_MAX = 16
 INPUT_POOL_SIZE = 64
 NMS_CONF = 0.25

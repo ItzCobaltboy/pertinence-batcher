@@ -11,7 +11,7 @@ from dvfs_runtime import settings as config
 
 def load_net(letter):
     """Stock COCO weights -> fused FP16 eval network on the GPU (as jetson-power bench.load_net)."""
-    if config.FAMILY == "resnet":
+    if config.FAMILY != "yolo":                          # every non-YOLO family is a torchvision classifier
         return load_resnet(letter)
     from ultralytics import YOLO
     os.makedirs(config.MODELS_DIR, exist_ok=True)
